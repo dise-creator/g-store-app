@@ -5,7 +5,7 @@ import { Send } from "lucide-react";
 export default function Footer() {
   return (
     <footer className="bg-[#13151A] border-t border-white/5 py-12 mt-20">
-      <div className="max-w-[1520px] mx-auto px-6">
+      <div className="max-w-[1420px] mx-auto px-6" border-radius="0 0 20px 20px">
         <div className="flex flex-col md:flex-row justify-between items-center gap-8">
           
           {/* Левая часть: Лого и Копирайт */}
