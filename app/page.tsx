@@ -11,6 +11,14 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-coverflow";
 
+interface Game {
+  id: number;
+  title: string;
+  price: number;
+  discount: string;
+  image: string;
+}
+
 const GAMES: Game[] = [
   { id: 1, title: "Starfield", price: 4200, discount: "-10%", image: "/images/starfield.jpg" },
   { id: 2, title: "Cyberpunk 2077", price: 2500, discount: "-50%", image: "/images/cyber.jpg" },

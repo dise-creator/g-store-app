@@ -6,7 +6,8 @@ import { X, Trash2, ShoppingBag, CreditCard } from "lucide-react";
 export default function CartDrawer() {
   const { items, isOpen, toggleCart, removeItem } = useCartStore();
 
-  const total = items.reduce((acc, item) => acc + (item.price * (item.quantity || 0)), 0);
+  // Считаем общую сумму, учитывая количество каждой игры
+const totalPrice = items.reduce((acc, item) => acc + (item.price * (item.quantity || 0)), 0);
 
   if (!isOpen) return null;
 
