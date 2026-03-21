@@ -1,68 +1,119 @@
-'use client';
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Search, X } from 'lucide-react';
-import GameCard from './GameCard';
+"use client";
 
-// Временный список игр
-const GAMES = [
-  { id: 1, title: "Saints Row", price: "3 670", image: "https://i.imgur.com/3Z4n5X1.jpg" },
-  { id: 2, title: "Gran Turismo 7", price: "6 995", image: "https://i.imgur.com/8Q6z2X3.jpg" },
-  { id: 3, title: "Elden Ring", price: "5 490", image: "https://i.imgur.com/4R6z1A9.jpg" },
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Search, X } from "lucide-react";
+import { useCartStore } from "../store/useCart";
+import GameCard from "./GameCard";
+
+// Тестовые данные для поиска
+const MOCK_GAMES = [
+  { id: 1, title: "Starfield", price: 4200, discount: "-10%", image: "/images/starfield.jpg" },
+  { id: 2, title: "Cyberpunk 2077", price: 2500, discount: "-50%", image: "/images/cyber.jpg" },
+  { id: 3, title: "Elden Ring", price: 3900, discount: "-20%", image: "/images/elden.jpg" },
+  { id: 4, title: "GTA V", price: 1200, discount: "-60%", image: "/images/gta.jpg" },
+  { id: 5, title: "Spider-Man 2", price: 9795, discount: "-10%", image: "/images/spider.jpg" },
+  { id: 6, title: "Minecraft", price: 2795, discount: "-5%", image: "/images/mc.jpg" },
 ];
 
-export default function SearchModal({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) {
-  const [query, setQuery] = useState('');
+export default function SearchModal() {
+  const { isSearchOpen, closeSearch } = useCartStore();
+  const [query, setQuery] = useState("");
 
-  // Фильтруем игры по названию
-  const filteredGames = GAMES.filter(game => 
-    game.title.toLowerCase().includes(query.toLowerCase())
+  // Фильтрация игр по запросу
+  const results = MOCK_GAMES.filter((g) =>
+    g.title.toLowerCase().includes(query.toLowerCase())
   );
+
+  // Закрытие по нажатию Esc
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => e.key === "Escape" && closeSearch();
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, [closeSearch]);
 
   return (
     <AnimatePresence>
-      {isOpen && (
-        <motion.div 
-          initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
-          animate={{ opacity: 1, backdropFilter: "blur(12px)" }}
-          exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
-          className="fixed inset-0 z-[100] bg-[#121820]/95 p-6 overflow-y-auto"
-        >
-          <div className="max-w-7xl mx-auto">
-            <div className="flex items-center gap-4 mb-10">
-              <div className="flex-1 relative">
-                <input 
+      {isSearchOpen && (
+        <div className="fixed inset-0 z-[100] flex items-start justify-center pt-20 px-4">
+          {/* Задний фон с блюром */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={closeSearch}
+            className="absolute inset-0 bg-black/40 backdrop-blur-xl"
+          />
+
+          {/* Само модальное окно */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className="relative w-full max-w-5xl bg-[#1e2530] rounded-[32px] border border-white/10 shadow-2xl overflow-hidden shadow-black/50"
+          >
+            {/* Поле поиска */}
+            <div className="p-6 border-b border-white/5 bg-[#1a212c]">
+              <div className="relative group">
+                <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-[#a855f7] transition-colors" />
+                <input
                   autoFocus
+                  type="text"
+                  placeholder="Найти игру или подписку..."
+                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-14 pr-14 text-white placeholder:text-gray-500 focus:outline-none focus:border-[#a855f7]/50 transition-all text-lg"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Найти игру или подписку"
-                  className="w-full bg-[#1e2530] border-none rounded-2xl py-4 px-14 text-xl text-white outline-none focus:ring-2 ring-blue-500 transition-all"
                 />
-                <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500" />
+                <button
+                  onClick={closeSearch}
+                  className="absolute right-5 top-1/2 -translate-y-1/2 p-2 hover:bg-white/10 rounded-xl text-gray-400"
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
-              <button onClick={onClose} className="p-4 bg-[#1e2530] rounded-2xl text-white hover:bg-[#252d3a]">
-                <X className="w-6 h-6" />
-              </button>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-              {filteredGames.map((game: any) => (
+            {/* Результаты с анимацией появления каждой карточки */}
+            <div className="p-8 max-h-[70vh] overflow-y-auto bg-[#13171f] custom-scrollbar">
+              <h4 className="text-gray-500 font-bold uppercase text-[11px] tracking-[0.2em] mb-8">
+                {query ? `Найдено: ${results.length}` : "Сейчас ищут"}
+              </h4>
+
+              <motion.div 
+                layout
+                className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
+              >
+                {results.map((game, index) => (
+                  <motion.div
+                    key={game.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }} // Эффект каскадного появления
+                  >
                     <GameCard 
-                        key={game.id} 
-                        id={game.id} // Вот эта строчка ОБЯЗАТЕЛЬНА
-                        title={game.title} 
-                        price={game.price} 
-                        image={game.image} 
-                                />
-                                ))}
-             
+                      id={game.id}
+                      title={game.title}
+                      price={game.price}
+                      discount={game.discount}
+                      image={game.image}
+                    />
+                  </motion.div>
+                ))}
+              </motion.div>
+
+              {results.length === 0 && (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-center py-20 text-gray-600 italic"
+                >
+                  По вашему запросу ничего не найдено
+                </motion.div>
+              )}
             </div>
-            
-            {filteredGames.length === 0 && (
-              <p className="text-center text-gray-500 mt-10">Ничего не найдено...</p>
-            )}
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       )}
     </AnimatePresence>
   );
