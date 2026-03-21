@@ -7,24 +7,17 @@ import GameCard from "@/components/GameCard";
 import { useCartStore } from "../store/useCart";
 
 import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import "swiper/css/effect-coverflow";
-
-interface Game {
-  id: number;
-  title: string;
-  price: number;
-  discount: string;
-  image: string;
-}
 
 const GAMES: Game[] = [
   { id: 1, title: "Starfield", price: 4200, discount: "-10%", image: "/images/starfield.jpg" },
   { id: 2, title: "Cyberpunk 2077", price: 2500, discount: "-50%", image: "/images/cyber.jpg" },
   { id: 3, title: "Elden Ring", price: 3900, discount: "-20%", image: "/images/elden.jpg" },
   { id: 4, title: "GTA V", price: 1200, discount: "-60%", image: "/images/gta.jpg" },
-  // Временно меняем битые картинки на рабочие
-  { id: 5, title: "RDR 2", price: 2499, discount: "-33%", image: "/images/cyber.jpg" }, 
-  { id: 6, title: "The Witcher 3", price: 1100, discount: "-70%", image: "/images/starfield.jpg" },
+  { id: 5, title: "RDR 2", price: 2499, discount: "-33%", image: "/images/starfield.jpg" }, // Временно рабочая
+  { id: 6, title: "The Witcher 3", price: 1100, discount: "-70%", image: "/images/cyber.jpg" },    // Временно рабочая
   { id: 7, title: "God of War", price: 3500, discount: "-15%", image: "/images/starfield.jpg" },
   { id: 8, title: "Forza Horizon", price: 3000, discount: "-25%", image: "/images/cyber.jpg" },
 ];
@@ -43,7 +36,8 @@ export default function Home() {
         Лидеры продаж
       </h2>
 
-      <div className="w-full">
+      {/* Контейнер с принудительной высотой, чтобы Swiper не пропадал */}
+      <div className="w-full relative min-h-[500px]"> 
         {filteredGames.length > 0 ? (
           <Swiper
             modules={[Navigation, Pagination, Autoplay, EffectCoverflow]}
@@ -54,19 +48,22 @@ export default function Home() {
             loop={filteredGames.length > 3}
             coverflowEffect={{
               rotate: 0,
-              stretch: 120,
+              stretch: 80,   // Чуть уменьшил, чтобы точно влезли
               depth: 100,
               modifier: 1,
               slideShadows: false,
             }}
-            autoplay={{ delay: 3500 }}
-            className="!overflow-visible py-10"
+            autoplay={{ delay: 3500, disableOnInteraction: false }}
+            className="w-full !overflow-visible py-10"
           >
             {filteredGames.map((game, index) => (
               <SwiperSlide key={game.id} style={{ width: '300px' }}>
                 <div 
                   className="animate-fade-in opacity-0" 
-                  style={{ animationDelay: `${index * 150}ms`, animationFillMode: 'forwards' }}
+                  style={{ 
+                    animationDelay: `${index * 150}ms`, 
+                    animationFillMode: 'forwards' 
+                  }}
                 >
                   <GameCard {...game} />
                 </div>
@@ -75,7 +72,7 @@ export default function Home() {
           </Swiper>
         ) : (
           <div className="text-center py-20 text-gray-500 font-bold uppercase opacity-30">
-            Ничего не найдено
+            Игры не найдены
           </div>
         )}
       </div>
