@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-/* Стили Swiper должны быть здесь, если они не работают в page.tsx */
 @import "swiper/css";
 @import "swiper/css/navigation";
 @import "swiper/css/pagination";
@@ -14,58 +13,31 @@ body {
   background: var(--background);
   color: var(--foreground);
   max-width: 100%;
-  overflow-x: hidden; /* Чтобы свайпер не создавал горизонтальную прокрутку */
-}
-@layer utilities {
-  .animate-fade-in {
-    animation: fadeIn 0.6s ease-out;
-  }
+  overflow-x: hidden;
 }
 
-@layer utilities {
-  @keyframes cardAppear {
-    from {
-      opacity: 0;
-      transform: translateY(30px) scale(0.9);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-  }
-
-  .animate-card-fade {
-    animation: cardAppear 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-  }
-}
-
-@keyframes fadeInSlideUp {
+/* 1. Чистые анимации без лишних вложений */
+@keyframes cardAppear {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px) scale(0.9);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
-.animate-fade-in {
-  animation: fadeInSlideUp 0.8s ease-out forwards;
-}
-html,
-body {
-  width: 100%;
-  max-width: 100vw;
-  overflow-x: hidden !important; /* Убиваем горизонтальный скролл на корню */
-  position: relative;
+/* 2. Класс для анимации */
+.animate-card-fade {
+  opacity: 0;
+  animation: cardAppear 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
-/* Применяем жесткую обрезку ко всем главным оберткам */
-#root, 
-#__next, 
-main {
+/* 3. Жесткая обрезка скролла */
+html, body, #root, #__next, main {
   width: 100%;
   max-width: 100vw;
   overflow-x: hidden !important;
+  position: relative;
 }

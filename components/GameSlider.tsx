@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, FreeMode } from "swiper/modules"; 
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -11,6 +11,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/free-mode";
 
+// Массив данных
 const GAMES = [
   { id: 1, title: "Starfield", price: 4200, image: "/images/starfield.jpg" },
   { id: 2, title: "Cyberpunk 2077", price: 2500, image: "/images/cyber.jpg" },
@@ -28,11 +29,19 @@ const GAMES = [
 
 export default function GameSlider() {
   const searchQuery = useCartStore((state) => state.searchQuery);
+  const [mounted, setMounted] = useState(false);
 
-  // Фильтруем здесь, чтобы filteredGames всегда был определен
+  // Ждем монтирования, чтобы избежать Hydration Error
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const filteredGames = GAMES.filter((game) =>
     game.title.toLowerCase().includes((searchQuery || "").toLowerCase())
   );
+
+  // До монтирования не рендерим ничего, чтобы сервер и клиент не спорили
+  if (!mounted) return <div className="min-h-[400px]" />;
 
   return (
     <section className="w-full">
@@ -43,10 +52,10 @@ export default function GameSlider() {
         </h2>
         
         <div className="flex gap-2">
-          <button className="slider-prev w-11 h-11 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#a855f7] transition-all disabled:opacity-20">
+          <button className="slider-prev w-11 h-11 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#a855f7] transition-all disabled:opacity-20 z-20 cursor-pointer">
             <ChevronLeft className="w-6 h-6 text-white" />
           </button>
-          <button className="slider-next w-11 h-11 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#a855f7] transition-all disabled:opacity-20">
+          <button className="slider-next w-11 h-11 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#a855f7] transition-all disabled:opacity-20 z-20 cursor-pointer">
             <ChevronRight className="w-6 h-6 text-white" />
           </button>
         </div>
@@ -66,11 +75,19 @@ export default function GameSlider() {
               1024: { slidesPerView: 5 },
               1280: { slidesPerView: 6 },
             }}
-            className="w-full !pb-10"
+            className="w-full !pb-10 !overflow-visible"
           >
-            {filteredGames.map((game) => (
+            {filteredGames.map((game, index) => (
               <SwiperSlide key={game.id} className="h-auto"> 
-                <GameCard {...game} />
+                <div 
+                  className="animate-card-fade" 
+                  style={{ 
+                    animationDelay: `${index * 80}ms`,
+                    willChange: "transform, opacity" 
+                  }}
+                >
+                  <GameCard {...game} />
+                </div>
               </SwiperSlide>
             ))}
           </Swiper>
