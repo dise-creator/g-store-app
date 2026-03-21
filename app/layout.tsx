@@ -1,38 +1,40 @@
-import type { Metadata } from "next";
+"use client";
+
+import React, { useState } from "react";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
 import SearchModal from "@/components/SearchModal";
 
-export const metadata: Metadata = {
-  title: "My Game Store",
-  description: "Магазин лучших игр",
-};
-
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Управление модалкой поиска
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
   return (
     <html lang="ru">
-      <body className="antialiased bg-[#0f1218] text-white flex flex-col min-h-screen">
-        {/* Модальное окно поиска (поверх всего) */}
-        <SearchModal />
+      <body className="antialiased bg-[#0a0a0b] text-white flex flex-col min-h-screen">
         
-        {/* Шапка сайта */}
-        <Header />
+        {/* Передаем обязательные пропсы в модалку */}
+        <SearchModal 
+          isOpen={isSearchOpen} 
+          onClose={() => setIsSearchOpen(false)} 
+        />
         
-        {/* Панель корзины */}
+        {/* Передаем функцию открытия в шапку */}
+        <Header onSearchClick={() => setIsSearchOpen(true)} />
+        
         <CartDrawer /> 
         
-        {/* Основной контент с отступом под Header */}
-        <main className="flex-grow pt-[100px]">
+        {/* Отступ pt-24 уже есть внутри page.tsx, поэтому тут просто flex-grow */}
+        <main className="flex-grow">
           {children}
         </main>
 
-        {/* Подвал сайта */}
         <Footer />
       </body>
     </html>

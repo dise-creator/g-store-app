@@ -1,43 +1,59 @@
 "use client";
 
-import React from 'react';
-import { Plus } from 'lucide-react';
-import { useCartStore } from '../store/useCart';
+import React, { useEffect, useState } from "react";
+import { useCartStore } from "@/store/useCart";
 
-// 1. Явно объявляем интерфейс
 interface GameCardProps {
   id: number;
   title: string;
   price: number;
-  discount: string;
   image: string;
+  discount?: string;
 }
 
-// 2. Типизируем пропсы компонента
-export default function GameCard({ id, title, price, discount, image }: GameCardProps) {
+export default function GameCard({ id, title, price, image, discount }: GameCardProps) {
   const addItem = useCartStore((state) => state.addItem);
+  const [mounted, setMounted] = useState(false);
+
+  // Ждем, пока компонент появится в браузере
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Останавливаем другие события
+    e.preventDefault();
+    e.stopPropagation();
+    
+    console.log("Клик сработал для:", title);
+    addItem({ id, title, price, image });
+
+    const tg = (window as any).Telegram?.WebApp;
+    if (tg?.HapticFeedback) {
+      tg.HapticFeedback.impactOccurred("light");
+    }
+  };
+
+  // Пока не смонтировано, показываем пустую рамку, чтобы не было ошибок
+  if (!mounted) return <div className="w-full aspect-[3/4] bg-white/5 rounded-[32px] animate-pulse" />;
 
   return (
-    <div className="bg-[#1e2530] rounded-3xl overflow-hidden border border-white/5 group hover:border-[#a855f7]/50 transition-all duration-500">
-      <div className="relative h-[420px]">
-        <img src={image} alt={title} className="w-full h-full object-cover" />
-        <div className="absolute top-4 right-4 bg-[#a855f7] text-white text-xs font-black px-2 py-1 rounded-lg">
-          {discount}
-        </div>
-      </div>
+    <div 
+      onClick={handleCardClick}
+      className="relative group w-full aspect-[3/4] rounded-[32px] overflow-hidden cursor-pointer active:scale-95 transition-all duration-500 shadow-2xl border border-white/5 z-10"
+    >
+      <img 
+        src={image} 
+        alt={title}
+        className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+      />
       
-      <div className="p-6">
-        <h3 className="text-white font-bold text-sm uppercase truncate mb-4">{title}</h3>
-        <div className="flex items-center justify-between">
-          <div className="flex flex-col">
-            <span className="text-white font-black text-lg">{price.toLocaleString()} ₽</span>
-          </div>
-          <button 
-            onClick={() => addItem({ id, title, price, image })}
-            className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-white hover:bg-[#a855f7] transition-all cursor-pointer"
-          >
-            <Plus className="w-5 h-5" />
-          </button>
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0f1218] via-[#0f1218]/20 to-transparent opacity-90" />
+
+      <div className="absolute bottom-0 left-0 right-0 p-8 z-20">
+        <h3 className="text-white font-black text-2xl uppercase italic leading-none">{title}</h3>
+        <div className="text-white font-black text-3xl mt-2">
+          {price.toLocaleString()} <span className="text-sm">₽</span>
         </div>
       </div>
     </div>
