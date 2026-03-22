@@ -13,7 +13,6 @@ const BASE_GAMES = [
   { id: 6, title: "ШАХТЕРСКОЕ РЕМЕСЛО", price: 1100, image: "/images/mc.jpg" },
 ];
 
-// Генерируем расширенный список с гарантированно числовыми ID
 const LONG_LIST = Array(3).fill(BASE_GAMES).flat().map((game, index) => ({
   ...game,
   id: index + 1
@@ -22,23 +21,20 @@ const LONG_LIST = Array(3).fill(BASE_GAMES).flat().map((game, index) => ({
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
 
-  // Имитируем процесс загрузки данных (например, запрос к БД или API)
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 2000); // Скелетоны будут активны 2 секунды для демонстрации
+    }, 2000); 
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <main className="min-h-screen pt-32 pb-20 bg-[#0a0a0b] overflow-x-hidden">
-      {/* Центральный контейнер с max-w-[1400px] выравнивает весь контент 
-          строго по вертикальной линии твоего хедера.
-          px-4 md:px-10 обеспечивает отступы от краев экрана.
-      */}
+    /* Убрал bg-[#0a0a0b], теперь виден градиент из globals.css */
+    <main className="min-h-screen pt-32 pb-20 overflow-x-hidden bg-transparent">
+      
       <div className="max-w-[1400px] mx-auto px-4 md:px-10 flex flex-col gap-24">
         
-        {/* Секция "Топ предложения" с поддержкой 6 карточек в ряд */}
+        {/* Секция "Топ предложения" */}
         <GameSlider 
           title="Топ предложения" 
           games={LONG_LIST} 
