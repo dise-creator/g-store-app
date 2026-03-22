@@ -53,3 +53,34 @@ h3 {
 .group * {
   backface-visibility: hidden;
 }
+
+/* Полная стилизация скроллбара для Chrome, Edge и Safari */
+@layer base {
+  ::-webkit-scrollbar {
+    width: 8px; /* Делаем его еще тоньше и аккуратнее */
+  }
+
+  ::-webkit-scrollbar-track {
+    /* Делаем фон полностью прозрачным или под цвет твоего фона #0a0a0b */
+    background: #0a0a0b; 
+  }
+
+  ::-webkit-scrollbar-thumb {
+    /* Цвет ползунка: делаем его темно-серым, чтобы не бросался в глаза */
+    background-color: #27272a; 
+    border-radius: 100px;
+    /* Важно: добавляем прозрачную рамку, чтобы создать отступ от краев */
+    border: 2px solid #0a0a0b;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    /* При наведении подсвечиваем твоим фирменным фиолетовым */
+    background-color: #a855f7;
+  }
+
+  /* Для Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #27272a #0a0a0b;
+  }
+}
