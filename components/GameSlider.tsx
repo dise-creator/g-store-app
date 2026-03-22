@@ -25,48 +25,39 @@ export default function GameSlider({ games, title }: { games: Game[], title: str
 
   return (
     <div className="w-full">
-      {/* Шапка: выровнена по краям сетки */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
-          <div className="w-1.5 h-8 bg-[#a855f7] rounded-full shadow-[0_0_20px_rgba(168,85,247,0.6)]" />
-          <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter">
+          <div className="w-1 h-6 bg-[#a855f7] rounded-full shadow-[0_0_15px_rgba(168,85,247,0.5)]" />
+          <h2 className="text-xl font-black text-white uppercase italic tracking-tighter">
             {title}
           </h2>
         </div>
 
-        <div className="flex gap-3">
-          <button 
-            onClick={scrollPrev} 
-            className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-[#a855f7] transition-all active:scale-90"
-          >
-            <ChevronLeft size={20} />
+        <div className="flex gap-2">
+          <button onClick={scrollPrev} className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/30 hover:text-white hover:bg-[#a855f7] transition-all">
+            <ChevronLeft size={18} />
           </button>
-          <button 
-            onClick={scrollNext} 
-            className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-[#a855f7] transition-all active:scale-90"
-          >
-            <ChevronRight size={20} />
+          <button onClick={scrollNext} className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/30 hover:text-white hover:bg-[#a855f7] transition-all">
+            <ChevronRight size={18} />
           </button>
         </div>
       </div>
 
-      {/* Вьюпорт свайпера */}
       <div className="overflow-hidden no-scrollbar" ref={emblaRef}>
-        <div className="flex gap-5 cursor-grab active:cursor-grabbing">
+        <div className="flex gap-4 cursor-grab active:cursor-grabbing">
           {games.map((game) => (
             <div 
               key={game.id} 
-              /* Математика для 4-х целых карточек:
-                100% ширины - 60px (3 промежутка по 20px) / 4 карточки.
-                На мобилках: 1.2 карточки, чтобы был виден край следующей.
+              /* Расчет для 6 игр:
+                 (100% - (5 промежутков * 16px)) / 6 игр.
+                 На мобильных оставляем 2.2 игры.
               */
-              className="flex-[0_0_calc((100%-20px)/1.2)] md:flex-[0_0_calc((100%-60px)/4)] select-none"
+              className="flex-[0_0_calc((100%-16px)/2.2)] md:flex-[0_0_calc((100%-80px)/6)] select-none"
             >
               <GameCard {...game} />
             </div>
           ))}
-          {/* Небольшой отступ в конце для плавности */}
-          <div className="flex-[0_0_20px] shrink-0 pointer-events-none" />
+          <div className="flex-[0_0_1px] shrink-0" />
         </div>
       </div>
     </div>
