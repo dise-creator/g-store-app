@@ -4,19 +4,19 @@ import React, { useState } from "react";
 import Header from "@/components/Header";
 import CartDrawer from "@/components/CartDrawer";
 import SearchModal from "@/components/SearchModal";
+import { SessionProvider } from "next-auth/react";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   return (
-    <>
+    <SessionProvider>
       <Header 
         onSearchClick={() => setIsSearchOpen(true)} 
         onCartClick={() => setIsCartOpen(true)} 
       />
 
-      {/* Теперь мы не передаем items вручную, CartDrawer сам возьмет их из стора */}
       <CartDrawer 
         isOpen={isCartOpen} 
         onClose={() => setIsCartOpen(false)} 
@@ -28,6 +28,6 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       />
 
       <main>{children}</main>
-    </>
+    </SessionProvider>
   );
 }

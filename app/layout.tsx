@@ -1,23 +1,23 @@
-import { Unbounded } from "next/font/google";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "@/components/ClientLayout";
 
-const unbounded = Unbounded({ 
-  subsets: ["cyrillic", "latin"],
-  weight: ["400", "700", "900"],
-  variable: "--font-unbounded",
-});
+const inter = Inter({ subsets: ["latin", "cyrillic"] });
 
-export const metadata = {
-  title: "Магазин игр",
-  description: "Лучший выбор игр",
+export const metadata: Metadata = {
+  title: "Game Store",
+  description: "Digital Keys Store",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="ru" className={unbounded.variable}>
-      {/* Теперь body не ограничен клиентскими скриптами на старте */}
-      <body className="bg-[#0a0a0b] antialiased text-white font-sans">
+    <html lang="ru">
+      <body className={inter.className}>
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

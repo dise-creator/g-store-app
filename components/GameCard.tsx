@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { useCartStore } from "@/store/useCart";
+import { motion } from "framer-motion";
 
 interface GameCardProps {
   id: number;
@@ -14,30 +15,47 @@ interface GameCardProps {
 export default function GameCard({ id, title, price, image }: GameCardProps) {
   const addItem = useCartStore((state) => state.addItem);
 
-  return (
-    <div 
-      onClick={() => addItem({ id, title, price, image })}
-      className="group cursor-pointer flex flex-col gap-3 animate-fade-in transition-transform active:scale-95"
-    >
-      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-2xl bg-white/5 transition-all duration-300 group-hover:ring-2 group-hover:ring-[#a855f7]/50 shadow-2xl">
-        <Image
-          src={image}
-          alt={title}
-          fill
-          sizes="(max-width: 768px) 50vw, 16vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-110"
-        />
-        <div className="absolute inset-0 bg-[#a855f7]/0 group-hover:bg-[#a855f7]/5 transition-colors duration-300" />
-      </div>
+  const handleCardClick = () => {
+    addItem({ id, title, price, image });
+  };
 
-      <div className="flex flex-col gap-0.5 px-0.5">
-        <span className="text-base font-bold text-white tracking-tight">
-          {price.toLocaleString()} ₽
-        </span>
-        <h3 className="text-[10px] md:text-xs font-medium text-white/40 truncate uppercase tracking-wider">
+  return (
+    <motion.div
+      whileHover={{ y: -5 }}
+      whileTap={{ scale: 0.98 }}
+      className="group relative cursor-pointer"
+      onClick={handleCardClick}
+    >
+      {/* 1. Картинка — уменьшил нижний отступ с mb-5 до mb-2 */}
+      <div className="relative h-72 w-full mb-2 rounded-[2.5rem] overflow-hidden border border-white/5 bg-[#121214]">
+        <Image 
+          src={image} 
+          alt={title} 
+          fill 
+          className="object-cover group-hover:scale-110 transition-transform duration-700" 
+        />
+      </div>
+      
+      {/* 2. Текстовый блок */}
+      <div className="px-1">
+        {/* Название: mb-0.5 вместо mb-1 для минимального зазора */}
+        <h3 className="text-white font-black italic uppercase text-[11px] mb-0.5 truncate tracking-tighter group-hover:text-[#a855f7] transition-colors">
           {title}
         </h3>
+        
+        {/* Подпись: mb-1 вместо mb-4, чтобы цена «прилипла» выше */}
+        <p className="text-white/20 text-[8px] uppercase font-bold tracking-widest mb-1">
+          Digital Key
+        </p>
+
+        {/* Цена */}
+        <p className="text-base font-black italic text-white tracking-tighter">
+          {price.toLocaleString()} ₽
+        </p>
       </div>
-    </div>
+
+      {/* Свечение */}
+      <div className="absolute -inset-2 rounded-[3rem] bg-[#a855f7]/5 opacity-0 group-hover:opacity-100 blur-2xl transition-all duration-500 z-[-1]" />
+    </motion.div>
   );
 }
