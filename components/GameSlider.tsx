@@ -71,17 +71,15 @@ export default function GameSlider({ games, title, isLoading = false }: GameSlid
                 </div>
               ))
             : // 2. Состояние данных: показываем реальные карточки
-              games.map((game) => (
-                <div 
-                  key={game.id} 
-                  /* Математика для 6 карточек:
-                     100% ширины минус 5 отступов по 16px (gap-4), деленное на 6.
-                  */
-                  className="flex-[0_0_calc((100%-16px)/2.2)] md:flex-[0_0_calc((100%-80px)/6)] select-none"
-                >
-                  <GameCard {...game} />
-                </div>
-              ))
+           games.map((game, index) => (
+  <div 
+    key={game.id} 
+    className="flex-[0_0_calc((100%-16px)/2.2)] md:flex-[0_0_calc((100%-80px)/6)] select-none animate-in fade-in duration-700"
+    style={{ animationDelay: `${index * 50}ms` }} // Карточки появятся по очереди с задержкой
+  >
+    <GameCard {...game} />
+  </div>
+))
           }
           {/* Технический отступ в конце ленты */}
           <div className="flex-[0_0_1px] shrink-0 pointer-events-none" />

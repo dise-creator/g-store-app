@@ -1,12 +1,9 @@
 @import "tailwindcss";
 
-@import "swiper/css";
-@import "swiper/css/navigation";
-@import "swiper/css/pagination";
-
+/* 1. Шрифты и системные переменные */
 :root {
-    font-family: var(--font-unbounded), sans-serif;
-  --background: #13151A;
+  font-family: var(--font-unbounded), sans-serif;
+  --background: #0a0a0b; /* Обновил под твой новый темный дизайн */
   --foreground: #ffffff;
 }
 
@@ -15,96 +12,69 @@ body {
   color: var(--foreground);
   max-width: 100%;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* 1. Чистые анимации без лишних вложений */
-@keyframes cardAppear {
-  from {
+/* 2. Анимация проявления карточек (Fade In) */
+@layer utilities {
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
     opacity: 0;
-    transform: translateY(30px) scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
+    animation: fadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   }
 }
 
-/* 2. Класс для анимации */
-.animate-card-fade {
-  opacity: 0;
-  animation: cardAppear 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-}
-
-/* 3. Жесткая обрезка скролла */
-html, body, #root, #__next, main {
-  width: 100%;
-  max-width: 100vw;
-  overflow-x: hidden !important;
-  position: relative;
-}
-/* Добавь это для более четкого и агрессивного вида текста */
-h3 {
-  text-wrap: balance; /* Чтобы длинные названия не ломались некрасиво */
-  letter-spacing: -0.02em;
-  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-}
-
-/* Эффект плавности для всех трансформаций на карточке */
-.group * {
-  backface-visibility: hidden;
-}
-
-/* Полная стилизация скроллбара для Chrome, Edge и Safari */
+/* 3. Очистка интерфейса от скроллбаров (Чистый вид как на референсах) */
 @layer base {
-  ::-webkit-scrollbar {
-    width: 8px; /* Делаем его еще тоньше и аккуратнее */
-  }
-
-  ::-webkit-scrollbar-track {
-    /* Делаем фон полностью прозрачным или под цвет твоего фона #0a0a0b */
-    background: #0a0a0b; 
-  }
-
-  ::-webkit-scrollbar-thumb {
-    /* Цвет ползунка: делаем его темно-серым, чтобы не бросался в глаза */
-    background-color: #27272a; 
-    border-radius: 100px;
-    /* Важно: добавляем прозрачную рамку, чтобы создать отступ от краев */
-    border: 2px solid #0a0a0b;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    /* При наведении подсвечиваем твоим фирменным фиолетовым */
-    background-color: #a855f7;
-  }
-
-  /* Для Firefox */
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: #27272a #0a0a0b;
-  }
-}
-
-
-/* В самый конец файла */
-@layer base {
+  /* Полностью убираем дефолтный скроллбар браузера */
   ::-webkit-scrollbar {
     display: none !important;
     width: 0 !important;
     height: 0 !important;
   }
 
-  body {
+  html, body {
+    scrollbar-width: none !important; /* Firefox */
+    -ms-overflow-style: none !important; /* IE/Edge */
+  }
+
+  /* Для кастомных контейнеров свайпера */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none !important;
+  }
+  
+  .no-scrollbar {
     -ms-overflow-style: none !important;
     scrollbar-width: none !important;
   }
 }
 
-/* Персонально для свайперов */
-.no-scrollbar::-webkit-scrollbar {
-  display: none !important;
+/* 4. Стили заголовков и визуальные правки */
+h2, h3 {
+  text-wrap: balance;
+  letter-spacing: -0.02em;
 }
-.no-scrollbar {
-  -ms-overflow-style: none !important;
-  scrollbar-width: none !important;
+
+/* Фикс для плавности трансформаций внутри карточек */
+.group * {
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+/* 5. Жесткая блокировка горизонтального сдвига всей страницы */
+html, body, main {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  position: relative;
 }
