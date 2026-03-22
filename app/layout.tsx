@@ -1,6 +1,6 @@
 import { Unbounded } from "next/font/google";
 import "./globals.css";
-import ClientLayout from "../components/ClientLayout";
+import ClientLayout from "@/components/ClientLayout";
 
 const unbounded = Unbounded({ 
   subsets: ["cyrillic", "latin"],
