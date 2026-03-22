@@ -5,27 +5,35 @@ import Header from "@/components/Header";
 import CartDrawer from "@/components/CartDrawer";
 import SearchModal from "@/components/SearchModal";
 
-export default function ClientLayout({
-  children,
-}: {
+// Добавляем типизацию для children, чтобы layout.tsx не ругался
+interface ClientLayoutProps {
   children: React.ReactNode;
-}) {
+}
+
+export default function ClientLayout({ children }: ClientLayoutProps) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [cartItems, setCartItems] = useState([]);
 
   return (
     <>
-      {/* Теперь Header точно знает, что такое onSearchClick */}
-      <Header onSearchClick={() => setIsSearchOpen(true)} />
+      <Header 
+        onSearchClick={() => setIsSearchOpen(true)} 
+        onCartClick={() => setIsCartOpen(true)} // Теперь это заработает
+      />
 
-      <CartDrawer />
+      <CartDrawer 
+        isOpen={isCartOpen} 
+        onClose={() => setIsCartOpen(false)} 
+        items={cartItems} 
+      />
 
       <SearchModal
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
       />
 
-      {/* Весь контент страниц (children) попадает сюда */}
-      {children}
+      <main>{children}</main>
     </>
   );
 }
