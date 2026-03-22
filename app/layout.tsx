@@ -1,41 +1,33 @@
-"use client";
+"use client"; // Обязательно, так как используем useState
 
 import React, { useState } from "react";
+import { Unbounded } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
-import SearchModal from "@/components/SearchModal";
+import SearchModal from "@/components/SearchModal"; // Создадим его ниже
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  // Управление модалкой поиска
+const unbounded = Unbounded({ 
+  subsets: ["cyrillic", "latin"],
+  weight: ["400", "700", "900"],
+  variable: "--font-unbounded",
+});
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   return (
-    <html lang="ru">
-      <body className="antialiased bg-[#0a0a0b] text-white flex flex-col min-h-screen">
-        
-        {/* Передаем обязательные пропсы в модалку */}
-        <SearchModal 
-          isOpen={isSearchOpen} 
-          onClose={() => setIsSearchOpen(false)} 
-        />
-        
-        {/* Передаем функцию открытия в шапку */}
+    <html lang="ru" className={unbounded.variable}>
+      <body className="bg-[#0a0a0b] antialiased">
+        {/* Передаем функцию открытия в Header */}
         <Header onSearchClick={() => setIsSearchOpen(true)} />
         
-        <CartDrawer /> 
+        <CartDrawer />
         
-        {/* Отступ pt-24 уже есть внутри page.tsx, поэтому тут просто flex-grow */}
-        <main className="flex-grow">
-          {children}
-        </main>
-
-        <Footer />
+        {/* Само модальное окно поиска */}
+        <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+        
+        {children}
       </body>
     </html>
   );

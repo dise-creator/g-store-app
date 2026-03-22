@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
+import Image from "next/image";
 import { useCartStore } from "@/store/useCart";
 
 interface GameCardProps {
@@ -8,54 +9,51 @@ interface GameCardProps {
   title: string;
   price: number;
   image: string;
-  discount?: string;
 }
 
-export default function GameCard({ id, title, price, image, discount }: GameCardProps) {
+export default function GameCard({ id, title, price, image }: GameCardProps) {
   const addItem = useCartStore((state) => state.addItem);
-  const [mounted, setMounted] = useState(false);
-
-  // Ждем, пока компонент появится в браузере
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const handleCardClick = (e: React.MouseEvent) => {
-    // Останавливаем другие события
-    e.preventDefault();
-    e.stopPropagation();
-    
-    console.log("Клик сработал для:", title);
-    addItem({ id, title, price, image });
-
-    const tg = (window as any).Telegram?.WebApp;
-    if (tg?.HapticFeedback) {
-      tg.HapticFeedback.impactOccurred("light");
-    }
-  };
-
-  // Пока не смонтировано, показываем пустую рамку, чтобы не было ошибок
-  if (!mounted) return <div className="w-full aspect-[3/4] bg-white/5 rounded-[32px] animate-pulse" />;
 
   return (
     <div 
-      onClick={handleCardClick}
-      className="relative group w-full aspect-[3/4] rounded-[32px] overflow-hidden cursor-pointer active:scale-95 transition-all duration-500 shadow-2xl border border-white/5 z-10"
+      onClick={() => addItem({ id, title, price, image })}
+      className="group relative aspect-[3/4] rounded-[32px] overflow-hidden cursor-pointer transition-all duration-500 hover:scale-[1.05] active:scale-95 border border-white/10 shadow-2xl bg-[#1a1c23]"
     >
-      <img 
-        src={image} 
+      {/* Фоновая картинка с эффектом при наведении */}
+      <Image
+        src={image}
         alt={title}
-        className="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+        fill
+        className="object-cover transition-transform duration-700 group-hover:scale-110 group-hover:rotate-2 brightness-[0.8] group-hover:brightness-100"
       />
-      
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0f1218] via-[#0f1218]/20 to-transparent opacity-90" />
 
-      <div className="absolute bottom-0 left-0 right-0 p-8 z-20">
-        <h3 className="text-white font-black text-2xl uppercase italic leading-none">{title}</h3>
-        <div className="text-white font-black text-3xl mt-2">
-          {price.toLocaleString()} <span className="text-sm">₽</span>
+      {/* Матовый градиент снизу */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0b] via-black/20 to-transparent opacity-90" />
+
+      {/* Контент */}
+      <div className="absolute inset-0 flex flex-col items-center justify-end p-5 text-center pb-10">
+        
+        {/* Название: Используем встроенный мощный шрифт с жирным начертанием */}
+        <h3 className="text-white text-[1.4rem] font-[1000] uppercase italic leading-[0.85] mb-4 
+                       tracking-tighter drop-shadow-[0_5px_15px_rgba(0,0,0,1)]
+                       transition-all duration-500 group-hover:text-[#a855f7] group-hover:scale-110">
+          {title}
+        </h3>
+
+        {/* Цена в стильном "стеклянном" бабле */}
+        <div className="bg-white/10 backdrop-blur-xl px-5 py-2 rounded-2xl border border-white/20 
+                        shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]
+                        transition-all duration-500 group-hover:bg-[#a855f7] group-hover:border-transparent group-hover:shadow-[0_0_20px_rgba(168,85,247,0.4)]">
+          <div className="flex items-center gap-2 text-white font-black text-lg">
+            <span>{price.toLocaleString()}</span>
+            <span className="text-[12px] text-[#a855f7] group-hover:text-white transition-colors font-extrabold">₽</span>
+          </div>
         </div>
       </div>
+      
+      {/* Неоновая рамка при наведении */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 
+                      ring-inset ring-2 ring-[#a855f7]/40 rounded-[32px]" />
     </div>
   );
 }
