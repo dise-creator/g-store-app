@@ -2,9 +2,9 @@
 
 import React, { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Trash2, Minus, Plus, ShoppingBag } from "lucide-react";
-import { useCartStore } from "@/store/useCart";
+import { X, Minus, Plus, Trash2, ShoppingBag, CreditCard } from "lucide-react";
 import Image from "next/image";
+import { useCartStore } from "@/store/useCart";
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -12,134 +12,178 @@ interface CartDrawerProps {
 }
 
 export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
-  const { items, removeItem, updateQuantity } = useCartStore();
-  const totalAmount = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const { items, removeItem, updateQuantity, clearCart } = useCartStore();
 
-  // --- ЛОГИКА ESCAPE ---
+  // 1. Закрытие по нажатию Esc
   useEffect(() => {
-    const handleEsc = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        onClose();
-      }
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
     };
-
-    if (isOpen) {
-      window.addEventListener("keydown", handleEsc);
-      // Блокируем прокрутку сайта, когда корзина открыта
-      document.body.style.overflow = "hidden";
-    }
-
-    return () => {
-      window.removeEventListener("keydown", handleEsc);
-      document.body.style.overflow = "unset";
-    };
+    if (isOpen) window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
   }, [isOpen, onClose]);
-  // ---------------------
+
+  const totalAmount = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
 
   return (
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* ФОНОВЫЙ СЛОЙ */}
+          {/* Overlay с мягким размытием */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[998] cursor-pointer"
+            className="fixed inset-0 bg-black/40 backdrop-blur-md z-[150]"
           />
 
-          {/* ПАНЕЛЬ КОРЗИНЫ */}
+          {/* Элегантная панель корзины */}
           <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 h-full w-full md:w-[420px] bg-[#0a0a0b] border-l border-white/5 z-[999] shadow-[-20px_0_50px_rgba(0,0,0,0.5)] flex flex-col"
+            initial={{ x: "-100%", opacity: 0.5 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: "-100%", opacity: 0.5 }}
+            transition={{ type: "spring", damping: 28, stiffness: 220 }}
+            className={`
+              fixed left-0 top-0 h-full w-full max-w-[420px] z-[200] flex flex-col
+              bg-[#0f0f13]/80 backdrop-blur-3xl backdrop-saturate-150
+              border-r border-white/10 shadow-[20px_0_50px_rgba(0,0,0,0.3)]
+              rounded-r-[2.5rem] /* Тот самый изысканный край */
+            `}
           >
+            {/* Декоративный градиент на фоне внутри панели */}
+            <div className="absolute inset-0 bg-radial-at-tl from-[#a855f7]/5 via-transparent to-transparent pointer-events-none rounded-r-[2.5rem]" />
+
             {/* Шапка */}
-            <div className="p-8 pb-6 flex items-center justify-between border-b border-white/5">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-[#a855f7]/10 rounded-lg">
-                  <ShoppingBag size={20} className="text-[#a855f7]" />
+            <div className="relative p-8 flex items-center justify-between">
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2 mb-1">
+                  <ShoppingBag size={16} className="text-[#a855f7]" />
+                  <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">
+                    Your Selection
+                  </span>
                 </div>
-                <h2 className="text-xl font-black text-white uppercase italic tracking-tighter">
+                <h2 className="text-2xl font-black uppercase italic tracking-tighter text-white">
                   Корзина
                 </h2>
               </div>
-              <button 
-                onClick={onClose} 
-                className="p-2 text-white/20 hover:text-white hover:bg-white/5 rounded-xl transition-all"
+              <button
+                onClick={onClose}
+                className="w-10 h-10 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-full transition-all text-white/50 hover:text-white border border-white/5 active:scale-90"
               >
-                <X size={24} />
+                <X size={20} />
               </button>
             </div>
 
             {/* Список товаров */}
-            <div className="flex-1 overflow-y-auto p-8 space-y-6 no-scrollbar">
-              {items.length === 0 ? (
-                <div className="h-full flex flex-col items-center justify-center text-center space-y-4">
-                  <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center">
-                    <ShoppingBag size={32} className="text-white/10" />
-                  </div>
-                  <p className="text-white/20 uppercase font-black italic text-xs tracking-[0.2em]">
-                    Пусто
-                  </p>
-                </div>
-              ) : (
+            <div className="relative flex-1 overflow-y-auto px-8 py-2 no-scrollbar space-y-6">
+              {items.length > 0 ? (
                 items.map((item) => (
-                  <div key={item.id} className="flex gap-4 group">
-                    <div className="w-20 h-24 relative rounded-2xl overflow-hidden shrink-0 bg-white/5 border border-white/5">
-                      <Image src={item.image} alt={item.title} fill className="object-cover" />
+                  <motion.div
+                    layout
+                    key={item.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="group flex items-center gap-5"
+                  >
+                    {/* Изображение с мягким свечением */}
+                    <div className="relative w-20 h-28 shrink-0 rounded-2xl overflow-hidden border border-white/10 shadow-lg transition-transform group-hover:scale-105 duration-500">
+                      <Image
+                        src={item.image}
+                        alt={item.title}
+                        fill
+                        className="object-cover"
+                      />
                     </div>
-                    
-                    <div className="flex flex-col justify-between py-1 flex-1 min-w-0">
-                      <div>
-                        <h4 className="text-white font-bold text-sm uppercase truncate leading-tight mb-1">
+
+                    {/* Информация */}
+                    <div className="flex-1 space-y-3">
+                      <div className="flex justify-between items-start gap-2">
+                        <h3 className="text-[11px] font-black uppercase tracking-wider text-white/80 leading-tight line-clamp-2">
                           {item.title}
-                        </h4>
-                        <p className="text-white/20 text-[9px] uppercase font-black tracking-widest">
-                          Digital Key
-                        </p>
+                        </h3>
+                        <button 
+                          onClick={() => removeItem(item.id)}
+                          className="text-white/10 hover:text-red-400 transition-colors"
+                        >
+                          <Trash2 size={14} />
+                        </button>
                       </div>
 
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3 bg-white/5 rounded-lg px-2 py-1 border border-white/5">
-                          <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="text-white/40 hover:text-[#a855f7]"><Minus size={14}/></button>
-                          <span className="text-white font-black text-xs">{item.quantity}</span>
-                          <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="text-white/40 hover:text-[#a855f7]"><Plus size={14}/></button>
-                        </div>
-                        <p className="text-white font-black italic text-sm">
-                          {(item.price * item.quantity).toLocaleString()} ₽
+                        <p className="text-[#a855f7] font-black italic text-base">
+                          {item.price.toLocaleString()} ₽
                         </p>
+                        
+                        {/* Компактный контроллер количества */}
+                        <div className="flex items-center gap-3 bg-white/5 px-2 py-1 rounded-xl border border-white/5">
+                          <button
+                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            className="text-white/30 hover:text-white transition-colors"
+                          >
+                            <Minus size={12} />
+                          </button>
+                          <span className="text-xs font-bold text-white min-w-[12px] text-center">
+                            {item.quantity}
+                          </span>
+                          <button
+                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            className="text-white/30 hover:text-white transition-colors"
+                          >
+                            <Plus size={12} />
+                          </button>
+                        </div>
                       </div>
                     </div>
-
-                    <button 
-                      onClick={() => removeItem(item.id)} 
-                      className="opacity-0 group-hover:opacity-100 p-2 text-white/10 hover:text-red-500 transition-all self-start"
-                    >
-                      <Trash2 size={18} />
-                    </button>
-                  </div>
+                  </motion.div>
                 ))
+              ) : (
+                <div className="h-64 flex flex-col items-center justify-center text-center">
+                  <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4 border border-white/5">
+                    <ShoppingBag size={24} className="opacity-20" />
+                  </div>
+                  <p className="text-[10px] uppercase font-black tracking-widest opacity-20 text-white">
+                    Список пуст
+                  </p>
+                </div>
               )}
             </div>
 
-            {/* Футер */}
+            {/* Футер: Итоговая информация */}
             {items.length > 0 && (
-              <div className="p-8 bg-[#0c0c0e] border-t border-white/5 space-y-6">
-                <div className="flex justify-between items-end">
-                  <div className="flex flex-col">
-                    <span className="text-white/30 text-[10px] font-black uppercase tracking-[0.2em] mb-1">Итого</span>
-                    <span className="text-3xl text-white font-black italic tracking-tighter">
+              <div className="relative p-8 bg-gradient-to-t from-black/40 to-transparent space-y-6 rounded-br-[2.5rem]">
+                <div className="space-y-2">
+                  <div className="flex justify-between text-[10px] font-bold uppercase tracking-widest text-white/30">
+                    <span>Всего позиций</span>
+                    <span>{items.reduce((a, b) => a + b.quantity, 0)}</span>
+                  </div>
+                  <div className="flex justify-between items-end">
+                    <span className="text-sm font-black uppercase italic text-white/60">Итого:</span>
+                    <span className="text-3xl font-black italic text-white tracking-tighter drop-shadow-[0_0_15px_rgba(168,85,247,0.3)]">
                       {totalAmount.toLocaleString()} ₽
                     </span>
                   </div>
                 </div>
-                <button className="w-full py-5 bg-[#a855f7] rounded-2xl text-white font-black uppercase italic hover:scale-[1.02] active:scale-95 transition-all shadow-[0_20px_40px_rgba(168,85,247,0.2)]">
-                  Оформить заказ
-                </button>
+
+                <div className="flex flex-col gap-3">
+                  <button className="relative w-full py-5 bg-[#a855f7] hover:bg-[#9333ea] text-white rounded-2xl font-black uppercase italic tracking-[0.15em] transition-all active:scale-[0.97] shadow-[0_20px_40px_rgba(168,85,247,0.3)] group overflow-hidden">
+                    <span className="relative z-10 flex items-center justify-center gap-3 text-sm">
+                      <CreditCard size={18} />
+                      Оформить заказ
+                    </span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                  </button>
+                  
+                  <button 
+                    onClick={clearCart}
+                    className="py-2 text-[9px] font-bold text-white/20 uppercase hover:text-white transition-colors tracking-[0.3em]"
+                  >
+                    Очистить всё
+                  </button>
+                </div>
               </div>
             )}
           </motion.div>
