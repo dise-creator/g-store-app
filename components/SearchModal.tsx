@@ -2,11 +2,10 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Search, Plus } from "lucide-react";
+import { X, Search as SearchIcon, Check, Plus } from "lucide-react";
 import Image from "next/image";
 import { useCartStore } from "@/store/useCart";
 
-// 1. Описываем тип игры, чтобы TypeScript не ругался на "any"
 interface Game {
   id: number;
   title: string;
@@ -14,112 +13,116 @@ interface Game {
   image: string;
 }
 
-// 2. Данные теперь точно внутри файла
-const ALL_GAMES: Game[] = [
-  { id: 1, title: "СТАРФИЛД", price: 4200, image: "/images/starfield.jpg" },
-  { id: 2, title: "КИБЕРПАНК 2077", price: 2500, image: "/images/cyber.jpg" },
-  { id: 3, title: "ЭЛДЕН РИНГ", price: 3900, image: "/images/elden.jpg" },
-  { id: 4, title: "GTA V", price: 1200, image: "/images/gta.jpg" },
-  { id: 5, title: "FIFA 24", price: 2499, image: "/images/fifa2024.jpg" },
-  { id: 6, title: "ШАХТЕРСКОЕ РЕМЕСЛО", price: 1100, image: "/images/mc.jpg" },
-];
-
 interface SearchModalProps {
   isOpen: boolean;
   onClose: () => void;
+  games: Game[];
 }
 
-export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
+export default function SearchModal({ isOpen, onClose, games = [] }: SearchModalProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const addItem = useCartStore((state) => state.addItem);
+  const { addItem, items } = useCartStore();
 
-  // Очистка при закрытии
+  // 1. Закрытие через ESC
   useEffect(() => {
-    if (!isOpen) setSearchQuery("");
-  }, [isOpen]);
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, [onClose]);
 
-  const filteredGames = useMemo(() => {
-    if (!searchQuery.trim()) return ALL_GAMES;
-    return ALL_GAMES.filter((game) =>
-      game.title.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [searchQuery]);
+  const isInCart = (gameId: number) => items.some(item => item.id === gameId);
 
-  // Типизированная функция добавления
-  const handleAddToCart = (game: Game) => {
-    addItem({
-      ...game,
-    });
-  };
+  // 2. Логика фильтрации + Рандомные игры
+  const displayGames = useMemo(() => {
+    if (searchQuery.length > 0) {
+      return games.filter((game) =>
+        game.title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+    // Если поиск пуст — берем 5 рандомных игр
+    return [...games].sort(() => 0.5 - Math.random()).slice(0, 5);
+  }, [searchQuery, games]);
 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[200] flex items-start justify-center pt-20 px-4">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="absolute inset-0 bg-black/60 backdrop-blur-2xl"
-          />
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[150] bg-[#0a0a0c]/95 backdrop-blur-xl flex flex-col"
+        >
+          {/* Компактная шапка */}
+          <div className="w-full max-w-[900px] mx-auto px-6 py-8 flex items-center gap-4">
+            <div className="relative flex-1 group">
+              <SearchIcon className="absolute left-5 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-[#a855f7] transition-colors" size={20} />
+              <input
+                autoFocus
+                type="text"
+                placeholder="Поиск игр..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-lg text-white outline-none focus:border-[#a855f7]/40 focus:bg-white/[0.07] transition-all font-bold uppercase italic tracking-tighter"
+              />
+            </div>
+            <button 
+              onClick={onClose} 
+              className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-red-500/20 transition-all text-xs font-bold"
+            >
+              ESC
+            </button>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: -20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: -20 }}
-            className="relative w-full max-w-2xl bg-[#16161a]/90 border border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl backdrop-blur-3xl"
-          >
-            <div className="p-8">
-              <div className="flex items-center justify-between mb-6">
-                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">Поиск по магазину</span>
-                <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full transition-colors text-white/20 hover:text-white">
-                  <X size={20} />
-                </button>
-              </div>
+          {/* Список результатов */}
+          <div className="flex-1 overflow-y-auto px-6 pb-20">
+            <div className="max-w-[900px] mx-auto flex flex-col gap-3">
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20 mb-2 ml-2">
+                {searchQuery.length > 0 ? "Результаты поиска" : "Возможно, вам понравится"}
+              </p>
 
-              <div className="relative mb-8">
-                <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-[#a855f7]" size={18} />
-                <input 
-                  autoFocus
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Найти игру..."
-                  className="w-full bg-white/[0.03] border border-white/10 rounded-2xl py-3.5 pl-14 pr-6 text-white text-sm focus:outline-none focus:border-[#a855f7]/50 transition-all placeholder:text-white/20"
-                />
-              </div>
+              {displayGames.map((game) => {
+                const added = isInCart(game.id);
 
-              <div className="space-y-3 max-h-[350px] overflow-y-auto pr-2 no-scrollbar">
-                {filteredGames.map((game) => (
+                return (
                   <motion.div 
                     layout
-                    key={game.id}
-                    className="group flex items-center justify-between p-3 rounded-2xl bg-white/[0.02] border border-transparent hover:border-white/10 hover:bg-white/5 transition-all"
+                    key={game.id} 
+                    className="flex items-center justify-between bg-white/[0.03] border border-white/5 rounded-2xl p-3 hover:bg-white/[0.06] transition-all group"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-14 relative rounded-xl overflow-hidden border border-white/10">
+                      <div className="w-12 h-12 relative rounded-lg overflow-hidden border border-white/5">
                         <Image src={game.image} alt={game.title} fill className="object-cover" />
                       </div>
                       <div>
-                        <h4 className="text-white font-bold text-xs uppercase tracking-tight">{game.title}</h4>
-                        <p className="text-[#a855f7] font-black italic text-[11px]">{game.price.toLocaleString()} ₽</p>
+                        <h3 className="text-sm font-black uppercase italic text-white leading-none">{game.title}</h3>
+                        <p className="text-[#a855f7] text-xs font-black italic mt-1">{game.price.toLocaleString()} ₽</p>
                       </div>
                     </div>
 
-                    <button 
-                      onClick={() => handleAddToCart(game)}
-                      className="flex items-center gap-2 bg-[#a855f7]/10 hover:bg-[#a855f7] text-[#a855f7] hover:text-white px-4 py-2 rounded-xl border border-[#a855f7]/20 transition-all active:scale-90"
+                    <button
+                      onClick={() => !added && addItem(game)}
+                      className={`
+                        flex items-center gap-2 px-5 py-2.5 rounded-xl text-[10px] font-black uppercase italic transition-all duration-300
+                        ${added 
+                          ? "bg-[#a855f7] text-white shadow-[0_0_20px_rgba(168,85,247,0.4)]" 
+                          : "bg-white/5 text-white/40 border border-white/5 hover:bg-[#a855f7]/20 hover:text-[#a855f7]"
+                        }
+                      `}
                     >
-                      <Plus size={14} />
-                      <span className="text-[10px] font-black uppercase italic">В корзину</span>
+                      {added ? (
+                        <><Check size={14} strokeWidth={4} /> Добавлено</>
+                      ) : (
+                        <><Plus size={14} /> В корзину</>
+                      )}
                     </button>
                   </motion.div>
-                ))}
-              </div>
+                );
+              })}
             </div>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       )}
     </AnimatePresence>
   );
