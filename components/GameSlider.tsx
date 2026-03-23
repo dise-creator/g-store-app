@@ -1,30 +1,25 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import GameCard from "./GameCard";
+import GameCard, { Game } from "./GameCard";
 import GameCardSkeleton from "./GameCardSkeleton";
-
-interface Game {
-  id: number;
-  title: string;
-  price: number;
-  image: string;
-}
+import GameModal from "./GameModal";
 
 interface GameSliderProps {
   games: Game[];
   title: string;
-  isLoading?: boolean; // Новый проп для управления загрузкой
+  isLoading?: boolean;
 }
 
-export default function GameSlider({ games, title, isLoading = false }: GameSliderProps) {
+export default function GameSlider({ games = [], title, isLoading = false }: GameSliderProps) {
+  const [selectedGame, setSelectedGame] = useState<Game | null>(null);
+  
   const [emblaRef, emblaApi] = useEmblaCarousel({ 
     align: "start", 
     containScroll: "trimSnaps",
-    dragFree: true,
-    watchDrag: true
+    dragFree: true
   });
 
   const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
@@ -32,59 +27,48 @@ export default function GameSlider({ games, title, isLoading = false }: GameSlid
 
   return (
     <div className="w-full">
-      {/* Шапка секции: Заголовок и Кнопки */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-8 px-2">
         <div className="flex items-center gap-4">
-          <div className="w-1 h-6 bg-[#a855f7] rounded-full shadow-[0_0_15px_rgba(168,85,247,0.5)]" />
-          <h2 className="text-xl font-black text-white uppercase italic tracking-tighter">
-            {title}
-          </h2>
+          <div className="w-1.5 h-8 bg-[#a855f7] rounded-full shadow-[0_0_20px_rgba(168,85,247,0.5)]" />
+          <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter">{title}</h2>
         </div>
 
         <div className="flex gap-2">
-          <button 
-            onClick={scrollPrev} 
-            className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/30 hover:text-white hover:bg-[#a855f7] hover:border-[#a855f7] transition-all active:scale-90"
-          >
-            <ChevronLeft size={18} />
+          <button onClick={scrollPrev} className="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-[#a855f7] transition-all active:scale-90">
+            <ChevronLeft size={20} />
           </button>
-          <button 
-            onClick={scrollNext} 
-            className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/30 hover:text-white hover:bg-[#a855f7] hover:border-[#a855f7] transition-all active:scale-90"
-          >
-            <ChevronRight size={18} />
+          <button onClick={scrollNext} className="w-10 h-10 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-[#a855f7] transition-all active:scale-90">
+            <ChevronRight size={20} />
           </button>
         </div>
       </div>
 
-      {/* Контейнер слайдера */}
       <div className="overflow-hidden no-scrollbar" ref={emblaRef}>
-        <div className="flex gap-4 cursor-grab active:cursor-grabbing">
+        <div className="flex gap-5 px-2">
           {isLoading 
-            ? // 1. Состояние загрузки: показываем 6 скелетонов
-              Array(6).fill(0).map((_, i) => (
-                <div 
-                  key={`skeleton-${i}`} 
-                  className="flex-[0_0_calc((100%-16px)/2.2)] md:flex-[0_0_calc((100%-80px)/6)]"
-                >
+            ? Array(6).fill(0).map((_, i) => (
+                <div key={`skeleton-${i}`} className="flex-[0_0_calc((100%-16px)/2.2)] md:flex-[0_0_calc((100%-100px)/6)]">
                   <GameCardSkeleton />
                 </div>
               ))
-            : // 2. Состояние данных: показываем реальные карточки
-           games.map((game, index) => (
-  <div 
-    key={game.id} 
-    className="flex-[0_0_calc((100%-16px)/2.2)] md:flex-[0_0_calc((100%-80px)/6)] select-none animate-in fade-in duration-700"
-    style={{ animationDelay: `${index * 50}ms` }} // Карточки появятся по очереди с задержкой
-  >
-    <GameCard {...game} />
-  </div>
-))
+            : (games || []).map((game, index) => (
+                <div 
+                  key={`${game.id}-${index}`} 
+                  onClick={() => setSelectedGame(game)}
+                  className="flex-[0_0_calc((100%-16px)/2.2)] md:flex-[0_0_calc((100%-100px)/6)] select-none"
+                >
+                  <GameCard game={game} />
+                </div>
+              ))
           }
-          {/* Технический отступ в конце ленты */}
-          <div className="flex-[0_0_1px] shrink-0 pointer-events-none" />
         </div>
       </div>
+
+      <GameModal 
+        game={selectedGame} 
+        isOpen={!!selectedGame} 
+        onClose={() => setSelectedGame(null)} 
+      />
     </div>
   );
 }
