@@ -2,42 +2,35 @@
 
 import React from "react";
 import { ShoppingBag } from "lucide-react";
-import { useCartStore } from "@/store/useCart";
-import { motion, AnimatePresence } from "framer-motion";
 
-export default function CartButton({ onClick }: { onClick: () => void }) {
-  const items = useCartStore((state) => state.items);
-  
-  const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
-  const totalPrice = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+// Описываем типы для входящих данных
+interface CartButtonProps {
+  onClick: () => void;
+  totalAmount: number;
+  totalItems: number;
+}
 
-  console.log("Кнопка корзины видит товаров:", totalItems);
-
+export default function CartButton({ onClick, totalAmount, totalItems }: CartButtonProps) {
   return (
     <button
       onClick={onClick}
-      className="group relative flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 p-2 pr-4 rounded-2xl transition-all active:scale-95"
+      className="relative flex items-center gap-3 bg-[#a855f7] hover:bg-[#9333ea] text-white px-5 py-2.5 rounded-2xl transition-all active:scale-95 shadow-[0_10px_20px_rgba(168,85,247,0.3)] group"
     >
-      <div className="relative p-2 bg-[#a855f7] rounded-xl shadow-lg shadow-[#a855f7]/20">
-        <ShoppingBag size={20} className="text-white" />
-        <AnimatePresence>
-          {totalItems > 0 && (
-            <motion.span
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0 }}
-              className="absolute -top-1 -right-1 w-4 h-4 bg-white text-[#a855f7] text-[9px] font-black rounded-full flex items-center justify-center border border-[#a855f7]"
-            >
-              {totalItems}
-            </motion.span>
-          )}
-        </AnimatePresence>
+      {/* Иконка с индикатором количества */}
+      <div className="relative">
+        <ShoppingBag size={20} className="group-hover:rotate-12 transition-transform" />
+        {totalItems > 0 && (
+          <span className="absolute -top-2 -right-2 bg-white text-[#a855f7] text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-sm">
+            {totalItems}
+          </span>
+        )}
       </div>
 
-      <div className="flex flex-col items-start">
-        <span className="text-[10px] text-white/40 uppercase font-black tracking-widest leading-none">Корзина</span>
-        <span className="text-sm font-black text-white italic">
-          {totalPrice.toLocaleString()} ₽
+      {/* Текст и сумма */}
+      <div className="flex flex-col items-start leading-none">
+        <span className="text-[9px] uppercase font-black tracking-widest opacity-60">Корзина</span>
+        <span className="text-sm font-black italic uppercase tracking-tighter">
+          {totalAmount.toLocaleString()} ₽
         </span>
       </div>
     </button>

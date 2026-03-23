@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Search } from "lucide-react";
 import UserProfile from "./UserProfile";
 import CartButton from "./CartButton"; 
+import { useCartStore } from "@/store/useCart"; // Добавили импорт
 
 interface HeaderProps {
   onSearchClick: () => void;
@@ -12,12 +13,21 @@ interface HeaderProps {
 
 export default function Header({ onSearchClick, onCartClick }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
+  const [mounted, setMounted] = useState(false); // Для безопасной гидратации
+  
+  // Достаем товары из стора
+  const items = useCartStore((state) => state.items);
 
   useEffect(() => {
+    setMounted(true);
     const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Считаем данные для корзины
+  const totalAmount = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <header 
@@ -25,14 +35,12 @@ export default function Header({ onSearchClick, onCartClick }: HeaderProps) {
         fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-[1440px] z-[100] 
         px-8 rounded-[2rem] transition-all duration-500 ease-out
         flex justify-between items-center
-        /* Эффект плавающей панели */
         ${scrolled 
           ? "py-4 bg-black/40 backdrop-blur-2xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]" 
           : "py-6 bg-white/[0.03] backdrop-blur-md border border-white/5"
         }
       `}
     >
-      {/* Внутреннее свечение для эффекта объема */}
       <div className="absolute inset-0 rounded-[2rem] pointer-events-none bg-gradient-to-br from-white/[0.05] to-transparent" />
 
       {/* Логотип */}
@@ -45,7 +53,6 @@ export default function Header({ onSearchClick, onCartClick }: HeaderProps) {
         </span>
       </div>
 
-      {/* Правая часть */}
       <div className="relative flex items-center gap-3 md:gap-5">
         <button
           onClick={onSearchClick}
@@ -58,7 +65,12 @@ export default function Header({ onSearchClick, onCartClick }: HeaderProps) {
 
         <div className="flex items-center gap-3">
           <UserProfile />
-          <CartButton onClick={onCartClick} />
+          {/* Теперь передаем данные в кнопку */}
+          <CartButton 
+            onClick={onCartClick} 
+            totalAmount={mounted ? totalAmount : 0}
+            totalItems={mounted ? totalItems : 0}
+          />
         </div>
       </div>
     </header>

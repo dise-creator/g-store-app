@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware'; // Добавляем этот важный модуль
+import { persist } from 'zustand/middleware';
 
 interface CartItem {
   id: number;
@@ -13,9 +13,10 @@ interface CartStore {
   items: CartItem[];
   isOpen: boolean;
   toggleCart: () => void;
-  addItem: (product: any) => void;
+  addItem: (product: Omit<CartItem, 'quantity'>) => void;
   removeItem: (id: number) => void;
   updateQuantity: (id: number, quantity: number) => void;
+  clearCart: () => void; // Добавим полезный метод очистки
 }
 
 export const useCartStore = create<CartStore>()(
@@ -23,10 +24,10 @@ export const useCartStore = create<CartStore>()(
     (set) => ({
       items: [],
       isOpen: false,
+      
       toggleCart: () => set((state) => ({ isOpen: !state.isOpen })),
       
       addItem: (product) => set((state) => {
-        // Проверяем, есть ли уже такой товар
         const existingItem = state.items.find((item) => item.id === product.id);
         
         if (existingItem) {
@@ -39,7 +40,6 @@ export const useCartStore = create<CartStore>()(
           };
         }
         
-        // Если товара нет, добавляем его с количеством 1
         return { 
           items: [...state.items, { ...product, quantity: 1 }] 
         };
@@ -54,9 +54,11 @@ export const useCartStore = create<CartStore>()(
           item.id === id ? { ...item, quantity: Math.max(1, quantity) } : item
         ),
       })),
+
+      clearCart: () => set({ items: [] }),
     }),
     {
-      name: 'cart-storage', // Ключ, по которому корзина будет лежать в LocalStorage
+      name: 'cart-storage',
     }
   )
 );
