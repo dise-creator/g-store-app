@@ -1,84 +1,12 @@
 @import "tailwindcss";
 
-/* 1. Системные переменные и базовые стили */
 @layer base {
-  :root {
-    --color-1: #1a1a2e;
-    --color-2: #2d2d44;
-    --color-3: #4b4b61;
-  }
-
   html, body {
     margin: 0;
     padding: 0;
-    min-height: 100vh;
-    width: 100%;
-    max-width: 100vw;
-    overflow-x: hidden;
-    position: relative;
+    /* Устанавливаем очень темный сине-черный для мягкости */
+    background-color: #050507 !important;
     color: white;
-    
-    /* Фон и анимация градиента */
-    background: linear-gradient(135deg, var(--color-1), var(--color-2), var(--color-3)) !important;
-    background-size: 400% 400% !important;
-    background-attachment: fixed !important;
-    animation: gradientAnimation 15s ease infinite !important;
-
-    /* Полная очистка скроллбара (браузерная часть) */
-    scrollbar-width: none !important;
-    -ms-overflow-style: none !important;
-  }
-
-  /* Вебскит-скроллбары выносим отдельно для чистоты */
-  ::-webkit-scrollbar {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
-  }
-
-  h2, h3 {
-    text-wrap: balance;
-    letter-spacing: -0.02em;
-  }
-}
-
-/* 2. Анимации */
-@keyframes gradientAnimation {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* 3. Утилиты */
-@layer utilities {
-  .animate-fade-in {
-    opacity: 0;
-    animation: fadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-  }
-
-  /* Класс для кастомных контейнеров (слайдеры, модалки) */
-  .no-scrollbar {
-    -ms-overflow-style: none !important;
-    scrollbar-width: none !important;
-  }
-  .no-scrollbar::-webkit-scrollbar {
-    display: none !important;
-  }
-
-  /* Фикс для плавности трансформаций внутри карточек */
-  .preserve-3d {
-    backface-visibility: hidden;
-    transform-style: preserve-3d;
+    min-height: 100vh;
   }
 }
