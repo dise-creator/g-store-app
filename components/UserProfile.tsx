@@ -11,7 +11,6 @@ export default function UserProfile() {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
-  // Логика закрытия по ESC (только если меню открыто)
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") setIsOpen(false);
@@ -20,20 +19,16 @@ export default function UserProfile() {
     return () => window.removeEventListener("keydown", handleEsc);
   }, [isOpen]);
 
-  // ГЛАВНАЯ ПРАВКА: Убираем лишнее окно для гостей
   const handleProfileClick = () => {
     if (!session) {
-      // Если не залогинен — сразу летим на красивую страницу
-      router.push('/signin');
+      router.push('/signin'); // Мгновенный переход
     } else {
-      // Если залогинен — открываем меню управления профилем
       setIsOpen(!isOpen);
     }
   };
 
   return (
     <div className="relative">
-      {/* Кнопка профиля */}
       <button
         onClick={handleProfileClick}
         className={`p-3 rounded-2xl border transition-all active:scale-90 ${
@@ -50,11 +45,9 @@ export default function UserProfile() {
       </button>
 
       <AnimatePresence>
-        {/* Показываем выпадающее меню ТОЛЬКО если пользователь вошел в систему */}
         {isOpen && session && (
           <>
             <div className="fixed inset-0 z-[100]" onClick={() => setIsOpen(false)} />
-
             <motion.div
               initial={{ opacity: 0, y: 10, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -71,7 +64,6 @@ export default function UserProfile() {
                     <p className="text-[#a855f7] text-[10px] uppercase font-black tracking-widest">Игрок</p>
                   </div>
                 </div>
-
                 <button 
                   onClick={() => signOut()}
                   className="w-full py-4 bg-red-500/5 hover:bg-red-500/10 border border-red-500/10 text-red-500 rounded-2xl font-black text-[10px] uppercase italic transition-all flex items-center justify-center gap-2"

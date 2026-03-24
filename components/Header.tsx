@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Search } from "lucide-react";
 import UserProfile from "./UserProfile";
 import CartButton from "./CartButton"; 
-import { useCartStore } from "@/store/useCart"; // Добавили импорт
+import { useCartStore } from "@/store/useCart";
 
 interface HeaderProps {
   onSearchClick: () => void;
@@ -13,9 +13,7 @@ interface HeaderProps {
 
 export default function Header({ onSearchClick, onCartClick }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
-  const [mounted, setMounted] = useState(false); // Для безопасной гидратации
-  
-  // Достаем товары из стора
+  const [mounted, setMounted] = useState(false);
   const items = useCartStore((state) => state.items);
 
   useEffect(() => {
@@ -25,52 +23,44 @@ export default function Header({ onSearchClick, onCartClick }: HeaderProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Считаем данные для корзины
   const totalAmount = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
-  return (
-    <header 
-      className={`
-        fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-[1440px] z-[100] 
-        px-8 rounded-[2rem] transition-all duration-500 ease-out
-        flex justify-between items-center
-        ${scrolled 
-          ? "py-4 bg-black/40 backdrop-blur-2xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]" 
-          : "py-6 bg-white/[0.03] backdrop-blur-md border border-white/5"
-        }
-      `}
-    >
-      <div className="absolute inset-0 rounded-[2rem] pointer-events-none bg-gradient-to-br from-white/[0.05] to-transparent" />
+  // Стили для 3D эффекта
+  const dark3D = {
+    color: "#2D3748",
+    textShadow: "0 1px 0 #1a202c, 0 2px 0 #1a202c, 0 3px 0 #1a202c, 0 4px 6px rgba(0,0,0,0.5)"
+  };
 
-      {/* Логотип */}
-      <div className="relative flex flex-col group cursor-pointer shrink-0">
-        <h1 className="text-xl md:text-2xl font-black italic uppercase tracking-tighter text-white">
-          GAME<span className="text-[#a855f7] drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]">STORE</span>
+  const viper3D = {
+    color: "#00FFFF",
+    textShadow: "0 1px 0 #00e6e6, 0 2px 0 #00cccc, 0 0 15px rgba(0, 255, 255, 0.8), 0 4px 8px rgba(0,0,0,0.4)"
+  };
+
+  return (
+    <header className={`fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-[1440px] z-[100] px-8 rounded-[2rem] transition-all duration-500 flex justify-between items-center ${
+      scrolled ? "py-4 bg-black/60 backdrop-blur-3xl border border-white/10 shadow-2xl" : "py-6 bg-white/[0.03] backdrop-blur-md border border-white/5"
+    }`}>
+      
+      {/* ЛОГОТИП С ГАРАНТИРОВАННЫМ ЦВЕТОМ И РАЗДЕЛЕНИЕМ */}
+      <div className="relative flex items-center group cursor-pointer shrink-0">
+        <h1 className="flex items-baseline font-black italic uppercase tracking-tighter select-none scale-110 md:scale-125 origin-left">
+          <span style={dark3D} className="text-3xl md:text-4xl">C</span>
+          <span style={dark3D} className="text-3xl md:text-4xl mr-1.5">L</span>
+          
+          <span style={viper3D} className="text-4xl md:text-5xl">I</span>
+          <span style={viper3D} className="text-4xl md:text-5xl">C</span>
         </h1>
-        <span className="text-[7px] uppercase tracking-[0.3em] text-white/30 font-bold -mt-1 ml-0.5">
-          Digital Universe
-        </span>
       </div>
 
       <div className="relative flex items-center gap-3 md:gap-5">
-        <button
-          onClick={onSearchClick}
-          className="p-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/5 transition-all active:scale-95 group"
-        >
-          <Search size={20} className="text-white/60 group-hover:text-white transition-colors" />
+        <button onClick={onSearchClick} className="p-3 bg-white/5 hover:bg-white/10 rounded-xl border border-white/5 transition-all active:scale-95 group shadow-[0_0_20px_rgba(0,255,255,0.05)] hover:shadow-[0_0_30px_rgba(0,255,255,0.2)]">
+          <Search size={20} className="text-white/60 group-hover:text-[#00ffff] transition-colors" />
         </button>
-
         <div className="h-6 w-[1px] bg-white/10 mx-1 hidden md:block" />
-
         <div className="flex items-center gap-3">
           <UserProfile />
-          {/* Теперь передаем данные в кнопку */}
-          <CartButton 
-            onClick={onCartClick} 
-            totalAmount={mounted ? totalAmount : 0}
-            totalItems={mounted ? totalItems : 0}
-          />
+          <CartButton onClick={onCartClick} totalAmount={mounted ? totalAmount : 0} totalItems={mounted ? totalItems : 0} />
         </div>
       </div>
     </header>

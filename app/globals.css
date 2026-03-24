@@ -4,9 +4,64 @@
   html, body {
     margin: 0;
     padding: 0;
-    /* Устанавливаем очень темный сине-черный для мягкости */
-    background-color: #050507 !important;
+    /* Ультра-черный фон для контраста */
+    background-color: #010101 !important;
     color: white;
     min-height: 100vh;
+    font-feature-settings: "kern" 1;
+    overflow-x: hidden;
+  }
+}
+
+@layer utilities {
+  /* 1. ОБЪЕМНЫЙ БИРЮЗОВЫЙ ЛОГОТИП CLIC */
+  
+  /* 3D Объем для металлических букв CL */
+  .clic-3d-dark {
+    color: #2D3748 !important; /* Gunmetal */
+    text-shadow: 
+      0 1px 0 #1a202c,
+      0 2px 0 #1a202c,
+      0 3px 0 #1a202c,
+      0 4px 1px rgba(0,0,0,0.6), /* Тень грани */
+      0 0 5px rgba(0,0,0,0.3),
+      0 8px 15px rgba(0,0,0,0.5); /* Глубокая тень */
+  }
+
+  /* 3D Объем и Бирюзовое свечение для кристаллов IC */
+  .clic-3d-viper {
+    color: #00FFFF !important; /* Твой Бирюзовый */
+    text-shadow: 
+      0 1px 0 #00e6e6,
+      0 2px 0 #00cccc,
+      0 3px 0 #00b3b3,
+      0 4px 1px rgba(0,0,0,0.7), /* Тень грани */
+      /* Слои бирюзового неона */
+      0 0 15px rgba(0, 255, 255, 1),
+      0 0 25px rgba(0, 255, 255, 0.6),
+      0 0 50px rgba(0, 255, 255, 0.4);
+  }
+
+  /* 2. УНИВЕРСАЛЬНОЕ БИРЮЗОВОЕ СВЕЧЕНИЕ (везде вместо фиолетового) */
+  
+  /* Мягкое бирюзовое свечение (box-shadow) */
+  .viper-glow-sm {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+  }
+
+  /* Интенсивное бирюзовое свечение (hover) */
+  .viper-glow-md:hover {
+    box-shadow: 0 0 35px rgba(0, 255, 255, 0.4) !important;
+    border-color: rgba(0, 255, 255, 0.5) !important;
+  }
+
+  /* Текстовое бирюзовое свечение */
+  .text-viper-glow {
+    text-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+  }
+
+  /* Бирюзовый градиент для фонов */
+  .bg-viper-gradient {
+    background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(0, 255, 255, 0.03) 100%);
   }
 }

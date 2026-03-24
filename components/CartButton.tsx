@@ -3,7 +3,6 @@
 import React from "react";
 import { ShoppingBag } from "lucide-react";
 
-// Описываем типы для входящих данных
 interface CartButtonProps {
   onClick: () => void;
   totalAmount: number;
@@ -14,25 +13,32 @@ export default function CartButton({ onClick, totalAmount, totalItems }: CartBut
   return (
     <button
       onClick={onClick}
-      className="relative flex items-center gap-3 bg-[#a855f7] hover:bg-[#9333ea] text-white px-5 py-2.5 rounded-2xl transition-all active:scale-95 shadow-[0_10px_20px_rgba(168,85,247,0.3)] group"
+      // Применяем те же размеры и скругления, что и у других иконок
+      className="group relative p-3 rounded-2xl transition-all duration-300 active:scale-95 flex items-center justify-center 
+                 bg-[#00FFFF] border border-white/5 
+                 shadow-[0_0_20px_rgba(0,255,255,0.2)] hover:shadow-[0_0_30px_rgba(0,255,255,0.4)]"
     >
-      {/* Иконка с индикатором количества */}
-      <div className="relative">
-        <ShoppingBag size={20} className="group-hover:rotate-12 transition-transform" />
+      <div className="relative flex items-center justify-center gap-2">
+        {/* Иконка корзины */}
+        <ShoppingBag size={22} className="text-black group-hover:scale-105 transition-transform" />
+
+        {/* Сумма (если больше 0) */}
+        {totalAmount >= 0 && (
+          <span className="text-sm font-black italic text-black -mb-0.5 whitespace-nowrap">
+            {totalAmount} ₽
+          </span>
+        )}
+
+        {/* Индикатор количества товаров (над иконкой) */}
         {totalItems > 0 && (
-          <span className="absolute -top-2 -right-2 bg-white text-[#a855f7] text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-sm">
+          <span className="absolute -top-1.5 -left-1.5 bg-black text-[#00FFFF] text-[9px] font-black w-4 h-4 flex items-center justify-center rounded-full border-2 border-[#00FFFF]">
             {totalItems}
           </span>
         )}
       </div>
 
-      {/* Текст и сумма */}
-      <div className="flex flex-col items-start leading-none">
-        <span className="text-[9px] uppercase font-black tracking-widest opacity-60">Корзина</span>
-        <span className="text-sm font-black italic uppercase tracking-tighter">
-          {totalAmount.toLocaleString()} ₽
-        </span>
-      </div>
+      {/* Внутренний блик для объема */}
+      <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
     </button>
   );
 }
