@@ -1,101 +1,108 @@
 "use client";
 
-import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { X, ShoppingCart, Star, Clock } from "lucide-react";
-import Image from "next/image";
-import { useCartStore } from "@/store/useCart";
+import React, { useEffect } from "react";
+import { X, ShoppingCart, Star } from "lucide-react";
+import { Game } from "./GameCard";
 
-export default function GameModal({ game, isOpen, onClose }: any) {
-  const addItem = useCartStore((state) => state.addItem);
+interface GameModalProps {
+  game: Game | null;
+  isOpen: boolean;
+  onClose: () => void;
+}
 
-  if (!game) return null;
+export default function GameModal({ game, isOpen, onClose }: GameModalProps) {
+  useEffect(() => {
+    const handleEsc = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+    if (isOpen) {
+      window.addEventListener("keydown", handleEsc);
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      window.removeEventListener("keydown", handleEsc);
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen, onClose]);
+
+  if (!isOpen || !game) return null;
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-          {/* Задний фон с блюром */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="absolute inset-0 bg-black/80 backdrop-blur-md"
-          />
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
+      <div className="relative w-full max-w-5xl bg-[#0a0a0a] rounded-[3rem] overflow-hidden flex flex-col md:row shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/5">
+        
+        {/* КНОПКА ЗАКРЫТИЯ: Теперь бирюзовая */}
+        <button 
+          onClick={onClose}
+          className="absolute top-8 right-8 z-20 p-3 bg-[#00FFFF] rounded-full text-black shadow-[0_0_20px_rgba(0,255,255,0.4)] hover:scale-110 active:scale-90 transition-all"
+        >
+          <X size={24} strokeWidth={3} />
+        </button>
 
-          {/* Контент модалки */}
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.9, opacity: 0, y: 20 }}
-            className="relative w-full max-w-4xl bg-[#111114] border border-white/10 rounded-[3rem] overflow-hidden shadow-2xl flex flex-col md:flex-row"
-          >
-            {/* Кнопка закрытия */}
-            <button 
-              onClick={onClose}
-              className="absolute top-6 right-6 z-10 w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white hover:bg-red-500 transition-colors"
-            >
-              <X size={20} />
-            </button>
+        <div className="flex flex-col md:flex-row w-full h-full">
+          {/* ИЗОБРАЖЕНИЕ: Исправлено отображение */}
+          <div className="w-full md:w-1/2 min-h-[400px] relative">
+            <img 
+              src={game.image || `/images/games/${game.id}.jpg`} 
+              alt={game.title}
+              className="absolute inset-0 w-full h-full object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-[#0a0a0a]/40" />
+          </div>
 
-            {/* Левая часть: Изображение */}
-            <div className="relative w-full md:w-1/2 aspect-[3/4]">
-              <Image src={game.image} alt={game.title} fill className="object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#111114] via-transparent to-transparent" />
-            </div>
-
-            {/* Правая часть: Инфо */}
-            <div className="p-10 md:w-1/2 flex flex-col justify-center">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="bg-[#a855f7]/20 text-[#a855f7] px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest">
-                  Популярное
-                </span>
-                <div className="flex items-center gap-1 text-yellow-500">
-                    <Star size={14} fill="currentColor" />
-                    <span className="text-sm font-bold">4.9</span>
-                </div>
-              </div>
-
-              <h2 className="text-4xl font-black uppercase italic tracking-tighter text-white mb-2 leading-none">
-                {game.title}
-              </h2>
-              <p className="text-white/40 text-sm leading-relaxed mb-8">
-                Погрузитесь в невероятное приключение от Digital Universe. 
-                Лучшая графика, захватывающий сюжет и полная свобода действий ждут вас.
-              </p>
-
-              <div className="grid grid-cols-2 gap-4 mb-8">
-                <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
-                    <span className="block text-[10px] text-white/30 uppercase font-bold mb-1">Жанр</span>
-                    <span className="text-white text-sm font-bold">Action / RPG</span>
-                </div>
-                <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
-                    <span className="block text-[10px] text-white/30 uppercase font-bold mb-1">Платформа</span>
-                    <span className="text-white text-sm font-bold">PC / PS5</span>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between mt-auto">
-                <div>
-                    <span className="block text-[10px] text-white/30 uppercase font-bold mb-1">Цена издания</span>
-                    <span className="text-3xl font-black italic text-white">{game.price.toLocaleString()} ₽</span>
-                </div>
-                <button 
-                  onClick={() => {
-                    addItem(game);
-                    onClose();
-                  }}
-                  className="flex items-center gap-3 bg-[#a855f7] hover:bg-[#9333ea] text-white px-8 py-4 rounded-2xl font-black uppercase italic tracking-tighter transition-all transform active:scale-95 shadow-[0_0_30px_rgba(168,85,247,0.4)]"
-                >
-                  <ShoppingCart size={20} />
-                  Купить
-                </button>
+          {/* КОНТЕНТ */}
+          <div className="w-full md:w-1/2 p-10 md:p-14 flex flex-col">
+            <div className="flex items-center gap-4 mb-6">
+              <span className="px-4 py-1.5 bg-[#00FFFF]/10 text-[#00FFFF] text-[10px] font-black uppercase rounded-lg border border-[#00FFFF]/20">
+                Популярное
+              </span>
+              <div className="flex items-center gap-1.5 text-[#FFD700]">
+                <Star size={18} fill="currentColor" />
+                <span className="text-sm font-black italic">4.9</span>
               </div>
             </div>
-          </motion.div>
+
+            <h2 className="text-5xl font-black text-white uppercase italic tracking-tighter mb-8 leading-none">
+              {game.title}
+            </h2>
+
+            <p className="text-white/40 text-lg leading-relaxed mb-10 font-medium">
+              Погрузитесь в невероятное приключение. Лучшая графика и полная свобода действий ждут вас в Digital Universe.
+            </p>
+
+            <div className="grid grid-cols-2 gap-6 mb-12">
+              <div className="space-y-2">
+                <p className="text-[10px] text-white/20 uppercase font-black tracking-widest">Жанр</p>
+                <p className="text-base text-white/80 font-bold uppercase italic">Action / RPG</p>
+              </div>
+              <div className="space-y-2">
+                <p className="text-[10px] text-white/20 uppercase font-black tracking-widest">Платформа</p>
+                <p className="text-base text-white/80 font-bold uppercase italic">PC / PS5</p>
+              </div>
+            </div>
+
+            <div className="flex items-end justify-between mt-auto pt-8 border-t border-white/5">
+              <div className="space-y-1">
+                <p className="text-[10px] text-white/20 uppercase font-black tracking-widest">Цена издания</p>
+                <p className="text-4xl font-black text-white italic tracking-tighter">
+                  {game.price} ₽
+                </p>
+              </div>
+
+              {/* КНОПКА КУПИТЬ: Теперь тоже бирюзовая в тон */}
+              <button className="flex items-center gap-4 px-10 py-5 bg-[#00FFFF] rounded-[1.5rem] text-black font-black shadow-[0_0_30px_rgba(0,255,255,0.3)] hover:shadow-[0_0_50px_rgba(0,255,255,0.5)] hover:scale-105 active:scale-95 transition-all uppercase italic text-lg">
+                <ShoppingCart size={24} strokeWidth={3} />
+                Купить
+              </button>
+            </div>
+          </div>
         </div>
-      )}
-    </AnimatePresence>
+      </div>
+
+      {/* Подсказка ESC */}
+      <div className="fixed bottom-12 text-[11px] font-black text-white/10 uppercase tracking-[0.3em] animate-pulse">
+        Нажмите <span className="mx-2 px-3 py-1 bg-white/5 rounded-lg border border-white/10 text-white/30">ESC</span> чтобы закрыть
+      </div>
+    </div>
   );
 }

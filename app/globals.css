@@ -65,3 +65,22 @@
     background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(0, 255, 255, 0.03) 100%);
   }
 }
+@layer utilities {
+  .nav-button-active {
+    background-color: #00FFFF !important;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+  }
+  
+  .nav-button-active:hover {
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.6);
+    transform: scale(1.05);
+  }
+
+  .nav-button-disabled {
+    background-color: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
