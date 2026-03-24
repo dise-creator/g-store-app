@@ -1,9 +1,31 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { motion, Variants } from "framer-motion";
 import GameSlider from "@/components/GameSlider";
 import HeroBanner from "@/components/HeroBanner";
+import AnimatedBackground from "@/components/AnimatedBackground";
 import { ALL_GAMES } from "@/store/games";
+
+// Исправленные варианты анимации с явной типизацией Variants
+const sectionVariants: Variants = {
+  hidden: { 
+    opacity: 0, 
+    y: 50, 
+    scale: 0.95 
+  },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    scale: 1,
+    transition: {
+      type: "spring",
+      stiffness: 70,
+      damping: 15,
+      // Убрали duration, так как он конфликтует с spring в типизации Framer Motion
+    }
+  },
+};
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -19,34 +41,46 @@ export default function Home() {
   }));
 
   return (
-    <main className="min-h-screen pt-40 pb-20 bg-transparent animate-fade-in">
-      {/* Используем flex-col с gap-16 вместо gap-32, 
-         чтобы слайдеры были ближе друг к другу 
-      */}
+    <main className="relative min-h-screen pt-40 pb-20 bg-transparent">
+      {/* Живой фон как на видео */}
+      <AnimatedBackground />
+
       <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex flex-col gap-16">
         
-        {/* Баннер с дополнительным нижним отступом для баланса */}
-        <div className="mb-4">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-4"
+        >
           <HeroBanner />
-        </div>
+        </motion.div>
         
-        {/* Секция "Топ предложения" — теперь она ближе к баннеру */}
-        <section>
+        {/* Секция с анимацией при скролле */}
+        <motion.section
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+        >
           <GameSlider 
             title="Топ предложения" 
             games={longList} 
             isLoading={isLoading} 
           />
-        </section>
+        </motion.section>
 
-        {/* Секция "Недавно добавленные" */}
-        <section>
+        <motion.section
+          variants={sectionVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+        >
           <GameSlider 
             title="Недавно добавленные" 
             games={[...longList].reverse()} 
             isLoading={isLoading} 
           />
-        </section>
+        </motion.section>
 
       </div>
     </main>
