@@ -7,80 +7,91 @@ import HeroBanner from "@/components/HeroBanner";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import { ALL_GAMES } from "@/store/games";
 
-// Исправленные варианты анимации с явной типизацией Variants
+// Типизация для анимации появления (Scroll Reveal)
 const sectionVariants: Variants = {
-  hidden: { 
-    opacity: 0, 
-    y: 50, 
-    scale: 0.95 
-  },
+  hidden: { opacity: 0, y: 50, scale: 0.98 },
   visible: { 
     opacity: 1, 
     y: 0, 
     scale: 1,
-    transition: {
-      type: "spring",
-      stiffness: 70,
-      damping: 15,
-      // Убрали duration, так как он конфликтует с spring в типизации Framer Motion
-    }
+    transition: { type: "spring", stiffness: 60, damping: 15 }
   },
 };
+
+// Список будущих жанров для масштабирования сайта
+const GENRES = [
+  { title: "Популярные новинки", key: "new" },
+  { title: "Экшен и приключения", key: "action" },
+  { title: "Ролевые игры (RPG)", key: "rpg" },
+  { title: "Стратегии", key: "strategy" },
+  { title: "Шутеры", key: "shooters" },
+  { title: "Инди-хиты", key: "indie" },
+  { title: "Спортивные игры", key: "sports" },
+  { title: "Симуляторы", key: "sim" },
+];
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 1500);
+    // Имитация загрузки данных
+    const timer = setTimeout(() => setIsLoading(false), 1200);
     return () => clearTimeout(timer);
   }, []);
 
-  const longList = Array(3).fill(ALL_GAMES).flat().map((game, index) => ({
-    ...game,
-    id: index + 1
-  }));
+  // Подготавливаем данные для слайдеров
+  // Пока просто дублируем список, перемешивая его для визуального разнообразия
+  const getShuffledGames = () => [...ALL_GAMES].sort(() => Math.random() - 0.5);
 
   return (
-    <main className="relative min-h-screen pt-40 pb-20 bg-transparent">
-      {/* Живой фон как на видео */}
+    <main className="relative min-h-screen pt-32 pb-40 bg-transparent">
+      {/* Твой кастомный живой фон */}
       <AnimatedBackground />
 
-      <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex flex-col gap-16">
+      <div className="max-w-[1440px] mx-auto px-6 md:px-12 flex flex-col gap-24">
         
+        {/* Приветственный баннер */}
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-4"
+          transition={{ duration: 0.8 }}
         >
           <HeroBanner />
         </motion.div>
         
-        {/* Секция с анимацией при скролле */}
+        {/* ОСНОВНОЙ БЛОК: ТОП ПРЕДЛОЖЕНИЯ */}
         <motion.section
           variants={sectionVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
+          viewport={{ once: true, amount: 0.1 }}
         >
           <GameSlider 
             title="Топ предложения" 
-            games={longList} 
+            games={ALL_GAMES} 
             isLoading={isLoading} 
           />
         </motion.section>
 
-        <motion.section
-          variants={sectionVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-        >
-          <GameSlider 
-            title="Недавно добавленные" 
-            games={[...longList].reverse()} 
-            isLoading={isLoading} 
-          />
-        </motion.section>
+        {/* ДИНАМИЧЕСКИЕ СЕКЦИИ ПО ЖАНРАМ (Дубликаты) */}
+        {GENRES.map((genre, index) => (
+          <motion.section
+            key={genre.key}
+            variants={sectionVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.1 }}
+            // Добавляем небольшую задержку для каждой следующей секции при быстром скролле
+            transition={{ delay: index * 0.05 }}
+          >
+            <GameSlider 
+              title={genre.title} 
+              // Пока передаем перемешанный общий список игр
+              games={getShuffledGames()} 
+              isLoading={isLoading} 
+            />
+          </motion.section>
+        ))}
 
       </div>
     </main>
