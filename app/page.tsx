@@ -1,12 +1,15 @@
 "use client";
-import React, { useMemo } from "react";
+
+import React, { useMemo, useState, useEffect } from "react";
 import GameSlider from "@/components/GameSlider";
 import HeroBanner from "@/components/HeroBanner";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import { ALL_GAMES } from "@/store/games";
 
 export default function Home() {
-  // Генерируем много секций для бесконечного скролла
+  // Состояние для хранения перемешанных игр для каждой секции
+  const [shuffledSections, setShuffledSections] = useState<any[]>([]);
+
   const sections = useMemo(() => [
     { title: "Новинки", key: "new" },
     { title: "Популярное", key: "trending" },
@@ -15,6 +18,15 @@ export default function Home() {
     { title: "Симуляторы", key: "sim" },
     { title: "Инди-хиты", key: "indie" }
   ], []);
+
+  // Перемешиваем игры только один раз при загрузке на клиенте
+  useEffect(() => {
+    const data = sections.map(s => ({
+      ...s,
+      games: [...ALL_GAMES].sort(() => Math.random() - 0.5)
+    }));
+    setShuffledSections(data);
+  }, [sections]);
 
   return (
     <main className="relative min-h-screen !bg-transparent pt-32 pb-24">
@@ -29,15 +41,23 @@ export default function Home() {
 
         {/* Много слайдеров с играми */}
         <div className="flex flex-col gap-28">
-          {sections.map((s) => (
-            <div key={s.key} className="bg-transparent">
-              <GameSlider 
-                title={s.title} 
-                // Рандомим игры для каждой секции, чтобы они отличались
-                games={[...ALL_GAMES].sort(() => Math.random() - 0.5)} 
-              />
-            </div>
-          ))}
+          {shuffledSections.length > 0 ? (
+            shuffledSections.map((s) => (
+              <div key={s.key} className="bg-transparent">
+                <GameSlider 
+                  title={s.title} 
+                  games={s.games} 
+                />
+              </div>
+            ))
+          ) : (
+            // Скелетоны или заглушка на время перемешивания
+            sections.map((s) => (
+              <div key={s.key}>
+                <GameSlider title={s.title} games={[]} isLoading={true} />
+              </div>
+            ))
+          )}
         </div>
       </div>
     </main>

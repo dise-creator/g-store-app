@@ -2,8 +2,13 @@
 
 import React, { useCallback, useState, useMemo } from "react";
 import useEmblaCarousel from "embla-carousel-react";
+// ИСПРАВЛЕНО: Правильный пакет lucide-react
 import { ChevronLeft, ChevronRight } from "lucide-react"; 
-import GameCard, { Game } from "./GameCard";
+
+// ИСПРАВЛЕНО: Импортируем сам компонент и ТИП отдельно
+import GameCard from "./GameCard"; 
+import type { Game } from "@/store/games"; // Берем интерфейс из стора, чтобы не было конфликтов
+
 import GameCardSkeleton from "./GameCardSkeleton";
 import GameModal from "./GameModal";
 

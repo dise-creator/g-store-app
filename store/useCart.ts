@@ -62,3 +62,8 @@ export const useCartStore = create<CartStore>()(
     }
   )
 );
+export const selectTotalItems = (state: CartStore) => 
+  state.items.reduce((acc, item) => acc + item.quantity, 0);
+
+export const selectTotalPrice = (state: CartStore) => 
+  state.items.reduce((acc, item) => acc + item.price * item.quantity, 0);
