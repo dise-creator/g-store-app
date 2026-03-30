@@ -2,41 +2,44 @@
 
 import React from "react";
 import Image from "next/image";
-import { Game } from "@/store/games"; // Импортируем интерфейс оттуда
+import type { Game } from "@/store/games";
 
 interface GameCardProps {
   game: Game;
 }
 
 export default function GameCard({ game }: GameCardProps) {
-  if (!game) return null;
-
   return (
-    <div className="w-full flex flex-col gap-3 group cursor-pointer">
-      {/* Контейнер изображения с легким неоновым свечением при наведении */}
-      <div className="relative aspect-[3/4.2] w-full rounded-[1.5rem] overflow-hidden border border-white/5 bg-[#1a1a1e] transition-all duration-500 group-hover:border-[#00FFFF]/30 group-hover:shadow-[0_0_20px_rgba(0,255,255,0.1)]">
-        <Image 
-          src={game.image} 
-          alt={game.title} 
-          fill 
-          sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 16vw"
-          className="object-cover transition-transform duration-700 group-hover:scale-110" 
-          priority={game.id <= 6} // Приоритетная загрузка для первых карточек
+    <div className="group relative flex flex-col gap-5">
+      {/* Контейнер изображения */}
+      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[2.5rem] border border-white/5 transition-all duration-500 group-hover:border-[#63f3f7]/40 group-hover:shadow-[0_0_40px_rgba(99,243,247,0.15)]">
+        <Image
+          src={game.image}
+          alt={game.title}
+          fill
+          className="object-cover transition-transform duration-700 group-hover:scale-110"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
       </div>
 
-      {/* Инфо-блок */}
-      <div className="px-1 transition-transform duration-300 group-hover:translate-x-1">
-        <h2 className="text-[13px] font-black uppercase italic tracking-tighter text-white/90 line-clamp-1 group-hover:text-[#00FFFF] transition-colors">
+      {/* Инфо-блок: Увеличенные названия и цены */}
+      <div className="flex flex-col gap-2 px-2">
+        <h3 className="font-michroma text-[12px] md:text-[14px] uppercase tracking-[0.15em] text-white/40 group-hover:text-white/90 transition-all duration-300 line-clamp-1">
           {game.title}
-        </h2>
-        <div className="flex items-baseline gap-1 mt-1">
-           <span className="text-base font-black italic text-white/80">
+        </h3>
+        
+        <div className="flex items-center gap-1.5">
+          <span className="font-michroma text-xl md:text-2xl text-white tracking-tight drop-shadow-[0_0_10px_rgba(255,255,255,0.1)]">
             {game.price.toLocaleString()}
           </span>
-          <span className="text-[10px] font-bold uppercase text-white/40">₽</span>
+          <span className="font-michroma text-sm md:text-base text-[#63f3f7] drop-shadow-[0_0_8px_rgba(99,243,247,0.4)]">
+            ₽
+          </span>
         </div>
       </div>
+
+      {/* Декоративная полоса стала шире и ярче */}
+      <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-0 h-[3px] bg-[#63f3f7] transition-all duration-500 group-hover:w-[70%] blur-[1.5px] opacity-0 group-hover:opacity-100 shadow-[0_0_15px_#63f3f7]" />
     </div>
   );
 }
