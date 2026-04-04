@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { X, ShoppingCart, Check, Zap } from "lucide-react";
+import { X, Zap } from "lucide-react";
 import dynamic from "next/dynamic";
 import { useCartStore } from "@/store/useCart"; 
 import type { Game } from "@/store/games";
@@ -18,11 +18,26 @@ export default function GameModal({ game, isOpen, onClose }: { game: Game | null
   const [isAdded, setIsAdded] = useState(false);
   const addItem = useCartStore((state) => state.addItem);
 
+  // Логика закрытия по Esc и управления скроллом
   useEffect(() => {
     setMounted(true);
-    if (isOpen) document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = "unset"; };
-  }, [isOpen]);
+
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+      window.addEventListener("keydown", handleEsc);
+    }
+
+    return () => {
+      document.body.style.overflow = "unset";
+      window.removeEventListener("keydown", handleEsc);
+    };
+  }, [isOpen, onClose]);
 
   if (!mounted || !isOpen || !game) return null;
 
@@ -34,9 +49,13 @@ export default function GameModal({ game, isOpen, onClose }: { game: Game | null
 
   return createPortal(
     <div className="fixed inset-0 z-[999] flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-black/90 backdrop-blur-md" onClick={onClose} />
+      {/* Overlay */}
+      <div 
+        className="absolute inset-0 bg-black/90 backdrop-blur-md" 
+        onClick={onClose} 
+      />
       
-      <div className="relative z-[1000] w-full max-w-6xl bg-[#0a0b0d] border border-white/5 rounded-[2.5rem] overflow-hidden flex flex-col lg:flex-row">
+      <div className="relative z-[1000] w-full max-w-6xl bg-[#0a0b0d] border border-white/5 rounded-[2.5rem] overflow-hidden flex flex-col lg:flex-row shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
         
         {/* ВИДЕО */}
         <div className="w-full lg:w-[60%] bg-black aspect-video lg:aspect-auto">
@@ -76,7 +95,7 @@ export default function GameModal({ game, isOpen, onClose }: { game: Game | null
 
             <button 
               onClick={handleAddToCart}
-              className={`w-full h-16 rounded-2xl font-michroma font-black uppercase text-xs tracking-widest transition-all
+              className={`w-full h-16 rounded-2xl font-michroma font-black uppercase text-xs tracking-widest transition-all active:scale-95
                 ${isAdded ? "bg-[#63f3f7] text-black" : "bg-white/10 text-white hover:bg-white/20"}`}
             >
               {isAdded ? "В КОРЗИНЕ" : "ДОБАВИТЬ"}
@@ -84,7 +103,11 @@ export default function GameModal({ game, isOpen, onClose }: { game: Game | null
           </div>
         </div>
 
-        <button onClick={onClose} className="absolute top-6 right-6 text-white/20 hover:text-white transition-colors">
+        {/* Кнопка закрытия (крестик) */}
+        <button 
+          onClick={onClose} 
+          className="absolute top-6 right-6 text-white/20 hover:text-white transition-colors p-2 hover:bg-white/5 rounded-full"
+        >
           <X size={24} />
         </button>
       </div>
