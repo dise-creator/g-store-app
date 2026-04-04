@@ -1,69 +1,47 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import type { Game } from './games';
 
-interface CartItem {
-  id: number;
-  title: string;
-  price: number;
-  image: string;
+interface CartItem extends Game {
   quantity: number;
 }
 
 interface CartStore {
   items: CartItem[];
-  isOpen: boolean;
-  toggleCart: () => void;
-  addItem: (product: Omit<CartItem, 'quantity'>) => void;
-  removeItem: (id: number) => void;
-  updateQuantity: (id: number, quantity: number) => void;
-  clearCart: () => void; // Добавим полезный метод очистки
+  addItem: (game: Game) => void;
+  removeItem: (id: string) => void;
+  updateQuantity: (id: string, quantity: number) => void; // Добавляем сюда
+  clearCart: () => void;
+  totalPrice: () => number;
 }
 
-export const useCartStore = create<CartStore>()(
-  persist(
-    (set) => ({
-      items: [],
-      isOpen: false,
-      
-      toggleCart: () => set((state) => ({ isOpen: !state.isOpen })),
-      
-      addItem: (product) => set((state) => {
-        const existingItem = state.items.find((item) => item.id === product.id);
-        
-        if (existingItem) {
-          return {
-            items: state.items.map((item) =>
-              item.id === product.id 
-                ? { ...item, quantity: item.quantity + 1 } 
-                : item
-            ),
-          };
-        }
-        
-        return { 
-          items: [...state.items, { ...product, quantity: 1 }] 
-        };
-      }),
-
-      removeItem: (id) => set((state) => ({
-        items: state.items.filter((item) => item.id !== id),
-      })),
-
-      updateQuantity: (id, quantity) => set((state) => ({
-        items: state.items.map((item) =>
-          item.id === id ? { ...item, quantity: Math.max(1, quantity) } : item
-        ),
-      })),
-
-      clearCart: () => set({ items: [] }),
-    }),
-    {
-      name: 'cart-storage',
+export const useCartStore = create<CartStore>((set, get) => ({
+  items: [],
+  addItem: (game) => set((state) => {
+    const existingItem = state.items.find(item => item.id === game.id);
+    if (existingItem) {
+      return {
+        items: state.items.map(item =>
+          item.id === game.id ? { ...item, quantity: item.quantity + 1 } : item
+        )
+      };
     }
-  )
-);
-export const selectTotalItems = (state: CartStore) => 
-  state.items.reduce((acc, item) => acc + item.quantity, 0);
-
-export const selectTotalPrice = (state: CartStore) => 
-  state.items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    return { items: [...state.items, { ...game, quantity: 1 }] };
+  }),
+  removeItem: (id) => set((state) => ({
+    items: state.items.filter((item) => String(item.id) !== String(id))
+  })),
+  // РЕАЛИЗАЦИЯ ФУНКЦИИ:
+  updateQuantity: (id, quantity) => set((state) => ({
+    items: state.items.map(item => 
+      item.id === id ? { ...item, quantity: Math.max(0, quantity) } : item
+    ).filter(item => item.quantity > 0)
+  })),
+  clearCart: () => set({ items: [] }),
+  totalPrice: () => {
+    const items = get().items;
+    return items.reduce((total, item) => {
+      const price = Number(item.price) || 0;
+      return total + (price * item.quantity);
+    }, 0);
+  },
+}));
