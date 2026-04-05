@@ -4,6 +4,7 @@ import React, { useMemo, useState, useEffect } from "react";
 import GameSlider from "@/components/GameSlider";
 import HeroBanner from "@/components/HeroBanner";
 import AnimatedBackground from "@/components/AnimatedBackground";
+import GameModal from "@/components/GameModal"; // <--- 1. ДОБАВИЛИ ИМПОРТ
 import { supabase } from "@/lib/supabase"; 
 import type { Game } from "@/store/games";
 
@@ -11,7 +12,6 @@ export default function Home() {
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Ключи (key) должны совпадать с тем, что ты пишешь в колонку category в Supabase
   const sections = useMemo(() => [
     { title: "Новинки", key: "new" },
     { title: "Популярное", key: "trending" },
@@ -40,17 +40,11 @@ export default function Home() {
     loadData();
   }, []);
 
-  // ИСПРАВЛЕННАЯ ФУНКЦИЯ: теперь она фильтрует игры
   const getSectionGames = (sectionKey: string) => {
-    // 1. Пытаемся найти игры именно этой категории
     const filtered = games.filter(g => g.category === sectionKey);
-    
-    // 2. Если в категории пусто, показываем случайные игры (чтобы сайт не был пустым),
-    // но ограничиваем их количество, чтобы не было гигантских дублей
     if (filtered.length === 0) {
       return [...games].sort(() => Math.random() - 0.5).slice(0, 4);
     }
-    
     return filtered;
   };
 
@@ -75,7 +69,6 @@ export default function Home() {
               <div key={s.key} className="bg-transparent">
                 <GameSlider 
                   title={s.title} 
-                  // Передаем отфильтрованные игры
                   games={getSectionGames(s.key)} 
                 />
               </div>
@@ -83,6 +76,9 @@ export default function Home() {
           )}
         </div>
       </div>
+
+      {/* <--- 2. ДОБАВИЛИ КОМПОНЕНТ МОДАЛКИ В КОНЕЦ ---> */}
+      <GameModal /> 
     </main>
   );
 }

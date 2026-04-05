@@ -5,13 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Search as SearchIcon, Check, Plus } from "lucide-react";
 import Image from "next/image";
 import { useCartStore } from "@/store/useCart";
-
-interface Game {
-  id: number;
-  title: string;
-  price: number;
-  image: string;
-}
+import type { Game } from "@/store/games"; // Используем единый тип Game
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -32,7 +26,8 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
     return () => window.removeEventListener("keydown", handleEsc);
   }, [onClose]);
 
-  const isInCart = (gameId: number) => items.some(item => item.id === gameId);
+  // Исправлено: теперь ID сравнивается как строка
+  const isInCart = (gameId: string) => items.some(item => item.id === gameId);
 
   // 2. Логика фильтрации + Рандомные игры
   const displayGames = useMemo(() => {
@@ -41,7 +36,7 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
         game.title.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
-    // Если поиск пуст — берем 5 рандомных игр
+    // Если поиск пуст — берем 5 рандомных игр (используем ID для стабильной сортировки)
     return [...games].sort(() => 0.5 - Math.random()).slice(0, 5);
   }, [searchQuery, games]);
 
@@ -54,22 +49,22 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-[150] bg-[#0a0a0c]/95 backdrop-blur-xl flex flex-col"
         >
-          {/* Компактная шапка */}
+          {/* Поле поиска */}
           <div className="w-full max-w-[900px] mx-auto px-6 py-8 flex items-center gap-4">
             <div className="relative flex-1 group">
-              <SearchIcon className="absolute left-5 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-[#a855f7] transition-colors" size={20} />
+              <SearchIcon className="absolute left-5 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-[#63f3f7] transition-colors" size={20} />
               <input
                 autoFocus
                 type="text"
                 placeholder="Поиск игр..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-lg text-white outline-none focus:border-[#a855f7]/40 focus:bg-white/[0.07] transition-all font-bold uppercase italic tracking-tighter"
+                className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-lg text-white outline-none focus:border-[#63f3f7]/40 focus:bg-white/[0.07] transition-all font-bold uppercase italic tracking-tighter"
               />
             </div>
             <button 
               onClick={onClose} 
-              className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-red-500/20 transition-all text-xs font-bold"
+              className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all text-[10px] font-black"
             >
               ESC
             </button>
@@ -93,11 +88,17 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
                   >
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 relative rounded-lg overflow-hidden border border-white/5">
-                        <Image src={game.image} alt={game.title} fill className="object-cover" />
+                        <Image 
+                          src={game.image} 
+                          alt={game.title} 
+                          fill 
+                          className="object-cover" 
+                          unoptimized 
+                        />
                       </div>
                       <div>
                         <h3 className="text-sm font-black uppercase italic text-white leading-none">{game.title}</h3>
-                        <p className="text-[#a855f7] text-xs font-black italic mt-1">{game.price.toLocaleString()} ₽</p>
+                        <p className="text-[#63f3f7] text-xs font-black italic mt-1">{game.price.toLocaleString()} ₽</p>
                       </div>
                     </div>
 
@@ -106,8 +107,8 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
                       className={`
                         flex items-center gap-2 px-5 py-2.5 rounded-xl text-[10px] font-black uppercase italic transition-all duration-300
                         ${added 
-                          ? "bg-[#a855f7] text-white shadow-[0_0_20px_rgba(168,85,247,0.4)]" 
-                          : "bg-white/5 text-white/40 border border-white/5 hover:bg-[#a855f7]/20 hover:text-[#a855f7]"
+                          ? "bg-[#63f3f7] text-black shadow-[0_0_20px_rgba(99,243,247,0.4)]" 
+                          : "bg-white/5 text-white/40 border border-white/5 hover:bg-[#63f3f7]/20 hover:text-[#63f3f7]"
                         }
                       `}
                     >
