@@ -14,8 +14,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ru">
-      {/* Убрали inter.className, добавили стандартный font-sans */}
-      <body className="antialiased font-sans">
+      {/* Добавили bg-[#121212] для серого фона всей страницы */}
+      <body className="antialiased font-sans bg-[#121212] text-white">
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

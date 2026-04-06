@@ -4,8 +4,8 @@
   html, body {
     margin: 0;
     padding: 0;
-    /* Ультра-черный фон для контраста */
-    background-color: #010101 !important;
+    /* Изменили на серый цвет как в чате, !important перебьет все остальные стили */
+    background-color: #121212 !important; 
     color: white;
     min-height: 100vh;
     font-feature-settings: "kern" 1;
@@ -42,7 +42,7 @@
       0 0 50px rgba(0, 255, 255, 0.4);
   }
 
-  /* 2. УНИВЕРСАЛЬНОЕ БИРЮЗОВОЕ СВЕЧЕНИЕ (везде вместо фиолетового) */
+  /* 2. УНИВЕРСАЛЬНОЕ БИРЮЗОВОЕ СВЕЧЕНИЕ */
   
   /* Мягкое бирюзовое свечение (box-shadow) */
   .viper-glow-sm {
@@ -65,6 +65,7 @@
     background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(0, 255, 255, 0.03) 100%);
   }
 }
+
 @layer utilities {
   .nav-button-active {
     background-color: #00FFFF !important;

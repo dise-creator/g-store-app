@@ -41,7 +41,7 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
   const wishlistCount = wishlistItems.length;
 
   return (
-    <header className={`fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-[1440px] z-[100] px-8 rounded-[2.5rem] transition-all duration-700 flex justify-between items-center transform-gpu will-change-[backdrop-filter,background-color] ${
+    <header className={`fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-[1440px] z-[100] px-8 rounded-[2.5rem] transition-all duration-700 flex justify-between items-center transform-gpu ${
       scrolled 
         ? "py-3 bg-black/[0.15] backdrop-blur-[40px] border border-white/[0.1] shadow-2xl" 
         : "py-6 bg-transparent backdrop-blur-[10px] border border-white/[0.05]"
@@ -49,18 +49,29 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
       
       {/* Логотип CLIC */}
       <div className="relative group/logo cursor-pointer shrink-0 h-14 flex items-center active:scale-95 transition-transform duration-150">
-        <div className="relative flex items-end tracking-widest transition-all duration-500 skew-x-[-12deg] group-hover/logo:skew-x-[-10deg]">
-          <h1 className="select-none flex items-end tracking-wider transition-all duration-500">
-            {/* Часть CL */}
-            <span 
-              className="font-michroma text-white text-2xl md:text-3xl font-black transition-all duration-500 transform -translate-y-3 md:-translate-y-4 opacity-90"
-              style={{ WebkitTextStroke: "1.5px white" }}
-            >
-              CL
-            </span>
+        <div className="relative flex items-center h-full tracking-widest transition-all duration-500 skew-x-[-12deg] group-hover/logo:skew-x-[-10deg]">
+          
+          <h1 className="select-none flex items-center transition-all duration-500 h-full">
+            
+            {/* Секция CL - подняли чуть выше через mt-[-2px] */}
+            <div className="flex items-center mt-[-2px]">
+              {/* Буква C */}
+              <span className="relative flex items-center justify-center font-michroma text-white text-2xl md:text-4xl font-black transition-all duration-500" style={{ WebkitTextStroke: "1px white" }}>
+                C
+                {/* ТРЕУГОЛЬНИК: Теперь позиционируем через смещение translate чтобы поймать центр C */}
+                <PlayIcon 
+                  className="absolute text-[#63f3f7] w-3 h-3 md:w-5 md:h-5 opacity-0 group-hover/logo:opacity-100 transition-all duration-300 transform scale-50 group-hover/logo:scale-100 translate-x-[1px] translate-y-[1px] drop-shadow-[0_0_10px_#63f3f7]" 
+                />
+              </span>
+              
+              {/* Буква L */}
+              <span className="font-michroma text-white text-2xl md:text-4xl font-black ml-[1px] transition-all duration-500" style={{ WebkitTextStroke: "1px white" }}>
+                L
+              </span>
+            </div>
 
-            {/* Часть IC с треугольником */}
-            <span className="relative flex items-center ml-1">
+            {/* Секция IC - основная база */}
+            <span className="relative flex items-center ml-1 h-full">
               <span 
                 className="font-unbounded text-white text-4xl md:text-6xl font-black transition-all duration-500"
                 style={{ 
@@ -68,71 +79,29 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
                   textShadow: "6px 6px 0px rgba(0,0,0,1)" 
                 }}
               >
-                I
-                <span className="relative inline-flex items-center justify-center">
-                  C
-                  {/* Треугольник: смещен вправо (translate-x) и ниже (translate-y) */}
-                  <PlayIcon 
-                    className="absolute text-[#63f3f7] w-4 h-4 md:w-6 md:h-6 opacity-0 group-hover/logo:opacity-100 transition-all duration-300 transform scale-50 group-hover/logo:scale-100 translate-x-[25%] translate-y-[10%] drop-shadow-[0_0_10px_#63f3f7]" 
-                  />
-                </span>
-              </span>
-              
-              {/* Свечение логотипа */}
-              <span 
-                className="absolute inset-0 text-white blur-[2px] opacity-60 pointer-events-none group-hover/logo:opacity-90 transition-all" 
-                style={{ 
-                  WebkitTextStroke: "3.5px white",
-                  filter: "drop-shadow(0 0 15px rgba(99,243,247,0.7))"
-                }}
-              >
                 IC
               </span>
             </span>
           </h1>
 
-          {/* Линия под логотипом */}
+          {/* Неоновая линия под лого */}
           <div className="absolute -bottom-1 right-0 w-[50%] h-[5px] bg-[#63f3f7] opacity-0 group-hover/logo:opacity-100 blur-[3px] transition-all duration-500 shadow-[0_0_25px_#63f3f7] rounded-full scale-x-0 group-hover/logo:scale-x-100 origin-right" />
         </div>
       </div>
 
       {/* Правая часть */}
       <div className="relative flex items-center gap-3 md:gap-5">
-        <button 
-          onClick={onSearchClick} 
-          className="p-3 bg-white/[0.03] hover:bg-white/[0.08] rounded-2xl border border-white/5 transition-all active:scale-95 group"
-        >
+        <button onClick={onSearchClick} className="p-3 bg-white/[0.03] hover:bg-white/[0.08] rounded-2xl border border-white/5 transition-all active:scale-95 group">
           <Search size={20} className="text-white/40 group-hover:text-[#63f3f7] transition-colors" />
         </button>
-
-        <button 
-          onClick={onWishlistClick}
-          className="relative p-3 bg-white/[0.03] hover:bg-white/[0.08] rounded-2xl border border-white/5 transition-all active:scale-95 group"
-        >
-          <Heart 
-            size={20} 
-            className={`transition-colors ${
-              mounted && wishlistCount > 0 
-                ? "text-[#63f3f7] fill-[#63f3f7]/20" 
-                : "text-white/40 group-hover:text-[#63f3f7]"
-            }`} 
-          />
-          {mounted && wishlistCount > 0 && (
-            <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#63f3f7] text-black text-[9px] font-black rounded-full flex items-center justify-center">
-              {wishlistCount}
-            </span>
-          )}
+        <button onClick={onWishlistClick} className="relative p-3 bg-white/[0.03] hover:bg-white/[0.08] rounded-2xl border border-white/5 transition-all active:scale-95 group">
+          <Heart size={20} className={`transition-colors ${mounted && wishlistCount > 0 ? "text-[#63f3f7] fill-[#63f3f7]/20" : "text-white/40 group-hover:text-[#63f3f7]"}`} />
+          {mounted && wishlistCount > 0 && <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#63f3f7] text-black text-[9px] font-black rounded-full flex items-center justify-center animate-in zoom-in duration-300">{wishlistCount}</span>}
         </button>
-
         <div className="h-6 w-[1px] bg-white/10 mx-1 hidden md:block" />
-
         <div className="flex items-center gap-3">
           <UserProfile />
-          <CartButton 
-            onClick={onCartClick} 
-            totalAmount={mounted ? totalAmount : 0} 
-            totalItems={mounted ? totalItems : 0} 
-          />
+          <CartButton onClick={onCartClick} totalAmount={mounted ? totalAmount : 0} totalItems={mounted ? totalItems : 0} />
         </div>
       </div>
     </header>
