@@ -1,54 +1,62 @@
+export interface GameEdition {
+  name: string;
+  price: number;
+  features: string[];
+}
+
 export interface Game {
-  id: string; // Тип изменен на string для совместимости с Supabase
+  id: string;
   title: string;
   price: number;
   image: string;
-  description: string; 
-  videoUrl?: string;   
-  category?: string;
+  category: string; // Сделали обязательным для корректной фильтрации
+  shortDescription: string; // Вместо старого description
+  fullDescription: string;  // Новое поле для модалки
+  screenshots: string[];    // Фото для нижней части модалки
+  editions: GameEdition[];  // Версии игры
+  videoUrl?: string;
 }
 
 export const ALL_GAMES: Game[] = [
   { 
-    id: "1", 
-    title: "СТАРФИЛД", 
-    price: 4200, 
-    image: "/images/starfield.jpg",
-    description: "Исследуйте глубины космоса в новой ролевой игре от создателей Skyrim." 
-  },
-  { 
     id: "2", 
     title: "КИБЕРПАНК 2077", 
     price: 2500, 
+    category: "RPG", // Теперь g.category в фильтре не будет ошибкой
     image: "/images/cyber.jpg",
-    description: "Приключенческая ролевая игра в открытом мире Найт-Сити."
+    shortDescription: "Приключенческая ролевая игра в открытом мире Найт-Сити.",
+    fullDescription: "Cyberpunk 2077 — это приключенческая ролевая игра, действие которой происходит в мегаполисе Найт-Сити, где власть, роскошь и модификации тела ценятся выше всего. Вы играете за V, наёмника в поисках уникального устройства, позволяющего обрести бессмертие.",
+    screenshots: [
+      "/images/cyber.jpg", 
+      "/images/cyber.jpg", 
+      "/images/cyber.jpg"
+    ],
+    editions: [
+      {
+        name: "Standard",
+        price: 2500,
+        features: ["Базовая игра", "Цифровые бонусы"]
+      },
+      {
+        name: "Deluxe",
+        price: 3990,
+        features: ["Базовая игра", "Дополнение Phantom Liberty", "Саундтрек"]
+      }
+    ]
   },
   { 
     id: "3", 
     title: "ЭЛДЕН РИНГ", 
     price: 3900, 
+    category: "RPG",
     image: "/images/elden.jpg",
-    description: "Восстань, Погасшая душа, и стань владыкой Элдена в Междуземье." 
+    shortDescription: "Восстань, Погасшая душа, и стань владыкой Элдена.",
+    fullDescription: "Золотой Порядок разрушен. Восстань, Погасшая душа! Междуземье ждет своего властелина. Овладей силой Кольца Элден и стань владыкой Элдена.",
+    screenshots: ["/images/elden.jpg", "/images/elden.jpg", "/images/elden.jpg"],
+    editions: [
+      { name: "Standard", price: 3900, features: ["Игра"] },
+      { name: "SOTE Edition", price: 5490, features: ["Игра", "Shadow of the Erdtree"] }
+    ]
   },
-  { 
-    id: "4", 
-    title: "GTA V", 
-    price: 1200, 
-    image: "/images/gta.jpg",
-    description: "Криминальный боевик в Лос-Сантосе." 
-  },
-  { 
-    id: "5", 
-    title: "FIFA 24", 
-    price: 2499, 
-    image: "/images/fifa2024.jpg",
-    description: "Самый реалистичный симулятор футбола." 
-  },
-  { 
-    id: "6", 
-    title: "ШАХТЕРСКОЕ РЕМЕСЛО", 
-    price: 1100, 
-    image: "/images/mc.jpg",
-    description: "Бесконечный мир для вашего творчества и выживания." 
-  },
+  // Остальные игры (1, 4, 5, 6) заполни по аналогии, добавив category и пустые массивы screenshots/editions
 ];

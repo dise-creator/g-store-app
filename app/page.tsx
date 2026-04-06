@@ -4,44 +4,55 @@ import React, { useMemo, useState, useEffect } from "react";
 import GameSlider from "@/components/GameSlider";
 import HeroBanner from "@/components/HeroBanner";
 import AnimatedBackground from "@/components/AnimatedBackground";
-import GameModal from "@/components/GameModal"; // <--- 1. ДОБАВИЛИ ИМПОРТ
+import GameModal from "@/components/GameModal";
 import { supabase } from "@/lib/supabase"; 
-import type { Game } from "@/store/games";
+import { ALL_GAMES, type Game } from "@/store/games"; // Добавили ALL_GAMES как запасной вариант
 
 export default function Home() {
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Исправляем ключи секций, чтобы они совпадали с теми, что мы прописали в store/games.ts
   const sections = useMemo(() => [
-    { title: "Новинки", key: "new" },
-    { title: "Популярное", key: "trending" },
-    { title: "Шутеры", key: "fps" },
-    { title: "RPG и Приключения", key: "rpg" },
-    { title: "Симуляторы", key: "sim" },
-    { title: "Инди-хиты", key: "indie" }
+    { title: "RPG и Приключения", key: "RPG" }, // Ключ должен быть как в базе/сторе
+    { title: "Шутеры", key: "FPS" },
+    { title: "Симуляторы", key: "SIM" },
+    { title: "Новинки", key: "NEW" },
   ], []);
 
   useEffect(() => {
     async function loadData() {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('games')
-        .select('*')
-        .order('created_at', { ascending: false });
+      try {
+        const { data, error } = await supabase
+          .from('games')
+          .select('*')
+          .order('created_at', { ascending: false });
 
-      if (error) {
-        console.error("Ошибка загрузки данных:", error.message);
-      } else if (data) {
-        setGames(data as Game[]);
+        if (error) {
+          console.warn("Supabase error, using local fallback:", error.message);
+          setGames(ALL_GAMES); // Если база пуста или ошибка, берем данные из файла
+        } else if (data && data.length > 0) {
+          setGames(data as Game[]);
+        } else {
+          setGames(ALL_GAMES);
+        }
+      } catch (err) {
+        setGames(ALL_GAMES);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
 
     loadData();
   }, []);
 
+  // Теперь типизация g.category будет работать корректно, 
+  // так как мы обновили интерфейс Game в store/games.ts
   const getSectionGames = (sectionKey: string) => {
-    const filtered = games.filter(g => g.category === sectionKey);
+    const filtered = games.filter(g => g.category?.toUpperCase() === sectionKey.toUpperCase());
+    
+    // Если в категории пусто, показываем любые 4 игры, чтобы секция не была пустой
     if (filtered.length === 0) {
       return [...games].sort(() => Math.random() - 0.5).slice(0, 4);
     }
@@ -77,7 +88,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* <--- 2. ДОБАВИЛИ КОМПОНЕНТ МОДАЛКИ В КОНЕЦ ---> */}
+      {/* Модалка теперь будет получать корректные данные g.category и описание */}
       <GameModal /> 
     </main>
   );
