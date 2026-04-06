@@ -6,15 +6,14 @@ import HeroBanner from "@/components/HeroBanner";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import GameModal from "@/components/GameModal";
 import { supabase } from "@/lib/supabase"; 
-import { ALL_GAMES, type Game } from "@/store/games"; // Добавили ALL_GAMES как запасной вариант
+import { ALL_GAMES, type Game } from "@/store/games";
 
 export default function Home() {
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Исправляем ключи секций, чтобы они совпадали с теми, что мы прописали в store/games.ts
   const sections = useMemo(() => [
-    { title: "RPG и Приключения", key: "RPG" }, // Ключ должен быть как в базе/сторе
+    { title: "RPG и Приключения", key: "RPG" },
     { title: "Шутеры", key: "FPS" },
     { title: "Симуляторы", key: "SIM" },
     { title: "Новинки", key: "NEW" },
@@ -31,7 +30,7 @@ export default function Home() {
 
         if (error) {
           console.warn("Supabase error, using local fallback:", error.message);
-          setGames(ALL_GAMES); // Если база пуста или ошибка, берем данные из файла
+          setGames(ALL_GAMES); 
         } else if (data && data.length > 0) {
           setGames(data as Game[]);
         } else {
@@ -43,32 +42,32 @@ export default function Home() {
         setLoading(false);
       }
     }
-
     loadData();
   }, []);
 
-  // Теперь типизация g.category будет работать корректно, 
-  // так как мы обновили интерфейс Game в store/games.ts
   const getSectionGames = (sectionKey: string) => {
     const filtered = games.filter(g => g.category?.toUpperCase() === sectionKey.toUpperCase());
-    
-    // Если в категории пусто, показываем любые 4 игры, чтобы секция не была пустой
     if (filtered.length === 0) {
-      return [...games].sort(() => Math.random() - 0.5).slice(0, 4);
+      return [...games].sort(() => Math.random() - 0.5).slice(0, 8);
     }
     return filtered;
   };
 
   return (
-    <main className="relative min-h-screen !bg-transparent pt-32 pb-24">
+    // ИСПРАВЛЕНО: Увеличили pt-32 до pt-52 для значительного отступа от хедера
+    <main className="relative min-h-screen !bg-transparent pt-42 pb-24 overflow-x-hidden">
       <AnimatedBackground />
 
-      <div className="relative z-10 max-w-[1440px] mx-auto px-6 flex flex-col gap-32">
-        <section>
+      {/* Контейнер с боковыми отступами md:px-10 */}
+      <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-10 flex flex-col gap-24 md:gap-32">
+        
+        {/* ИСПРАВЛЕНО: Добавлен mt-8 для дополнительного расстояния между хедером и баннером */}
+        <section className="w-full mt-8">
           <HeroBanner />
         </section>
 
-        <div className="flex flex-col gap-28">
+        {/* Слайдеры с компактными отступами gap */}
+        <div className="flex flex-col gap-16 md:gap-24">
           {loading ? (
             sections.map((s) => (
               <div key={s.key}>
@@ -80,7 +79,8 @@ export default function Home() {
               <div key={s.key} className="bg-transparent">
                 <GameSlider 
                   title={s.title} 
-                  games={getSectionGames(s.key)} 
+                  games={getSectionGames(s.key)}
+                  onSelectGame={(game) => console.log("Selected:", game.title)} 
                 />
               </div>
             ))
@@ -88,7 +88,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Модалка теперь будет получать корректные данные g.category и описание */}
       <GameModal /> 
     </main>
   );
