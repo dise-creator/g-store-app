@@ -16,7 +16,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   const [isMounted, setIsMounted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  // Берем данные из твоего стора
+  // Подключаем стор
   const { items, removeItem, updateQuantity, clearCart } = useCartStore();
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
     };
   }, [isOpen, onClose]);
 
-  // Считаем сумму, гарантируя числовой формат
+  // Расчет суммы
   const totalAmount = items.reduce(
     (sum, item) => sum + (Number(item.price) || 0) * (item.quantity || 0),
     0
@@ -67,7 +67,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
       if (error) throw error;
 
-      alert('✅ Заказ оформлен успешно!');
+      alert('✅ Заказ успешно оформлен!');
       clearCart();
       onClose();
     } catch (err: any) {
@@ -82,7 +82,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[999] flex items-start justify-start">
+        <div className="fixed inset-0 z-[999] flex items-start justify-start p-4 md:p-6">
           {/* Overlay */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -94,96 +94,106 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
           {/* Панель корзины */}
           <motion.div
-            initial={{ x: "-100%" }}
+            initial={{ x: "-110%" }} // Чуть больше смещение для плавности
             animate={{ x: 0 }}
-            exit={{ x: "-100%" }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="relative h-full w-full max-w-[420px] flex flex-col bg-[#0a0a0c] border-r border-white/5 shadow-2xl overflow-hidden"
+            exit={{ x: "-110%" }}
+            transition={{ type: "spring", damping: 28, stiffness: 220 }}
+            // ИСПРАВЛЕНО: Добавлены скругления углов (rounded-r-[3rem] и rounded-l-[3rem] для симметрии в паддинге)
+            className="relative h-full w-full max-w-[420px] flex flex-col bg-[#0a0a0c] border border-white/10 shadow-2xl overflow-hidden rounded-[2.5rem] md:rounded-[3rem]"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Шапка (БЕЗ My Collection) */}
-            <div className="p-8 flex items-center justify-between border-b border-white/5 bg-white/[0.02]">
+            {/* Шапка (Компактная) */}
+            <div className="p-8 flex items-center justify-between border-b border-white/10 bg-white/[0.02]">
               <h2 className="text-3xl font-black uppercase italic tracking-tighter text-white">
                 Корзина
               </h2>
               <button
                 onClick={onClose}
-                className="w-12 h-12 flex items-center justify-center bg-white/5 hover:bg-[#00FFFF] hover:text-black rounded-full transition-all text-white/50 border border-white/5 cursor-pointer"
+                // ИСПРАВЛЕНО: Скругление кнопки закрытия
+                className="w-12 h-12 flex items-center justify-center bg-white/5 hover:bg-[#00FFFF] hover:text-black rounded-full transition-all text-white/50 border border-white/10 cursor-pointer"
               >
                 <X size={24} strokeWidth={3} />
               </button>
             </div>
 
-            {/* Список товаров */}
+            {/* Список товаров (Компактный) */}
             <div className="flex-1 overflow-y-auto px-6 py-8 no-scrollbar space-y-4">
               {items.length > 0 ? (
                 <AnimatePresence mode="popLayout">
                   {items.map((item) => (
                     <motion.div
                       layout
-                      // Ключ должен быть cartItemId для корректной анимации
-                      key={item.cartItemId} 
-                      initial={{ opacity: 0, y: 20 }}
+                      key={item.cartItemId} // Используем cartItemId
+                      initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.9 }}
-                      className="group flex items-center gap-4 bg-white/5 p-4 rounded-[2rem] border border-white/5 hover:border-[#00FFFF]/20 transition-all"
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      // ИСПРАВЛЕНО: Закругление карточки товара (rounded-[1.5rem])
+                      className="group flex items-center gap-4 bg-white/[0.03] p-4 rounded-[1.8rem] border border-white/10 hover:border-[#00FFFF]/30 transition-all"
                     >
-                      <div className="relative w-20 h-24 shrink-0 rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+                      {/* Изображение */}
+                      {/* ИСПРАВЛЕНО: Закругление миниатюры (rounded-xl) */}
+                      <div className="relative w-16 h-18 shrink-0 rounded-2xl overflow-hidden border border-white/10">
                         <Image src={item.image} alt={item.title} fill className="object-cover" unoptimized />
                       </div>
 
+                      {/* Инфо */}
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-[13px] font-black uppercase italic text-white/90 truncate mb-3">
+                        <h3 className="text-[11px] font-extrabold uppercase tracking-wider text-white/90 truncate mb-2">
                           {item.title}
                         </h3>
+                        
                         <div className="flex items-center justify-between">
-                          <p className="text-[#00FFFF] font-black italic text-lg">
+                          <p className="text-[#00FFFF] font-black italic text-base leading-none">
                             {(Number(item.price) || 0).toLocaleString()} ₽
                           </p>
                           
-                          {/* Управление количеством по cartItemId */}
-                          <div className="flex items-center gap-4 bg-black/60 px-3 py-1.5 rounded-xl border border-white/5">
+                          {/* Управление количеством (cartItemId) */}
+                          {/* ИСПРАВЛЕНО: Закругление счетчика (rounded-lg) */}
+                          <div className="flex items-center gap-2.5 bg-black/40 px-2.5 py-1.5 rounded-xl border border-white/5">
                             <button 
                               onClick={() => updateQuantity(item.cartItemId, item.quantity - 1)} 
-                              className="text-white/40 hover:text-[#00FFFF] transition-colors cursor-pointer p-1"
+                              className="text-white/30 hover:text-[#00FFFF] transition-colors p-0.5 cursor-pointer"
                             >
-                              <Minus size={14} strokeWidth={3} />
+                              <Minus size={12} strokeWidth={2.5} />
                             </button>
-                            <span className="text-sm font-bold text-white w-4 text-center">{item.quantity}</span>
+                            <span className="text-[12px] font-bold text-white w-3 text-center leading-none">
+                              {item.quantity}
+                            </span>
                             <button 
                               onClick={() => updateQuantity(item.cartItemId, item.quantity + 1)} 
-                              className="text-white/40 hover:text-[#00FFFF] transition-colors cursor-pointer p-1"
+                              className="text-white/30 hover:text-[#00FFFF] transition-colors p-0.5 cursor-pointer"
                             >
-                              <Plus size={14} strokeWidth={3} />
+                              <Plus size={12} strokeWidth={2.5} />
                             </button>
                           </div>
                         </div>
                       </div>
 
-                      {/* Удаление по cartItemId */}
+                      {/* Удаление (cartItemId) */}
+                      {/* ИСПРАВЛЕНО: Закругление кнопки удаления (rounded-lg) */}
                       <button 
                         onClick={() => removeItem(item.cartItemId)} 
-                        className="p-3 text-white/10 hover:text-red-500 hover:bg-red-500/10 rounded-full transition-all cursor-pointer"
+                        className="p-3 text-white/10 hover:text-red-500 hover:bg-red-500/5 rounded-xl transition-all cursor-pointer"
                       >
-                        <Trash2 size={20} />
+                        <Trash2 size={16} />
                       </button>
                     </motion.div>
                   ))}
                 </AnimatePresence>
               ) : (
-                <div className="h-full flex flex-col items-center justify-center opacity-20">
-                  <ShoppingBag size={64} strokeWidth={1} className="mb-4 text-white" />
-                  <p className="text-sm font-black uppercase italic tracking-widest text-white">Пусто</p>
+                <div className="h-full flex flex-col items-center justify-center opacity-10">
+                  <ShoppingBag size={48} strokeWidth={1} className="mb-2 text-white" />
+                  <p className="text-[10px] font-black uppercase italic tracking-[0.3em] text-white">Пусто</p>
                 </div>
               )}
             </div>
 
             {/* Футер */}
             {items.length > 0 && (
-              <div className="p-8 bg-black/80 backdrop-blur-xl border-t border-white/5 space-y-6">
+              <div className="p-8 bg-black/80 backdrop-blur-xl border-t border-white/10 space-y-7">
                 <div className="flex justify-between items-end">
                   <span className="text-[10px] font-black uppercase italic text-white/30 tracking-widest">Итого:</span>
-                  <span className="text-4xl font-black italic text-[#00FFFF] tracking-tighter">
+                  <span className="text-4xl font-black italic text-[#00FFFF] tracking-tighter leading-none">
                     {totalAmount.toLocaleString()} ₽
                   </span>
                 </div>
@@ -192,18 +202,19 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   <button 
                     onClick={handleCheckout}
                     disabled={isSubmitting}
-                    className={`w-full py-6 rounded-2xl font-black uppercase italic tracking-[0.2em] transition-all shadow-[0_0_40px_rgba(0,255,255,0.15)] flex items-center justify-center gap-3 cursor-pointer ${
+                    // ИСПРАВЛЕНО: Скругление главной кнопки оплаты (rounded-xl)
+                    className={`w-full py-6 rounded-2xl font-black uppercase italic tracking-[0.2em] transition-all flex items-center justify-center gap-3 cursor-pointer ${
                       isSubmitting 
                       ? "bg-white/5 text-white/20 cursor-wait" 
-                      : "bg-[#00FFFF] text-black hover:scale-[1.02] active:scale-95"
+                      : "bg-[#00FFFF] text-black hover:scale-[1.02] active:scale-95 shadow-[0_0_30px_rgba(0,255,255,0.1)]"
                     }`}
                   >
-                    <CreditCard size={22} />
-                    {isSubmitting ? "Оформление..." : "Оплатить заказ"}
+                    <CreditCard size={18} />
+                    <span className="text-sm">{isSubmitting ? "Оформление..." : "Оплатить заказ"}</span>
                   </button>
                   <button 
                     onClick={clearCart} 
-                    className="text-[10px] font-black text-white/20 uppercase hover:text-red-500 transition-colors tracking-[0.4em] cursor-pointer text-center"
+                    className="text-[9px] font-black text-white/20 uppercase hover:text-red-500 transition-colors tracking-[0.3em] cursor-pointer text-center py-2"
                   >
                     Очистить список
                   </button>
