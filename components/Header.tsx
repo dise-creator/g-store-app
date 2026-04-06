@@ -1,16 +1,23 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Search, Heart } from "lucide-react"; // Добавили Heart
+import { Search, Heart } from "lucide-react"; 
 import UserProfile from "./UserProfile";
 import CartButton from "./CartButton"; 
 import { useCartStore } from "@/store/useCart";
-import { useWishlistStore } from "@/store/useWishlist"; // Импортируем стор избранного
+import { useWishlistStore } from "@/store/useWishlist";
+
+// Иконка треугольника (Play)
+const PlayIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className={className} xmlns="http://www.w3.org/2000/svg">
+    <path d="M8 5v14l11-7z"/>
+  </svg>
+);
 
 interface HeaderProps {
   onSearchClick: () => void;
   onCartClick: () => void;
-  onWishlistClick?: () => void; // Добавили проп для клика по избранному
+  onWishlistClick?: () => void;
 }
 
 export default function Header({ onSearchClick, onCartClick, onWishlistClick }: HeaderProps) {
@@ -18,14 +25,12 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
   const [mounted, setMounted] = useState(false);
   
   const items = useCartStore((state) => state.items);
-  const wishlistItems = useWishlistStore((state) => state.items); // Получаем айтемы избранного
+  const wishlistItems = useWishlistStore((state) => state.items);
 
   useEffect(() => {
     setMounted(true);
     const handleScroll = () => {
-      window.requestAnimationFrame(() => {
-        setScrolled(window.scrollY > 20);
-      });
+      window.requestAnimationFrame(() => setScrolled(window.scrollY > 20));
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -43,15 +48,18 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
     }`}>
       
       {/* Логотип CLIC */}
-      <div className="relative group/logo cursor-pointer shrink-0 h-14 flex items-center">
-        <div className="relative flex tracking-widest transition-all duration-500 skew-x-[-12deg] group-hover/logo:skew-x-[-10deg]">
+      <div className="relative group/logo cursor-pointer shrink-0 h-14 flex items-center active:scale-95 transition-transform duration-150">
+        <div className="relative flex items-end tracking-widest transition-all duration-500 skew-x-[-12deg] group-hover/logo:skew-x-[-10deg]">
           <h1 className="select-none flex items-end tracking-wider transition-all duration-500">
+            {/* Часть CL */}
             <span 
               className="font-michroma text-white text-2xl md:text-3xl font-black transition-all duration-500 transform -translate-y-3 md:-translate-y-4 opacity-90"
-              style={{ WebkitTextStroke: "2px white" }}
+              style={{ WebkitTextStroke: "1.5px white" }}
             >
               CL
             </span>
+
+            {/* Часть IC с треугольником */}
             <span className="relative flex items-center ml-1">
               <span 
                 className="font-unbounded text-white text-4xl md:text-6xl font-black transition-all duration-500"
@@ -60,8 +68,17 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
                   textShadow: "6px 6px 0px rgba(0,0,0,1)" 
                 }}
               >
-                IC
+                I
+                <span className="relative inline-flex items-center justify-center">
+                  C
+                  {/* Треугольник: смещен вправо (translate-x) и ниже (translate-y) */}
+                  <PlayIcon 
+                    className="absolute text-[#63f3f7] w-4 h-4 md:w-6 md:h-6 opacity-0 group-hover/logo:opacity-100 transition-all duration-300 transform scale-50 group-hover/logo:scale-100 translate-x-[25%] translate-y-[10%] drop-shadow-[0_0_10px_#63f3f7]" 
+                  />
+                </span>
               </span>
+              
+              {/* Свечение логотипа */}
               <span 
                 className="absolute inset-0 text-white blur-[2px] opacity-60 pointer-events-none group-hover/logo:opacity-90 transition-all" 
                 style={{ 
@@ -73,12 +90,14 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
               </span>
             </span>
           </h1>
+
+          {/* Линия под логотипом */}
           <div className="absolute -bottom-1 right-0 w-[50%] h-[5px] bg-[#63f3f7] opacity-0 group-hover/logo:opacity-100 blur-[3px] transition-all duration-500 shadow-[0_0_25px_#63f3f7] rounded-full scale-x-0 group-hover/logo:scale-x-100 origin-right" />
         </div>
       </div>
 
+      {/* Правая часть */}
       <div className="relative flex items-center gap-3 md:gap-5">
-        {/* Поиск */}
         <button 
           onClick={onSearchClick} 
           className="p-3 bg-white/[0.03] hover:bg-white/[0.08] rounded-2xl border border-white/5 transition-all active:scale-95 group"
@@ -86,7 +105,6 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
           <Search size={20} className="text-white/40 group-hover:text-[#63f3f7] transition-colors" />
         </button>
 
-        {/* --- ИЗБРАННОЕ --- */}
         <button 
           onClick={onWishlistClick}
           className="relative p-3 bg-white/[0.03] hover:bg-white/[0.08] rounded-2xl border border-white/5 transition-all active:scale-95 group"
@@ -100,7 +118,7 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
             }`} 
           />
           {mounted && wishlistCount > 0 && (
-            <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#63f3f7] text-black text-[9px] font-black rounded-full flex items-center justify-center animate-in zoom-in duration-300">
+            <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#63f3f7] text-black text-[9px] font-black rounded-full flex items-center justify-center">
               {wishlistCount}
             </span>
           )}
