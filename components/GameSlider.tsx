@@ -12,11 +12,16 @@ interface GameSliderProps {
   games: Game[];
   title: string;
   isLoading?: boolean;
+  // ДОБАВИЛИ: Это исправит ошибку "onSelectGame не существует" в page.tsx
+  onSelectGame?: (game: Game) => void;
 }
 
-export default function GameSlider({ games = [], title, isLoading = false }: GameSliderProps) {
-  // УДАЛИЛИ локальный стейт selectedGame и GameModal отсюда, 
-  // так как модалка теперь глобальная в page.tsx
+export default function GameSlider({ 
+  games = [], 
+  title, 
+  isLoading = false,
+  onSelectGame 
+}: GameSliderProps) {
 
   const displayGames = useMemo(() => {
     // Если игр мало, дублируем их для плавности прокрутки
@@ -35,28 +40,31 @@ export default function GameSlider({ games = [], title, isLoading = false }: Gam
   const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
 
   return (
-    <div className="w-full py-10 transform-gpu">
+    // УМЕНЬШИЛИ: py-10 -> py-6 для компактности
+    <div className="w-full py-6 transform-gpu">
       {/* Шапка слайдера */}
-      <div className="flex items-center justify-between mb-8 px-8">
+      <div className="flex items-center justify-between mb-6 px-8">
         <div className="flex items-center gap-4">
-          <div className="w-1 h-8 bg-[#63f3f7] rounded-full shadow-[0_0_20px_#63f3f7]" />
-          <h2 className="text-xl md:text-2xl font-michroma text-white uppercase tracking-[0.25em] leading-none opacity-90 italic">
+          {/* Сделали полоску чуть короче: h-8 -> h-6 */}
+          <div className="w-1 h-6 bg-[#63f3f7] rounded-full shadow-[0_0_15px_#63f3f7]" />
+          <h2 className="text-lg md:text-xl font-michroma text-white uppercase tracking-[0.2em] leading-none opacity-80 italic">
             {title}
           </h2>
         </div>
 
-        <div className="flex gap-3">
+        {/* Компактные кнопки управления */}
+        <div className="flex gap-2">
           <button 
             onClick={scrollPrev} 
-            className="w-12 h-12 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-white/40 hover:text-[#63f3f7] hover:border-[#63f3f7]/50 hover:bg-[#63f3f7]/5 transition-all active:scale-90"
+            className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-white/40 hover:text-[#63f3f7] hover:border-[#63f3f7]/50 hover:bg-[#63f3f7]/5 transition-all active:scale-90"
           >
-            <ChevronLeft size={24} />
+            <ChevronLeft size={20} />
           </button>
           <button 
             onClick={scrollNext} 
-            className="w-12 h-12 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-white/40 hover:text-[#63f3f7] hover:border-[#63f3f7]/50 hover:bg-[#63f3f7]/5 transition-all active:scale-90"
+            className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-white/40 hover:text-[#63f3f7] hover:border-[#63f3f7]/50 hover:bg-[#63f3f7]/5 transition-all active:scale-90"
           >
-            <ChevronRight size={24} />
+            <ChevronRight size={20} />
           </button>
         </div>
       </div>
@@ -65,23 +73,25 @@ export default function GameSlider({ games = [], title, isLoading = false }: Gam
       <div className="relative">
         <div 
           className="overflow-hidden px-8 cursor-grab active:cursor-grabbing 
-                     [mask-image:linear-gradient(to_right,transparent,white_10%,white_90%,transparent)]" 
+                     [mask-image:linear-gradient(to_right,transparent,white_5%,white_95%,transparent)]" 
           ref={emblaRef}
         >
-          <div className="flex gap-6 md:gap-8"> 
+          {/* ИСПРАВЛЕНО: Уменьшили gap-8 -> gap-4 для плотности карточек */}
+          <div className="flex gap-4"> 
             {isLoading 
-              ? Array(6).fill(0).map((_, i) => (
-                  <div key={`skeleton-${i}`} className="flex-[0_0_75%] sm:flex-[0_0_35%] md:flex-[0_0_25%] lg:flex-[0_0_20%]">
+              ? Array(8).fill(0).map((_, i) => (
+                  // УМЕНЬШИЛИ: flex-basis теперь позволяет вместить больше карточек (lg: 16.6% вместо 20%)
+                  <div key={`skeleton-${i}`} className="flex-[0_0_65%] sm:flex-[0_0_30%] md:flex-[0_0_22%] lg:flex-[0_0_16.6%]">
                     <GameCardSkeleton />
                   </div>
                 ))
               : displayGames.map((game, index) => (
                   <div 
                     key={`${game.id}-${index}`} 
-                    className="flex-[0_0_75%] sm:flex-[0_0_35%] md:flex-[0_0_25%] lg:flex-[0_0_20%] min-w-0 select-none"
+                    className="flex-[0_0_65%] sm:flex-[0_0_30%] md:flex-[0_0_22%] lg:flex-[0_0_16.6%] min-w-0 select-none"
                   >
-                    {/* GameCard сам внутри себя умеет открывать глобальную модалку */}
-                    <GameCard game={game} />
+                    {/* Передаем функцию выбора, если она нужна */}
+                    <GameCard game={game} onSelect={() => onSelectGame?.(game)} />
                   </div>
                 ))
             }
