@@ -5,14 +5,18 @@ import { useRouter } from "next/navigation";
 import Header from "./Header";
 import SearchModal from "./SearchModal";
 import CartDrawer from "./CartDrawer";
-import GameModal from "./GameModal"; // 1. Импортируем модалку
-import { ALL_GAMES } from "@/store/games"; 
+import GameModal from "./GameModal";
+// ИЗМЕНЕНО: Импортируем хук useGamesStore вместо статичной переменной
+import { useGamesStore } from "@/store/games"; 
 import { SessionProvider } from "next-auth/react";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+
+  // ДОБАВЛЕНО: Подписываемся на актуальный список игр из стора
+  const allGames = useGamesStore((state) => state.allGames);
 
   return (
     <SessionProvider>
@@ -30,7 +34,8 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       <SearchModal 
         isOpen={isSearchOpen} 
         onClose={() => setIsSearchOpen(false)} 
-        games={ALL_GAMES} 
+        // ИЗМЕНЕНО: Теперь передаем динамические данные вместо ALL_GAMES
+        games={allGames} 
       />
 
       {/* Весь основной контент страниц */}
@@ -38,9 +43,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         {children}
       </main>
 
-      {/* 2. ГЛОБАЛЬНАЯ МОДАЛКА ИГРЫ 
-        Ставим её в самый низ, чтобы она перекрывала всё, что выше в коде.
-      */}
+      {/* 2. ГЛОБАЛЬНАЯ МОДАЛКА ИГРЫ */}
       <GameModal /> 
     </SessionProvider>
   );
