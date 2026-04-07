@@ -17,7 +17,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const router = useRouter();
   const allGames = useGamesStore((state) => state.allGames);
 
-  // Исправляет ошибку Hydration Error
+  // Фикс гидратации
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -26,7 +26,6 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
   return (
     <SessionProvider>
-      {/* Обертка flex-col позволяет прижать футер к низу */}
       <div className="flex flex-col min-h-screen bg-[#0a0a0c]">
         
         <Header 
@@ -35,19 +34,16 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
           onWishlistClick={() => router.push('/wishlist')}
         />
 
-        {/* Модальные окна */}
         <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
         <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} games={allGames} />
 
-        {/* pb-16 — уменьшенный в 2.5 раза отступ снизу основного контента */}
-        <main className="relative flex-grow pb-16">
+        {/* pb-12 — отступ уменьшен в 3 раза для компактности */}
+        <main className="relative flex-grow pb-12">
           {children}
         </main>
 
-        {/* Плавающий футер-остров */}
         <Footer />
         
-        {/* Глобальное окно подробностей игры */}
         <GameModal /> 
       </div>
     </SessionProvider>
