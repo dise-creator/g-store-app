@@ -4,18 +4,16 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useGameModal } from "@/store/useGameModal";
 import { useCartStore } from "@/store/useCart";
-import { X, ShoppingCart, ChevronLeft, ChevronRight, Check, ShieldCheck, Zap, Star } from "lucide-react";
+import { X, ShoppingCart, ChevronLeft, ChevronRight, Check, ShieldCheck, Zap } from "lucide-react";
 
 export default function GameModal() {
   const { isOpen, selectedGame, closeModal } = useGameModal();
   const addItem = useCartStore((state) => state.addItem);
   
-  // Состояния для слайдера и выбора издания
   const [selectedEditionIndex, setSelectedEditionIndex] = useState(0);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAdded, setIsAdded] = useState(false);
 
-  // Сбрасываем всё при открытии новой игры
   useEffect(() => {
     if (isOpen) {
       setSelectedEditionIndex(0);
@@ -24,23 +22,26 @@ export default function GameModal() {
     }
   }, [isOpen, selectedGame]);
 
+  // Проверка на наличие данных (Предотвращает падение приложения)
   if (!isOpen || !selectedGame) return null;
 
-  // Данные из твоего интерфейса Game
-  const screenshots = selectedGame.screenshots && selectedGame.screenshots.length > 0 
+  // Безопасное получение данных через Optional Chaining и значения по умолчанию
+  const screenshots = selectedGame?.screenshots?.length > 0 
     ? selectedGame.screenshots 
-    : [selectedGame.image];
+    : [selectedGame?.image || ""];
     
-  const editions = selectedGame.editions && selectedGame.editions.length > 0
+  const editions = selectedGame?.editions?.length > 0
     ? selectedGame.editions
-    : [{ name: "Standard Edition", price: selectedGame.price, features: ["Базовая игра"] }];
+    : [{ name: "Standard Edition", price: selectedGame?.price || 0, features: ["Базовая игра"] }];
 
-  const currentEdition = editions[selectedEditionIndex];
+  const currentEdition = editions[selectedEditionIndex] || editions[0];
 
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % screenshots.length);
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + screenshots.length) % screenshots.length);
 
   const handleAddToCart = () => {
+    if (!selectedGame || !currentEdition) return;
+
     addItem({
       ...selectedGame,
       price: currentEdition.price,
@@ -60,18 +61,19 @@ export default function GameModal() {
         {/* Мобильная кнопка закрытия */}
         <button onClick={closeModal} className="absolute top-6 right-6 z-[250] md:hidden text-white/50"><X size={30}/></button>
 
-        {/* ЛЕВАЯ ЧАСТЬ: Слайдер скриншотов из БД */}
+        {/* ЛЕВАЯ ЧАСТЬ: Слайдер */}
         <div className="relative w-full md:w-[60%] h-[40vh] md:h-auto group bg-black">
-          <Image 
-            key={currentSlide}
-            src={screenshots[currentSlide]} 
-            alt="Gameplay" 
-            fill 
-            className="object-cover transition-all duration-700 ease-in-out"
-            unoptimized
-          />
+          {screenshots[currentSlide] && (
+            <Image 
+              key={currentSlide}
+              src={screenshots[currentSlide]} 
+              alt="Gameplay" 
+              fill 
+              className="object-cover transition-all duration-700 ease-in-out"
+              unoptimized
+            />
+          )}
           
-          {/* Навигация */}
           {screenshots.length > 1 && (
             <>
               <button onClick={prevSlide} className="absolute left-6 top-1/2 -translate-y-1/2 w-14 h-14 bg-black/40 backdrop-blur-xl border border-white/10 rounded-full text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-[#63f3f7] hover:text-black">
@@ -90,11 +92,11 @@ export default function GameModal() {
           )}
         </div>
 
-        {/* ПРАВАЯ ЧАСТЬ: Информация и выбор версий */}
+        {/* ПРАВАЯ ЧАСТЬ */}
         <div className="flex flex-col flex-1 p-8 md:p-14 overflow-y-auto custom-scrollbar">
           <div className="mb-8">
-            <h2 className="font-michroma text-3xl text-white uppercase tracking-tighter mb-4">{selectedGame.title}</h2>
-            <p className="text-white/40 text-sm leading-relaxed mb-6">{selectedGame.shortDescription}</p>
+            <h2 className="font-michroma text-3xl text-white uppercase tracking-tighter mb-4">{selectedGame?.title}</h2>
+            <p className="text-white/40 text-sm leading-relaxed mb-6">{selectedGame?.shortDescription}</p>
             <div className="flex flex-wrap gap-3">
               <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-xl border border-white/5">
                 <ShieldCheck size={14} className="text-[#63f3f7]" />
@@ -107,7 +109,6 @@ export default function GameModal() {
             </div>
           </div>
 
-          {/* ВЫБОР ИЗДАНИЯ ИЗ ТВОЕГО МАССИВА EDITIONS */}
           <div className="space-y-4 mb-10">
             <p className="text-[10px] text-white/20 uppercase font-black tracking-[0.3em] mb-4">Выберите издание</p>
             <div className="flex flex-col gap-3">
@@ -119,14 +120,15 @@ export default function GameModal() {
                 >
                   <div className="flex justify-between items-center w-full mb-2">
                     <span className={`text-sm font-bold uppercase ${selectedEditionIndex === index ? "text-white" : "text-white/30"}`}>
-                      {edition.name}
+                      {edition?.name}
                     </span>
                     <span className={`font-michroma text-xs ${selectedEditionIndex === index ? "text-[#63f3f7]" : "text-white/20"}`}>
-                      {edition.price.toLocaleString()} ₽
+                      {edition?.price?.toLocaleString() || 0} ₽
                     </span>
                   </div>
                   <div className="flex flex-wrap gap-x-4 gap-y-1">
-                    {edition.features.map((feature, fIdx) => (
+                    {/* Используем Optional Chaining для массива features */}
+                    {edition?.features?.map((feature, fIdx) => (
                       <span key={fIdx} className="text-[9px] text-white/20 uppercase tracking-tighter">
                          • {feature}
                       </span>
@@ -137,12 +139,11 @@ export default function GameModal() {
             </div>
           </div>
 
-          {/* ПРАЙС И КУПИТЬ */}
           <div className="mt-auto pt-8 border-t border-white/5">
             <div className="flex items-center justify-between mb-8">
               <span className="text-[10px] text-white/20 uppercase font-bold tracking-widest">Итого к оплате</span>
               <div className="flex items-baseline gap-2">
-                <span className="font-michroma text-4xl text-white">{currentEdition.price.toLocaleString()}</span>
+                <span className="font-michroma text-4xl text-white">{currentEdition?.price?.toLocaleString() || 0}</span>
                 <span className="text-[#63f3f7] font-michroma text-sm">₽</span>
               </div>
             </div>
