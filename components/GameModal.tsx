@@ -1,29 +1,37 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useGameModal } from "@/store/useGameModal";
+import { useGamesStore } from "@/store/games"; // ИСПОЛЬЗУЕМ ОБЩИЙ СТОР
 import { useCartStore } from "@/store/useCart";
 import { X, ShoppingCart, Check } from "lucide-react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function GameModal() {
-  const { isOpen, selectedGame, closeModal } = useGameModal();
+  // Извлекаем данные из вашего обновленного useGamesStore
+  const selectedGame = useGamesStore((state) => state.selectedGame);
+  const setSelectedGame = useGamesStore((state) => state.setSelectedGame);
+  
+  // Функция закрытия просто обнуляет выбранную игру
+  const closeModal = () => setSelectedGame(null);
+  
   const addItem = useCartStore((state) => state.addItem);
   
   const [selectedEditionIndex, setSelectedEditionIndex] = useState(0);
   const [isAdded, setIsAdded] = useState(false);
 
+  // Сброс состояния при открытии новой игры
   useEffect(() => {
     setSelectedEditionIndex(0);
     setIsAdded(false);
-  }, [isOpen, selectedGame]);
+  }, [selectedGame]);
 
+  // Если в сторе нет выбранной игры, компонент ничего не рендерит
   if (!selectedGame) return null;
 
   const editions = selectedGame.editions || [];
   const screenshots = selectedGame.screenshots || [];
-  const description = selectedGame.fullDescription || (selectedGame as any).full_description || selectedGame.shortDescription;
+  const description = selectedGame.fullDescription || selectedGame.shortDescription;
 
   const basePrice = Number(selectedGame.price || 0);
   const currentEdition = editions.length > 0 
@@ -38,9 +46,17 @@ export default function GameModal() {
 
   return (
     <AnimatePresence>
-      {isOpen && (
+      {/* Если selectedGame существует — показываем модалку */}
+      {selectedGame && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-8 bg-black/90 backdrop-blur-xl overflow-y-auto">
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={closeModal} className="absolute inset-0 cursor-pointer" />
+          {/* Оверлей для закрытия */}
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }} 
+            onClick={closeModal} 
+            className="absolute inset-0 cursor-pointer" 
+          />
 
           <motion.div 
             initial={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -62,7 +78,7 @@ export default function GameModal() {
                   {selectedGame.title}
                 </h2>
                 
-                {/* --- УВЕЛИЧЕННЫЕ КНОПКИ ИЗДАНИЙ --- */}
+                {/* Издания */}
                 {editions.length > 1 && (
                   <div className="flex flex-wrap gap-3 p-2 bg-white/5 rounded-2xl border border-white/5 w-full max-w-md mx-auto">
                     {editions.map((edition: any, idx: number) => (
@@ -88,7 +104,6 @@ export default function GameModal() {
                   <span className="text-2xl text-[#63f3f7] font-michroma">₽</span>
                 </div>
 
-                {/* --- ЦЕНТРИРОВАННАЯ КНОПКА С УВЕЛИЧЕННЫМ ШРИФТОМ --- */}
                 <div className="flex justify-center w-full">
                   <motion.button 
                     whileHover={{ scale: 1.05, y: -2 }}
@@ -120,6 +135,7 @@ export default function GameModal() {
               </div>
             </div>
 
+            {/* Скриншоты и описание */}
             <div className="p-8 md:p-12 bg-black/40 border-t border-white/5 space-y-10">
               {screenshots.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
