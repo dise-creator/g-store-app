@@ -1,59 +1,61 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Game } from "@/store/games";
 
-// Расширяем интерфейс, чтобы он соответствовал нашему новому Game
 interface BannerSlide extends Game {
   subtitle: string;
   desc: string;
   color: string;
+  fontClass: string; // Специальный шрифт для каждой игры
 }
 
 const BANNER_SLIDES: BannerSlide[] = [
   {
-    id: "2", // Строка для синхронизации со Store и Supabase
-    title: "КИБЕРПАНК",
-    subtitle: "2077",
-    category: "RPG",
-    desc: "Станьте легендой Найт-Сити уже сегодня. Скидка 40% только до конца недели.",
-    shortDescription: "Экшен-RPG в Найт-Сити.",
+    id: "gow-1", 
+    title: "GOD OF",
+    subtitle: "WAR",
+    category: "Action",
+    desc: "Продолжение легендарной саги. Отправьтесь в эпическое путешествие вместе с Кратосом и Атреем по всем девяти мирам.",
+    shortDescription: "Экшен-приключение.",
     fullDescription: "", 
+    price: 3500,
+    image: "/hero/1.jpg", 
+    screenshots: [],
+    editions: [],
+    color: "#a8c0d8",
+    fontClass: "font-[family-name:var(--font-arapey)]" // Античный стиль
+  },
+  {
+    id: "spidey-1",
+    title: "SPIDER",
+    subtitle: "MAN",
+    category: "Action",
+    desc: "Станьте величайшим защитником Нью-Йорка. Невероятные полеты на паутине и динамичные сражения ждут вас.",
+    shortDescription: "Приключения супергероя.",
+    fullDescription: "",
+    price: 2900,
+    image: "/hero/2.jpg", 
+    screenshots: [],
+    editions: [],
+    color: "#ef4444",
+    fontClass: "font-[family-name:var(--font-bangers)] tracking-wider" // Стиль комиксов
+  },
+  {
+    id: "tlou-1",
+    title: "LAST OF",
+    subtitle: "US II",
+    category: "Action",
+    desc: "Эмоциональная и жестокая история Элли в мире, где грани между добром и злом окончательно стерты.",
+    shortDescription: "Драматический триллер.",
+    fullDescription: "",
     price: 2500,
-    image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070",
+    image: "/hero/3.jpg", 
     screenshots: [],
     editions: [],
-    color: "#63f3f7" // Твой фирменный цвет
-  },
-  {
-    id: "1",
-    title: "СТАРФИЛД",
-    subtitle: "DIGITAL",
-    category: "RPG",
-    desc: "Исследуйте бесконечные просторы космоса в новой ролевой игре от Bethesda.",
-    shortDescription: "Космическая одиссея.",
-    fullDescription: "",
-    price: 4200,
-    image: "https://images.unsplash.com/photo-1614728263952-84ea256f9679?q=80&w=2070",
-    screenshots: [],
-    editions: [],
-    color: "#3b82f6"
-  },
-  {
-    id: "3",
-    title: "ЭЛДЕН",
-    subtitle: "РИНГ",
-    category: "RPG",
-    desc: "Восстань, Погасшая душа, и стань владыкой Элдена в Междуземье.",
-    shortDescription: "Хардкорное приключение.",
-    fullDescription: "",
-    price: 3900,
-    image: "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?q=80&w=2070",
-    screenshots: [],
-    editions: [],
-    color: "#eab308"
+    color: "#4ade80",
+    fontClass: "font-[family-name:var(--font-im-fell)]" // Постапокалиптический стиль
   }
 ];
 
@@ -63,7 +65,7 @@ export default function HeroBanner() {
   useEffect(() => {
     const timer = setInterval(() => {
       setIndex((prev) => (prev === BANNER_SLIDES.length - 1 ? 0 : prev + 1));
-    }, 8000); // Чуть увеличил интервал для читаемости
+    }, 8000); 
     return () => clearInterval(timer);
   }, []);
 
@@ -71,8 +73,8 @@ export default function HeroBanner() {
 
   return (
     <section 
-      className="relative w-full h-[500px] md:h-[650px] rounded-[2.5rem] md:rounded-[4rem] overflow-hidden bg-[#0a0a0c] group transition-all duration-1000 shadow-2xl"
-      style={{ boxShadow: `0 40px 100px -30px ${current.color}30` }} 
+      className="relative w-full h-[480px] md:h-[600px] rounded-[2.5rem] md:rounded-[3.5rem] overflow-hidden bg-[#0a0a0c] group transition-all duration-1000"
+      style={{ boxShadow: `0 30px 80px -20px ${current.color}25` }} 
     >
       <AnimatePresence mode="wait">
         <motion.div
@@ -80,68 +82,58 @@ export default function HeroBanner() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 0.8 }}
           className="absolute inset-0"
         >
-          {/* Улучшенные маски для текста */}
-          <div className="absolute inset-0 z-10 bg-gradient-to-r from-[#0a0a0c] via-[#0a0a0c]/60 to-transparent" />
-          <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#0a0a0c] via-transparent to-transparent" />
+          {/* Градиенты для читаемости текста */}
+          <div className="absolute inset-0 z-10 bg-gradient-to-r from-[#0a0a0c] via-[#0a0a0c]/40 to-transparent" />
+          <div className="absolute inset-0 z-10 bg-gradient-to-t from-[#0a0a0c]/50 via-transparent to-transparent" />
           
-          <Image
+          <img
             src={current.image}
             alt={current.title}
-            fill
-            className="object-cover transition-transform duration-[10000ms] scale-110 group-hover:scale-100"
-            priority
-            unoptimized
+            className="absolute inset-0 z-0 w-full h-full object-cover transition-transform duration-[10000ms] scale-105 group-hover:scale-100"
           />
           
-          <div className="absolute inset-0 z-20 flex flex-col justify-center px-10 md:px-24">
+          <div className="absolute inset-0 z-20 flex flex-col justify-center px-12 md:px-24">
             <motion.div 
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3, duration: 0.8 }}
-              className="max-w-3xl"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+              className="max-w-2xl"
             >
-              <div 
-                className="inline-flex items-center px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.3em] mb-8 border backdrop-blur-md"
-                style={{ backgroundColor: `${current.color}15`, borderColor: `${current.color}30`, color: current.color }}
-              >
-                <span className="w-2 h-2 rounded-full bg-current animate-pulse mr-3" />
-                Featured Game
-              </div>
-              
-              <h1 className="text-6xl sm:text-7xl md:text-[9rem] font-black uppercase italic tracking-tighter text-white mb-8 leading-[0.8] drop-shadow-2xl">
+              {/* Тематический заголовок */}
+              <h1 className={`${current.fontClass} text-5xl sm:text-6xl md:text-7xl font-black uppercase italic text-white mb-6 leading-[0.9] drop-shadow-xl`}>
                 {current.title} <br /> 
-                <span style={{ color: current.color }} className="opacity-90">{current.subtitle}</span>
+                <span style={{ color: current.color }} className="opacity-95">{current.subtitle}</span>
               </h1>
               
-              <p className="text-white/50 text-base md:text-xl font-medium mb-12 max-w-lg italic leading-relaxed">
+              <p className="text-white/60 text-sm md:text-lg font-medium mb-10 max-w-lg italic leading-relaxed text-balance">
                 {current.desc}
               </p>
               
+              {/* Компактная кнопка */}
               <button 
-                className="group/btn relative px-10 md:px-14 py-5 md:py-6 text-black font-black uppercase italic rounded-[1.5rem] overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-[0_20px_50px_rgba(0,0,0,0.3)]"
+                className="group/btn relative px-8 py-3.5 text-black font-extrabold uppercase italic rounded-xl overflow-hidden transition-all hover:scale-105 active:scale-95 shadow-lg"
                 style={{ backgroundColor: current.color }}
               >
-                {/* Исправляем гидратацию через suppressHydrationWarning */}
-                <span className="relative z-10 flex items-center gap-3 text-lg" suppressHydrationWarning>
-                  Забрать за {current.price.toLocaleString()} ₽
+                <span className="relative z-10 flex items-center gap-2.5 text-sm md:text-base">
+                  Купить за {current.price.toLocaleString()} ₽
                 </span>
-                <div className="absolute inset-0 bg-white/30 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300" />
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300" />
               </button>
             </motion.div>
           </div>
         </motion.div>
       </AnimatePresence>
 
-      {/* Индикаторы */}
-      <div className="absolute bottom-12 left-10 md:left-24 z-30 flex gap-3">
+      {/* Индикаторы слайдов */}
+      <div className="absolute bottom-10 left-12 md:left-24 z-30 flex gap-2.5">
         {BANNER_SLIDES.map((_, i) => (
           <button 
             key={i}
             onClick={() => setIndex(i)}
-            className={`h-2 rounded-full transition-all duration-700 ${i === index ? "w-16" : "w-6 bg-white/10 hover:bg-white/20"}`}
+            className={`h-1.5 rounded-full transition-all duration-500 ${i === index ? "w-10" : "w-4 bg-white/10 hover:bg-white/20"}`}
             style={{ backgroundColor: i === index ? current.color : "" }}
           />
         ))}

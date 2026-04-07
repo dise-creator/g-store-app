@@ -1,6 +1,34 @@
 import type { Metadata } from "next";
+import { 
+  Inter, 
+  Bangers, 
+  Arapey, 
+  IM_Fell_DW_Pica_SC 
+} from "next/font/google"; // Импортируем нужные шрифты
 import "./globals.css";
 import ClientLayout from "@/components/ClientLayout";
+
+// Настраиваем шрифты
+const inter = Inter({ subsets: ["latin", "cyrillic"], variable: "--font-inter" });
+
+const bangers = Bangers({ 
+  weight: "400", 
+  subsets: ["latin"], 
+  variable: "--font-bangers" 
+});
+
+const arapey = Arapey({ 
+  weight: "400", 
+  subsets: ["latin"], 
+  style: ["normal", "italic"],
+  variable: "--font-arapey" 
+});
+
+const imFell = IM_Fell_DW_Pica_SC({ 
+  weight: "400", 
+  subsets: ["latin"], 
+  variable: "--font-im-fell" 
+});
 
 export const metadata: Metadata = {
   title: "Game Store",
@@ -14,8 +42,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ru">
-      {/* Добавили bg-[#121212] для серого фона всей страницы */}
-      <body className="antialiased font-sans bg-[#121212] text-white">
+      {/* Добавляем переменные шрифтов в className body */}
+      <body className={`${inter.className} ${bangers.variable} ${arapey.variable} ${imFell.variable} antialiased bg-[#121212] text-white`}>
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

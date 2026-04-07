@@ -6,14 +6,11 @@ import HeroBanner from "@/components/HeroBanner";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import GameModal from "@/components/GameModal";
 import { supabase } from "@/lib/supabase"; 
-// ДОБАВЛЕНО: импортируем useGamesStore для синхронизации с поиском
 import { ALL_GAMES, type Game, useGamesStore } from "@/store/games";
 
 export default function Home() {
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState(true);
-  
-  // ДОБАВЛЕНО: получаем функцию для обновления глобального списка игр
   const setAllGames = useGamesStore((state) => state.setAllGames);
 
   const sections = useMemo(() => [
@@ -32,43 +29,45 @@ export default function Home() {
           .select('*')
           .order('created_at', { ascending: false });
 
-        if (error) {
-          console.warn("Supabase error, using local fallback:", error.message);
+        if (error || !data || data.length === 0) {
           setGames(ALL_GAMES);
-          setAllGames(ALL_GAMES); // Синхронизируем стор
-        } else if (data && data.length > 0) {
+          setAllGames(ALL_GAMES);
+        } else {
           const fetchedGames = data as Game[];
           setGames(fetchedGames);
-          setAllGames(fetchedGames); // СИНХРОНИЗИРУЕМ ПОИСК С БАЗОЙ ДАННЫХ
-        } else {
-          setGames(ALL_GAMES);
-          setAllGames(ALL_GAMES); // Синхронизируем стор
+          setAllGames(fetchedGames);
         }
       } catch (err) {
         setGames(ALL_GAMES);
-        setAllGames(ALL_GAMES); // Синхронизируем стор
+        setAllGames(ALL_GAMES);
       } finally {
         setLoading(false);
       }
     }
     loadData();
-  }, [setAllGames]); // Добавили зависимость для корректности
+  }, [setAllGames]);
 
   const getSectionGames = (sectionKey: string) => {
     const filtered = games.filter(g => g.category?.toUpperCase() === sectionKey.toUpperCase());
-    if (filtered.length === 0) {
-      return [...games].sort(() => Math.random() - 0.5).slice(0, 8);
-    }
-    return filtered;
+    return filtered.length === 0 ? [...games].sort(() => Math.random() - 0.5).slice(0, 8) : filtered;
   };
 
   return (
-    <main className="relative min-h-screen !bg-transparent pt-42 pb-24 overflow-x-hidden">
-      <AnimatedBackground />
+    /* 1. Убрали pt-42 (слишком много), поставили pt-32.
+       2. Убрали !bg-transparent, задали базовый темный фон.
+    */
+    <main className="relative min-h-screen bg-[#050507] pt-32 pb-24 overflow-x-hidden">
+      
+      {/* ФОН: всегда -z-10, чтобы быть ПОД контентом */}
+      <div className="fixed inset-0 z-0">
+        <AnimatedBackground />
+      </div>
 
+      {/* КОНТЕНТ: z-10, чтобы быть НАД фоном */}
       <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-10 flex flex-col gap-24 md:gap-32">
         
-        <section className="w-full mt-8">
+        {/* БАННЕР: Явно выделяем в секцию */}
+        <section className="w-full">
           <HeroBanner />
         </section>
 
@@ -81,7 +80,7 @@ export default function Home() {
             ))
           ) : (
             sections.map((s) => (
-              <div key={s.key} className="bg-transparent">
+              <div key={s.key}>
                 <GameSlider 
                   title={s.title} 
                   games={getSectionGames(s.key)}

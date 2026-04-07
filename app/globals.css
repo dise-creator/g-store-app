@@ -4,12 +4,13 @@
   html, body {
     margin: 0;
     padding: 0;
-    /* Изменили на серый цвет как в чате, !important перебьет все остальные стили */
-    background-color: #121212 !important; 
+    background-color: #0a0a0c; /* Убрали !important */
     color: white;
     min-height: 100vh;
     font-feature-settings: "kern" 1;
     overflow-x: hidden;
+    position: relative;
+    z-index: 0;
   }
 }
 
