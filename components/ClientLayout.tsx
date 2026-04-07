@@ -17,33 +17,45 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const router = useRouter();
   const allGames = useGamesStore((state) => state.allGames);
 
-  // Фикс гидратации
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  // Предотвращаем гидратацию до полной загрузки клиента
   if (!mounted) return <div className="bg-[#0a0a0c] min-h-screen" />;
 
   return (
     <SessionProvider>
-      <div className="flex flex-col min-h-screen bg-[#0a0a0c]">
+      {/* flex-col и min-h-screen гарантируют, что футер будет прижат к низу, 
+        а isolate создает чистый контекст для z-index.
+      */}
+      <div className="relative flex flex-col min-h-screen bg-[#0a0a0c] text-white isolate overflow-x-hidden">
         
-        <Header 
-          onSearchClick={() => setIsSearchOpen(true)} 
-          onCartClick={() => setIsCartOpen(true)} 
-          onWishlistClick={() => router.push('/wishlist')}
-        />
+        {/* ХЕДЕР: Фиксируем сверху, чтобы он всегда был доступен (z-100) */}
+        <div className="sticky top-0 z-[100] w-full">
+          <Header 
+            onSearchClick={() => setIsSearchOpen(true)} 
+            onCartClick={() => setIsCartOpen(true)} 
+            onWishlistClick={() => router.push('/wishlist')}
+          />
+        </div>
 
+        {/* СЛУЖЕБНЫЕ ОКНА: Должны перекрывать контент, но быть под модалкой игры */}
         <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
         <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} games={allGames} />
 
-        {/* pb-12 — отступ уменьшен в 3 раза для компактности */}
-        <main className="relative flex-grow pb-12">
+        {/* ОСНОВНОЙ КОНТЕНТ: 
+            flex-grow заставляет main занимать всё свободное место, отодвигая футер вниз.
+            z-10 гарантирует, что карточки игр будут кликабельны и не "уйдут" под фон.
+        */}
+        <main className="relative z-10 flex-grow w-full">
           {children}
         </main>
 
+        {/* ФУТЕР: Теперь он просто идет следом в потоке, без абсолютного позиционирования. */}
         <Footer />
         
+        {/* МОДАЛЬНОЕ ОКНО ИГРЫ: Самый высокий приоритет отображения */}
         <GameModal /> 
       </div>
     </SessionProvider>

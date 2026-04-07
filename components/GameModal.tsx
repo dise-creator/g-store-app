@@ -1,160 +1,169 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useGamesStore } from "@/store/games"; // ИСПОЛЬЗУЕМ ОБЩИЙ СТОР
-import { useCartStore } from "@/store/useCart";
-import { X, ShoppingCart, Check } from "lucide-react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { useGameModal } from "@/store/useGameModal";
+import { useCartStore } from "@/store/useCart";
+import { X, ShoppingCart, ChevronLeft, ChevronRight, Check, ShieldCheck, Zap, Star } from "lucide-react";
 
 export default function GameModal() {
-  // Извлекаем данные из вашего обновленного useGamesStore
-  const selectedGame = useGamesStore((state) => state.selectedGame);
-  const setSelectedGame = useGamesStore((state) => state.setSelectedGame);
-  
-  // Функция закрытия просто обнуляет выбранную игру
-  const closeModal = () => setSelectedGame(null);
-  
+  const { isOpen, selectedGame, closeModal } = useGameModal();
   const addItem = useCartStore((state) => state.addItem);
   
+  // Состояния для слайдера и выбора издания
   const [selectedEditionIndex, setSelectedEditionIndex] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [isAdded, setIsAdded] = useState(false);
 
-  // Сброс состояния при открытии новой игры
+  // Сбрасываем всё при открытии новой игры
   useEffect(() => {
-    setSelectedEditionIndex(0);
-    setIsAdded(false);
-  }, [selectedGame]);
+    if (isOpen) {
+      setSelectedEditionIndex(0);
+      setCurrentSlide(0);
+      setIsAdded(false);
+    }
+  }, [isOpen, selectedGame]);
 
-  // Если в сторе нет выбранной игры, компонент ничего не рендерит
-  if (!selectedGame) return null;
+  if (!isOpen || !selectedGame) return null;
 
-  const editions = selectedGame.editions || [];
-  const screenshots = selectedGame.screenshots || [];
-  const description = selectedGame.fullDescription || selectedGame.shortDescription;
+  // Данные из твоего интерфейса Game
+  const screenshots = selectedGame.screenshots && selectedGame.screenshots.length > 0 
+    ? selectedGame.screenshots 
+    : [selectedGame.image];
+    
+  const editions = selectedGame.editions && selectedGame.editions.length > 0
+    ? selectedGame.editions
+    : [{ name: "Standard Edition", price: selectedGame.price, features: ["Базовая игра"] }];
 
-  const basePrice = Number(selectedGame.price || 0);
-  const currentEdition = editions.length > 0 
-    ? { name: editions[selectedEditionIndex].name, price: Number(editions[selectedEditionIndex].price) }
-    : { name: "Standard", price: basePrice };
+  const currentEdition = editions[selectedEditionIndex];
+
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % screenshots.length);
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + screenshots.length) % screenshots.length);
 
   const handleAddToCart = () => {
-    addItem({ ...selectedGame, price: currentEdition.price, selectedEdition: currentEdition.name });
+    addItem({
+      ...selectedGame,
+      price: currentEdition.price,
+      title: `${selectedGame.title} (${currentEdition.name})`
+    });
+    
     setIsAdded(true);
-    setTimeout(() => setIsAdded(false), 3000);
+    setTimeout(() => setIsAdded(false), 2000);
   };
 
   return (
-    <AnimatePresence>
-      {/* Если selectedGame существует — показываем модалку */}
-      {selectedGame && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-8 bg-black/90 backdrop-blur-xl overflow-y-auto">
-          {/* Оверлей для закрытия */}
-          <motion.div 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
-            exit={{ opacity: 0 }} 
-            onClick={closeModal} 
-            className="absolute inset-0 cursor-pointer" 
+    <div className="fixed inset-0 z-[200] flex items-center justify-center p-0 md:p-6 animate-in fade-in duration-300">
+      <div className="absolute inset-0 bg-black/95 backdrop-blur-2xl" onClick={closeModal} />
+      
+      <div className="relative z-[210] w-full max-w-[1200px] h-full md:h-auto md:max-h-[90vh] bg-[#0d0d0f] md:border md:border-white/10 md:rounded-[3rem] overflow-hidden flex flex-col md:flex-row shadow-2xl">
+        
+        {/* Мобильная кнопка закрытия */}
+        <button onClick={closeModal} className="absolute top-6 right-6 z-[250] md:hidden text-white/50"><X size={30}/></button>
+
+        {/* ЛЕВАЯ ЧАСТЬ: Слайдер скриншотов из БД */}
+        <div className="relative w-full md:w-[60%] h-[40vh] md:h-auto group bg-black">
+          <Image 
+            key={currentSlide}
+            src={screenshots[currentSlide]} 
+            alt="Gameplay" 
+            fill 
+            className="object-cover transition-all duration-700 ease-in-out"
+            unoptimized
           />
-
-          <motion.div 
-            initial={{ scale: 0.9, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.9, opacity: 0, y: 20 }}
-            className="relative z-10 w-full max-w-5xl bg-[#0d0e12] border border-white/10 rounded-[3rem] overflow-hidden flex flex-col pointer-events-auto shadow-2xl"
-          >
-            <button onClick={closeModal} className="absolute top-6 right-6 z-50 text-white/20 hover:text-white transition-colors p-2">
-              <X size={32} />
-            </button>
-
-            <div className="flex flex-col md:flex-row">
-              <div className="relative w-full md:w-2/5 aspect-[3/4] md:aspect-auto min-h-[400px]">
-                <Image src={selectedGame.image} alt={selectedGame.title} fill className="object-cover" unoptimized />
+          
+          {/* Навигация */}
+          {screenshots.length > 1 && (
+            <>
+              <button onClick={prevSlide} className="absolute left-6 top-1/2 -translate-y-1/2 w-14 h-14 bg-black/40 backdrop-blur-xl border border-white/10 rounded-full text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-[#63f3f7] hover:text-black">
+                <ChevronLeft size={28} />
+              </button>
+              <button onClick={nextSlide} className="absolute right-6 top-1/2 -translate-y-1/2 w-14 h-14 bg-black/40 backdrop-blur-xl border border-white/10 rounded-full text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-[#63f3f7] hover:text-black">
+                <ChevronRight size={28} />
+              </button>
+              
+              <div className="absolute bottom-10 left-10 flex gap-2">
+                {screenshots.map((_, idx) => (
+                  <button key={idx} onClick={() => setCurrentSlide(idx)} className={`h-1 rounded-full transition-all duration-300 ${idx === currentSlide ? "w-10 bg-[#63f3f7]" : "w-2 bg-white/20"}`} />
+                ))}
               </div>
+            </>
+          )}
+        </div>
 
-              <div className="flex-1 p-8 md:p-12 flex flex-col justify-center gap-10 text-center">
-                <h2 className="text-4xl md:text-5xl font-michroma text-white uppercase italic leading-tight">
-                  {selectedGame.title}
-                </h2>
-                
-                {/* Издания */}
-                {editions.length > 1 && (
-                  <div className="flex flex-wrap gap-3 p-2 bg-white/5 rounded-2xl border border-white/5 w-full max-w-md mx-auto">
-                    {editions.map((edition: any, idx: number) => (
-                      <button
-                        key={edition.name}
-                        onClick={() => setSelectedEditionIndex(idx)}
-                        className={`flex-1 min-w-[140px] py-4 rounded-xl font-michroma text-[12px] uppercase transition-all tracking-wider ${
-                          selectedEditionIndex === idx 
-                            ? "bg-[#63f3f7] text-black shadow-[0_0_20px_rgba(99,243,247,0.4)]" 
-                            : "text-white/40 hover:text-white hover:bg-white/5"
-                        }`}
-                      >
-                        {edition.name}
-                      </button>
+        {/* ПРАВАЯ ЧАСТЬ: Информация и выбор версий */}
+        <div className="flex flex-col flex-1 p-8 md:p-14 overflow-y-auto custom-scrollbar">
+          <div className="mb-8">
+            <h2 className="font-michroma text-3xl text-white uppercase tracking-tighter mb-4">{selectedGame.title}</h2>
+            <p className="text-white/40 text-sm leading-relaxed mb-6">{selectedGame.shortDescription}</p>
+            <div className="flex flex-wrap gap-3">
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-xl border border-white/5">
+                <ShieldCheck size={14} className="text-[#63f3f7]" />
+                <span className="text-[9px] text-white/60 uppercase font-bold tracking-widest italic">Лицензионный ключ</span>
+              </div>
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-xl border border-white/5">
+                <Zap size={14} className="text-[#63f3f7]" />
+                <span className="text-[9px] text-white/60 uppercase font-bold tracking-widest italic">Моментальная выдача</span>
+              </div>
+            </div>
+          </div>
+
+          {/* ВЫБОР ИЗДАНИЯ ИЗ ТВОЕГО МАССИВА EDITIONS */}
+          <div className="space-y-4 mb-10">
+            <p className="text-[10px] text-white/20 uppercase font-black tracking-[0.3em] mb-4">Выберите издание</p>
+            <div className="flex flex-col gap-3">
+              {editions.map((edition, index) => (
+                <button 
+                  key={index}
+                  onClick={() => setSelectedEditionIndex(index)}
+                  className={`flex flex-col p-6 rounded-[2rem] border transition-all ${selectedEditionIndex === index ? "bg-white/5 border-[#63f3f7] shadow-[0_0_30px_rgba(99,243,247,0.1)]" : "border-white/5 hover:border-white/10"}`}
+                >
+                  <div className="flex justify-between items-center w-full mb-2">
+                    <span className={`text-sm font-bold uppercase ${selectedEditionIndex === index ? "text-white" : "text-white/30"}`}>
+                      {edition.name}
+                    </span>
+                    <span className={`font-michroma text-xs ${selectedEditionIndex === index ? "text-[#63f3f7]" : "text-white/20"}`}>
+                      {edition.price.toLocaleString()} ₽
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap gap-x-4 gap-y-1">
+                    {edition.features.map((feature, fIdx) => (
+                      <span key={fIdx} className="text-[9px] text-white/20 uppercase tracking-tighter">
+                         • {feature}
+                      </span>
                     ))}
                   </div>
-                )}
+                </button>
+              ))}
+            </div>
+          </div>
 
-                <div className="flex items-center justify-center gap-4">
-                  <span className="text-6xl font-michroma text-white tracking-tighter">
-                    {currentEdition.price.toLocaleString()}
-                  </span>
-                  <span className="text-2xl text-[#63f3f7] font-michroma">₽</span>
-                </div>
-
-                <div className="flex justify-center w-full">
-                  <motion.button 
-                    whileHover={{ scale: 1.05, y: -2 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={handleAddToCart}
-                    className={`relative group h-20 px-16 rounded-2xl font-michroma uppercase italic tracking-[0.2em] flex items-center justify-center gap-4 overflow-hidden border transition-all duration-500 backdrop-blur-md shadow-xl ${
-                      isAdded 
-                        ? "bg-[#63f3f7] text-black border-[#63f3f7] shadow-[0_0_30px_rgba(99,243,247,0.4)]" 
-                        : "bg-white/5 border-white/10 text-[#63f3f7] hover:border-[#63f3f7]/50 hover:bg-[#63f3f7]/5"
-                    }`}
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                    
-                    <AnimatePresence mode="wait">
-                      {isAdded ? (
-                        <motion.div key="added" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex items-center gap-3">
-                          <Check size={28} strokeWidth={3} />
-                          <span className="text-lg">ДОБАВЛЕНО</span>
-                        </motion.div>
-                      ) : (
-                        <motion.div key="cart" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="flex items-center gap-3">
-                          <ShoppingCart size={28} />
-                          <span className="text-lg">В КОРЗИНУ</span>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.button>
-                </div>
+          {/* ПРАЙС И КУПИТЬ */}
+          <div className="mt-auto pt-8 border-t border-white/5">
+            <div className="flex items-center justify-between mb-8">
+              <span className="text-[10px] text-white/20 uppercase font-bold tracking-widest">Итого к оплате</span>
+              <div className="flex items-baseline gap-2">
+                <span className="font-michroma text-4xl text-white">{currentEdition.price.toLocaleString()}</span>
+                <span className="text-[#63f3f7] font-michroma text-sm">₽</span>
               </div>
             </div>
 
-            {/* Скриншоты и описание */}
-            <div className="p-8 md:p-12 bg-black/40 border-t border-white/5 space-y-10">
-              {screenshots.length > 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {screenshots.slice(0, 3).map((img: string, i: number) => (
-                    <div key={i} className="relative aspect-video rounded-3xl overflow-hidden border border-white/10 group bg-white/5">
-                      <Image src={img} alt={`screenshot-${i}`} fill className="object-cover opacity-60 group-hover:opacity-100 transition-all duration-700 group-hover:scale-110" unoptimized />
-                    </div>
-                  ))}
-                </div>
-              )}
-              <div className="max-w-4xl border-l-2 border-[#63f3f7]/30 pl-8 py-2 mx-auto">
-                <p className="text-white/60 text-lg leading-relaxed font-light italic">
-                  {description || "Описание временно отсутствует."}
-                </p>
+            <button 
+              onClick={handleAddToCart}
+              className={`group relative w-full h-20 rounded-[1.5rem] flex items-center justify-center gap-4 transition-all ${isAdded ? "bg-green-500 shadow-[0_0_40px_rgba(34,197,94,0.3)]" : "bg-[#63f3f7] hover:shadow-[0_0_40px_rgba(99,243,247,0.3)] active:scale-95"}`}
+            >
+              <div className={`flex items-center gap-4 transition-all duration-300 ${isAdded ? "translate-y-10 opacity-0" : "translate-y-0 opacity-100"}`}>
+                <ShoppingCart size={20} className="text-black" />
+                <span className="text-black font-black uppercase tracking-[0.2em] text-xs">Добавить в корзину</span>
               </div>
-            </div>
-          </motion.div>
+              
+              <div className={`absolute inset-0 flex items-center justify-center gap-3 transition-all duration-300 ${isAdded ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"}`}>
+                <Check size={20} className="text-white" />
+                <span className="text-white font-black uppercase tracking-[0.2em] text-xs">Товар добавлен</span>
+              </div>
+            </button>
+          </div>
         </div>
-      )}
-    </AnimatePresence>
+      </div>
+    </div>
   );
 }
