@@ -4,64 +4,105 @@
   html, body {
     margin: 0;
     padding: 0;
-    background-color: #0a0a0c; /* Убрали !important */
+    background-color: #234929; /* Болотистый тёмно-зелёный */
     color: white;
     min-height: 100vh;
+    body {
+  font-family: var(--font-rajdhani), sans-serif;
+}
     font-feature-settings: "kern" 1;
     overflow-x: hidden;
     position: relative;
     z-index: 0;
   }
+
+  /* Кастомный скроллбар для всей страницы */
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(99, 243, 247, 0.2);
+    border-radius: 99px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(99, 243, 247, 0.5);
+  }
+
+  /* Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(99, 243, 247, 0.2) transparent;
+  }
 }
 
 @layer utilities {
+  /* Скроллбар внутри компонентов (CartDrawer, GameModal) */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 3px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(99, 243, 247, 0.15);
+    border-radius: 99px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(99, 243, 247, 0.4);
+  }
+
   /* 1. ОБЪЕМНЫЙ БИРЮЗОВЫЙ ЛОГОТИП CLIC */
-  
-  /* 3D Объем для металлических букв CL */
   .clic-3d-dark {
-    color: #2D3748 !important; /* Gunmetal */
+    color: #2D3748 !important;
     text-shadow: 
       0 1px 0 #1a202c,
       0 2px 0 #1a202c,
       0 3px 0 #1a202c,
-      0 4px 1px rgba(0,0,0,0.6), /* Тень грани */
+      0 4px 1px rgba(0,0,0,0.6),
       0 0 5px rgba(0,0,0,0.3),
-      0 8px 15px rgba(0,0,0,0.5); /* Глубокая тень */
+      0 8px 15px rgba(0,0,0,0.5);
   }
 
-  /* 3D Объем и Бирюзовое свечение для кристаллов IC */
   .clic-3d-viper {
-    color: #00FFFF !important; /* Твой Бирюзовый */
+    color: #00FFFF !important;
     text-shadow: 
       0 1px 0 #00e6e6,
       0 2px 0 #00cccc,
       0 3px 0 #00b3b3,
-      0 4px 1px rgba(0,0,0,0.7), /* Тень грани */
-      /* Слои бирюзового неона */
+      0 4px 1px rgba(0,0,0,0.7),
       0 0 15px rgba(0, 255, 255, 1),
       0 0 25px rgba(0, 255, 255, 0.6),
       0 0 50px rgba(0, 255, 255, 0.4);
   }
 
   /* 2. УНИВЕРСАЛЬНОЕ БИРЮЗОВОЕ СВЕЧЕНИЕ */
-  
-  /* Мягкое бирюзовое свечение (box-shadow) */
   .viper-glow-sm {
     box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
   }
 
-  /* Интенсивное бирюзовое свечение (hover) */
   .viper-glow-md:hover {
     box-shadow: 0 0 35px rgba(0, 255, 255, 0.4) !important;
     border-color: rgba(0, 255, 255, 0.5) !important;
   }
 
-  /* Текстовое бирюзовое свечение */
   .text-viper-glow {
     text-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
   }
 
-  /* Бирюзовый градиент для фонов */
   .bg-viper-gradient {
     background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(0, 255, 255, 0.03) 100%);
   }

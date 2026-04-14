@@ -4,6 +4,8 @@ export interface GameEdition {
   name: string;
   price: number;
   features: string[];
+  platform?: string;  // "PlayStation" | "Steam" | "Xbox"
+  cards?: { value: number; quantity: number }[]; // карты пополнения
 }
 
 export interface Game {
@@ -29,7 +31,15 @@ export const ALL_GAMES: Game[] = [
     shortDescription: "Продолжение легендарной саги.",
     fullDescription: "Отправьтесь в эпическое путешествие вместе с Кратосом и Атреем.",
     screenshots: ["/hero/1.jpg"],
-    editions: [{ name: "Standard", price: 3500, features: ["Базовая игра"] }]
+    editions: [
+      { 
+        name: "Standard", 
+        price: 3500, 
+        platform: "PlayStation",
+        features: ["Базовая игра"],
+        cards: [{ value: 2000, quantity: 1 }, { value: 1500, quantity: 1 }]
+      }
+    ]
   },
   { 
     id: "spidey-1", 
@@ -40,7 +50,15 @@ export const ALL_GAMES: Game[] = [
     shortDescription: "Станьте защитником Нью-Йорка.",
     fullDescription: "Невероятные полеты на паутине и динамичные сражения.",
     screenshots: ["/hero/2.jpg"],
-    editions: [{ name: "Standard", price: 2900, features: ["Базовая игра"] }]
+    editions: [
+      { 
+        name: "Standard", 
+        price: 2900, 
+        platform: "PlayStation",
+        features: ["Базовая игра"],
+        cards: [{ value: 1500, quantity: 1 }, { value: 1500, quantity: 1 }]
+      }
+    ]
   },
   { 
     id: "tlou-1", 
@@ -51,7 +69,15 @@ export const ALL_GAMES: Game[] = [
     shortDescription: "Эмоциональная история Элли.",
     fullDescription: "Мир, где грани между добром и злом стерты.",
     screenshots: ["/hero/3.jpg"],
-    editions: [{ name: "Standard", price: 2500, features: ["Базовая игра"] }]
+    editions: [
+      { 
+        name: "Standard", 
+        price: 2500, 
+        platform: "PlayStation",
+        features: ["Базовая игра"],
+        cards: [{ value: 2500, quantity: 1 }]
+      }
+    ]
   }
 ];
 

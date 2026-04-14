@@ -21,7 +21,7 @@ export default function UserProfile() {
 
   const handleProfileClick = () => {
     if (!session) {
-      router.push('/signin'); // Мгновенный переход
+      router.push('/signin');
     } else {
       setIsOpen(!isOpen);
     }
@@ -56,14 +56,28 @@ export default function UserProfile() {
             >
               <div className="flex flex-col gap-4">
                 <div className="flex items-center gap-3 border-b border-white/5 pb-4">
-                  <div className="w-10 h-10 rounded-full bg-[#a855f7]/20 flex items-center justify-center font-black text-[#a855f7] border border-[#a855f7]/30">
-                    {session.user?.name?.[0]}
-                  </div>
+                  {/* Добавили аватарку из сессии если есть */}
+                  {session.user?.image ? (
+                    <img src={session.user.image} className="w-10 h-10 rounded-full border border-[#a855f7]/30" alt="avatar" />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-[#a855f7]/20 flex items-center justify-center font-black text-[#a855f7] border border-[#a855f7]/30">
+                      {session.user?.name?.[0]}
+                    </div>
+                  )}
                   <div className="overflow-hidden">
                     <p className="text-white font-bold text-sm italic truncate">{session.user?.name}</p>
                     <p className="text-[#a855f7] text-[10px] uppercase font-black tracking-widest">Игрок</p>
                   </div>
                 </div>
+
+                {/* Кнопка личного кабинета — добавили */}
+                <button 
+                  onClick={() => { router.push('/profile'); setIsOpen(false); }}
+                  className="w-full py-4 bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-[#63f3f7]/20 text-white hover:text-[#63f3f7] rounded-2xl font-black text-[10px] uppercase italic transition-all flex items-center justify-center gap-2"
+                >
+                  <User size={14} /> Личный кабинет
+                </button>
+
                 <button 
                   onClick={() => signOut()}
                   className="w-full py-4 bg-red-500/5 hover:bg-red-500/10 border border-red-500/10 text-red-500 rounded-2xl font-black text-[10px] uppercase italic transition-all flex items-center justify-center gap-2"
