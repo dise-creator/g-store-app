@@ -5,7 +5,8 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGameModal } from "@/store/useGameModal";
 import { useCartStore } from "@/store/useCart";
-import { X, ShoppingCart, ChevronLeft, ChevronRight, Check, ShieldCheck, Zap, CreditCard } from "lucide-react";
+import { useRegionStore, REGIONS } from "@/store/useRegion";
+import { X, ShoppingCart, ChevronLeft, ChevronRight, Check, ShieldCheck, Zap, CreditCard, TrendingDown } from "lucide-react";
 
 const PSIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -42,6 +43,7 @@ const PSNCard = ({ value, animate }: { value: number; animate: boolean }) => (
 export default function GameModal() {
   const { isOpen, selectedGame, closeModal } = useGameModal();
   const addItem = useCartStore((state) => state.addItem);
+  const { region, getPrice, getPriceForRegion, rates } = useRegionStore();
 
   const [selectedEditionIndex, setSelectedEditionIndex] = useState(0);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -68,6 +70,19 @@ export default function GameModal() {
     : [{ name: "Standard Edition", price: selectedGame?.price || 0, features: ["Базовая игра"] }];
 
   const currentEdition = editions[selectedEditionIndex] || editions[0];
+  const currentRegion = REGIONS[region];
+  const displayPrice = getPrice(currentEdition?.price || 0);
+  const originalPrice = currentEdition?.price || 0;
+  const savings = originalPrice - displayPrice;
+
+  // Считаем цены всех регионов через getPriceForRegion
+  const allRegionPrices = Object.values(REGIONS).map(r => ({
+    region: r,
+    price: getPriceForRegion(originalPrice, r.code)
+  })).sort((a, b) => a.price - b.price);
+
+  const cheapestRegion = allRegionPrices[0];
+  const isCurrentCheapest = cheapestRegion.region.code === region;
 
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % screenshots.length);
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + screenshots.length) % screenshots.length);
@@ -78,7 +93,7 @@ export default function GameModal() {
     setTimeout(() => {
       addItem({
         ...selectedGame,
-        price: currentEdition.price,
+        price: displayPrice,
         title: `${selectedGame.title} (${currentEdition.name})`
       });
       setIsAdded(true);
@@ -96,8 +111,6 @@ export default function GameModal() {
         <button onClick={closeModal} className="absolute top-4 right-4 z-[250] md:hidden text-white/50">
           <X size={28} />
         </button>
-
-        {/* Десктопная кнопка закрытия */}
         <button onClick={closeModal} className="absolute top-5 right-5 z-[250] hidden md:flex w-10 h-10 items-center justify-center bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-white/40 hover:text-white transition-all">
           <X size={18} />
         </button>
@@ -133,11 +146,11 @@ export default function GameModal() {
           )}
         </div>
 
-        {/* ПРАВАЯ ЧАСТЬ — компактная, без скролла */}
+        {/* ПРАВАЯ ЧАСТЬ */}
         <div className="flex flex-col flex-1 p-6 md:p-8 overflow-hidden">
 
           {/* Бейджи */}
-          <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-2 mb-4 flex-wrap">
             <div className="flex items-center gap-1.5 px-2.5 py-1 bg-[#003087]/20 border border-[#003087]/40 rounded-lg">
               <PSIcon className="w-3.5 h-3.5 text-[#0070d1]" />
               <span className="text-[8px] text-[#0070d1] uppercase font-black tracking-widest">PS5</span>
@@ -150,6 +163,10 @@ export default function GameModal() {
               <Zap size={11} className="text-[#63f3f7]" />
               <span className="text-[8px] text-white/50 uppercase font-bold tracking-widest">Моментально</span>
             </div>
+            <div className="flex items-center gap-1.5 px-2.5 py-1 bg-[#63f3f7]/10 border border-[#63f3f7]/20 rounded-lg">
+              <span className="text-sm">{currentRegion.flag}</span>
+              <span className="text-[8px] text-[#63f3f7] uppercase font-black tracking-widest">{currentRegion.name}</span>
+            </div>
           </div>
 
           {/* Заголовок */}
@@ -160,51 +177,106 @@ export default function GameModal() {
 
           {/* Выбор издания */}
           <p className="text-[9px] text-white/20 uppercase font-black tracking-[0.3em] mb-2">Выберите вариант</p>
-          <div className="flex flex-col gap-2 mb-4">
-            {editions.map((edition, index) => (
-              <button
-                key={index}
-                onClick={() => setSelectedEditionIndex(index)}
-                className={`flex flex-col p-4 rounded-2xl border transition-all text-left ${
-                  selectedEditionIndex === index
-                    ? "bg-white/5 border-[#63f3f7] shadow-[0_0_20px_rgba(99,243,247,0.1)]"
-                    : "border-white/5 hover:border-white/10"
-                }`}
-              >
-                <div className="flex justify-between items-center w-full">
-                  <span className={`text-sm font-black uppercase italic ${selectedEditionIndex === index ? "text-white" : "text-white/30"}`}>
-                    {edition?.name}
-                  </span>
-                  <span className={`font-black text-base ${selectedEditionIndex === index ? "text-[#63f3f7]" : "text-white/20"}`}>
-                    {edition?.price?.toLocaleString() || 0} ₽
-                  </span>
-                </div>
-
-                {edition?.cards && edition.cards.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 mt-2">
-                    {edition.cards.map((card, cIdx) => (
-                      <div key={cIdx} className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-[9px] font-black ${selectedEditionIndex === index ? "bg-[#63f3f7]/10 border-[#63f3f7]/20 text-[#63f3f7]" : "bg-white/[0.03] border-white/5 text-white/20"}`}>
-                        <CreditCard size={9} />
-                        {card.quantity > 1 && <span>{card.quantity}×</span>}
-                        <span>PSN {card.value.toLocaleString()} ₽</span>
-                      </div>
-                    ))}
+          <div className="flex flex-col gap-2 mb-3">
+            {editions.map((edition, index) => {
+              const editionDisplayPrice = getPrice(edition?.price || 0);
+              return (
+                <button
+                  key={index}
+                  onClick={() => setSelectedEditionIndex(index)}
+                  className={`flex flex-col p-4 rounded-2xl border transition-all text-left ${
+                    selectedEditionIndex === index
+                      ? "bg-white/5 border-[#63f3f7] shadow-[0_0_20px_rgba(99,243,247,0.1)]"
+                      : "border-white/5 hover:border-white/10"
+                  }`}
+                >
+                  <div className="flex justify-between items-center w-full">
+                    <span className={`text-sm font-black uppercase italic ${selectedEditionIndex === index ? "text-white" : "text-white/30"}`}>
+                      {edition?.name}
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-white/20 text-xs line-through font-black">
+                        {edition?.price?.toLocaleString()} ₽
+                      </span>
+                      <span className={`font-black text-base ${selectedEditionIndex === index ? "text-[#63f3f7]" : "text-white/20"}`}>
+                        {editionDisplayPrice.toLocaleString()} ₽
+                      </span>
+                    </div>
                   </div>
-                )}
 
-                {(!edition?.cards || edition.cards.length === 0) && (
-                  <div className="flex flex-wrap gap-x-3 mt-1">
-                    {edition?.features?.map((feature, fIdx) => (
-                      <span key={fIdx} className="text-[8px] text-white/20 uppercase">• {feature}</span>
-                    ))}
-                  </div>
-                )}
-              </button>
-            ))}
+                  {edition?.cards && edition.cards.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5 mt-2">
+                      {edition.cards.map((card, cIdx) => (
+                        <div key={cIdx} className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-[9px] font-black ${selectedEditionIndex === index ? "bg-[#63f3f7]/10 border-[#63f3f7]/20 text-[#63f3f7]" : "bg-white/[0.03] border-white/5 text-white/20"}`}>
+                          <CreditCard size={9} />
+                          {card.quantity > 1 && <span>{card.quantity}×</span>}
+                          <span>PSN {card.value.toLocaleString()} ₽</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {(!edition?.cards || edition.cards.length === 0) && (
+                    <div className="flex flex-wrap gap-x-3 mt-1">
+                      {edition?.features?.map((feature, fIdx) => (
+                        <span key={fIdx} className="text-[8px] text-white/20 uppercase">• {feature}</span>
+                      ))}
+                    </div>
+                  )}
+                </button>
+              );
+            })}
           </div>
 
-          {/* Инструкция — горизонтальная компактная */}
-          <div className="flex items-center gap-3 mb-4 p-3 bg-white/[0.02] border border-white/5 rounded-xl">
+          {/* Блок сравнения цен по регионам */}
+          {rates && (
+            <div className={`mb-3 p-3 rounded-xl border ${
+              isCurrentCheapest
+                ? "bg-green-500/5 border-green-500/20"
+                : "bg-[#f59e0b]/5 border-[#f59e0b]/20"
+            }`}>
+              <div className="flex items-center gap-2 mb-2">
+                <TrendingDown size={12} className={isCurrentCheapest ? "text-green-400" : "text-[#f59e0b]"} />
+                <span className={`text-[9px] font-black uppercase tracking-widest ${isCurrentCheapest ? "text-green-400" : "text-[#f59e0b]"}`}>
+                  {isCurrentCheapest
+                    ? "🏆 Лучшая цена в вашем регионе!"
+                    : `💡 Дешевле в ${cheapestRegion.region.name} — ${cheapestRegion.price.toLocaleString()} ₽`
+                  }
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                {allRegionPrices.map(({ region: r, price }, idx) => (
+                  <div
+                    key={r.code}
+                    className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border flex-1 justify-between ${
+                      r.code === region
+                        ? "bg-white/[0.05] border-white/20"
+                        : idx === 0
+                        ? "bg-green-500/10 border-green-500/20"
+                        : "bg-white/[0.02] border-white/5"
+                    }`}
+                  >
+                    <div className="flex items-center gap-1">
+                      <span className="text-sm">{r.flag}</span>
+                      <span className={`text-[8px] font-black uppercase ${
+                        r.code === region ? "text-white/60" : idx === 0 ? "text-green-400" : "text-white/20"
+                      }`}>
+                        {r.code}
+                      </span>
+                    </div>
+                    <span className={`text-[10px] font-black ${
+                      r.code === region ? "text-white" : idx === 0 ? "text-green-400" : "text-white/30"
+                    }`}>
+                      {price.toLocaleString()} ₽
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Инструкция */}
+          <div className="flex items-center gap-3 mb-3 p-3 bg-white/[0.02] border border-white/5 rounded-xl">
             {[
               { step: "1", text: "Купи карту PSN" },
               { step: "2", text: "Получи код" },
@@ -227,15 +299,18 @@ export default function GameModal() {
             <div className="flex items-center justify-between mb-4">
               <div>
                 <span className="text-[9px] text-white/20 uppercase font-bold tracking-widest block">Итого к оплате</span>
-                {currentEdition?.cards && (
-                  <span className="text-[8px] text-white/20 mt-0.5 block">
-                    {currentEdition.cards.map(c => `${c.quantity > 1 ? c.quantity + "×" : ""}PSN ${c.value.toLocaleString()}₽`).join(" + ")}
-                  </span>
-                )}
+                <span className="text-[#63f3f7] text-[9px] font-black mt-0.5 block">
+                  Экономия {savings.toLocaleString()} ₽ {currentRegion.flag}
+                </span>
               </div>
-              <div className="flex items-baseline gap-1.5">
-                <span className="font-black italic text-4xl text-white">{currentEdition?.price?.toLocaleString() || 0}</span>
-                <span className="text-[#63f3f7] font-black text-lg">₽</span>
+              <div className="flex items-center gap-3">
+                <span className="text-white/20 text-lg line-through font-black">
+                  {originalPrice.toLocaleString()} ₽
+                </span>
+                <div className="flex items-baseline gap-1.5">
+                  <span className="font-black italic text-4xl text-white">{displayPrice.toLocaleString()}</span>
+                  <span className="text-[#63f3f7] font-black text-lg">₽</span>
+                </div>
               </div>
             </div>
 

@@ -5,6 +5,7 @@ import GameSlider from "@/components/GameSlider";
 import HeroBanner from "@/components/HeroBanner";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import GameModal from "@/components/GameModal";
+import SubscriptionSection from "../components/SubscriptionSection";
 import { supabase } from "@/lib/supabase"; 
 import { ALL_GAMES, type Game, useGamesStore } from "@/store/games";
 
@@ -53,24 +54,20 @@ export default function Home() {
   };
 
   return (
-    /* 1. Убрали pt-42 (слишком много), поставили pt-32.
-       2. Убрали !bg-transparent, задали базовый темный фон.
-    */
     <main className="relative min-h-screen bg-[#050507] pt-32 pb-24 overflow-x-hidden">
       
-      {/* ФОН: всегда -z-10, чтобы быть ПОД контентом */}
       <div className="fixed inset-0 z-0">
         <AnimatedBackground />
       </div>
 
-      {/* КОНТЕНТ: z-10, чтобы быть НАД фоном */}
       <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-10 flex flex-col gap-24 md:gap-32">
         
-        {/* БАННЕР: Явно выделяем в секцию */}
+        {/* Баннер */}
         <section className="w-full">
           <HeroBanner />
         </section>
 
+        {/* Слайдеры + подписки */}
         <div className="flex flex-col gap-16 md:gap-24">
           {loading ? (
             sections.map((s) => (
@@ -79,17 +76,32 @@ export default function Home() {
               </div>
             ))
           ) : (
-            sections.map((s) => (
-              <div key={s.key}>
-                <GameSlider 
-                  title={s.title} 
+            <>
+              {/* RPG и Приключения */}
+              <GameSlider
+                title={sections[0].title}
+                games={getSectionGames(sections[0].key)}
+                onSelectGame={(game) => console.log("Selected:", game.title)}
+              />
+
+              {/* Подписки PS Plus — между RPG и Шутерами */}
+              <section className="w-full">
+                <SubscriptionSection />
+              </section>
+
+              {/* Шутеры, Симуляторы, Новинки */}
+              {sections.slice(1).map((s) => (
+                <GameSlider
+                  key={s.key}
+                  title={s.title}
                   games={getSectionGames(s.key)}
-                  onSelectGame={(game) => console.log("Selected:", game.title)} 
+                  onSelectGame={(game) => console.log("Selected:", game.title)}
                 />
-              </div>
-            ))
+              ))}
+            </>
           )}
         </div>
+
       </div>
 
       <GameModal /> 

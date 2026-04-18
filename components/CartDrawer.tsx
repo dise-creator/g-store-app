@@ -8,6 +8,7 @@ import { useCartStore } from "@/store/useCart";
 import { supabase } from "@/lib/supabase";
 import { useSession } from "next-auth/react";
 import { getLoyaltyInfo } from "@/lib/loyalty";
+import { useRegionStore, REGIONS } from "@/store/useRegion";
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -21,6 +22,10 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
   const { items, removeItem, updateQuantity, clearCart } = useCartStore();
   const { data: session } = useSession();
+  const { region } = useRegionStore();
+
+  // RU больше нет — регион всегда показываем
+  const currentRegion = REGIONS[region];
 
   useEffect(() => {
     setIsMounted(true);
@@ -78,22 +83,19 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
         quantity: item.quantity
       }));
 
-      // 1. Создаём заказ
       const { error: orderError } = await supabase
         .from('orders')
         .insert([{
           items: preparedItems,
           total_price: finalAmount,
-          status: 'completed', // Сразу completed так как оплата мгновенная
+          status: 'completed',
           user_email: session.user.email,
         }]);
 
       if (orderError) throw orderError;
 
-      // 2. Выдаём ключи для каждой игры в заказе
       for (const item of items) {
         for (let i = 0; i < item.quantity; i++) {
-          // Ищем свободный ключ для этой игры
           const { data: voucher } = await supabase
             .from('vouchers')
             .select('id')
@@ -103,7 +105,6 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             .limit(1)
             .single();
 
-          // Если нашли ключ — привязываем к пользователю
           if (voucher) {
             await supabase
               .from('vouchers')
@@ -117,7 +118,6 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
         }
       }
 
-      // 3. Обновляем total_spent и уровень лояльности
       const newTotalSpent = totalSpent + finalAmount;
       const newLoyalty = getLoyaltyInfo(newTotalSpent);
 
@@ -164,11 +164,17 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             className="relative h-full w-full max-w-[420px] flex flex-col bg-[#0a0a0c] border border-white/10 shadow-2xl overflow-hidden rounded-[2.5rem] md:rounded-[3rem]"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Шапка */}
+            {/* Шапка — флаг региона всегда */}
             <div className="p-8 flex items-center justify-between border-b border-white/10 bg-white/[0.02]">
-              <h2 className="text-3xl font-black uppercase italic tracking-tighter text-white">
-                Корзина
-              </h2>
+              <div className="flex items-center gap-3">
+                <h2 className="text-3xl font-black uppercase italic tracking-tighter text-white">
+                  Корзина
+                </h2>
+                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-[#63f3f7]/10 border border-[#63f3f7]/20 rounded-xl">
+                  <span className="text-base">{currentRegion.flag}</span>
+                  <span className="text-[9px] text-[#63f3f7] font-black uppercase tracking-widest">{currentRegion.code}</span>
+                </div>
+              </div>
               <button
                 onClick={onClose}
                 className="w-12 h-12 flex items-center justify-center bg-white/5 hover:bg-[#00FFFF] hover:text-black rounded-full transition-all text-white/50 border border-white/10 cursor-pointer"
@@ -199,9 +205,13 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           {item.title}
                         </h3>
                         <div className="flex items-center justify-between">
-                          <p className="text-[#00FFFF] font-black italic text-base leading-none">
-                            {(Number(item.price) || 0).toLocaleString()} ₽
-                          </p>
+                          {/* Флажок региона на товаре — всегда */}
+                          <div className="flex items-center gap-1.5">
+                            <p className="text-[#00FFFF] font-black italic text-base leading-none">
+                              {(Number(item.price) || 0).toLocaleString()} ₽
+                            </p>
+                            <span className="text-xs opacity-50">{currentRegion.flag}</span>
+                          </div>
                           <div className="flex items-center gap-2.5 bg-black/40 px-2.5 py-1.5 rounded-xl border border-white/5">
                             <button
                               onClick={() => updateQuantity(item.cartItemId, item.quantity - 1)}

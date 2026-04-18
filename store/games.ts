@@ -4,8 +4,8 @@ export interface GameEdition {
   name: string;
   price: number;
   features: string[];
-  platform?: string;  // "PlayStation" | "Steam" | "Xbox"
-  cards?: { value: number; quantity: number }[]; // карты пополнения
+  platform?: string;
+  cards?: { value: number; quantity: number }[];
 }
 
 export interface Game {
@@ -19,6 +19,25 @@ export interface Game {
   screenshots: string[];
   editions: GameEdition[];
   videoUrl?: string;
+  // Новые поля скидки
+  discount_percent?: number;
+  discount_until?: string;
+}
+
+// Хелпер — проверяет активна ли скидка прямо сейчас
+export function getActiveDiscount(game: Game): number {
+  if (!game.discount_percent || game.discount_percent <= 0) return 0;
+  if (!game.discount_until) return game.discount_percent; // бессрочная скидка
+  const until = new Date(game.discount_until);
+  if (until < new Date()) return 0; // скидка истекла
+  return game.discount_percent;
+}
+
+// Хелпер — считает цену со скидкой
+export function getDiscountedPrice(game: Game): number {
+  const discount = getActiveDiscount(game);
+  if (discount <= 0) return game.price;
+  return Math.round(game.price * (1 - discount / 100));
 }
 
 export const ALL_GAMES: Game[] = [

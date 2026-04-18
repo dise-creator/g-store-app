@@ -6,7 +6,7 @@ import { useCartStore } from "@/store/useCart";
 import { Zap } from "lucide-react";
 
 interface SubscriptionCardProps {
-  id: number;
+  id: string; // исправили с number на string
   title: string;
   price: number;
   image: string;
@@ -19,10 +19,9 @@ export default function SubscriptionCard({ id, title, price, image, color, durat
 
   return (
     <div 
-      onClick={() => addItem({ id, title, price, image })}
+      onClick={() => addItem({ id, title, price, image } as any)}
       className="group relative overflow-hidden rounded-[2.5rem] bg-white/5 border border-white/5 p-8 transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
     >
-      {/* Цветное свечение на фоне */}
       <div 
         className="absolute -right-20 -top-20 w-64 h-64 blur-[100px] opacity-20 transition-opacity group-hover:opacity-40"
         style={{ backgroundColor: color }}

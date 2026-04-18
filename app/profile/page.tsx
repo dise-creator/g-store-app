@@ -26,7 +26,6 @@ interface Order {
   items: { game_id: string; title: string; price: number; quantity: number }[];
 }
 
-// Тип для ключа
 interface Voucher {
   id: string;
   code: string;
@@ -42,8 +41,6 @@ export default function ProfilePage() {
   const [loadingLoyalty, setLoadingLoyalty] = useState(true);
   const [orders, setOrders] = useState<Order[]>([]);
   const [loadingOrders, setLoadingOrders] = useState(false);
-
-  // Ключи
   const [vouchers, setVouchers] = useState<Voucher[]>([]);
   const [loadingVouchers, setLoadingVouchers] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -77,7 +74,6 @@ export default function ProfilePage() {
     loadOrders();
   }, [session, activeTab]);
 
-  // Загружаем ключи когда переходим на вкладку
   useEffect(() => {
     async function loadVouchers() {
       if (!session?.user?.email || activeTab !== "keys") return;
@@ -94,7 +90,6 @@ export default function ProfilePage() {
     loadVouchers();
   }, [session, activeTab]);
 
-  // Копирование ключа в буфер обмена
   const handleCopy = (id: string, code: string) => {
     navigator.clipboard.writeText(code);
     setCopiedId(id);
@@ -132,19 +127,23 @@ export default function ProfilePage() {
 
       <div className="relative z-10 max-w-[1200px] mx-auto px-6 md:px-10">
 
-        <Link href="/" className="inline-flex items-center gap-2 text-white/30 hover:text-[#63f3f7] transition-colors mb-10 text-xs uppercase font-black italic tracking-widest">
-          <ChevronLeft size={16} />
-          Вернуться в магазин
+        {/* Кнопка назад — крупнее */}
+        <Link
+          href="/"
+          className="inline-flex items-center gap-3 mb-10 px-5 py-3 bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-[#63f3f7]/30 rounded-2xl transition-all group"
+        >
+          <ChevronLeft size={20} className="text-white/40 group-hover:text-[#63f3f7] transition-colors" />
+          <span className="text-white/40 group-hover:text-[#63f3f7] transition-colors text-sm font-black uppercase italic tracking-widest">
+            Вернуться в магазин
+          </span>
         </Link>
 
-        <div className="mb-12">
-          <h1 className="text-6xl md:text-8xl font-black italic uppercase tracking-tighter">
-            <span className="text-white">ЛИЧ</span>
-            <span className="text-[#63f3f7]" style={{ textShadow: "0 0 40px rgba(99,243,247,0.5)" }}>НЫЙ</span>
+        {/* Заголовок — меньше и новое название */}
+        <div className="mb-10">
+          <h1 className="text-4xl md:text-5xl font-black italic uppercase tracking-tighter">
+            <span className="text-white">МОЁ </span>
+            <span className="text-[#63f3f7]" style={{ textShadow: "0 0 30px rgba(99,243,247,0.5)" }}>ПРОСТРАНСТВО</span>
           </h1>
-          <h2 className="text-6xl md:text-8xl font-black italic uppercase tracking-tighter text-white">
-            КАБИНЕТ
-          </h2>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-6">
@@ -288,7 +287,6 @@ export default function ProfilePage() {
               </motion.div>
             )}
 
-            {/* Вкладка ключей — теперь с реальными данными */}
             {activeTab === "keys" && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
                 <h3 className="text-white font-black italic uppercase text-2xl mb-6 tracking-tight">Мои ключи</h3>
@@ -312,7 +310,6 @@ export default function ProfilePage() {
                           <p className="text-white/30 text-[9px] uppercase font-black tracking-widest">
                             {voucher.game_title || "Игра"}
                           </p>
-                          {/* Ключ в стиле лицензионного кода */}
                           <p className="text-[#63f3f7] font-black text-sm tracking-widest font-mono">
                             {voucher.code}
                           </p>
@@ -320,8 +317,6 @@ export default function ProfilePage() {
                             {new Date(voucher.created_at).toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" })}
                           </p>
                         </div>
-
-                        {/* Кнопка копирования */}
                         <button
                           onClick={() => handleCopy(voucher.id, voucher.code)}
                           className={`shrink-0 p-3 rounded-xl border transition-all ${
@@ -407,7 +402,6 @@ export default function ProfilePage() {
                 )}
               </motion.div>
             )}
-
           </div>
         </div>
       </div>

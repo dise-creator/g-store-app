@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { signOut, useSession } from "next-auth/react";
-import { User, LogOut } from "lucide-react";
+import { User, LogOut, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 
@@ -56,7 +56,6 @@ export default function UserProfile() {
             >
               <div className="flex flex-col gap-4">
                 <div className="flex items-center gap-3 border-b border-white/5 pb-4">
-                  {/* Добавили аватарку из сессии если есть */}
                   {session.user?.image ? (
                     <img src={session.user.image} className="w-10 h-10 rounded-full border border-[#a855f7]/30" alt="avatar" />
                   ) : (
@@ -70,12 +69,12 @@ export default function UserProfile() {
                   </div>
                 </div>
 
-                {/* Кнопка личного кабинета — добавили */}
+                {/* Моё пространство */}
                 <button 
                   onClick={() => { router.push('/profile'); setIsOpen(false); }}
                   className="w-full py-4 bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-[#63f3f7]/20 text-white hover:text-[#63f3f7] rounded-2xl font-black text-[10px] uppercase italic transition-all flex items-center justify-center gap-2"
                 >
-                  <User size={14} /> Личный кабинет
+                  <Sparkles size={14} /> Моё пространство
                 </button>
 
                 <button 
