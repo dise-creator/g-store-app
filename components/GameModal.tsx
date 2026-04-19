@@ -59,7 +59,6 @@ export default function GameModal() {
     }
   }, [isOpen, selectedGame]);
 
-  // ESC закрывает модалку
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") closeModal();
@@ -114,8 +113,10 @@ export default function GameModal() {
     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 animate-in fade-in duration-300">
       <div className="absolute inset-0 bg-black/90 backdrop-blur-2xl" onClick={closeModal} />
 
-      {/* Увеличили max-w до 1300px и добавили overflow-y-auto */}
-      <div className="relative z-[210] w-full max-w-[1300px] h-full md:h-[90vh] bg-[#0d0d0f] md:border md:border-white/10 md:rounded-[2.5rem] overflow-hidden flex flex-col md:flex-row shadow-2xl">
+      {/* Модалка — синий фон */}
+      <div className="relative z-[210] w-full max-w-[1300px] h-full md:h-[90vh] bg-[#0a0f1e] md:border md:border-[#1a2a4a] md:rounded-[2.5rem] overflow-hidden flex flex-col md:flex-row shadow-2xl"
+        style={{ boxShadow: "0 0 80px rgba(0, 60, 160, 0.2)" }}
+      >
 
         {/* Кнопка закрытия мобильная */}
         <button onClick={closeModal} className="absolute top-4 right-4 z-[250] md:hidden text-white/50">
@@ -129,7 +130,7 @@ export default function GameModal() {
         </button>
 
         {/* ЛЕВАЯ ЧАСТЬ: Слайдер */}
-        <div className="relative w-full md:w-[48%] h-[40vh] md:h-full group bg-black shrink-0">
+        <div className="relative w-full md:w-[48%] h-[40vh] md:h-full group bg-[#060b16] shrink-0">
           {screenshots[currentSlide] && (
             <Image
               key={currentSlide}
@@ -140,8 +141,8 @@ export default function GameModal() {
               unoptimized
             />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#060b16]/80 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#0a0f1e]/30" />
 
           {screenshots.length > 1 && (
             <>
@@ -159,7 +160,6 @@ export default function GameModal() {
             </>
           )}
 
-          {/* Название поверх слайдера на мобиле */}
           <div className="absolute bottom-12 left-6 md:hidden">
             <h2 className="font-black italic uppercase text-3xl text-white tracking-tighter leading-none">
               {selectedGame?.title}
@@ -168,7 +168,7 @@ export default function GameModal() {
         </div>
 
         {/* ПРАВАЯ ЧАСТЬ */}
-        <div className="flex flex-col flex-1 overflow-y-auto no-scrollbar">
+        <div className="flex flex-col flex-1 overflow-y-auto no-scrollbar bg-[#0a0f1e]">
           <div className="flex flex-col flex-1 p-7 md:p-10 gap-5">
 
             {/* Бейджи */}
@@ -211,8 +211,8 @@ export default function GameModal() {
                       onClick={() => setSelectedEditionIndex(index)}
                       className={`flex flex-col p-5 rounded-2xl border transition-all text-left ${
                         selectedEditionIndex === index
-                          ? "bg-white/5 border-[#63f3f7] shadow-[0_0_25px_rgba(99,243,247,0.1)]"
-                          : "border-white/5 hover:border-white/15"
+                          ? "bg-blue-900/20 border-[#63f3f7] shadow-[0_0_25px_rgba(99,243,247,0.08)]"
+                          : "border-white/5 hover:border-white/15 bg-white/[0.02]"
                       }`}
                     >
                       <div className="flex justify-between items-center w-full">
@@ -276,7 +276,7 @@ export default function GameModal() {
                       key={r.code}
                       className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border flex-1 justify-between ${
                         r.code === region
-                          ? "bg-white/[0.06] border-white/20"
+                          ? "bg-blue-900/20 border-blue-700/40"
                           : idx === 0
                           ? "bg-green-500/10 border-green-500/20"
                           : "bg-white/[0.02] border-white/5"
@@ -356,9 +356,11 @@ export default function GameModal() {
                   disabled={showCardAnimation}
                   whileTap={{ scale: 0.97 }}
                   className={`group relative w-full h-16 rounded-2xl flex items-center justify-center gap-3 transition-all overflow-hidden text-sm ${
-                    isAdded ? "bg-green-500 shadow-[0_0_30px_rgba(34,197,94,0.3)]"
-                    : showCardAnimation ? "bg-[#63f3f7]/50 cursor-wait"
-                    : "bg-[#63f3f7] hover:shadow-[0_0_30px_rgba(99,243,247,0.3)]"
+                    isAdded
+                      ? "bg-[#63f3f7] shadow-[0_0_30px_rgba(99,243,247,0.4)]"
+                      : showCardAnimation
+                      ? "bg-[#63f3f7]/50 cursor-wait"
+                      : "bg-[#63f3f7] hover:shadow-[0_0_30px_rgba(99,243,247,0.3)]"
                   }`}
                 >
                   <div className={`flex items-center gap-3 transition-all duration-300 ${isAdded || showCardAnimation ? "translate-y-10 opacity-0" : "translate-y-0 opacity-100"}`}>
@@ -369,9 +371,10 @@ export default function GameModal() {
                     <CreditCard size={20} className="text-black animate-bounce" />
                     <span className="text-black font-black uppercase tracking-[0.2em]">Добавляем...</span>
                   </div>
+                  {/* Товар добавлен — бирюзовый вместо зелёного */}
                   <div className={`absolute inset-0 flex items-center justify-center gap-3 transition-all duration-300 ${isAdded ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"}`}>
-                    <Check size={20} className="text-white" />
-                    <span className="text-white font-black uppercase tracking-[0.2em]">Товар добавлен!</span>
+                    <Check size={20} className="text-black" />
+                    <span className="text-black font-black uppercase tracking-[0.2em]">Товар добавлен!</span>
                   </div>
                 </motion.button>
               </div>

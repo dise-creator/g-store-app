@@ -16,7 +16,7 @@ export default function AnimatedBackground() {
       <motion.div 
         animate={{ x: ["30%", "-10%", "30%"], y: ["10%", "-20%", "10%"], scale: [1.1, 1, 1.1] }}
         transition={{ duration: 28, repeat: Infinity, ease: "linear" }}
-        className="absolute bottom-[-20%] right-[-10%] w-[80%] h-[80%] bg-blue-800/25 blur-[150px] rounded-full opacity-60" 
+        className="absolute bottom-[-20%] right-[-10%] w-[80%] h-[80%] bg-blue-900/25 blur-[150px] rounded-full opacity-60" 
       />
 
       {/* 3. Бирюзовый акцент */}
@@ -30,7 +30,7 @@ export default function AnimatedBackground() {
       <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#80808010_1px,transparent_1px),linear-gradient(to_bottom,#80808010_1px,transparent_1px)] bg-[size:80px_80px]" />
 
       {/* Виньетка */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,#080f1e_100%)] opacity-50" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,#080f1e_100%)] opacity-40" />
     </div>
   );
 }

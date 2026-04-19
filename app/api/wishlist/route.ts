@@ -13,7 +13,7 @@ export async function POST(req: Request) {
     const { gameIds } = await req.json();
 
     const { error } = await supabase
-      .from("profiles")
+      .from("users")
       .update({ wishlist: gameIds })
       .eq("email", session.user.email);
 

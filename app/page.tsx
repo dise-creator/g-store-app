@@ -8,6 +8,7 @@ import GameModal from "@/components/GameModal";
 import SubscriptionSection from "../components/SubscriptionSection";
 import { supabase } from "@/lib/supabase"; 
 import { ALL_GAMES, type Game, useGamesStore } from "@/store/games";
+import NewsBlock from "@/components/NewsBlock";
 
 export default function Home() {
   const [games, setGames] = useState<Game[]>([]);
@@ -66,7 +67,7 @@ export default function Home() {
         <section className="w-full">
           <HeroBanner />
         </section>
-
+        <NewsBlock />
         {/* Слайдеры + подписки */}
         <div className="flex flex-col gap-16 md:gap-24">
           {loading ? (

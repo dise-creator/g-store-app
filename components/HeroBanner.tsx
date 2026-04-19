@@ -55,6 +55,9 @@ const BANNER_SLIDES: BannerSlide[] = [
   }
 ];
 
+// Цвет фона — должен совпадать с AnimatedBackground
+const BG = "#0d1528";
+
 export default function HeroBanner() {
   const [index, setIndex] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
@@ -68,7 +71,7 @@ export default function HeroBanner() {
     return () => clearInterval(timer);
   }, []);
 
-  if (!isMounted) return <div className="w-full h-[450px] md:h-[520px] mt-8 bg-[#0a0a0c] rounded-[2.5rem]" />;
+  if (!isMounted) return <div className="w-full h-[450px] md:h-[520px] mt-8 rounded-[2.5rem]" style={{ backgroundColor: BG }} />;
 
   const current = BANNER_SLIDES[index];
 
@@ -79,8 +82,11 @@ export default function HeroBanner() {
 
   return (
     <section 
-      className="relative w-full h-[450px] md:h-[520px] mt-8 rounded-[2.5rem] md:rounded-[3.5rem] overflow-hidden bg-[#0a0a0c] group shadow-2xl"
-      style={{ boxShadow: `0 30px 80px -20px ${current.color}25` }} 
+      className="relative w-full h-[450px] md:h-[520px] mt-8 rounded-[2.5rem] md:rounded-[3.5rem] overflow-hidden group"
+      style={{
+        backgroundColor: BG,
+        boxShadow: `0 30px 80px -20px ${current.color}20`
+      }} 
     >
       <AnimatePresence mode="wait">
         <motion.div
@@ -92,23 +98,33 @@ export default function HeroBanner() {
           className="absolute inset-0 cursor-pointer flex items-center justify-center"
           onClick={(e) => handleAction(e, current)}
         >
-          <div className="absolute inset-0 bg-[#0a0a0c]" />
+          <div className="absolute inset-0" style={{ backgroundColor: BG }} />
 
           <div className="relative h-full w-full flex justify-center items-center">
-             <img
+            <img
               src={current.image}
               alt={current.title}
               className="h-full w-auto max-w-none object-contain transition-transform duration-[10000ms] scale-100 group-hover:scale-[1.03]"
               style={{
-                maskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)',
-                WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)',
+                maskImage: 'linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 8%, black 85%, transparent 100%)',
+                WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 8%, black 85%, transparent 100%)',
                 maskComposite: 'intersect',
                 WebkitMaskComposite: 'source-in'
               }}
             />
           </div>
 
-          <div className="absolute inset-y-0 left-0 z-10 w-full md:w-1/2 bg-gradient-to-r from-[#0a0a0c] via-[#0a0a0c]/60 to-transparent" />
+          {/* Левый градиент — сливается с фоном */}
+          <div
+            className="absolute inset-y-0 left-0 z-10 w-full md:w-1/2"
+            style={{ background: `linear-gradient(to right, ${BG} 0%, ${BG}99 40%, transparent 100%)` }}
+          />
+
+          {/* Нижний градиент */}
+          <div
+            className="absolute bottom-0 left-0 right-0 z-10 h-32"
+            style={{ background: `linear-gradient(to top, ${BG} 0%, transparent 100%)` }}
+          />
           
           <div className="absolute inset-0 z-20 flex flex-col justify-center px-12 md:px-24">
             <motion.div 
