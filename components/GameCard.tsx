@@ -20,12 +20,10 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
   
   const isFavorite = isInWishlist ? isInWishlist(game.id) : false;
 
-  // Скидка
   const discount = getActiveDiscount(game);
   const hasDiscount = discount > 0;
   const basePrice = hasDiscount ? getDiscountedPrice(game) : game.price;
 
-  // Цена всегда региональная — RU больше нет
   const displayPrice = getPrice(basePrice);
   const originalDisplayPrice = getPrice(game.price);
   const currentRegion = REGIONS[region];
@@ -45,7 +43,6 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
   return (
     <div className="group relative flex flex-col gap-3 transition-all">
       
-      {/* Кнопка вишлист */}
       <button 
         onClick={handleHeartClick}
         type="button"
@@ -54,7 +51,6 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
         <Heart size={16} className={isFavorite ? "fill-[#63f3f7] text-[#63f3f7] drop-shadow-[0_0_5px_#63f3f7]" : ""} />
       </button>
 
-      {/* Бейдж скидки — левый верхний угол */}
       {hasDiscount && (
         <div className="absolute top-3 left-3 z-[60] flex items-center gap-1 px-2.5 py-1.5 bg-red-500 rounded-xl shadow-[0_0_15px_rgba(239,68,68,0.5)]">
           <span className="text-white font-black text-xs uppercase tracking-wider">
@@ -63,7 +59,6 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
         </div>
       )}
 
-      {/* Флаг региона — всегда показываем */}
       <div className={`absolute z-[60] flex items-center gap-1 px-2 py-1 bg-black/60 backdrop-blur-md rounded-lg border border-white/10 ${
         hasDiscount ? "top-12 left-3" : "top-3 left-3"
       }`}>
@@ -71,7 +66,6 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
         <span className="text-[8px] text-white/50 font-black uppercase">{currentRegion.code}</span>
       </div>
 
-      {/* Кнопка клика на всю карточку */}
       <button
         onClick={handleCardClick}
         type="button"
@@ -79,8 +73,8 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
         aria-label={`Открыть ${game.title}`}
       />
 
-      {/* Изображение */}
-      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[2rem] border border-white/5 transition-all group-hover:border-[#63f3f7]/30 bg-[#161618]">
+      {/* Изображение — убран group-hover:border-[#63f3f7]/30 */}
+      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[2rem] border border-white/5 transition-all bg-[#161618]">
         <Image 
           src={game.image} 
           alt={game.title} 
@@ -99,13 +93,11 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
         )}
       </div>
 
-      {/* Текст */}
       <div className="flex flex-col gap-1 px-2 pointer-events-none">
         <h3 className="font-michroma text-[9px] md:text-[10px] uppercase tracking-[0.15em] text-white/30 group-hover:text-white/80 italic truncate">
           {game.title}
         </h3>
         <div className="flex items-center gap-2 flex-wrap">
-          {/* Актуальная цена */}
           <div className="flex items-center gap-1.5">
             <span className={`font-michroma text-lg leading-none ${hasDiscount ? "text-red-400" : "text-white"}`}>
               {displayPrice.toLocaleString()}
@@ -113,7 +105,6 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
             <span className={`font-michroma text-[10px] mt-1 ${hasDiscount ? "text-red-400" : "text-[#63f3f7]"}`}>₽</span>
           </div>
 
-          {/* Зачёркнутая оригинальная цена — всегда показываем */}
           <span className="font-michroma text-xs text-white/20 line-through leading-none mt-1">
             {hasDiscount ? originalDisplayPrice.toLocaleString() : game.price.toLocaleString()} ₽
           </span>
