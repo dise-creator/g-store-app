@@ -9,6 +9,7 @@ import { supabase } from "@/lib/supabase";
 import { useSession } from "next-auth/react";
 import { getLoyaltyInfo } from "@/lib/loyalty";
 import { useRegionStore, REGIONS } from "@/store/useRegion";
+import { useRouter } from "next/navigation";
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -17,19 +18,16 @@ interface CartDrawerProps {
 
 export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   const [isMounted, setIsMounted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [totalSpent, setTotalSpent] = useState(0);
+  const router = useRouter();
 
   const { items, removeItem, updateQuantity, clearCart } = useCartStore();
   const { data: session } = useSession();
   const { region } = useRegionStore();
 
-  // RU больше нет — регион всегда показываем
   const currentRegion = REGIONS[region];
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  useEffect(() => { setIsMounted(true); }, []);
 
   useEffect(() => {
     async function loadUserData() {
@@ -59,87 +57,20 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   }, [isOpen, onClose]);
 
   const originalAmount = items.reduce(
-    (sum, item) => sum + (Number(item.price) || 0) * (item.quantity || 0),
-    0
+    (sum, item) => sum + (Number(item.price) || 0) * (item.quantity || 0), 0
   );
   const loyalty = getLoyaltyInfo(totalSpent);
   const discountAmount = Math.round(originalAmount * loyalty.discount / 100);
   const finalAmount = originalAmount - discountAmount;
 
-  const handleCheckout = async () => {
-    if (items.length === 0 || isSubmitting) return;
-
+  const handleCheckout = () => {
+    if (items.length === 0) return;
     if (!session?.user?.email) {
       alert("Войдите в аккаунт чтобы оформить заказ");
       return;
     }
-
-    setIsSubmitting(true);
-    try {
-      const preparedItems = items.map(item => ({
-        game_id: item.id,
-        title: item.title,
-        price: item.price,
-        quantity: item.quantity
-      }));
-
-      const { error: orderError } = await supabase
-        .from('orders')
-        .insert([{
-          items: preparedItems,
-          total_price: finalAmount,
-          status: 'completed',
-          user_email: session.user.email,
-        }]);
-
-      if (orderError) throw orderError;
-
-      for (const item of items) {
-        for (let i = 0; i < item.quantity; i++) {
-          const { data: voucher } = await supabase
-            .from('vouchers')
-            .select('id')
-            .eq('game_id', item.id)
-            .eq('is_used', false)
-            .is('user_email', null)
-            .limit(1)
-            .single();
-
-          if (voucher) {
-            await supabase
-              .from('vouchers')
-              .update({
-                is_used: true,
-                user_email: session.user.email,
-                game_title: item.title,
-              })
-              .eq('id', voucher.id);
-          }
-        }
-      }
-
-      const newTotalSpent = totalSpent + finalAmount;
-      const newLoyalty = getLoyaltyInfo(newTotalSpent);
-
-      const { error: userError } = await supabase
-        .from('users')
-        .update({
-          total_spent: newTotalSpent,
-          discount_percent: newLoyalty.discount,
-          loyalty_level: newLoyalty.level,
-        })
-        .eq('email', session.user.email);
-
-      if (userError) throw userError;
-
-      alert('✅ Заказ оформлен! Ключи доступны в личном кабинете.');
-      clearCart();
-      onClose();
-    } catch (err: any) {
-      alert('❌ Ошибка: ' + err.message);
-    } finally {
-      setIsSubmitting(false);
-    }
+    onClose();
+    router.push("/checkout");
   };
 
   if (!isMounted) return null;
@@ -164,7 +95,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             className="relative h-full w-full max-w-[420px] flex flex-col bg-[#0a0a0c] border border-white/10 shadow-2xl overflow-hidden rounded-[2.5rem] md:rounded-[3rem]"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Шапка — флаг региона всегда */}
+            {/* Шапка */}
             <div className="p-8 flex items-center justify-between border-b border-white/10 bg-white/[0.02]">
               <div className="flex items-center gap-3">
                 <h2 className="text-3xl font-black uppercase italic tracking-tighter text-white">
@@ -177,7 +108,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               </div>
               <button
                 onClick={onClose}
-                className="w-12 h-12 flex items-center justify-center bg-white/5 hover:bg-[#00FFFF] hover:text-black rounded-full transition-all text-white/50 border border-white/10 cursor-pointer"
+                className="w-12 h-12 flex items-center justify-center bg-white/5 hover:bg-[#63f3f7] hover:text-black rounded-full transition-all text-white/50 border border-white/10"
               >
                 <X size={24} strokeWidth={3} />
               </button>
@@ -194,9 +125,9 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
-                      className="group flex items-center gap-4 bg-white/[0.03] p-4 rounded-[1.8rem] border border-white/10 hover:border-[#00FFFF]/30 transition-all"
+                      className="group flex items-center gap-4 bg-white/[0.03] p-4 rounded-[1.8rem] border border-white/10 hover:border-[#63f3f7]/30 transition-all"
                     >
-                      <div className="relative w-16 h-18 shrink-0 rounded-2xl overflow-hidden border border-white/10">
+                      <div className="relative w-16 h-20 shrink-0 rounded-2xl overflow-hidden border border-white/10">
                         <Image src={item.image} alt={item.title} fill className="object-cover" unoptimized />
                       </div>
 
@@ -205,9 +136,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           {item.title}
                         </h3>
                         <div className="flex items-center justify-between">
-                          {/* Флажок региона на товаре — всегда */}
                           <div className="flex items-center gap-1.5">
-                            <p className="text-[#00FFFF] font-black italic text-base leading-none">
+                            <p className="text-[#63f3f7] font-black italic text-base leading-none">
                               {(Number(item.price) || 0).toLocaleString()} ₽
                             </p>
                             <span className="text-xs opacity-50">{currentRegion.flag}</span>
@@ -215,7 +145,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                           <div className="flex items-center gap-2.5 bg-black/40 px-2.5 py-1.5 rounded-xl border border-white/5">
                             <button
                               onClick={() => updateQuantity(item.cartItemId, item.quantity - 1)}
-                              className="text-white/30 hover:text-[#00FFFF] transition-colors p-0.5 cursor-pointer"
+                              className="text-white/30 hover:text-[#63f3f7] transition-colors p-0.5"
                             >
                               <Minus size={12} strokeWidth={2.5} />
                             </button>
@@ -224,7 +154,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                             </span>
                             <button
                               onClick={() => updateQuantity(item.cartItemId, item.quantity + 1)}
-                              className="text-white/30 hover:text-[#00FFFF] transition-colors p-0.5 cursor-pointer"
+                              className="text-white/30 hover:text-[#63f3f7] transition-colors p-0.5"
                             >
                               <Plus size={12} strokeWidth={2.5} />
                             </button>
@@ -234,7 +164,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
                       <button
                         onClick={() => removeItem(item.cartItemId)}
-                        className="p-3 text-white/10 hover:text-red-500 hover:bg-red-500/5 rounded-xl transition-all cursor-pointer"
+                        className="p-3 text-white/10 hover:text-red-500 hover:bg-red-500/5 rounded-xl transition-all"
                       >
                         <Trash2 size={16} />
                       </button>
@@ -254,21 +184,21 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               <div className="p-8 bg-black/80 backdrop-blur-xl border-t border-white/10 space-y-5">
 
                 {loyalty.discount > 0 && (
-                  <div className="flex flex-col gap-2 p-4 bg-[#00FFFF]/5 border border-[#00FFFF]/20 rounded-2xl">
+                  <div className="flex flex-col gap-2 p-4 bg-[#63f3f7]/5 border border-[#63f3f7]/20 rounded-2xl">
                     <div className="flex justify-between items-center">
                       <span className="text-white/30 text-[9px] uppercase font-black tracking-widest">Без скидки</span>
                       <span className="text-white/30 font-black text-sm line-through">{originalAmount.toLocaleString()} ₽</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-[#00FFFF] text-[9px] uppercase font-black tracking-widest">Скидка {loyalty.discount}% · {loyalty.level}</span>
-                      <span className="text-[#00FFFF] font-black text-sm">−{discountAmount.toLocaleString()} ₽</span>
+                      <span className="text-[#63f3f7] text-[9px] uppercase font-black tracking-widest">Скидка {loyalty.discount}% · {loyalty.level}</span>
+                      <span className="text-[#63f3f7] font-black text-sm">−{discountAmount.toLocaleString()} ₽</span>
                     </div>
                   </div>
                 )}
 
                 <div className="flex justify-between items-end">
                   <span className="text-[10px] font-black uppercase italic text-white/30 tracking-widest">Итого:</span>
-                  <span className="text-4xl font-black italic text-[#00FFFF] tracking-tighter leading-none">
+                  <span className="text-4xl font-black italic text-[#63f3f7] tracking-tighter leading-none">
                     {finalAmount.toLocaleString()} ₽
                   </span>
                 </div>
@@ -276,19 +206,14 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 <div className="flex flex-col gap-4">
                   <button
                     onClick={handleCheckout}
-                    disabled={isSubmitting}
-                    className={`w-full py-6 rounded-2xl font-black uppercase italic tracking-[0.2em] transition-all flex items-center justify-center gap-3 cursor-pointer ${
-                      isSubmitting
-                        ? "bg-white/5 text-white/20 cursor-wait"
-                        : "bg-[#00FFFF] text-black hover:scale-[1.02] active:scale-95 shadow-[0_0_30px_rgba(0,255,255,0.1)]"
-                    }`}
+                    className="w-full py-6 rounded-2xl font-black uppercase italic tracking-[0.2em] transition-all flex items-center justify-center gap-3 bg-[#63f3f7] text-black hover:scale-[1.02] active:scale-95 shadow-[0_0_30px_rgba(99,243,247,0.1)]"
                   >
                     <CreditCard size={18} />
-                    <span className="text-sm">{isSubmitting ? "Оформление..." : "Оплатить заказ"}</span>
+                    <span className="text-sm">Перейти к оплате</span>
                   </button>
                   <button
                     onClick={clearCart}
-                    className="text-[9px] font-black text-white/20 uppercase hover:text-red-500 transition-colors tracking-[0.3em] cursor-pointer text-center py-2"
+                    className="text-[9px] font-black text-white/20 uppercase hover:text-red-500 transition-colors tracking-[0.3em] text-center py-2"
                   >
                     Очистить список
                   </button>

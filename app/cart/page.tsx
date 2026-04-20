@@ -7,11 +7,12 @@ import Image from 'next/image';
 import { Trash2, Minus, Plus, CreditCard, ShoppingBag } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { getLoyaltyInfo } from '@/lib/loyalty';
+import { useRouter } from 'next/navigation';
 
 export default function CartPage() {
+  const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
-  const { items, removeItem, updateQuantity, clearCart } = useCartStore();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { items, removeItem, updateQuantity } = useCartStore();
   const { data: session } = useSession();
   const [totalSpent, setTotalSpent] = useState(0);
 
@@ -32,85 +33,31 @@ export default function CartPage() {
     loadUserData();
   }, [session]);
 
-  // Считаем цены через getTotalPrice
   const loyalty = getLoyaltyInfo(totalSpent);
   const originalPrice = getTotalPrice(items);
   const discountAmount = Math.round(originalPrice * loyalty.discount / 100);
   const finalPrice = originalPrice - discountAmount;
 
-  const handleCheckout = async () => {
-    if (items.length === 0) {
-      alert("Корзина пуста");
-      return;
-    }
-    if (!session?.user?.email) {
-      alert("Войдите в аккаунт чтобы оформить заказ");
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      const preparedItems = items.map(item => ({
-        game_id: item.id,
-        title: item.title,
-        price: item.price,
-        quantity: item.quantity
-      }));
-
-      // 1. Создаём заказ
-      const { error: orderError } = await supabase
-        .from('orders')
-        .insert([{
-          items: preparedItems,
-          total_price: finalPrice,
-          status: 'pending',
-          user_email: session.user.email,
-        }])
-        .select();
-
-      if (orderError) throw orderError;
-
-      // 2. Обновляем total_spent и уровень лояльности
-      const newTotalSpent = totalSpent + finalPrice;
-      const newLoyalty = getLoyaltyInfo(newTotalSpent);
-
-      const { error: userError } = await supabase
-        .from('users')
-        .update({
-          total_spent: newTotalSpent,
-          discount_percent: newLoyalty.discount,
-          loyalty_level: newLoyalty.level,
-        })
-        .eq('email', session.user.email);
-
-      if (userError) throw userError;
-
-      alert('✅ Заказ успешно оформлен!');
-      clearCart();
-
-    } catch (err: any) {
-      console.error('Ошибка при оформлении:', err);
-      alert('❌ Ошибка: ' + (err.message || 'Не удалось сохранить заказ'));
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleCheckout = () => {
+    if (items.length === 0) { alert("Корзина пуста"); return; }
+    if (!session?.user?.email) { alert("Войдите в аккаунт чтобы оформить заказ"); return; }
+    router.push("/checkout");
   };
 
-  if (!isMounted) return <div className="min-h-screen bg-black" />;
+  if (!isMounted) return <div className="min-h-screen" />;
 
   if (items.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] text-white">
-        <ShoppingBag size={64} className="text-white/20 mb-4" />
-        <h2 className="text-2xl font-bold mb-2 uppercase italic">Корзина пуста</h2>
-        <p className="opacity-50 text-center">Добавьте игры из каталога,<br/>чтобы сделать заказ</p>
+      <div className="flex flex-col items-center justify-center min-h-[60vh] text-white gap-6">
+        <ShoppingBag size={64} className="text-white/20" />
+        <h2 className="text-2xl font-bold uppercase italic">Корзина пуста</h2>
+        <p className="text-white/40 text-center">Добавьте игры из каталога,<br/>чтобы сделать заказ</p>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 text-white pb-24">
+    <div className="max-w-4xl mx-auto p-6 text-white pb-24 pt-32">
       <h1 className="text-4xl font-black mb-10 italic uppercase tracking-tighter">Ваша Корзина</h1>
 
       <div className="grid gap-4 mb-10">
@@ -131,7 +78,7 @@ export default function CartPage() {
 
             <div className="flex-grow">
               <h3 className="font-black text-xl uppercase italic leading-tight mb-1">{item.title}</h3>
-              <p className="text-cyan-400 font-black text-lg">
+              <p className="text-[#63f3f7] font-black text-lg">
                 {(item.price || 0).toLocaleString()} ₽
               </p>
             </div>
@@ -139,14 +86,14 @@ export default function CartPage() {
             <div className="flex items-center gap-4 bg-black/40 rounded-2xl px-4 py-2 border border-white/10">
               <button
                 onClick={() => updateQuantity(item.cartItemId, Math.max(1, item.quantity - 1))}
-                className="hover:text-cyan-400 opacity-50 hover:opacity-100 p-1"
+                className="hover:text-[#63f3f7] opacity-50 hover:opacity-100 p-1 transition-all"
               >
                 <Minus size={20} />
               </button>
               <span className="w-6 text-center font-black text-xl">{item.quantity}</span>
               <button
                 onClick={() => updateQuantity(item.cartItemId, item.quantity + 1)}
-                className="hover:text-cyan-400 opacity-50 hover:opacity-100 p-1"
+                className="hover:text-[#63f3f7] opacity-50 hover:opacity-100 p-1 transition-all"
               >
                 <Plus size={20} />
               </button>
@@ -164,7 +111,7 @@ export default function CartPage() {
 
       <div className="bg-white/5 border border-white/10 rounded-[32px] p-8 backdrop-blur-md">
 
-        {/* Блок скидки — показываем только если есть скидка */}
+        {/* Скидка лояльности */}
         {loyalty.discount > 0 && (
           <div className="flex flex-col gap-2 mb-6 p-4 bg-[#63f3f7]/5 border border-[#63f3f7]/20 rounded-2xl">
             <div className="flex justify-between items-center">
@@ -172,7 +119,9 @@ export default function CartPage() {
               <span className="text-white/40 font-black line-through">{originalPrice.toLocaleString()} ₽</span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-[#63f3f7] uppercase font-black text-xs">Скидка {loyalty.discount}% ({loyalty.level})</span>
+              <span className="text-[#63f3f7] uppercase font-black text-xs">
+                Скидка {loyalty.discount}% ({loyalty.level})
+              </span>
               <span className="text-[#63f3f7] font-black">−{discountAmount.toLocaleString()} ₽</span>
             </div>
           </div>
@@ -180,22 +129,18 @@ export default function CartPage() {
 
         <div className="flex justify-between items-center mb-8">
           <span className="text-white/40 uppercase font-black text-sm">Итого к оплате</span>
-          <span className="text-5xl font-black text-cyan-400 italic">
-            {finalPrice.toLocaleString()} ₽
-          </span>
+          <div className="flex items-baseline gap-1">
+            <span className="text-5xl font-black text-[#63f3f7] italic">{finalPrice.toLocaleString()}</span>
+            <span className="text-[#63f3f7] font-black text-xl">₽</span>
+          </div>
         </div>
 
         <button
           onClick={handleCheckout}
-          disabled={isSubmitting}
-          className={`w-full py-6 rounded-2xl font-black uppercase italic text-black transition-all flex items-center justify-center gap-3 text-lg ${
-            isSubmitting
-              ? 'bg-gray-600 cursor-not-allowed'
-              : 'bg-cyan-400 hover:bg-cyan-300 shadow-[0_15px_45px_rgba(34,211,238,0.25)]'
-          }`}
+          className="w-full py-6 rounded-2xl font-black uppercase italic text-black transition-all flex items-center justify-center gap-3 text-lg bg-[#63f3f7] hover:shadow-[0_0_30px_rgba(99,243,247,0.3)] active:scale-95"
         >
           <CreditCard size={24} />
-          {isSubmitting ? 'Оформление...' : 'Оформить заказ'}
+          Перейти к оплате
         </button>
       </div>
     </div>
