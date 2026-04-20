@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useMemo, useRef } from "react";
+import React, { useCallback, useMemo } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
@@ -39,9 +39,19 @@ export default function GameSlider({
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
   return (
-    <div className="w-full py-6 transform-gpu">
+    <div
+      className="w-full py-8 transform-gpu relative rounded-[2.5rem] overflow-hidden"
+      style={{
+        background: "linear-gradient(135deg, rgba(29,51,147,0.25) 0%, rgba(20,38,120,0.18) 50%, rgba(29,51,147,0.12) 100%)",
+        border: "1px solid rgba(29,51,147,0.4)",
+        boxShadow: "inset 0 0 60px rgba(29,51,147,0.1)",
+      }}
+    >
+      {/* Декоративное пятно */}
+      <div className="absolute top-0 right-1/4 w-80 h-40 bg-[#1d3393]/10 blur-[80px] rounded-full pointer-events-none" />
+
       {/* Шапка */}
-      <div className="flex items-center justify-between mb-6 px-8">
+      <div className="relative flex items-center justify-between mb-6 px-8">
         <div className="flex items-center gap-4">
           <div className="w-1 h-8 bg-[#63f3f7] rounded-full shadow-[0_0_15px_#63f3f7]" />
           <h2
@@ -81,9 +91,14 @@ export default function GameSlider({
                   <motion.div
                     key={`skeleton-${i}`}
                     className="flex-[0_0_65%] sm:flex-[0_0_30%] md:flex-[0_0_22%] lg:flex-[0_0_16.6%]"
-                    initial={{ opacity: 0, y: 40 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: i * 0.06, ease: "easeOut" }}
+                    initial={{ opacity: 0, scale: 0.7 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 260,
+                      damping: 22,
+                      delay: i * 0.06,
+                    }}
                   >
                     <GameCardSkeleton />
                   </motion.div>
@@ -92,12 +107,13 @@ export default function GameSlider({
                   <motion.div 
                     key={`${game.id}-${index}`} 
                     className="flex-[0_0_65%] sm:flex-[0_0_30%] md:flex-[0_0_22%] lg:flex-[0_0_16.6%] min-w-0 select-none"
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, scale: 0.7, x: index % 2 === 0 ? -20 : 20 }}
+                    animate={{ opacity: 1, scale: 1, x: 0 }}
                     transition={{
-                      duration: 0.55,
-                      delay: (index % 8) * 0.07,
-                      ease: [0.25, 0.46, 0.45, 0.94]
+                      type: "spring",
+                      stiffness: 260,
+                      damping: 22,
+                      delay: (index % 8) * 0.06,
                     }}
                   >
                     <GameCard game={game} onSelect={() => onSelectGame?.(game)} />

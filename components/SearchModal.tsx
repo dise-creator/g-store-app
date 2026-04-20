@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search as SearchIcon, X, Clock, TrendingUp } from "lucide-react";
+import { Search as SearchIcon, X, Clock, TrendingUp, ShoppingCart, Check } from "lucide-react";
 import Image from "next/image";
 import { useCartStore } from "@/store/useCart";
 import { useRegionStore } from "@/store/useRegion";
@@ -29,6 +29,7 @@ const HISTORY_KEY = "clic-search-history";
 export default function SearchModal({ isOpen, onClose, games = [] }: SearchModalProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [history, setHistory] = useState<string[]>([]);
+  const [justAdded, setJustAdded] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { addItem, items } = useCartStore();
@@ -37,13 +38,23 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
 
   const isInCart = (gameId: string) => items.some(item => String(item.id) === String(gameId));
 
-  // Загружаем историю из localStorage
+  // Блокируем скролл страницы
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add("modal-open");
+    } else {
+      document.body.classList.remove("modal-open");
+    }
+    return () => {
+      document.body.classList.remove("modal-open");
+    };
+  }, [isOpen]);
+
   useEffect(() => {
     const saved = localStorage.getItem(HISTORY_KEY);
     if (saved) setHistory(JSON.parse(saved));
   }, []);
 
-  // Фокус при открытии
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 100);
@@ -51,7 +62,6 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
     }
   }, [isOpen]);
 
-  // ESC закрывает
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -60,7 +70,6 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
     return () => window.removeEventListener("keydown", handleEsc);
   }, [isOpen, onClose]);
 
-  // Сохраняем в историю
   const saveToHistory = (query: string) => {
     if (!query.trim()) return;
     const newHistory = [query, ...history.filter(h => h !== query)].slice(0, 5);
@@ -78,6 +87,14 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
     saveToHistory(game.title);
     openModal(game);
     onClose();
+  };
+
+  const handleAddToCart = (e: React.MouseEvent, game: Game, displayPrice: number) => {
+    e.stopPropagation();
+    if (isInCart(game.id)) return;
+    addItem({ ...game, price: displayPrice });
+    setJustAdded(game.id);
+    setTimeout(() => setJustAdded(null), 2000);
   };
 
   const handleHistoryClick = (query: string) => {
@@ -98,15 +115,14 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
         return mainTitle.includes(query) || mapped.includes(query);
       })
       .sort((a, b) => {
-        const aStarts = clean(a.title).startsWith(query);
-        const bStarts = clean(b.title).startsWith(query);
+        const aStarts = clean(a.title).startsWith(clean(searchQuery));
+        const bStarts = clean(b.title).startsWith(clean(searchQuery));
         if (aStarts && !bStarts) return -1;
         if (!aStarts && bStarts) return 1;
         return 0;
       });
   }, [searchQuery, games]);
 
-  // Популярные — топ 6 случайных игр
   const popularGames = useMemo(() =>
     [...games].sort(() => 0.5 - Math.random()).slice(0, 6),
     [games]
@@ -116,26 +132,30 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Оверлей */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
+            onWheel={(e) => e.preventDefault()}
             className="fixed inset-0 z-[150] bg-black/80 backdrop-blur-xl"
           />
 
-          {/* Модальное окно */}
           <motion.div
             initial={{ opacity: 0, y: -20, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.98 }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
-            className="fixed top-8 left-1/2 -translate-x-1/2 z-[160] w-full max-w-[860px] mx-auto bg-[#0d0d0f] border border-white/10 rounded-[2.5rem] shadow-[0_40px_100px_rgba(0,0,0,0.8)] overflow-hidden"
+            className="fixed top-8 left-1/2 -translate-x-1/2 z-[160] w-full max-w-[900px] mx-auto bg-[#0a0f1e] border border-white/10 rounded-[2.5rem] overflow-hidden flex flex-col"
+            style={{
+              maxHeight: "85vh",
+              boxShadow: "0 40px 100px rgba(0,0,0,0.8), 0 0 40px rgba(0,60,160,0.15)"
+            }}
             onClick={(e) => e.stopPropagation()}
+            onWheel={(e) => e.stopPropagation()}
           >
             {/* Строка поиска */}
-            <div className="flex items-center gap-4 p-6 border-b border-white/5">
+            <div className="flex items-center gap-4 p-6 border-b border-white/5 shrink-0">
               <div className="relative flex-1">
                 <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-[#63f3f7]" size={20} />
                 <input
@@ -149,21 +169,22 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
               </div>
               <button
                 onClick={onClose}
-                className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/30 hover:text-white hover:bg-white/10 transition-all text-[10px] font-black uppercase"
+                className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/30 hover:text-white hover:bg-white/10 transition-all text-[10px] font-black uppercase shrink-0"
               >
                 ESC
               </button>
             </div>
 
-            <div className="p-6 max-h-[70vh] overflow-y-auto no-scrollbar">
+            {/* Контент со скроллом */}
+            <div className="p-6 overflow-y-auto no-scrollbar flex-1">
 
               {/* Результаты поиска */}
               {searchQuery.length > 0 && (
                 <div>
                   {searchResults.length > 0 ? (
-                    <div className="flex flex-col gap-2">
-                      {searchResults.map((game) => {
-                        const added = isInCart(game.id);
+                    <div className="flex flex-col gap-3">
+                      {searchResults.map((game, i) => {
+                        const added = isInCart(game.id) || justAdded === game.id;
                         const discount = getActiveDiscount(game);
                         const basePrice = discount > 0 ? getDiscountedPrice(game) : game.price;
                         const displayPrice = getPrice(basePrice);
@@ -172,35 +193,60 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
                           <motion.div
                             layout
                             key={game.id}
-                            initial={{ opacity: 0, y: 5 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="flex items-center justify-between bg-white/[0.03] border border-white/5 hover:border-[#63f3f7]/20 rounded-2xl p-3 transition-all group cursor-pointer"
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: i * 0.05 }}
+                            className="flex items-center justify-between bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 hover:border-[#63f3f7]/20 rounded-2xl p-4 transition-all group cursor-pointer"
                             onClick={() => handleGameClick(game)}
                           >
                             <div className="flex items-center gap-4">
-                              <div className="w-14 h-14 relative rounded-xl overflow-hidden border border-white/5 shrink-0">
-                                <Image src={game.image} alt={game.title} fill className="object-cover group-hover:scale-110 transition-transform duration-500" unoptimized />
+                              <div className="w-20 h-24 relative rounded-2xl overflow-hidden border border-white/10 shrink-0 shadow-lg">
+                                <Image
+                                  src={game.image}
+                                  alt={game.title}
+                                  fill
+                                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                                  unoptimized
+                                />
+                                {discount > 0 && (
+                                  <div className="absolute top-1.5 left-1.5 bg-red-500 text-white text-[8px] font-black px-1.5 py-0.5 rounded-lg shadow">
+                                    -{discount}%
+                                  </div>
+                                )}
                               </div>
-                              <div>
-                                <h3 className="text-sm font-black uppercase italic text-white leading-none mb-1">{game.title}</h3>
-                                <div className="flex items-center gap-2">
-                                  <p className="text-[#63f3f7] text-xs font-black">{displayPrice.toLocaleString()} ₽</p>
+
+                              <div className="flex flex-col gap-1">
+                                <h3 className="text-base font-black uppercase italic text-white leading-none">
+                                  {game.title}
+                                </h3>
+                                <p className="text-white/30 text-xs leading-relaxed line-clamp-2 max-w-[400px]">
+                                  {game.shortDescription}
+                                </p>
+                                <div className="flex items-center gap-2 mt-1">
+                                  <p className="text-[#63f3f7] text-lg font-black leading-none">
+                                    {displayPrice.toLocaleString()} ₽
+                                  </p>
                                   {discount > 0 && (
-                                    <span className="text-[8px] bg-red-500 text-white font-black px-1.5 py-0.5 rounded-lg">-{discount}%</span>
+                                    <p className="text-white/20 text-sm line-through font-black">
+                                      {getPrice(game.price).toLocaleString()} ₽
+                                    </p>
                                   )}
                                 </div>
                               </div>
                             </div>
-                            <button
-                              onClick={(e) => { e.stopPropagation(); !added && addItem({ ...game, price: displayPrice }); }}
-                              className={`shrink-0 px-4 py-2 rounded-xl text-[10px] font-black uppercase italic transition-all ${
+
+                            <motion.button
+                              onClick={(e) => handleAddToCart(e, game, displayPrice)}
+                              whileTap={{ scale: 0.9 }}
+                              className={`shrink-0 flex items-center gap-2 px-5 py-3 rounded-2xl text-xs font-black uppercase italic transition-all ${
                                 added
-                                  ? "bg-[#63f3f7] text-black"
-                                  : "bg-white/5 text-white/40 border border-white/5 hover:bg-[#63f3f7]/20 hover:text-[#63f3f7]"
+                                  ? "bg-[#63f3f7] text-black shadow-[0_0_15px_rgba(99,243,247,0.3)]"
+                                  : "bg-white/5 text-white/40 border border-white/10 hover:bg-[#63f3f7]/10 hover:text-[#63f3f7] hover:border-[#63f3f7]/30"
                               }`}
                             >
-                              {added ? "✓" : "В корзину"}
-                            </button>
+                              {added ? <Check size={14} /> : <ShoppingCart size={14} />}
+                              {added ? "Добавлено" : "В корзину"}
+                            </motion.button>
                           </motion.div>
                         );
                       })}
@@ -214,11 +260,11 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
                 </div>
               )}
 
-              {/* Пустой поиск — показываем историю и популярные */}
+              {/* Пустой поиск */}
               {searchQuery.length === 0 && (
                 <div className="flex flex-col gap-8">
 
-                  {/* История поиска */}
+                  {/* История */}
                   {history.length > 0 && (
                     <div>
                       <div className="flex items-center gap-2 mb-4">
@@ -247,13 +293,13 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
                     </div>
                   )}
 
-                  {/* Популярные игры — сетка карточек */}
+                  {/* Популярные */}
                   <div>
-                    <div className="flex items-center gap-2 mb-4">
+                    <div className="flex items-center gap-2 mb-5">
                       <TrendingUp size={14} className="text-[#63f3f7]" />
                       <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Популярные игры</p>
                     </div>
-                    <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
+                    <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
                       {popularGames.map((game) => {
                         const discount = getActiveDiscount(game);
                         const basePrice = discount > 0 ? getDiscountedPrice(game) : game.price;
@@ -263,25 +309,30 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
                           <motion.button
                             key={game.id}
                             onClick={() => handleGameClick(game)}
-                            whileHover={{ scale: 1.03 }}
+                            whileHover={{ scale: 1.04, y: -4 }}
                             whileTap={{ scale: 0.97 }}
                             className="flex flex-col gap-2 group"
                           >
-                            {/* Обложка */}
-                            <div className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden border border-white/5 group-hover:border-[#63f3f7]/30 transition-all bg-[#161618]">
-                              <Image src={game.image} alt={game.title} fill className="object-cover group-hover:scale-110 transition-transform duration-500" unoptimized />
+                            <div className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden border border-white/5 group-hover:border-[#63f3f7]/30 transition-all bg-[#161618] shadow-lg group-hover:shadow-[0_8px_20px_rgba(0,0,0,0.4)]">
+                              <Image
+                                src={game.image}
+                                alt={game.title}
+                                fill
+                                className="object-cover group-hover:scale-110 transition-transform duration-500"
+                                unoptimized
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                               {discount > 0 && (
-                                <div className="absolute top-2 left-2 bg-red-500 text-white text-[8px] font-black px-1.5 py-0.5 rounded-lg">
+                                <div className="absolute top-2 left-2 bg-red-500 text-white text-[8px] font-black px-1.5 py-0.5 rounded-lg shadow">
                                   -{discount}%
                                 </div>
                               )}
                             </div>
-                            {/* Название и цена */}
                             <div className="px-0.5">
-                              <p className="text-white/60 text-[8px] uppercase font-black italic truncate group-hover:text-white transition-colors leading-tight">
+                              <p className="text-white/60 text-[9px] uppercase font-black italic truncate group-hover:text-white transition-colors leading-tight">
                                 {game.title}
                               </p>
-                              <p className="text-[#63f3f7] text-[9px] font-black mt-0.5">
+                              <p className="text-[#63f3f7] text-[10px] font-black mt-0.5">
                                 {displayPrice.toLocaleString()} ₽
                               </p>
                             </div>

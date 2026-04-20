@@ -87,9 +87,20 @@ export default function SubscriptionSection() {
   };
 
   return (
-    <section className="w-full">
+    <section
+      className="w-full relative rounded-[3rem] overflow-hidden py-10 px-8"
+      style={{
+        background: "linear-gradient(135deg, rgba(0,60,160,0.12) 0%, rgba(0,40,120,0.08) 50%, rgba(0,60,160,0.06) 100%)",
+        border: "1px solid rgba(99,243,247,0.06)",
+        boxShadow: "inset 0 0 80px rgba(0,60,160,0.08)",
+      }}
+    >
+      {/* Декоративные пятна */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#63f3f7]/[0.03] blur-[100px] rounded-full pointer-events-none" />
+
       {/* Заголовок + переключатель */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+      <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
         <div>
           <p className="text-white/20 text-[10px] uppercase font-black tracking-[0.3em] mb-2">PlayStation Network</p>
           <h2 className="text-4xl md:text-5xl font-black italic uppercase tracking-tighter">
@@ -127,7 +138,7 @@ export default function SubscriptionSection() {
       </div>
 
       {/* Карточки */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+      <div className="relative grid grid-cols-1 md:grid-cols-3 gap-5">
         {plans.map((plan, idx) => {
           const price = Math.round(getPrice(plan.basePrice) * currentPeriod.multiplier);
           const isAdded = addedId === plan.id;
@@ -143,7 +154,7 @@ export default function SubscriptionSection() {
                   ? "border-[#f5a623]/40 shadow-[0_0_40px_rgba(245,166,35,0.15)]"
                   : "border-white/10 hover:border-white/20"
               }`}
-              style={{ background: "#0d0d0f" }}
+              style={{ background: "#0d1528" }}
             >
               {/* Popular бейдж */}
               {plan.popular && (
@@ -158,15 +169,16 @@ export default function SubscriptionSection() {
                 <div className="absolute -bottom-6 -left-6 w-24 h-24 rounded-full bg-white/5" />
                 <PSIcon className="w-8 h-8 text-black/30 mb-1 relative z-10" />
                 <p className="text-black/50 text-xs font-bold relative z-10">PlayStation Plus</p>
-                <p className="text-black font-black text-3xl uppercase tracking-tighter relative z-10"
-                  style={{ textShadow: "0 2px 10px rgba(0,0,0,0.3)" }}>
+                <p
+                  className="text-black font-black text-3xl uppercase tracking-tighter relative z-10"
+                  style={{ textShadow: "0 2px 10px rgba(0,0,0,0.3)" }}
+                >
                   {plan.name}
                 </p>
               </div>
 
               {/* Контент */}
               <div className="flex flex-col flex-1 p-6 gap-5">
-                {/* Цена с анимацией при смене периода */}
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={`${plan.id}-${activePeriod}`}
@@ -206,7 +218,7 @@ export default function SubscriptionSection() {
                   whileTap={{ scale: 0.97 }}
                   className={`w-full py-4 rounded-2xl font-black text-xs uppercase italic tracking-[0.15em] transition-all flex items-center justify-center gap-2 ${
                     isAdded
-                      ? "bg-green-500 text-white shadow-[0_0_20px_rgba(34,197,94,0.3)]"
+                      ? "bg-[#63f3f7] text-black shadow-[0_0_20px_rgba(99,243,247,0.3)]"
                       : plan.popular
                       ? "bg-[#f5a623] text-black hover:shadow-[0_0_30px_rgba(245,166,35,0.3)]"
                       : "bg-white/[0.05] border border-white/10 text-white hover:bg-white/[0.1] hover:border-[#63f3f7]/20 hover:text-[#63f3f7]"

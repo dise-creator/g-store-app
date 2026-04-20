@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Search, Heart } from "lucide-react"; 
 import UserProfile from "./UserProfile";
 import CartButton from "./CartButton"; 
@@ -25,6 +25,8 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
   const [scrolled, setScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [searchActivated, setSearchActivated] = useState(false);
+  const [wishlistPulse, setWishlistPulse] = useState(false);
+  const prevWishlist = useRef(0);
   
   const items = useCartStore((state) => state.items);
   const wishlistItems = useWishlistStore((state) => state.items);
@@ -42,6 +44,14 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
   const wishlistCount = wishlistItems.length;
 
+  useEffect(() => {
+    if (wishlistCount > prevWishlist.current) {
+      setWishlistPulse(true);
+      setTimeout(() => setWishlistPulse(false), 700);
+    }
+    prevWishlist.current = wishlistCount;
+  }, [wishlistCount]);
+
   const handleSearchClick = () => {
     setSearchActivated(true);
     setTimeout(() => {
@@ -52,7 +62,6 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
 
   return (
     <>
-      {/* Анимация вспышки при активации поиска */}
       <AnimatePresence>
         {searchActivated && (
           <motion.div
@@ -78,24 +87,70 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className="relative group/logo cursor-pointer shrink-0 h-14 flex items-center active:scale-95 transition-transform duration-150"
         >
-          <div className="relative flex items-center h-full tracking-widest transition-all duration-500 skew-x-[-12deg] group-hover/logo:skew-x-[-10deg]">
-            <h1 className="select-none flex items-center transition-all duration-500 h-full">
+          <div className="relative flex items-center h-full tracking-widest transition-all duration-500 skew-x-[-12deg] group-hover/logo:skew-x-[-8deg]">
+
+            {/* Свечение под логотипом при ховере */}
+            <div className="absolute -inset-3 rounded-2xl bg-[#63f3f7]/5 blur-xl opacity-0 group-hover/logo:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+            <h1 className="select-none flex items-center transition-all duration-500 h-full relative z-10">
               <div className="flex items-center mt-[-2px]">
-                <span className="relative flex items-center justify-center font-michroma text-white text-2xl md:text-4xl font-black transition-all duration-500" style={{ WebkitTextStroke: "1px white" }}>
+                {/* C */}
+                <span
+                  className="relative flex items-center justify-center font-michroma text-white text-2xl md:text-4xl font-black transition-all duration-500 group-hover/logo:text-[#63f3f7]"
+                  style={{ WebkitTextStroke: "1px white" }}
+                >
                   C
                   <PlayIcon className="absolute text-[#63f3f7] w-3 h-3 md:w-5 md:h-5 opacity-0 group-hover/logo:opacity-100 transition-all duration-300 transform scale-50 group-hover/logo:scale-100 translate-x-[1px] translate-y-[1px] drop-shadow-[0_0_10px_#63f3f7]" />
                 </span>
-                <span className="font-michroma text-white text-2xl md:text-4xl font-black ml-[1px] transition-all duration-500" style={{ WebkitTextStroke: "1px white" }}>
+
+                {/* L */}
+                <span
+                  className="font-michroma text-white text-2xl md:text-4xl font-black ml-[1px] transition-all duration-500 group-hover/logo:text-[#63f3f7]"
+                  style={{ WebkitTextStroke: "1px white" }}
+                >
                   L
                 </span>
               </div>
-              <span className="relative flex items-center ml-1 h-full">
-                <span className="font-unbounded text-white text-4xl md:text-6xl font-black transition-all duration-500" style={{ WebkitTextStroke: "3px white", textShadow: "6px 6px 0px rgba(0,0,0,1)" }}>
+
+              {/* IC — с шиммером */}
+              <span className="relative flex items-center ml-1 h-full overflow-hidden">
+                <span
+                  className="font-unbounded text-white text-4xl md:text-6xl font-black transition-all duration-500"
+                  style={{ WebkitTextStroke: "3px white", textShadow: "6px 6px 0px rgba(0,0,0,1)" }}
+                >
                   IC
                 </span>
+
+                {/* Бегущий шиммер */}
+                <motion.div
+                  animate={{ x: ["-150%", "200%"] }}
+                  transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 3, ease: "easeInOut" }}
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12 pointer-events-none"
+                />
               </span>
             </h1>
-            <div className="absolute -bottom-1 right-0 w-[50%] h-[5px] bg-[#63f3f7] opacity-0 group-hover/logo:opacity-100 blur-[3px] transition-all duration-500 shadow-[0_0_25px_#63f3f7] rounded-full scale-x-0 group-hover/logo:scale-x-100 origin-right" />
+
+            {/* Линия снизу — растёт при ховере */}
+            <motion.div
+              className="absolute -bottom-1 left-0 h-[3px] bg-[#63f3f7] rounded-full shadow-[0_0_15px_#63f3f7]"
+              initial={{ width: "0%" }}
+              whileHover={{ width: "100%" }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+            />
+
+            {/* Точки на концах линии */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              whileHover={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.2, delay: 0.1 }}
+              className="absolute -bottom-1 left-0 w-1.5 h-1.5 rounded-full bg-[#63f3f7] shadow-[0_0_8px_#63f3f7]"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              whileHover={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.2, delay: 0.3 }}
+              className="absolute -bottom-1 right-0 w-1.5 h-1.5 rounded-full bg-[#63f3f7] shadow-[0_0_8px_#63f3f7]"
+            />
           </div>
         </motion.div>
 
@@ -103,7 +158,6 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
         <div className="absolute left-1/2 -translate-x-1/2">
           <AnimatePresence mode="wait">
             {searchActivated ? (
-              // Строка поиска разворачивается из центра
               <motion.div
                 key="search"
                 initial={{ width: 48, opacity: 0, borderRadius: "16px" }}
@@ -124,7 +178,6 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
                 >
                   <Search size={18} className="text-[#63f3f7] shrink-0" />
                 </motion.div>
-
                 <motion.span
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -133,15 +186,11 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
                 >
                   Найти игру...
                 </motion.span>
-
-                {/* Мигающий курсор */}
                 <motion.div
                   animate={{ opacity: [1, 0, 1] }}
                   transition={{ duration: 0.8, repeat: Infinity }}
                   className="w-0.5 h-4 bg-[#63f3f7] rounded-full ml-1"
                 />
-
-                {/* Бегущие частицы */}
                 {[...Array(3)].map((_, i) => (
                   <motion.div
                     key={i}
@@ -180,7 +229,6 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
             whileTap={{ scale: 0.85, rotate: 15 }}
             className="p-3 bg-white/[0.03] hover:bg-white/[0.08] rounded-2xl border border-white/5 transition-colors group relative overflow-hidden"
           >
-            {/* Пульс при ховере */}
             <motion.div
               className="absolute inset-0 rounded-2xl bg-[#63f3f7]/10"
               initial={{ scale: 0, opacity: 0 }}
@@ -190,14 +238,85 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
             <Search size={20} className="text-white/40 group-hover:text-[#63f3f7] transition-colors relative z-10" />
           </motion.button>
 
-          <button onClick={onWishlistClick} className="relative p-3 bg-white/[0.03] hover:bg-white/[0.08] rounded-2xl border border-white/5 transition-all active:scale-95 group">
-            <Heart size={20} className={`transition-colors ${mounted && wishlistCount > 0 ? "text-[#63f3f7] fill-[#63f3f7]/20" : "text-white/40 group-hover:text-[#63f3f7]"}`} />
-            {mounted && wishlistCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#63f3f7] text-black text-[9px] font-black rounded-full flex items-center justify-center animate-in zoom-in duration-300">
-                {wishlistCount}
-              </span>
-            )}
-          </button>
+          {/* Кнопка вишлиста */}
+          <motion.button
+            onClick={onWishlistClick}
+            whileTap={{ scale: 0.8 }}
+            className="relative p-3 bg-white/[0.03] hover:bg-white/[0.08] rounded-2xl border border-white/5 transition-all group overflow-visible"
+          >
+            <motion.div
+              className="absolute inset-0 rounded-2xl bg-[#63f3f7]/10"
+              initial={{ scale: 0, opacity: 0 }}
+              whileHover={{ scale: 1.5, opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            />
+
+            <AnimatePresence>
+              {wishlistPulse && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1.4 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="absolute inset-0 rounded-2xl bg-[#63f3f7]/30 blur-xl pointer-events-none"
+                />
+              )}
+            </AnimatePresence>
+
+            <motion.div
+              animate={wishlistPulse ? {
+                scale: [1, 1.6, 0.85, 1.3, 1],
+                rotate: [0, -15, 10, -5, 0],
+              } : {}}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+            >
+              <Heart
+                size={20}
+                className={`transition-all relative z-10 ${
+                  mounted && wishlistCount > 0
+                    ? "text-[#63f3f7] fill-[#63f3f7]/30 drop-shadow-[0_0_8px_rgba(99,243,247,0.8)]"
+                    : "text-white/40 group-hover:text-[#63f3f7]"
+                }`}
+              />
+            </motion.div>
+
+            <AnimatePresence>
+              {wishlistPulse && (
+                <>
+                  {[...Array(6)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 1, scale: 1, x: 0, y: 0 }}
+                      animate={{
+                        opacity: 0,
+                        scale: 0,
+                        x: Math.cos((i / 6) * Math.PI * 2) * 28,
+                        y: Math.sin((i / 6) * Math.PI * 2) * 28,
+                      }}
+                      transition={{ duration: 0.6, ease: "easeOut" }}
+                      className="absolute left-1/2 top-1/2 w-1.5 h-1.5 rounded-full bg-[#63f3f7] pointer-events-none -translate-x-1/2 -translate-y-1/2"
+                      style={{ zIndex: 20 }}
+                    />
+                  ))}
+                </>
+              )}
+            </AnimatePresence>
+
+            <AnimatePresence>
+              {mounted && wishlistCount > 0 && (
+                <motion.span
+                  key={wishlistCount}
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  exit={{ scale: 0, rotate: 180 }}
+                  transition={{ type: "spring", stiffness: 500, damping: 20 }}
+                  className="absolute -top-1 -right-1 w-4 h-4 bg-[#63f3f7] text-black text-[9px] font-black rounded-full flex items-center justify-center"
+                >
+                  {wishlistCount}
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </motion.button>
 
           <div className="h-6 w-[1px] bg-white/10 hidden md:block" />
 

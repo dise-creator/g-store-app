@@ -79,7 +79,7 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
           src={game.image} 
           alt={game.title} 
           fill 
-          className="object-cover transition-transform duration-700 group-hover:scale-110" 
+          className="object-cover object-top transition-transform duration-700 group-hover:scale-110"
           unoptimized 
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />

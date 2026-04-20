@@ -141,3 +141,7 @@
     cursor: not-allowed;
   }
 }
+body.modal-open {
+  overflow: hidden;
+  height: 100vh;
+}
