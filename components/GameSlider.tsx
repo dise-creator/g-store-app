@@ -104,17 +104,18 @@ export default function GameSlider({
                   </motion.div>
                 ))
               : displayGames.map((game, index) => (
-                  <motion.div 
-                    key={`${game.id}-${index}`} 
+                  <motion.div
+                    key={`${game.id}-${index}`}
                     className="flex-[0_0_65%] sm:flex-[0_0_30%] md:flex-[0_0_22%] lg:flex-[0_0_16.6%] min-w-0 select-none"
-                    initial={{ opacity: 0, scale: 0.7, x: index % 2 === 0 ? -20 : 20 }}
-                    animate={{ opacity: 1, scale: 1, x: 0 }}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
                     transition={{
                       type: "spring",
-                      stiffness: 260,
-                      damping: 22,
-                      delay: (index % 8) * 0.06,
+                      stiffness: 200,
+                      damping: 20,
+                      delay: (index % 8) * 0.07,
                     }}
+                    whileHover={{ y: -6, transition: { duration: 0.2 } }}
                   >
                     <GameCard game={game} onSelect={() => onSelectGame?.(game)} />
                   </motion.div>

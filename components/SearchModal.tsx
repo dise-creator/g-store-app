@@ -299,7 +299,7 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
                       <TrendingUp size={14} className="text-[#63f3f7]" />
                       <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Популярные игры</p>
                     </div>
-                    <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
+                    <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
                       {popularGames.map((game) => {
                         const discount = getActiveDiscount(game);
                         const basePrice = discount > 0 ? getDiscountedPrice(game) : game.price;

@@ -8,8 +8,9 @@ import GameModal from "./GameModal";
 import Footer from "./Footer";
 import { useGamesStore } from "@/store/games";
 import { SessionProvider } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useRegionStore } from "@/store/useRegion";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
@@ -17,12 +18,12 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   const router = useRouter();
+  const pathname = usePathname();
   const allGames = useGamesStore((state) => state.allGames);
   const fetchRates = useRegionStore((state) => state.fetchRates);
 
   useEffect(() => {
     setMounted(true);
-    // Загружаем курсы при старте — если свежие (< 24ч) то из кэша, иначе с API
     fetchRates();
   }, [fetchRates]);
 
@@ -50,9 +51,19 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         {/* Индикатор загрузки курсов */}
         {mounted && <RatesLoader />}
 
-        {/* MAIN */}
+        {/* MAIN с анимацией */}
         <main className="relative z-10 flex-grow w-full">
-          {children}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={pathname}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+            >
+              {children}
+            </motion.div>
+          </AnimatePresence>
         </main>
 
         {/* FOOTER */}
@@ -69,9 +80,8 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   );
 }
 
-// Маленький компонент который показывает когда курсы обновляются
 function RatesLoader() {
-  const { isLoadingRates, rates } = useRegionStore();
+  const { isLoadingRates } = useRegionStore();
 
   if (!isLoadingRates) return null;
 

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useGamesStore, Game } from "@/store/games";
+import { useGamesStore } from "@/store/games";
 import { useRegionStore } from "@/store/useRegion";
 import { Tag } from "lucide-react";
 
@@ -31,7 +31,6 @@ export default function HeroBanner() {
   const { allGames, setSelectedGame } = useGamesStore();
   const { getPrice } = useRegionStore();
 
-  // Берём первые 8 игр для баннера
   const bannerGames = allGames.slice(0, 8);
 
   useEffect(() => {
@@ -43,7 +42,7 @@ export default function HeroBanner() {
   }, [bannerGames.length]);
 
   if (!isMounted || bannerGames.length === 0) return (
-    <div className="w-full h-[500px] md:h-[580px] mt-8 rounded-[2.5rem]" style={{ backgroundColor: BG }} />
+    <div className="w-full h-[380px] md:h-[580px] mt-4 md:mt-8 rounded-[2rem] md:rounded-[2.5rem]" style={{ backgroundColor: BG }} />
   );
 
   const current = bannerGames[index];
@@ -55,7 +54,6 @@ export default function HeroBanner() {
     ? Math.round(displayPrice * (1 - discount / 100))
     : displayPrice;
 
-  // Разбиваем название на две части
   const words = current.title.split(" ");
   const firstPart = words.slice(0, Math.ceil(words.length / 2)).join(" ");
   const secondPart = words.slice(Math.ceil(words.length / 2)).join(" ");
@@ -67,7 +65,7 @@ export default function HeroBanner() {
 
   return (
     <section
-      className="relative w-full h-[500px] md:h-[580px] mt-8 rounded-[2.5rem] md:rounded-[3.5rem] overflow-hidden group"
+      className="relative w-full h-[380px] md:h-[580px] mt-4 md:mt-8 rounded-[2rem] md:rounded-[3.5rem] overflow-hidden group"
       style={{
         backgroundColor: BG,
         boxShadow: `0 30px 80px -20px ${color}30`,
@@ -100,25 +98,25 @@ export default function HeroBanner() {
             />
           </div>
 
-          {/* Левый градиент */}
+          {/* Левый градиент — на мобилке полный, на десктопе половина */}
           <div
             className="absolute inset-y-0 left-0 z-10 w-full md:w-[55%]"
-            style={{ background: `linear-gradient(to right, ${BG} 0%, ${BG}cc 45%, transparent 100%)` }}
+            style={{ background: `linear-gradient(to right, ${BG} 0%, ${BG}ee 30%, ${BG}99 60%, transparent 100%)` }}
           />
 
           {/* Нижний градиент */}
           <div
-            className="absolute bottom-0 left-0 right-0 z-10 h-40"
+            className="absolute bottom-0 left-0 right-0 z-10 h-32 md:h-40"
             style={{ background: `linear-gradient(to top, ${BG} 0%, transparent 100%)` }}
           />
 
           {/* Контент */}
-          <div className="absolute inset-0 z-20 flex flex-col justify-center px-12 md:px-24">
+          <div className="absolute inset-0 z-20 flex flex-col justify-end md:justify-center px-6 md:px-24 pb-12 md:pb-0">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2, duration: 0.6 }}
-              className="max-w-xl flex flex-col gap-6"
+              className="flex flex-col gap-3 md:gap-6 max-w-xl"
             >
               {/* Бейдж скидки */}
               {discount > 0 && (
@@ -129,46 +127,44 @@ export default function HeroBanner() {
                   className="flex items-center gap-2 w-fit"
                 >
                   <div
-                    className="flex items-center gap-2 px-4 py-2 rounded-2xl font-black text-sm uppercase italic"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-black text-xs uppercase italic"
                     style={{
                       backgroundColor: color + "25",
                       border: `1px solid ${color}50`,
                       color,
                     }}
                   >
-                    <Tag size={14} />
+                    <Tag size={12} />
                     Скидка {discount}%
                   </div>
                 </motion.div>
               )}
 
               {/* Заголовок */}
-              <h1 className={`${fontClass} text-5xl sm:text-6xl md:text-8xl font-black uppercase italic text-white leading-[0.85] drop-shadow-2xl`}>
+              <h1 className={`${fontClass} text-4xl sm:text-5xl md:text-8xl font-black uppercase italic text-white leading-[0.85] drop-shadow-2xl`}>
                 {firstPart} <br />
                 <span style={{ color }} className="opacity-95">{secondPart}</span>
               </h1>
 
               {/* Цена + кнопка */}
-              <div className="flex items-center gap-6">
+              <div className="flex items-center gap-3 md:gap-6">
                 <div className="flex flex-col">
                   {discount > 0 && (
-                    <span className="text-white/30 text-sm font-black line-through">
+                    <span className="text-white/30 text-xs md:text-sm font-black line-through">
                       {displayPrice.toLocaleString()} ₽
                     </span>
                   )}
-                  <span className="font-black text-3xl md:text-4xl italic" style={{ color }}>
+                  <span className="font-black text-2xl md:text-4xl italic" style={{ color }}>
                     {discountedPrice.toLocaleString()} ₽
                   </span>
                 </div>
 
                 <button
                   onClick={handleAction}
-                  className="relative px-10 py-4 text-black font-extrabold uppercase italic rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-xl z-30"
+                  className="relative px-6 md:px-10 py-3 md:py-4 text-black font-extrabold uppercase italic rounded-xl md:rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-xl z-30 text-xs md:text-base"
                   style={{ backgroundColor: color }}
                 >
-                  <span className="text-sm md:text-base tracking-tighter">
-                    Забрать сейчас
-                  </span>
+                  Забрать сейчас
                 </button>
               </div>
             </motion.div>
@@ -177,7 +173,7 @@ export default function HeroBanner() {
       </AnimatePresence>
 
       {/* Точки навигации */}
-      <div className="absolute bottom-10 left-12 md:left-24 z-30 flex gap-3 flex-wrap max-w-xs">
+      <div className="absolute bottom-4 md:bottom-10 left-6 md:left-24 z-30 flex gap-2 flex-wrap">
         {bannerGames.map((_, i) => (
           <button
             key={i}
@@ -185,8 +181,8 @@ export default function HeroBanner() {
               e.stopPropagation();
               setIndex(i);
             }}
-            className={`h-1.5 rounded-full transition-all duration-500 ${
-              i === index ? "w-12" : "w-2.5 bg-white/10 hover:bg-white/30"
+            className={`h-1 md:h-1.5 rounded-full transition-all duration-500 ${
+              i === index ? "w-8 md:w-12" : "w-2 md:w-2.5 bg-white/10 hover:bg-white/30"
             }`}
             style={{ backgroundColor: i === index ? color : "" }}
           />

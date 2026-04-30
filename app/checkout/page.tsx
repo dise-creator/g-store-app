@@ -11,7 +11,7 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ChevronLeft, CreditCard, Wallet, ShieldCheck,
-  Zap, Mail, Check, Lock
+  Zap, Mail, Check, Lock, Tag, X, Loader2
 } from "lucide-react";
 
 const PAYMENT_METHODS = [
@@ -51,6 +51,17 @@ export default function CheckoutPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
+  // Промокод
+  const [promoInput, setPromoInput] = useState("");
+  const [promoLoading, setPromoLoading] = useState(false);
+  const [promoError, setPromoError] = useState<string | null>(null);
+  const [appliedPromo, setAppliedPromo] = useState<{
+    promo_id: string;
+    type: "percent" | "fixed";
+    value: number;
+    discount: number;
+  } | null>(null);
+
   useEffect(() => {
     setIsMounted(true);
     if (session?.user?.email) setEmail(session.user.email);
@@ -71,8 +82,43 @@ export default function CheckoutPage() {
 
   const loyalty = getLoyaltyInfo(totalSpent);
   const originalPrice = getTotalPrice(items);
-  const discountAmount = Math.round(originalPrice * loyalty.discount / 100);
-  const finalPrice = originalPrice - discountAmount;
+  const loyaltyDiscount = Math.round(originalPrice * loyalty.discount / 100);
+  const priceAfterLoyalty = originalPrice - loyaltyDiscount;
+  const promoDiscount = appliedPromo ? Math.min(appliedPromo.discount, priceAfterLoyalty) : 0;
+  const finalPrice = priceAfterLoyalty - promoDiscount;
+
+  const handleApplyPromo = async () => {
+    if (!promoInput.trim()) return;
+    setPromoLoading(true);
+    setPromoError(null);
+
+    try {
+      const res = await fetch("/api/promo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: promoInput, total: priceAfterLoyalty }),
+      });
+      const data = await res.json();
+
+      if (!data.ok) {
+        setPromoError(data.message);
+        setAppliedPromo(null);
+      } else {
+        setAppliedPromo(data);
+        setPromoError(null);
+      }
+    } catch {
+      setPromoError("Ошибка проверки промокода");
+    } finally {
+      setPromoLoading(false);
+    }
+  };
+
+  const handleRemovePromo = () => {
+    setAppliedPromo(null);
+    setPromoInput("");
+    setPromoError(null);
+  };
 
   const handleCheckout = async () => {
     if (!email) { alert("Введи email"); return; }
@@ -97,11 +143,18 @@ export default function CheckoutPage() {
           total_price: finalPrice,
           status: "completed",
           user_email: session.user.email,
+          promo_id: appliedPromo?.promo_id || null,
+          promo_discount: promoDiscount || null,
         }])
         .select()
         .single();
 
       if (orderError) throw orderError;
+
+      // Увеличиваем счётчик использования промокода
+      if (appliedPromo) {
+        await supabase.rpc("increment_promo_usage", { promo_id: appliedPromo.promo_id });
+      }
 
       // Обновляем лояльность
       const newTotalSpent = totalSpent + finalPrice;
@@ -126,6 +179,29 @@ export default function CheckoutPage() {
           is_used: true,
           order_id: order.id,
         });
+      }
+
+      // Получаем созданные ваучеры
+      const { data: createdVouchers } = await supabase
+        .from("vouchers")
+        .select("code, game_title")
+        .eq("order_id", order.id);
+
+      // Отправляем уведомление в Telegram
+      try {
+        await fetch("/api/notify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            orderId: order.id,
+            items: preparedItems,
+            total: finalPrice,
+            email,
+            vouchers: createdVouchers || [],
+          }),
+        });
+      } catch (notifyErr) {
+        console.error("Notify error:", notifyErr);
       }
 
       clearCart();
@@ -312,6 +388,53 @@ export default function CheckoutPage() {
               ))}
             </div>
 
+            {/* Промокод */}
+            <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-8 h-8 rounded-xl bg-[#63f3f7]/10 border border-[#63f3f7]/20 flex items-center justify-center">
+                  <Tag size={15} className="text-[#63f3f7]" />
+                </div>
+                <p className="text-white font-black uppercase italic text-sm tracking-widest">Промокод</p>
+              </div>
+
+              {appliedPromo ? (
+                <div className="flex items-center justify-between p-3 bg-[#63f3f7]/10 border border-[#63f3f7]/20 rounded-2xl">
+                  <div>
+                    <p className="text-[#63f3f7] font-black text-sm">{promoInput.toUpperCase()}</p>
+                    <p className="text-[#63f3f7]/60 text-[10px] font-black">
+                      −{appliedPromo.type === "percent" ? `${appliedPromo.value}%` : `${appliedPromo.value}₽`} применено
+                    </p>
+                  </div>
+                  <button onClick={handleRemovePromo} className="text-white/30 hover:text-red-400 transition-all">
+                    <X size={16} />
+                  </button>
+                </div>
+              ) : (
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={promoInput}
+                    onChange={e => setPromoInput(e.target.value.toUpperCase())}
+                    onKeyDown={e => e.key === "Enter" && handleApplyPromo()}
+                    placeholder="CLIC-XXXX-XXXX"
+                    className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white font-mono text-sm focus:outline-none focus:border-[#63f3f7]/40 transition-all placeholder-white/20"
+                  />
+                  <button
+                    onClick={handleApplyPromo}
+                    disabled={promoLoading || !promoInput}
+                    className="px-4 py-3 bg-[#63f3f7]/10 border border-[#63f3f7]/20 text-[#63f3f7] rounded-2xl font-black text-xs uppercase hover:bg-[#63f3f7]/20 transition-all disabled:opacity-40 flex items-center gap-1"
+                  >
+                    {promoLoading ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />}
+                    OK
+                  </button>
+                </div>
+              )}
+
+              {promoError && (
+                <p className="text-red-400 text-[10px] font-black mt-2">{promoError}</p>
+              )}
+            </div>
+
             {/* Итого */}
             <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6 flex flex-col gap-4">
               {loyalty.discount > 0 && (
@@ -322,11 +445,24 @@ export default function CheckoutPage() {
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-[#63f3f7] text-xs font-black uppercase">Скидка {loyalty.discount}%</span>
-                    <span className="text-[#63f3f7] text-sm font-black">−{discountAmount.toLocaleString()} ₽</span>
+                    <span className="text-[#63f3f7] text-sm font-black">−{loyaltyDiscount.toLocaleString()} ₽</span>
                   </div>
                   <div className="h-px bg-white/5" />
                 </>
               )}
+
+              {appliedPromo && (
+                <>
+                  <div className="flex justify-between items-center">
+                    <span className="text-[#63f3f7] text-xs font-black uppercase flex items-center gap-1">
+                      <Tag size={10} /> Промокод
+                    </span>
+                    <span className="text-[#63f3f7] text-sm font-black">−{promoDiscount.toLocaleString()} ₽</span>
+                  </div>
+                  <div className="h-px bg-white/5" />
+                </>
+              )}
+
               <div className="flex justify-between items-center">
                 <span className="text-white/40 text-xs font-black uppercase tracking-widest">Итого</span>
                 <div className="flex items-baseline gap-1">

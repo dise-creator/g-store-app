@@ -1,13 +1,14 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Search, Heart } from "lucide-react"; 
+import { Search, Heart } from "lucide-react";
 import UserProfile from "./UserProfile";
-import CartButton from "./CartButton"; 
+import CartButton from "./CartButton";
 import RegionSwitcher from "./RegionSwitcher";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCartStore } from "@/store/useCart";
 import { useWishlistStore } from "@/store/useWishlist";
+import Link from "next/link";
 
 const PlayIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" className={className} xmlns="http://www.w3.org/2000/svg">
@@ -27,7 +28,7 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
   const [searchActivated, setSearchActivated] = useState(false);
   const [wishlistPulse, setWishlistPulse] = useState(false);
   const prevWishlist = useRef(0);
-  
+
   const items = useCartStore((state) => state.items);
   const wishlistItems = useWishlistStore((state) => state.items);
 
@@ -75,87 +76,65 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
         )}
       </AnimatePresence>
 
-      <header className={`fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-[1440px] z-[100] px-8 rounded-[2.5rem] transition-all duration-700 flex justify-between items-center transform-gpu ${
-        scrolled 
-          ? "py-3 bg-black/[0.15] backdrop-blur-[40px] border border-white/[0.1] shadow-2xl" 
-          : "py-6 bg-transparent backdrop-blur-[10px] border border-white/[0.05]"
+      <header className={`fixed top-2 md:top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-[1440px] z-[100] px-4 md:px-8 rounded-[1.5rem] md:rounded-[2.5rem] transition-all duration-700 flex justify-between items-center transform-gpu ${
+        scrolled
+          ? "py-2 md:py-3 bg-black/[0.15] backdrop-blur-[40px] border border-white/[0.1] shadow-2xl"
+          : "py-3 md:py-6 bg-transparent backdrop-blur-[10px] border border-white/[0.05]"
       }`}>
 
         {/* Логотип */}
-        <motion.div
-          animate={searchActivated ? { opacity: 0, x: -30, filter: "blur(8px)" } : { opacity: 1, x: 0, filter: "blur(0px)" }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="relative group/logo cursor-pointer shrink-0 h-14 flex items-center active:scale-95 transition-transform duration-150"
-        >
-          <div className="relative flex items-center h-full tracking-widest transition-all duration-500 skew-x-[-12deg] group-hover/logo:skew-x-[-8deg]">
+        <Link href="/">
+          <motion.div
+            animate={searchActivated ? { opacity: 0, x: -30, filter: "blur(8px)" } : { opacity: 1, x: 0, filter: "blur(0px)" }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="relative group/logo cursor-pointer shrink-0 h-10 md:h-14 flex items-center active:scale-95 transition-transform duration-150"
+          >
+            <div className="relative flex items-center h-full tracking-widest transition-all duration-500 skew-x-[-12deg] group-hover/logo:skew-x-[-8deg]">
+              <div className="absolute -inset-3 rounded-2xl bg-[#63f3f7]/5 blur-xl opacity-0 group-hover/logo:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-            {/* Свечение под логотипом при ховере */}
-            <div className="absolute -inset-3 rounded-2xl bg-[#63f3f7]/5 blur-xl opacity-0 group-hover/logo:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
-            <h1 className="select-none flex items-center transition-all duration-500 h-full relative z-10">
-              <div className="flex items-center mt-[-2px]">
-                {/* C */}
-                <span
-                  className="relative flex items-center justify-center font-michroma text-white text-2xl md:text-4xl font-black transition-all duration-500 group-hover/logo:text-[#63f3f7]"
-                  style={{ WebkitTextStroke: "1px white" }}
-                >
-                  C
-                  <PlayIcon className="absolute text-[#63f3f7] w-3 h-3 md:w-5 md:h-5 opacity-0 group-hover/logo:opacity-100 transition-all duration-300 transform scale-50 group-hover/logo:scale-100 translate-x-[1px] translate-y-[1px] drop-shadow-[0_0_10px_#63f3f7]" />
+              <h1 className="select-none flex items-center transition-all duration-500 h-full relative z-10">
+                <div className="flex items-center mt-[-2px]">
+                  <span
+                    className="relative flex items-center justify-center font-michroma text-white text-xl md:text-4xl font-black transition-all duration-500 group-hover/logo:text-[#63f3f7]"
+                    style={{ WebkitTextStroke: "1px white" }}
+                  >
+                    C
+                    <PlayIcon className="absolute text-[#63f3f7] w-2.5 h-2.5 md:w-5 md:h-5 opacity-0 group-hover/logo:opacity-100 transition-all duration-300 transform scale-50 group-hover/logo:scale-100 translate-x-[1px] translate-y-[1px] drop-shadow-[0_0_10px_#63f3f7]" />
+                  </span>
+                  <span
+                    className="font-michroma text-white text-xl md:text-4xl font-black ml-[1px] transition-all duration-500 group-hover/logo:text-[#63f3f7]"
+                    style={{ WebkitTextStroke: "1px white" }}
+                  >
+                    L
+                  </span>
+                </div>
+                <span className="relative flex items-center ml-1 h-full overflow-hidden">
+                  <span
+                    className="font-unbounded text-white text-3xl md:text-6xl font-black transition-all duration-500"
+                    style={{ WebkitTextStroke: "2px white", textShadow: "4px 4px 0px rgba(0,0,0,1)" }}
+                  >
+                    IC
+                  </span>
+                  <motion.div
+                    animate={{ x: ["-150%", "200%"] }}
+                    transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 3, ease: "easeInOut" }}
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12 pointer-events-none"
+                  />
                 </span>
+              </h1>
 
-                {/* L */}
-                <span
-                  className="font-michroma text-white text-2xl md:text-4xl font-black ml-[1px] transition-all duration-500 group-hover/logo:text-[#63f3f7]"
-                  style={{ WebkitTextStroke: "1px white" }}
-                >
-                  L
-                </span>
-              </div>
+              <motion.div
+                className="absolute -bottom-1 left-0 h-[3px] bg-[#63f3f7] rounded-full shadow-[0_0_15px_#63f3f7]"
+                initial={{ width: "0%" }}
+                whileHover={{ width: "100%" }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+              />
+            </div>
+          </motion.div>
+        </Link>
 
-              {/* IC — с шиммером */}
-              <span className="relative flex items-center ml-1 h-full overflow-hidden">
-                <span
-                  className="font-unbounded text-white text-4xl md:text-6xl font-black transition-all duration-500"
-                  style={{ WebkitTextStroke: "3px white", textShadow: "6px 6px 0px rgba(0,0,0,1)" }}
-                >
-                  IC
-                </span>
-
-                {/* Бегущий шиммер */}
-                <motion.div
-                  animate={{ x: ["-150%", "200%"] }}
-                  transition={{ duration: 2.5, repeat: Infinity, repeatDelay: 3, ease: "easeInOut" }}
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12 pointer-events-none"
-                />
-              </span>
-            </h1>
-
-            {/* Линия снизу — растёт при ховере */}
-            <motion.div
-              className="absolute -bottom-1 left-0 h-[3px] bg-[#63f3f7] rounded-full shadow-[0_0_15px_#63f3f7]"
-              initial={{ width: "0%" }}
-              whileHover={{ width: "100%" }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-            />
-
-            {/* Точки на концах линии */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0 }}
-              whileHover={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.2, delay: 0.1 }}
-              className="absolute -bottom-1 left-0 w-1.5 h-1.5 rounded-full bg-[#63f3f7] shadow-[0_0_8px_#63f3f7]"
-            />
-            <motion.div
-              initial={{ opacity: 0, scale: 0 }}
-              whileHover={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.2, delay: 0.3 }}
-              className="absolute -bottom-1 right-0 w-1.5 h-1.5 rounded-full bg-[#63f3f7] shadow-[0_0_8px_#63f3f7]"
-            />
-          </div>
-        </motion.div>
-
-        {/* Центр */}
-        <div className="absolute left-1/2 -translate-x-1/2">
+        {/* Центр — скрываем на мобилке */}
+        <div className="absolute left-1/2 -translate-x-1/2 hidden md:block">
           <AnimatePresence mode="wait">
             {searchActivated ? (
               <motion.div
@@ -220,14 +199,19 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
         <motion.div
           animate={searchActivated ? { opacity: 0, x: 30, filter: "blur(8px)" } : { opacity: 1, x: 0, filter: "blur(0px)" }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="relative flex items-center gap-3 md:gap-4"
+          className="relative flex items-center gap-1.5 md:gap-4"
         >
+          {/* RegionSwitcher на мобилке */}
+          <div className="block md:hidden">
+            {mounted && <RegionSwitcher />}
+          </div>
+
           {/* Кнопка поиска */}
           <motion.button
             onClick={handleSearchClick}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.85, rotate: 15 }}
-            className="p-3 bg-white/[0.03] hover:bg-white/[0.08] rounded-2xl border border-white/5 transition-colors group relative overflow-hidden"
+            className="p-2 md:p-3 bg-white/[0.03] hover:bg-white/[0.08] rounded-xl md:rounded-2xl border border-white/5 transition-colors group relative overflow-hidden"
           >
             <motion.div
               className="absolute inset-0 rounded-2xl bg-[#63f3f7]/10"
@@ -235,14 +219,14 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
               whileHover={{ scale: 1.5, opacity: 1 }}
               transition={{ duration: 0.3 }}
             />
-            <Search size={20} className="text-white/40 group-hover:text-[#63f3f7] transition-colors relative z-10" />
+            <Search size={18} className="text-white/40 group-hover:text-[#63f3f7] transition-colors relative z-10" />
           </motion.button>
 
-          {/* Кнопка вишлиста */}
+          {/* Вишлист — скрываем на мобилке */}
           <motion.button
             onClick={onWishlistClick}
             whileTap={{ scale: 0.8 }}
-            className="relative p-3 bg-white/[0.03] hover:bg-white/[0.08] rounded-2xl border border-white/5 transition-all group overflow-visible"
+            className="relative p-2 md:p-3 bg-white/[0.03] hover:bg-white/[0.08] rounded-xl md:rounded-2xl border border-white/5 transition-all group overflow-visible hidden md:flex"
           >
             <motion.div
               className="absolute inset-0 rounded-2xl bg-[#63f3f7]/10"
@@ -250,7 +234,6 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
               whileHover={{ scale: 1.5, opacity: 1 }}
               transition={{ duration: 0.3 }}
             />
-
             <AnimatePresence>
               {wishlistPulse && (
                 <motion.div
@@ -262,7 +245,6 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
                 />
               )}
             </AnimatePresence>
-
             <motion.div
               animate={wishlistPulse ? {
                 scale: [1, 1.6, 0.85, 1.3, 1],
@@ -271,7 +253,7 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
               transition={{ duration: 0.5, ease: "easeInOut" }}
             >
               <Heart
-                size={20}
+                size={18}
                 className={`transition-all relative z-10 ${
                   mounted && wishlistCount > 0
                     ? "text-[#63f3f7] fill-[#63f3f7]/30 drop-shadow-[0_0_8px_rgba(99,243,247,0.8)]"
@@ -279,7 +261,6 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
                 }`}
               />
             </motion.div>
-
             <AnimatePresence>
               {wishlistPulse && (
                 <>
@@ -301,7 +282,6 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
                 </>
               )}
             </AnimatePresence>
-
             <AnimatePresence>
               {mounted && wishlistCount > 0 && (
                 <motion.span
@@ -320,9 +300,13 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
 
           <div className="h-6 w-[1px] bg-white/10 hidden md:block" />
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 md:gap-3">
             <UserProfile />
-            <CartButton onClick={onCartClick} totalAmount={mounted ? totalAmount : 0} totalItems={mounted ? totalItems : 0} />
+            <CartButton
+              onClick={onCartClick}
+              totalAmount={mounted ? totalAmount : 0}
+              totalItems={mounted ? totalItems : 0}
+            />
           </div>
         </motion.div>
       </header>
