@@ -1,14 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import AnimatedBackground from "@/components/AnimatedBackground";
 
-export default function TelegramEmailPage() {
+function TelegramEmailContent() {
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const tgId = searchParams.get("tg_id");
+  const tgName = searchParams.get("tg_name");
+  const tgPhoto = searchParams.get("tg_photo");
+
+  useEffect(() => {
+    if (!tgId) {
+      window.location.href = "/signin";
+    }
+  }, [tgId]);
 
   const handleSubmit = async () => {
     if (!email.includes("@")) {
@@ -20,11 +32,15 @@ export default function TelegramEmailPage() {
     setError("");
 
     try {
-      console.log("Отправляем запрос...");
       const res = await fetch("/api/auth/telegram-signin-cookie", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({
+          email,
+          tgId,
+          tgName,
+          tgPhoto,
+        }),
       });
 
       const data = await res.json();
@@ -35,7 +51,6 @@ export default function TelegramEmailPage() {
         return;
       }
 
-      console.log("Входим с telegramId:", data.telegramId);
       const result = await signIn("credentials", {
         email,
         telegramId: data.telegramId,
@@ -70,7 +85,9 @@ export default function TelegramEmailPage() {
           <p className="text-white font-black italic uppercase text-2xl">
             Почти готово!
           </p>
-          <p className="text-white/30 text-sm mt-2">Введи email для аккаунта</p>
+          <p className="text-white/30 text-sm mt-2">
+            Привет, {tgName || "друг"}! Введи email для аккаунта
+          </p>
         </div>
 
         <div className="flex flex-col gap-4">
@@ -95,5 +112,13 @@ export default function TelegramEmailPage() {
         </div>
       </motion.div>
     </main>
+  );
+}
+
+export default function TelegramEmailPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#050505]" />}>
+      <TelegramEmailContent />
+    </Suspense>
   );
 }
