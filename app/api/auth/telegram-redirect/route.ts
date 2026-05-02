@@ -41,23 +41,13 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  const telegramData = JSON.stringify({
-    id,
-    first_name,
-    last_name,
-    username,
-    photo_url,
-  });
-  const response = NextResponse.redirect(
-    new URL("/signin/telegram-email", req.url),
-  );
-  response.cookies.set("telegram_user", telegramData, {
-    httpOnly: true,
-    maxAge: 600,
-    path: "/",
-    secure: true,
-    sameSite: "lax",
-  });
+  // Передаём данные через URL вместо cookie
+  const redirectUrl = new URL("/signin/telegram-email", req.url);
+  redirectUrl.searchParams.set("tg_id", id);
+  if (first_name) redirectUrl.searchParams.set("tg_name", first_name);
+  if (last_name) redirectUrl.searchParams.set("tg_last", last_name);
+  if (username) redirectUrl.searchParams.set("tg_username", username);
+  if (photo_url) redirectUrl.searchParams.set("tg_photo", photo_url);
 
-  return response;
+  return NextResponse.redirect(redirectUrl);
 }
