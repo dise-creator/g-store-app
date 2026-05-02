@@ -29,7 +29,6 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.telegramId) return null;
 
-        // Ищем только по email — не важно через что зарегался
         const { data: user } = await supabaseAdmin
           .from("users")
           .select("*")
@@ -68,6 +67,12 @@ export const authOptions: NextAuthOptions = {
       }
 
       return true;
+    },
+
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith(baseUrl)) return url;
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      return baseUrl;
     },
 
     async session({ session, token }) {
