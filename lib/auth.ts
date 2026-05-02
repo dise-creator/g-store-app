@@ -6,7 +6,7 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
 );
 
 export const authOptions: NextAuthOptions = {
@@ -29,12 +29,11 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.telegramId) return null;
 
-        // Проверяем что пользователь с таким email и telegramId существует в БД
+        // Ищем только по email — не важно через что зарегался
         const { data: user } = await supabaseAdmin
           .from("users")
           .select("*")
           .eq("email", credentials.email)
-          .eq("provider_id", credentials.telegramId)
           .single();
 
         if (!user) return null;
