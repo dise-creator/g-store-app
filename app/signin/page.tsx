@@ -19,7 +19,6 @@ export default function SignInPage() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [router]);
 
-  // Стили для 3D эффекта
   const dark3D = {
     color: "#2D3748",
     textShadow: "0 1px 0 #1a202c, 0 2px 0 #1a202c, 0 3px 0 #1a202c, 0 5px 10px rgba(0,0,0,0.7)"
@@ -43,16 +42,13 @@ export default function SignInPage() {
         animate={{ opacity: 1, scale: 1 }}
         className="relative z-10 w-full max-w-[440px] px-8 py-16 bg-black/60 backdrop-blur-3xl border border-white/10 rounded-[4rem] shadow-[0_0_100px_rgba(0,255,255,0.1)]"
       >
-        {/* ОБЪЕМНЫЙ ЛОГОТИП С РАЗДЕЛЕНИЕМ */}
         <div className="text-center mb-16 relative">
           <h1 className="flex items-center justify-center font-black italic uppercase tracking-tighter select-none scale-110">
             <span style={dark3D} className="text-7xl">C</span>
             <span style={dark3D} className="text-7xl mr-3">L</span>
-            
             <span style={viper3D} className="text-8xl">I</span>
             <span style={viper3D} className="text-8xl">C</span>
           </h1>
-          {/* Линия под логотипом с бирюзовым свечением */}
           <div className="h-[2px] w-16 bg-gradient-to-r from-transparent via-[#00ffff]/50 to-transparent mx-auto mt-8 shadow-[0_0_15px_#00ffff]" />
         </div>
 
@@ -61,14 +57,27 @@ export default function SignInPage() {
             onClick={() => signIn("yandex", { callbackUrl: "/" })}
             className="group relative w-full py-5 bg-white/[0.03] border border-white/5 rounded-2xl overflow-hidden transition-all hover:border-[#ffcc00]/40 hover:shadow-[0_0_30px_rgba(255,204,0,0.1)] active:scale-[0.98]"
           >
-            <span className="relative z-10 text-white font-black text-xs uppercase italic group-hover:text-[#ffcc00] transition-colors">Войти через Яндекс</span>
+            <span className="relative z-10 text-white font-black text-xs uppercase italic group-hover:text-[#ffcc00] transition-colors">
+              Войти через Яндекс
+            </span>
+          </button>
+
+          <button
+            onClick={() => signIn("google", { callbackUrl: "/" })}
+            className="group relative w-full py-5 bg-white/[0.03] border border-white/5 rounded-2xl overflow-hidden transition-all hover:border-[#ea4335]/40 hover:shadow-[0_0_30px_rgba(234,67,53,0.1)] active:scale-[0.98]"
+          >
+            <span className="relative z-10 text-white font-black text-xs uppercase italic group-hover:text-[#ea4335] transition-colors">
+              Войти через Google
+            </span>
           </button>
 
           <button
             onClick={() => signIn("vk", { callbackUrl: "/" })}
             className="group relative w-full py-5 bg-white/[0.03] border border-white/5 rounded-2xl overflow-hidden transition-all hover:border-[#0077ff]/30 hover:shadow-[0_0_30px_rgba(0,119,255,0.1)] active:scale-[0.98]"
           >
-            <span className="relative z-10 text-white font-black text-xs uppercase italic group-hover:text-[#0077ff] transition-colors">Войти через VK ID</span>
+            <span className="relative z-10 text-white font-black text-xs uppercase italic group-hover:text-[#0077ff] transition-colors">
+              Войти через VK ID
+            </span>
           </button>
         </div>
 
