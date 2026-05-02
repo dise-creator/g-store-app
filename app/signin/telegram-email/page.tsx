@@ -20,6 +20,7 @@ export default function TelegramEmailPage() {
     setError("");
 
     try {
+      console.log("Отправляем запрос...");
       const res = await fetch("/api/auth/telegram-signin-cookie", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -27,18 +28,21 @@ export default function TelegramEmailPage() {
       });
 
       const data = await res.json();
+      console.log("Ответ сервера:", data);
 
       if (!data.ok) {
         setError(data.error || "Ошибка");
         return;
       }
 
+      console.log("Входим с telegramId:", data.telegramId);
       await signIn("credentials", {
         email,
         telegramId: data.telegramId,
         callbackUrl: "/",
       });
-    } catch {
+    } catch (e) {
+      console.error("Ошибка:", e);
       setError("Ошибка входа, попробуй снова");
     } finally {
       setLoading(false);
@@ -54,9 +58,7 @@ export default function TelegramEmailPage() {
         className="relative z-10 w-full max-w-[440px] px-8 py-16 bg-black/60 backdrop-blur-3xl border border-white/10 rounded-[4rem] shadow-[0_0_100px_rgba(0,255,255,0.1)]"
       >
         <div className="text-center mb-10">
-          <p className="text-white font-black italic uppercase text-2xl">
-            Почти готово!
-          </p>
+          <p className="text-white font-black italic uppercase text-2xl">Почти готово!</p>
           <p className="text-white/30 text-sm mt-2">Введи email для аккаунта</p>
         </div>
 
@@ -64,8 +66,8 @@ export default function TelegramEmailPage() {
           <input
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+            onChange={e => setEmail(e.target.value)}
+            onKeyDown={e => e.key === "Enter" && handleSubmit()}
             placeholder="your@email.com"
             className="w-full px-5 py-4 bg-white/5 border border-white/10 focus:border-[#63f3f7]/40 rounded-2xl text-white font-bold text-sm outline-none transition-all placeholder-white/20"
           />
