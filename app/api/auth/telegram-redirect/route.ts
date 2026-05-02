@@ -3,7 +3,7 @@ import crypto from "crypto";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-
+  
   const hash = searchParams.get("hash");
   const id = searchParams.get("id");
   const first_name = searchParams.get("first_name");
@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
 
   const checkString = Object.keys(params)
     .sort()
-    .map((k) => `${k}=${params[k]}`)
+    .map(k => `${k}=${params[k]}`)
     .join("\n");
 
   const hmac = crypto
@@ -36,25 +36,17 @@ export async function GET(req: NextRequest) {
     .digest("hex");
 
   if (hmac !== hash) {
-    return NextResponse.redirect(
-      new URL("/signin?error=invalid_hash", req.url),
-    );
+    return NextResponse.redirect(new URL("/signin?error=invalid_hash", req.url));
   }
 
-  const telegramData = JSON.stringify({
-    id,
-    first_name,
-    last_name,
-    username,
-    photo_url,
-  });
-  const response = NextResponse.redirect(
-    new URL("/signin/telegram-email", req.url),
-  );
+  const telegramData = JSON.stringify({ id, first_name, last_name, username, photo_url });
+  const response = NextResponse.redirect(new URL("/signin/telegram-email", req.url));
   response.cookies.set("telegram_user", telegramData, {
     httpOnly: true,
     maxAge: 600,
     path: "/",
+    secure: true,
+    sameSite: "lax",
   });
 
   return response;
