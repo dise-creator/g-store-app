@@ -36,11 +36,20 @@ export default function TelegramEmailPage() {
       }
 
       console.log("Входим с telegramId:", data.telegramId);
-      await signIn("credentials", {
+      const result = await signIn("credentials", {
         email,
         telegramId: data.telegramId,
         callbackUrl: "/",
+        redirect: false,
       });
+
+      console.log("SignIn result:", result);
+
+      if (result?.ok) {
+        window.location.href = "/";
+      } else {
+        setError("Ошибка входа: " + result?.error);
+      }
     } catch (e) {
       console.error("Ошибка:", e);
       setError("Ошибка входа, попробуй снова");
