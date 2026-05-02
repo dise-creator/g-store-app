@@ -25,26 +25,23 @@ export default function SignInPage() {
   }, [router, showEmailModal]);
 
   useEffect(() => {
-    // Сначала регистрируем функцию — до загрузки скрипта!
     (window as any).onTelegramAuth = async (user: any) => {
       const res = await fetch("/api/auth/telegram", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(user),
       });
-
       if (res.ok) {
         setTelegramUser(user);
         setShowEmailModal(true);
       }
     };
 
-    // Потом загружаем скрипт
     const script = document.createElement("script");
     script.src = "https://telegram.org/js/telegram-widget.js?22";
     script.setAttribute("data-telegram-login", "clicps_bot");
     script.setAttribute("data-size", "large");
-    script.setAttribute("data-onauth", "onTelegramAuth(user)");
+    script.setAttribute("data-auth-url", "https://clicps.ru/api/auth/telegram-redirect");
     script.setAttribute("data-request-access", "write");
     script.async = true;
     document.getElementById("telegram-widget")?.appendChild(script);
