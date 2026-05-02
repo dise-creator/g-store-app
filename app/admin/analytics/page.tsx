@@ -3,8 +3,10 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { motion } from "framer-motion";
-import { ChevronLeft, TrendingUp, ShoppingBag, Tag, Zap } from "lucide-react";
+import { ChevronLeft, TrendingUp, ShoppingBag, Tag, Zap, ShieldX } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAdmin } from "@/lib/useAdmin";
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer
@@ -36,11 +38,18 @@ interface DayStat {
 }
 
 export default function AnalyticsPage() {
+  const router = useRouter();
+  const { isAdmin, loading: adminLoading } = useAdmin();
   const [orders, setOrders] = useState<Order[]>([]);
   const [promos, setPromos] = useState<PromoCode[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!adminLoading && !isAdmin) router.push("/");
+  }, [isAdmin, adminLoading]);
+
+  useEffect(() => {
+    if (!isAdmin) return;
     async function load() {
       setLoading(true);
       const [{ data: ordersData }, { data: promosData }] = await Promise.all([
@@ -52,15 +61,13 @@ export default function AnalyticsPage() {
       setLoading(false);
     }
     load();
-  }, []);
+  }, [isAdmin]);
 
-  // Считаем метрики
   const totalRevenue = orders.reduce((sum, o) => sum + (o.total_price || 0), 0);
   const totalOrders = orders.length;
   const avgOrder = totalOrders > 0 ? Math.round(totalRevenue / totalOrders) : 0;
   const totalPromoDiscount = orders.reduce((sum, o) => sum + (o.promo_discount || 0), 0);
 
-  // График — последние 14 дней
   const chartData: DayStat[] = (() => {
     const days: Record<string, DayStat> = {};
     for (let i = 13; i >= 0; i--) {
@@ -80,7 +87,6 @@ export default function AnalyticsPage() {
     return Object.values(days);
   })();
 
-  // Топ игр
   const gameStats: Record<string, { title: string; count: number; revenue: number }> = {};
   orders.forEach((o) => {
     o.items?.forEach((item) => {
@@ -96,17 +102,36 @@ export default function AnalyticsPage() {
     .slice(0, 5);
 
   const cards = [
-    { label: "Общая выручка", value: `${totalRevenue.toLocaleString()} ₽`, icon: TrendingUp, color: "#63f3f7" },
-    { label: "Заказов", value: totalOrders, icon: ShoppingBag, color: "#63f3f7" },
-    { label: "Средний чек", value: `${avgOrder.toLocaleString()} ₽`, icon: Zap, color: "#63f3f7" },
-    { label: "Скидок по промо", value: `${totalPromoDiscount.toLocaleString()} ₽`, icon: Tag, color: "#63f3f7" },
+    { label: "Общая выручка", value: `${totalRevenue.toLocaleString()} ₽`, icon: TrendingUp },
+    { label: "Заказов", value: totalOrders, icon: ShoppingBag },
+    { label: "Средний чек", value: `${avgOrder.toLocaleString()} ₽`, icon: Zap },
+    { label: "Скидок по промо", value: `${totalPromoDiscount.toLocaleString()} ₽`, icon: Tag },
   ];
+
+  if (adminLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[#63f3f7] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!isAdmin) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
+        <ShieldX size={48} className="text-red-400" />
+        <p className="text-white/30 font-black uppercase italic text-xl">Нет доступа</p>
+        <Link href="/" className="px-6 py-3 bg-[#63f3f7] text-black font-black uppercase italic text-xs rounded-2xl">
+          На главную
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <main className="min-h-screen pt-10 pb-20 px-8">
       <div className="max-w-[1100px] mx-auto">
 
-        {/* Шапка */}
         <div className="flex items-center gap-4 mb-10">
           <Link href="/" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#63f3f7] transition-all">
             <ChevronLeft size={20} />
@@ -126,7 +151,6 @@ export default function AnalyticsPage() {
         ) : (
           <div className="flex flex-col gap-6">
 
-            {/* Карточки метрик */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {cards.map((card, i) => (
                 <motion.div
@@ -147,7 +171,6 @@ export default function AnalyticsPage() {
               ))}
             </div>
 
-            {/* График */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -178,8 +201,6 @@ export default function AnalyticsPage() {
             </motion.div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-              {/* Топ игр */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -205,7 +226,6 @@ export default function AnalyticsPage() {
                 )}
               </motion.div>
 
-              {/* Промокоды */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -235,7 +255,6 @@ export default function AnalyticsPage() {
               </motion.div>
             </div>
 
-            {/* Последние заказы */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -264,7 +283,6 @@ export default function AnalyticsPage() {
                 </div>
               )}
             </motion.div>
-
           </div>
         )}
       </div>

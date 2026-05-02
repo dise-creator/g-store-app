@@ -5,6 +5,7 @@ import { useCartStore, getTotalPrice } from "@/store/useCart";
 import { useSession } from "next-auth/react";
 import { supabase } from "@/lib/supabase";
 import { getLoyaltyInfo } from "@/lib/loyalty";
+import { selectCards } from "@/lib/cardSelector";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -51,7 +52,6 @@ export default function CheckoutPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
-  // Промокод
   const [promoInput, setPromoInput] = useState("");
   const [promoLoading, setPromoLoading] = useState(false);
   const [promoError, setPromoError] = useState<string | null>(null);
@@ -91,7 +91,6 @@ export default function CheckoutPage() {
     if (!promoInput.trim()) return;
     setPromoLoading(true);
     setPromoError(null);
-
     try {
       const res = await fetch("/api/promo", {
         method: "POST",
@@ -99,7 +98,6 @@ export default function CheckoutPage() {
         body: JSON.stringify({ code: promoInput, total: priceAfterLoyalty }),
       });
       const data = await res.json();
-
       if (!data.ok) {
         setPromoError(data.message);
         setAppliedPromo(null);
@@ -133,9 +131,9 @@ export default function CheckoutPage() {
         title: item.title,
         price: item.price,
         quantity: item.quantity,
+        region: item.region || "TR",
       }));
 
-      // Создаём заказ
       const { data: order, error: orderError } = await supabase
         .from("orders")
         .insert([{
@@ -151,12 +149,10 @@ export default function CheckoutPage() {
 
       if (orderError) throw orderError;
 
-      // Увеличиваем счётчик использования промокода
       if (appliedPromo) {
         await supabase.rpc("increment_promo_usage", { promo_id: appliedPromo.promo_id });
       }
 
-      // Обновляем лояльность
       const newTotalSpent = totalSpent + finalPrice;
       const newLoyalty = getLoyaltyInfo(newTotalSpent);
       await supabase
@@ -168,26 +164,50 @@ export default function CheckoutPage() {
         })
         .eq("email", session.user.email);
 
-      // Выдаём ваучеры
+      const allVouchers: { code: string; game_title: string; denomination: number }[] = [];
+
       for (const item of items) {
-        const code = `CLIC-${Math.random().toString(36).substring(2, 8).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
-        await supabase.from("vouchers").insert({
-          user_email: session.user.email,
-          game_id: item.id,
-          game_title: item.title,
-          code,
-          is_used: true,
-          order_id: order.id,
-        });
+        const itemRegion = (item as any).region || "TR";
+        const cards = selectCards(item.price);
+
+        for (let i = 0; i < item.quantity; i++) {
+          for (const card of cards) {
+            for (let q = 0; q < card.quantity; q++) {
+              const { data: voucher } = await supabase
+                .from("vouchers")
+                .select("*")
+                .eq("denomination", card.value)
+                .eq("region", itemRegion)
+                .eq("is_used", false)
+                .is("user_email", null)
+                .limit(1)
+                .single();
+
+              if (!voucher) {
+                throw new Error(`Нет ключей номинала ${card.value} ₽ для региона ${itemRegion}. Обратитесь в поддержку.`);
+              }
+
+              await supabase
+                .from("vouchers")
+                .update({
+                  is_used: true,
+                  user_email: session.user.email,
+                  order_id: order.id,
+                  game_title: item.title,
+                  game_id: item.id,
+                })
+                .eq("id", voucher.id);
+
+              allVouchers.push({
+                code: voucher.code,
+                game_title: item.title,
+                denomination: card.value,
+              });
+            }
+          }
+        }
       }
 
-      // Получаем созданные ваучеры
-      const { data: createdVouchers } = await supabase
-        .from("vouchers")
-        .select("code, game_title")
-        .eq("order_id", order.id);
-
-      // Отправляем уведомление в Telegram
       try {
         await fetch("/api/notify", {
           method: "POST",
@@ -197,7 +217,7 @@ export default function CheckoutPage() {
             items: preparedItems,
             total: finalPrice,
             email,
-            vouchers: createdVouchers || [],
+            vouchers: allVouchers,
           }),
         });
       } catch (notifyErr) {
@@ -232,16 +252,12 @@ export default function CheckoutPage() {
     <main className="min-h-screen pt-32 pb-20 px-6">
       <div className="max-w-[1100px] mx-auto">
 
-        {/* Шапка */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center gap-4 mb-10"
         >
-          <Link
-            href="/cart"
-            className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#63f3f7] transition-all"
-          >
+          <Link href="/cart" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#63f3f7] transition-all">
             <ChevronLeft size={20} />
           </Link>
           <div>
@@ -254,10 +270,8 @@ export default function CheckoutPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-8">
 
-          {/* Левая часть */}
           <div className="flex flex-col gap-6">
 
-            {/* Email */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -282,7 +296,6 @@ export default function CheckoutPage() {
               </p>
             </motion.div>
 
-            {/* Способ оплаты */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -340,7 +353,6 @@ export default function CheckoutPage() {
               </div>
             </motion.div>
 
-            {/* Гарантии */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -360,14 +372,12 @@ export default function CheckoutPage() {
             </motion.div>
           </div>
 
-          {/* Правая часть — итого */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.15 }}
             className="flex flex-col gap-4"
           >
-            {/* Товары */}
             <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6 flex flex-col gap-4">
               <p className="text-white/20 text-[10px] uppercase font-black tracking-[0.3em]">Ваш заказ</p>
               {items.map((item) => (
@@ -388,7 +398,6 @@ export default function CheckoutPage() {
               ))}
             </div>
 
-            {/* Промокод */}
             <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-8 h-8 rounded-xl bg-[#63f3f7]/10 border border-[#63f3f7]/20 flex items-center justify-center">
@@ -435,7 +444,6 @@ export default function CheckoutPage() {
               )}
             </div>
 
-            {/* Итого */}
             <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6 flex flex-col gap-4">
               {loyalty.discount > 0 && (
                 <>

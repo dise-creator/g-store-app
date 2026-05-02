@@ -5,12 +5,14 @@ import { useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Check, Copy, ShoppingBag, Home } from "lucide-react";
+import { Check, Copy, ShoppingBag, Home, CreditCard } from "lucide-react";
 
 interface Voucher {
   id: string;
   code: string;
   game_title: string;
+  denomination: number;
+  region: string;
 }
 
 function SuccessContent() {
@@ -25,7 +27,7 @@ function SuccessContent() {
     async function loadVouchers() {
       const { data } = await supabase
         .from("vouchers")
-        .select("id, code, game_title")
+        .select("id, code, game_title, denomination, region")
         .eq("order_id", orderId);
       if (data) setVouchers(data);
     }
@@ -36,6 +38,12 @@ function SuccessContent() {
     navigator.clipboard.writeText(code);
     setCopied(id);
     setTimeout(() => setCopied(null), 2000);
+  };
+
+  const getRegionFlag = (region: string) => {
+    if (region === "TR") return "🇹🇷";
+    if (region === "IN") return "🇮🇳";
+    return "";
   };
 
   return (
@@ -84,9 +92,20 @@ function SuccessContent() {
                 transition={{ delay: 0.4 + i * 0.1 }}
                 className="flex items-center justify-between p-4 bg-white/[0.02] border border-white/5 rounded-2xl gap-4"
               >
-                <div className="min-w-0">
-                  <p className="text-white/30 text-[9px] uppercase font-black tracking-widest mb-1">{voucher.game_title}</p>
-                  <p className="text-[#63f3f7] font-black text-sm font-mono tracking-widest">{voucher.code}</p>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <p className="text-white/30 text-[9px] uppercase font-black tracking-widest">{voucher.game_title}</p>
+                  </div>
+                  <p className="text-[#63f3f7] font-black text-sm font-mono tracking-widest mb-2">{voucher.code}</p>
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1 px-2 py-1 bg-[#63f3f7]/10 border border-[#63f3f7]/20 rounded-lg">
+                      <CreditCard size={10} className="text-[#63f3f7]" />
+                      <span className="text-[#63f3f7] text-[9px] font-black">
+                        PSN {voucher.denomination.toLocaleString()} ₽
+                      </span>
+                    </div>
+                    <span className="text-[10px]">{getRegionFlag(voucher.region)}</span>
+                  </div>
                 </div>
                 <motion.button
                   onClick={() => handleCopy(voucher.id, voucher.code)}

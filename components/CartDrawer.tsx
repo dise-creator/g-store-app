@@ -97,15 +97,11 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           >
             {/* Шапка */}
             <div className="p-8 flex items-center justify-between border-b border-white/10 bg-white/[0.02]">
-              <div className="flex items-center gap-3">
-                <h2 className="text-3xl font-black uppercase italic tracking-tighter text-white">
-                  Корзина
-                </h2>
-                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-[#63f3f7]/10 border border-[#63f3f7]/20 rounded-xl">
-                  <span className="text-base">{currentRegion.flag}</span>
-                  <span className="text-[9px] text-[#63f3f7] font-black uppercase tracking-widest">{currentRegion.code}</span>
-                </div>
-              </div>
+          <div className="flex items-center gap-3">
+  <h2 className="text-4xl font-black uppercase italic tracking-tighter text-white">
+    Корзина
+  </h2>
+</div>
               <button
                 onClick={onClose}
                 className="w-12 h-12 flex items-center justify-center bg-white/5 hover:bg-[#63f3f7] hover:text-black rounded-full transition-all text-white/50 border border-white/10"

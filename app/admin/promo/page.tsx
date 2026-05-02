@@ -3,8 +3,10 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, Plus, Trash2, Copy, Check, Loader2, Tag } from "lucide-react";
+import { ChevronLeft, Plus, Trash2, Copy, Check, Loader2, Tag, ShieldX } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAdmin } from "@/lib/useAdmin";
 
 interface PromoCode {
   id: string;
@@ -26,19 +28,25 @@ function generateCode(): string {
 }
 
 export default function PromoPage() {
+  const router = useRouter();
+  const { isAdmin, loading: adminLoading } = useAdmin();
   const [promos, setPromos] = useState<PromoCode[]>([]);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
-
   const [type, setType] = useState<"percent" | "fixed">("percent");
   const [value, setValue] = useState("");
   const [maxUses, setMaxUses] = useState("1");
   const [expiresAt, setExpiresAt] = useState("");
 
   useEffect(() => {
+    if (!adminLoading && !isAdmin) router.push("/");
+  }, [isAdmin, adminLoading]);
+
+  useEffect(() => {
+    if (!isAdmin) return;
     loadPromos();
-  }, []);
+  }, [isAdmin]);
 
   const loadPromos = async () => {
     setLoading(true);
@@ -53,23 +61,14 @@ export default function PromoPage() {
   const handleCreate = async () => {
     if (!value) return;
     setCreating(true);
-
     const code = generateCode();
     const { error } = await supabase.from("promo_codes").insert({
-      code,
-      type,
-      value: Number(value),
+      code, type, value: Number(value),
       max_uses: Number(maxUses),
       expires_at: expiresAt || null,
       is_active: true,
     });
-
-    if (!error) {
-      setValue("");
-      setMaxUses("1");
-      setExpiresAt("");
-      await loadPromos();
-    }
+    if (!error) { setValue(""); setMaxUses("1"); setExpiresAt(""); await loadPromos(); }
     setCreating(false);
   };
 
@@ -80,9 +79,7 @@ export default function PromoPage() {
 
   const handleToggle = async (id: string, current: boolean) => {
     await supabase.from("promo_codes").update({ is_active: !current }).eq("id", id);
-    setPromos((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, is_active: !current } : p))
-    );
+    setPromos((prev) => prev.map((p) => (p.id === id ? { ...p, is_active: !current } : p)));
   };
 
   const copyCode = (code: string) => {
@@ -90,6 +87,26 @@ export default function PromoPage() {
     setCopied(code);
     setTimeout(() => setCopied(null), 2000);
   };
+
+  if (adminLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[#63f3f7] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!isAdmin) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
+        <ShieldX size={48} className="text-red-400" />
+        <p className="text-white/30 font-black uppercase italic text-xl">Нет доступа</p>
+        <Link href="/" className="px-6 py-3 bg-[#63f3f7] text-black font-black uppercase italic text-xs rounded-2xl">
+          На главную
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <main className="min-h-screen pt-10 pb-20 px-8">
@@ -109,66 +126,37 @@ export default function PromoPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-          {/* Создание */}
           <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6 flex flex-col gap-4">
             <p className="text-white/30 text-[10px] uppercase font-black tracking-widest">Новый промокод</p>
 
-            {/* Тип */}
             <div className="flex gap-2">
               {(["percent", "fixed"] as const).map((t) => (
-                <button
-                  key={t}
-                  onClick={() => setType(t)}
-                  className={`flex-1 py-3 rounded-2xl font-black text-xs uppercase italic transition-all ${
-                    type === t
-                      ? "bg-[#63f3f7] text-black"
-                      : "bg-white/5 border border-white/10 text-white/40 hover:text-white"
-                  }`}
-                >
+                <button key={t} onClick={() => setType(t)}
+                  className={`flex-1 py-3 rounded-2xl font-black text-xs uppercase italic transition-all ${type === t ? "bg-[#63f3f7] text-black" : "bg-white/5 border border-white/10 text-white/40 hover:text-white"}`}>
                   {t === "percent" ? "Скидка %" : "Сумма ₽"}
                 </button>
               ))}
             </div>
 
-            {/* Значение */}
-            <input
-              type="number"
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
+            <input type="number" value={value} onChange={(e) => setValue(e.target.value)}
               placeholder={type === "percent" ? "Например: 15 (15%)" : "Например: 500 (500₽)"}
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#63f3f7]/40 transition-all placeholder-white/20"
-            />
+              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#63f3f7]/40 transition-all placeholder-white/20" />
 
-            {/* Кол-во использований */}
-            <input
-              type="number"
-              value={maxUses}
-              onChange={(e) => setMaxUses(e.target.value)}
-              placeholder="Кол-во использований"
-              min="1"
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#63f3f7]/40 transition-all placeholder-white/20"
-            />
+            <input type="number" value={maxUses} onChange={(e) => setMaxUses(e.target.value)}
+              placeholder="Кол-во использований" min="1"
+              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#63f3f7]/40 transition-all placeholder-white/20" />
 
-            {/* Дата истечения */}
-            <input
-              type="datetime-local"
-              value={expiresAt}
-              onChange={(e) => setExpiresAt(e.target.value)}
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#63f3f7]/40 transition-all"
-            />
+            <input type="datetime-local" value={expiresAt} onChange={(e) => setExpiresAt(e.target.value)}
+              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#63f3f7]/40 transition-all" />
             <p className="text-white/20 text-[10px] font-black -mt-2">Дата истечения (необязательно)</p>
 
-            <button
-              onClick={handleCreate}
-              disabled={creating || !value}
-              className="w-full py-4 bg-[#63f3f7] text-black font-black uppercase italic text-sm rounded-2xl hover:shadow-[0_0_30px_rgba(99,243,247,0.3)] transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2"
-            >
+            <button onClick={handleCreate} disabled={creating || !value}
+              className="w-full py-4 bg-[#63f3f7] text-black font-black uppercase italic text-sm rounded-2xl hover:shadow-[0_0_30px_rgba(99,243,247,0.3)] transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2">
               {creating ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />}
               Сгенерировать
             </button>
           </div>
 
-          {/* Список */}
           <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6">
             <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-4">
               Все промокоды ({promos.length})
@@ -183,17 +171,8 @@ export default function PromoPage() {
             <div className="flex flex-col gap-2 max-h-[500px] overflow-y-auto pr-1">
               <AnimatePresence>
                 {promos.map((p) => (
-                  <motion.div
-                    key={p.id}
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    className={`p-3 rounded-2xl border transition-all ${
-                      p.is_active
-                        ? "border-[#63f3f7]/10 bg-[#63f3f7]/[0.02]"
-                        : "border-white/5 bg-white/[0.01] opacity-40"
-                    }`}
-                  >
+                  <motion.div key={p.id} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                    className={`p-3 rounded-2xl border transition-all ${p.is_active ? "border-[#63f3f7]/10 bg-[#63f3f7]/[0.02]" : "border-white/5 bg-white/[0.01] opacity-40"}`}>
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2 min-w-0">
                         <Tag size={12} className="text-[#63f3f7] shrink-0" />
@@ -215,13 +194,9 @@ export default function PromoPage() {
                       <span className="text-[#63f3f7] text-[10px] font-black">
                         {p.type === "percent" ? `−${p.value}%` : `−${p.value}₽`}
                       </span>
-                      <span className="text-white/20 text-[10px]">
-                        {p.used_count}/{p.max_uses} использований
-                      </span>
+                      <span className="text-white/20 text-[10px]">{p.used_count}/{p.max_uses} использований</span>
                       {p.expires_at && (
-                        <span className="text-white/20 text-[10px]">
-                          до {new Date(p.expires_at).toLocaleDateString()}
-                        </span>
+                        <span className="text-white/20 text-[10px]">до {new Date(p.expires_at).toLocaleDateString()}</span>
                       )}
                     </div>
                   </motion.div>

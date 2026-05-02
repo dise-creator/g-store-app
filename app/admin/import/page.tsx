@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
-import { Search, Plus, Check, Loader2, ChevronLeft } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Search, Plus, Check, Loader2, ChevronLeft, ShieldX } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAdmin } from "@/lib/useAdmin";
 
 const RAWG_KEY = process.env.NEXT_PUBLIC_RAWG_API_KEY;
 
@@ -33,6 +35,8 @@ const CATEGORY_MAP: Record<string, string> = {
 };
 
 export default function ImportPage() {
+  const router = useRouter();
+  const { isAdmin, loading: adminLoading } = useAdmin();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<RawgGame[]>([]);
   const [loading, setLoading] = useState(false);
@@ -40,6 +44,10 @@ export default function ImportPage() {
   const [addingId, setAddingId] = useState<number | null>(null);
   const [price, setPrice] = useState<Record<number, string>>({});
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!adminLoading && !isAdmin) router.push("/");
+  }, [isAdmin, adminLoading]);
 
   const search = async () => {
     if (!query.trim()) return;
@@ -67,10 +75,7 @@ export default function ImportPage() {
 
   const handleAdd = async (game: RawgGame) => {
     const gamePrice = parseInt(price[game.id] || "0");
-    if (!gamePrice) {
-      alert("Введи цену!");
-      return;
-    }
+    if (!gamePrice) { alert("Введи цену!"); return; }
 
     setAddingId(game.id);
     setError(null);
@@ -89,11 +94,7 @@ export default function ImportPage() {
         description: details.description_raw?.slice(0, 200) || "",
         full_description: details.description_raw || "",
         screenshots: screenshots.slice(0, 5),
-        editions: [{
-          name: "Standard",
-          price: gamePrice,
-          features: ["Базовая игра"]
-        }],
+        editions: [{ name: "Standard", price: gamePrice, features: ["Базовая игра"] }],
         discount_percent: 0,
       });
 
@@ -111,16 +112,32 @@ export default function ImportPage() {
     }
   };
 
+  if (adminLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[#63f3f7] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!isAdmin) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
+        <ShieldX size={48} className="text-red-400" />
+        <p className="text-white/30 font-black uppercase italic text-xl">Нет доступа</p>
+        <Link href="/" className="px-6 py-3 bg-[#63f3f7] text-black font-black uppercase italic text-xs rounded-2xl">
+          На главную
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <main className="min-h-screen pt-10 pb-20 px-8">
       <div className="max-w-[1200px] mx-auto">
 
-        {/* Шапка */}
         <div className="flex items-center gap-4 mb-10">
-          <Link
-            href="/"
-            className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#63f3f7] transition-all"
-          >
+          <Link href="/" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#63f3f7] transition-all">
             <ChevronLeft size={20} />
           </Link>
           <div>
@@ -131,7 +148,6 @@ export default function ImportPage() {
           </div>
         </div>
 
-        {/* Поиск */}
         <div className="flex gap-3 mb-8">
           <div className="flex-1 relative">
             <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" />
@@ -144,55 +160,34 @@ export default function ImportPage() {
               className="w-full pl-11 pr-5 py-4 bg-white/[0.03] border border-white/10 rounded-2xl text-white placeholder-white/20 font-bold text-sm focus:outline-none focus:border-[#63f3f7]/40 transition-all"
             />
           </div>
-          <button
-            onClick={search}
-            disabled={loading}
-            className="px-8 py-4 bg-[#63f3f7] text-black font-black text-sm uppercase italic rounded-2xl hover:shadow-[0_0_20px_rgba(99,243,247,0.3)] transition-all active:scale-95 disabled:opacity-50 flex items-center gap-2"
-          >
+          <button onClick={search} disabled={loading}
+            className="px-8 py-4 bg-[#63f3f7] text-black font-black text-sm uppercase italic rounded-2xl hover:shadow-[0_0_20px_rgba(99,243,247,0.3)] transition-all active:scale-95 disabled:opacity-50 flex items-center gap-2">
             {loading ? <Loader2 size={18} className="animate-spin" /> : <Search size={18} />}
             Найти
           </button>
         </div>
 
-        {/* Ошибка */}
         {error && (
           <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-400 text-sm font-bold">
             {error}
           </div>
         )}
 
-        {/* Результаты */}
         <AnimatePresence>
           {results.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"
-            >
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
               {results.map((game, i) => {
                 const isAdded = addedIds.has(game.id);
                 const isAdding = addingId === game.id;
-
                 return (
-                  <motion.div
-                    key={game.id}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: i * 0.05 }}
-                    className="flex flex-col gap-2"
-                  >
-                    {/* Обложка */}
+                  <motion.div key={game.id} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: i * 0.05 }} className="flex flex-col gap-2">
                     <div className="relative aspect-[3/4] rounded-2xl overflow-hidden border border-white/5 bg-white/[0.02]">
                       {game.background_image ? (
-                        <img
-                          src={game.background_image}
-                          alt={game.name}
-                          className="w-full h-full object-cover"
-                        />
+                        <img src={game.background_image} alt={game.name} className="w-full h-full object-cover" />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-white/10 text-xs text-center p-2">
-                          Нет фото
-                        </div>
+                        <div className="w-full h-full flex items-center justify-center text-white/10 text-xs text-center p-2">Нет фото</div>
                       )}
                       {isAdded && (
                         <div className="absolute inset-0 bg-[#63f3f7]/20 flex items-center justify-center">
@@ -200,38 +195,18 @@ export default function ImportPage() {
                         </div>
                       )}
                     </div>
-
-                    {/* Название */}
                     <p className="text-white/80 text-[10px] font-black uppercase italic truncate">{game.name}</p>
-
-                    {/* Цена */}
-                    <input
-                      type="number"
-                      value={price[game.id] || ""}
+                    <input type="number" value={price[game.id] || ""}
                       onChange={e => setPrice(prev => ({ ...prev, [game.id]: e.target.value }))}
                       placeholder="Цена ₽"
-                      className="w-full px-3 py-2 bg-white/[0.03] border border-white/10 rounded-xl text-white text-xs font-bold focus:outline-none focus:border-[#63f3f7]/40 transition-all placeholder-white/20"
-                    />
-
-                    {/* Кнопка */}
-                    <button
-                      onClick={() => handleAdd(game)}
-                      disabled={isAdded || isAdding}
+                      className="w-full px-3 py-2 bg-white/[0.03] border border-white/10 rounded-xl text-white text-xs font-bold focus:outline-none focus:border-[#63f3f7]/40 transition-all placeholder-white/20" />
+                    <button onClick={() => handleAdd(game)} disabled={isAdded || isAdding}
                       className={`w-full py-2.5 rounded-xl font-black text-[10px] uppercase italic tracking-wider transition-all flex items-center justify-center gap-1.5 ${
-                        isAdded
-                          ? "bg-[#63f3f7]/10 border border-[#63f3f7]/20 text-[#63f3f7] cursor-default"
-                          : isAdding
-                          ? "bg-white/5 border border-white/10 text-white/30 cursor-wait"
-                          : "bg-[#63f3f7] text-black hover:shadow-[0_0_15px_rgba(99,243,247,0.3)] active:scale-95"
-                      }`}
-                    >
-                      {isAdded ? (
-                        <><Check size={12} /> Добавлено</>
-                      ) : isAdding ? (
-                        <><Loader2 size={12} className="animate-spin" /> Добавляем...</>
-                      ) : (
-                        <><Plus size={12} /> Добавить</>
-                      )}
+                        isAdded ? "bg-[#63f3f7]/10 border border-[#63f3f7]/20 text-[#63f3f7] cursor-default"
+                        : isAdding ? "bg-white/5 border border-white/10 text-white/30 cursor-wait"
+                        : "bg-[#63f3f7] text-black hover:shadow-[0_0_15px_rgba(99,243,247,0.3)] active:scale-95"
+                      }`}>
+                      {isAdded ? <><Check size={12} /> Добавлено</> : isAdding ? <><Loader2 size={12} className="animate-spin" /> Добавляем...</> : <><Plus size={12} /> Добавить</>}
                     </button>
                   </motion.div>
                 );
