@@ -1,23 +1,95 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import Link from "next/link";
 import AnimatedBackground from "@/components/AnimatedBackground";
 
 export default function SignInPage() {
   const router = useRouter();
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [telegramUser, setTelegramUser] = useState<any>(null);
+  const [email, setEmail] = useState("");
+  const [emailLoading, setEmailLoading] = useState(false);
+  const [emailError, setEmailError] = useState("");
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") router.push("/");
+      if (e.key === "Escape" && !showEmailModal) router.push("/");
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [router]);
+  }, [router, showEmailModal]);
+
+  useEffect(() => {
+    // Загружаем Telegram виджет скрипт
+    const script = document.createElement("script");
+    script.src = "https://telegram.org/js/telegram-widget.js?22";
+    script.setAttribute("data-telegram-login", "clicps_bot");
+    script.setAttribute("data-size", "large");
+    script.setAttribute("data-onauth", "onTelegramAuth(user)");
+    script.setAttribute("data-request-access", "write");
+    script.async = true;
+    document.getElementById("telegram-widget")?.appendChild(script);
+
+    // Глобальная функция для callback от Telegram
+    (window as any).onTelegramAuth = async (user: any) => {
+      // Сначала верифицируем данные на сервере
+      const res = await fetch("/api/auth/telegram", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(user),
+      });
+
+      if (res.ok) {
+        setTelegramUser(user);
+        setShowEmailModal(true);
+      }
+    };
+
+    return () => {
+      delete (window as any).onTelegramAuth;
+    };
+  }, []);
+
+  const handleEmailSubmit = async () => {
+    if (!email.includes("@")) {
+      setEmailError("Введи корректный email");
+      return;
+    }
+
+    setEmailLoading(true);
+    setEmailError("");
+
+    try {
+      // Сохраняем пользователя в БД
+      await fetch("/api/auth/telegram-signin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          telegramId: telegramUser.id,
+          name: telegramUser.first_name + (telegramUser.last_name ? " " + telegramUser.last_name : ""),
+          username: telegramUser.username,
+          photo: telegramUser.photo_url,
+          email,
+        }),
+      });
+
+      // Входим через credentials с email
+      await signIn("credentials", {
+        email,
+        telegramId: String(telegramUser.id),
+        callbackUrl: "/",
+      });
+    } catch {
+      setEmailError("Ошибка входа, попробуй снова");
+    } finally {
+      setEmailLoading(false);
+    }
+  };
 
   const dark3D = {
     color: "#2D3748",
@@ -79,12 +151,64 @@ export default function SignInPage() {
               Войти через VK ID
             </span>
           </button>
+
+          {/* Telegram виджет */}
+          <div className="w-full flex items-center justify-center py-1">
+            <div id="telegram-widget" />
+          </div>
         </div>
 
         <p className="mt-14 text-center text-[8px] text-white/10 uppercase font-bold tracking-[0.2em]">
           Нажмите <span className="text-white/30 border border-white/10 px-2 py-0.5 rounded mx-1">ESC</span> для отмены
         </p>
       </motion.div>
+
+      {/* Модалка с email */}
+      <AnimatePresence>
+        {showEmailModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-md px-6"
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              className="w-full max-w-[400px] bg-[#0a0a0c] border border-white/10 rounded-[2rem] p-8 flex flex-col gap-5"
+            >
+              <div>
+                <p className="text-white font-black uppercase italic text-xl">Почти готово!</p>
+                <p className="text-white/30 text-xs mt-1">
+                  Привет, {telegramUser?.first_name}! Введи email для аккаунта
+                </p>
+              </div>
+
+              <input
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                onKeyDown={e => e.key === "Enter" && handleEmailSubmit()}
+                placeholder="your@email.com"
+                className="w-full px-5 py-4 bg-white/5 border border-white/10 focus:border-[#63f3f7]/40 rounded-2xl text-white font-bold text-sm outline-none transition-all placeholder-white/20"
+              />
+
+              {emailError && (
+                <p className="text-red-400 text-xs font-black">{emailError}</p>
+              )}
+
+              <button
+                onClick={handleEmailSubmit}
+                disabled={emailLoading}
+                className="w-full py-4 bg-[#63f3f7] text-black font-black uppercase italic text-sm rounded-2xl disabled:opacity-50 transition-all hover:shadow-[0_0_20px_rgba(99,243,247,0.3)]"
+              >
+                {emailLoading ? "Входим..." : "Войти"}
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }
