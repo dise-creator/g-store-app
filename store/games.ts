@@ -17,6 +17,7 @@ export interface Game {
   shortDescription: string;
   fullDescription: string;
   description?: string;
+  full_description?: string;
   screenshots: string[];
   editions: GameEdition[];
   videoUrl?: string;

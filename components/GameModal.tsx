@@ -201,12 +201,16 @@ export default function GameModal() {
               <p className="text-white/40 text-sm leading-relaxed line-clamp-2">{selectedGame?.shortDescription}</p>
             </div>
 
-            {/* Описание на мобилке */}
-            {/* Описание на мобилке */}
+   {/* Описание на мобилке */}
 <div className="md:hidden flex flex-col gap-2">
   <p className="text-white/50 text-sm leading-relaxed">
-    {(selectedGame as any)?.description || selectedGame?.shortDescription}
+    {selectedGame?.description || selectedGame?.shortDescription}
   </p>
+  {(selectedGame?.full_description || selectedGame?.fullDescription) && (
+    <p className="text-white/25 text-xs leading-relaxed line-clamp-4">
+      {selectedGame?.full_description || selectedGame?.fullDescription}
+    </p>
+  )}
 </div>
 
             {/* Выбор издания */}
