@@ -66,6 +66,7 @@ export default function RootLayout({
         ${bangers.variable}
         ${arapey.variable}
         ${imFell.variable}
+        ${rajdhani.variable}
         font-[family-name:var(--font-rajdhani)]
         antialiased bg-[#0d1a0f] text-white
       `}>

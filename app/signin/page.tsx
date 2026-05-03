@@ -51,6 +51,57 @@ export default function SignInPage() {
     };
   }, []);
 
+  const handleEmailSubmit = async () => {
+    if (!email.includes("@")) {
+      setEmailError("Введи корректный email");
+      return;
+    }
+
+    setEmailLoading(true);
+    setEmailError("");
+
+    try {
+      const res = await fetch("/api/auth/telegram-signin-cookie", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          tgId: String(telegramUser.id),
+          tgName: telegramUser.first_name,
+          tgPhoto: telegramUser.photo_url,
+        }),
+      });
+
+      const data = await res.json();
+      console.log("Ответ сервера:", data);
+
+      if (!data.ok) {
+        setEmailError(data.error || "Ошибка");
+        return;
+      }
+
+      const result = await signIn("credentials", {
+        email,
+        telegramId: data.telegramId,
+        callbackUrl: "/",
+        redirect: false,
+      });
+
+      console.log("SignIn result:", result);
+
+      if (result?.ok) {
+        window.location.href = "/";
+      } else {
+        setEmailError("Ошибка входа: " + result?.error);
+      }
+    } catch (e) {
+      console.error("Ошибка:", e);
+      setEmailError("Ошибка входа, попробуй снова");
+    } finally {
+      setEmailLoading(false);
+    }
+  };
+
   const dark3D = {
     color: "#2D3748",
     textShadow: "0 1px 0 #1a202c, 0 2px 0 #1a202c, 0 3px 0 #1a202c, 0 5px 10px rgba(0,0,0,0.7)"
@@ -146,6 +197,7 @@ export default function SignInPage() {
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
+                onKeyDown={e => e.key === "Enter" && handleEmailSubmit()}
                 placeholder="your@email.com"
                 className="w-full px-5 py-4 bg-white/5 border border-white/10 focus:border-[#63f3f7]/40 rounded-2xl text-white font-bold text-sm outline-none transition-all placeholder-white/20"
               />
@@ -153,8 +205,9 @@ export default function SignInPage() {
                 <p className="text-red-400 text-xs font-black">{emailError}</p>
               )}
               <button
+                onClick={handleEmailSubmit}
                 disabled={emailLoading}
-                className="w-full py-4 bg-[#63f3f7] text-black font-black uppercase italic text-sm rounded-2xl disabled:opacity-50"
+                className="w-full py-4 bg-[#63f3f7] text-black font-black uppercase italic text-sm rounded-2xl disabled:opacity-50 transition-all hover:shadow-[0_0_20px_rgba(99,243,247,0.3)]"
               >
                 {emailLoading ? "Входим..." : "Войти"}
               </button>
