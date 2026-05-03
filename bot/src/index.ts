@@ -12,45 +12,76 @@ const supabase = createClient(
 );
 
 const SITE_URL = "https://clicps.ru";
-const MINI_APP_URL = "https://t.me/clicps_bot/clic";
 
-// Главное меню
 const mainMenu = () =>
   Markup.inlineKeyboard([
     [Markup.button.webApp("🛍 ОТКРЫТЬ МАГАЗИН", SITE_URL)],
-    [Markup.button.callback("🎮  КАТАЛОГ ИГР", "catalog")],
+    [Markup.button.callback("🎮 КАТАЛОГ ИГР", "catalog")],
     [
-      Markup.button.callback("🛒  КОРЗИНА", "cart"),
-      Markup.button.callback("❤️  ИЗБРАННОЕ", "wishlist"),
+      Markup.button.callback("🛒 КОРЗИНА", "cart"),
+      Markup.button.callback("❤️ ИЗБРАННОЕ", "wishlist"),
     ],
-    [Markup.button.url("🌐  САЙТ", SITE_URL)],
+    [
+      Markup.button.callback("👤 ПРОФИЛЬ", "profile"),
+      Markup.button.callback("💬 ПОДДЕРЖКА", "support"),
+    ],
   ]);
 
-// /start
 bot.start(async (ctx) => {
   const name = ctx.from.first_name;
-  await ctx.reply(
-    [
-      `🎮 *CLIC STORE*`,
-      ``,
-      `Привет, *${name}*\\! 👋`,
-      ``,
-      `Магазин карт пополнения *PlayStation Network*\\.`,
-      `Покупай игры дешевле через 🇹🇷 Турцию и 🇮🇳 Индию\\.`,
-      ``,
-      `━━━━━━━━━━━━━━━`,
-      `⚡️ Моментальная доставка`,
-      `🔒 Безопасная оплата`,
-      `💰 Скидки до 65%`,
-    ].join("\n"),
-    {
-      parse_mode: "MarkdownV2",
-      ...mainMenu(),
-    }
-  );
+
+  try {
+    await ctx.replyWithPhoto(
+      { url: "https://clicps.ru/hero/1.jpg" },
+      {
+        caption: [
+          `🎮 *CLIC STORE* — Цифровые ключи`,
+          ``,
+          `Привет, *${name}*\\! 👋`,
+          ``,
+          `Покупай карты пополнения *PlayStation Network*`,
+          `по выгодным ценам через региональные аккаунты\\.`,
+          ``,
+          `🇹🇷 *Турция* — скидка до 65%`,
+          `🇮🇳 *Индия* — скидка до 45%`,
+          ``,
+          `━━━━━━━━━━━━━━━━━━━`,
+          `⚡️ Моментальная доставка на email`,
+          `🔒 Официальные карты PSN`,
+          `💰 Программа лояльности`,
+          `🏆 Скидка до 15% постоянным клиентам`,
+        ].join("\n"),
+        parse_mode: "MarkdownV2",
+        ...mainMenu(),
+      }
+    );
+  } catch {
+    await ctx.reply(
+      [
+        `🎮 *CLIC STORE* — Цифровые ключи`,
+        ``,
+        `Привет, *${name}*\\! 👋`,
+        ``,
+        `Покупай карты пополнения *PlayStation Network*`,
+        `по выгодным ценам через региональные аккаунты\\.`,
+        ``,
+        `🇹🇷 *Турция* — скидка до 65%`,
+        `🇮🇳 *Индия* — скидка до 45%`,
+        ``,
+        `━━━━━━━━━━━━━━━━━━━`,
+        `⚡️ Моментальная доставка на email`,
+        `🔒 Официальные карты PSN`,
+        `💰 Программа лояльности`,
+        `🏆 Скидка до 15% постоянным клиентам`,
+      ].join("\n"),
+      {
+        parse_mode: "MarkdownV2",
+        ...mainMenu(),
+      }
+    );
+  }
 });
 
-// Каталог
 bot.action("catalog", async (ctx) => {
   await ctx.answerCbQuery();
 
@@ -65,7 +96,7 @@ bot.action("catalog", async (ctx) => {
   }
 
   await ctx.reply(
-    "🎮 *КАТАЛОГ ИГР*\n━━━━━━━━━━━━━━━\nВыбери игру:",
+    "🎮 *КАТАЛОГ ИГР*\n━━━━━━━━━━━━━━━\nВыбери игру для покупки:",
     { parse_mode: "Markdown" }
   );
 
@@ -80,7 +111,7 @@ bot.action("catalog", async (ctx) => {
       `━━━━━━━━━━━━━━━`,
       discount,
       `💰 Цена: *${price.toLocaleString()} ₽*`,
-      game.discount_percent ? `~~${game.price.toLocaleString()} ₽~~` : "",
+      game.discount_percent ? `~Без скидки: ${game.price.toLocaleString()} ₽~` : "",
       ``,
       `📝 ${game.shortDescription || "Описание отсутствует"}`,
     ].filter(Boolean).join("\n");
@@ -92,8 +123,8 @@ bot.action("catalog", async (ctx) => {
           caption,
           parse_mode: "Markdown",
           ...Markup.inlineKeyboard([
-            [Markup.button.webApp(`🛍 Купить — ${price.toLocaleString()} ₽`, SITE_URL)],
-            [Markup.button.callback(`🛒 В корзину бота — ${price.toLocaleString()} ₽`, `add_${game.id}`)],
+            [Markup.button.webApp(`🛍 Купить за ${price.toLocaleString()} ₽`, SITE_URL)],
+            [Markup.button.callback(`🛒 В корзину бота`, `add_${game.id}`)],
           ]),
         }
       );
@@ -101,22 +132,22 @@ bot.action("catalog", async (ctx) => {
       await ctx.reply(caption, {
         parse_mode: "Markdown",
         ...Markup.inlineKeyboard([
-          [Markup.button.webApp(`🛍 Купить — ${price.toLocaleString()} ₽`, SITE_URL)],
-          [Markup.button.callback(`🛒 В корзину бота — ${price.toLocaleString()} ₽`, `add_${game.id}`)],
+          [Markup.button.webApp(`🛍 Купить за ${price.toLocaleString()} ₽`, SITE_URL)],
+          [Markup.button.callback(`🛒 В корзину бота`, `add_${game.id}`)],
         ]),
       });
     }
   }
 
   await ctx.reply(
-    "⬆️ Выбери игру выше",
+    "⬆️ Выбери игру выше или открой полный каталог на сайте",
     Markup.inlineKeyboard([
+      [Markup.button.webApp("🛍 Полный каталог", SITE_URL)],
       [Markup.button.callback("⬅️ Главное меню", "back_home")],
     ])
   );
 });
 
-// Добавить в корзину
 bot.action(/^add_(.+)$/, async (ctx) => {
   await ctx.answerCbQuery("✅ Добавлено в корзину!");
   const gameId = ctx.match[1];
@@ -169,7 +200,6 @@ bot.action(/^add_(.+)$/, async (ctx) => {
   );
 });
 
-// Корзина
 bot.action("cart", async (ctx) => {
   await ctx.answerCbQuery();
   const userId = ctx.from.id;
@@ -181,11 +211,12 @@ bot.action("cart", async (ctx) => {
 
   if (!cartItems || cartItems.length === 0) {
     return ctx.reply(
-      "🛒 *Корзина пуста*\n\nДобавь игры из каталога!",
+      "🛒 *Корзина пуста*\n\nДобавь игры из каталога или купи прямо на сайте\\!",
       {
-        parse_mode: "Markdown",
+        parse_mode: "MarkdownV2",
         ...Markup.inlineKeyboard([
-          [Markup.button.callback("🎮 Перейти в каталог", "catalog")],
+          [Markup.button.webApp("🛍 Открыть магазин", SITE_URL)],
+          [Markup.button.callback("🎮 Каталог", "catalog")],
           [Markup.button.callback("⬅️ Главное меню", "back_home")],
         ]),
       }
@@ -205,12 +236,14 @@ bot.action("cart", async (ctx) => {
     ),
     `━━━━━━━━━━━━━━━`,
     `💰 *Итого: ${total.toLocaleString()} ₽*`,
+    ``,
+    `Для оформления заказа перейди на сайт\\.`,
   ].join("\n");
 
   await ctx.reply(text, {
-    parse_mode: "Markdown",
+    parse_mode: "MarkdownV2",
     ...Markup.inlineKeyboard([
-      [Markup.button.webApp("🛍 Оформить на сайте", SITE_URL)],
+      [Markup.button.webApp("💳 Оформить заказ", SITE_URL)],
       [Markup.button.callback("🗑 Очистить корзину", "clear_cart")],
       [Markup.button.callback("🎮 Продолжить покупки", "catalog")],
       [Markup.button.callback("⬅️ Главное меню", "back_home")],
@@ -218,14 +251,13 @@ bot.action("cart", async (ctx) => {
   });
 });
 
-// Очистить корзину
 bot.action("clear_cart", async (ctx) => {
   await ctx.answerCbQuery();
   await supabase.from("tg_cart").delete().eq("telegram_id", ctx.from.id);
   await ctx.reply(
     "🗑 *Корзина очищена*",
     {
-      parse_mode: "Markdown",
+      parse_mode: "MarkdownV2",
       ...Markup.inlineKeyboard([
         [Markup.button.callback("🎮 Каталог", "catalog")],
         [Markup.button.callback("⬅️ Главное меню", "back_home")],
@@ -234,11 +266,15 @@ bot.action("clear_cart", async (ctx) => {
   );
 });
 
-// Избранное
 bot.action("wishlist", async (ctx) => {
   await ctx.answerCbQuery();
   await ctx.reply(
-    "❤️ *ИЗБРАННОЕ*\n\nИзбранное синхронизировано с сайтом\\.\nОткрой сайт чтобы управлять списком\\.",
+    [
+      `❤️ *ИЗБРАННОЕ*`,
+      ``,
+      `Твой список избранного синхронизирован с сайтом\\.`,
+      `Открой магазин чтобы управлять списком и купить игры\\.`,
+    ].join("\n"),
     {
       parse_mode: "MarkdownV2",
       ...Markup.inlineKeyboard([
@@ -249,7 +285,46 @@ bot.action("wishlist", async (ctx) => {
   );
 });
 
-// Назад на главную
+bot.action("profile", async (ctx) => {
+  await ctx.answerCbQuery();
+  await ctx.reply(
+    [
+      `👤 *МОЙ ПРОФИЛЬ*`,
+      ``,
+      `Управляй профилем, смотри историю заказов`,
+      `и свои ключи активации на сайте\\.`,
+    ].join("\n"),
+    {
+      parse_mode: "MarkdownV2",
+      ...Markup.inlineKeyboard([
+        [Markup.button.webApp("👤 Открыть профиль", `${SITE_URL}/profile`)],
+        [Markup.button.callback("⬅️ Главное меню", "back_home")],
+      ]),
+    }
+  );
+});
+
+bot.action("support", async (ctx) => {
+  await ctx.answerCbQuery();
+  await ctx.reply(
+    [
+      `💬 *ПОДДЕРЖКА*`,
+      ``,
+      `Есть вопросы? Мы поможем\\!`,
+      ``,
+      `📧 Напиши нам в чат поддержки`,
+      `⏰ Отвечаем в течение 30 минут`,
+    ].join("\n"),
+    {
+      parse_mode: "MarkdownV2",
+      ...Markup.inlineKeyboard([
+        [Markup.button.url("💬 Написать в поддержку", "https://t.me/clic_support")],
+        [Markup.button.callback("⬅️ Главное меню", "back_home")],
+      ]),
+    }
+  );
+});
+
 bot.action("back_home", async (ctx) => {
   await ctx.answerCbQuery();
   await ctx.reply("Главное меню:", mainMenu());
