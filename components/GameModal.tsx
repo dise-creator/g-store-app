@@ -116,11 +116,11 @@ export default function GameModal() {
       <div className="absolute inset-0 bg-black/90 backdrop-blur-2xl" onClick={closeModal} />
 
       <div
-        className="relative z-[210] w-full max-w-[1300px] bg-[#0a0f1e] md:border md:border-[#1a2a4a] rounded-t-[2rem] md:rounded-[2.5rem] overflow-hidden flex flex-col md:flex-row shadow-2xl"
+        className="relative z-[210] w-full max-w-[1300px] bg-[#0a0f1e] md:border md:border-[#1a2a4a] md:rounded-[2.5rem] overflow-hidden flex flex-col md:flex-row shadow-2xl"
         style={{
           boxShadow: "0 0 80px rgba(0, 60, 160, 0.2)",
-          maxHeight: "95vh",
-          height: "auto",
+          height: "100dvh",
+          maxHeight: "100dvh",
         }}
       >
         {/* Кнопка закрытия */}
@@ -131,11 +131,8 @@ export default function GameModal() {
           <X size={18} />
         </button>
 
-        {/* Индикатор свайпа на мобилке */}
-        <div className="md:hidden w-12 h-1 bg-white/20 rounded-full mx-auto mt-3 mb-1 shrink-0" />
-
         {/* ЛЕВАЯ ЧАСТЬ: Слайдер */}
-        <div className="relative w-full md:w-[48%] h-[25vh] md:h-full group bg-[#060b16] shrink-0">
+        <div className="relative w-full md:w-[48%] h-[28vh] md:h-full group bg-[#060b16] shrink-0">
           {screenshots[currentSlide] && (
             <Image
               key={currentSlide}
@@ -165,8 +162,8 @@ export default function GameModal() {
             </>
           )}
 
-          <div className="absolute bottom-6 left-4 md:hidden">
-            <h2 className="font-black italic uppercase text-2xl text-white tracking-tighter leading-none drop-shadow-2xl">
+          <div className="absolute bottom-4 left-4 md:hidden">
+            <h2 className="font-black italic uppercase text-xl text-white tracking-tighter leading-none drop-shadow-2xl">
               {selectedGame?.title}
             </h2>
           </div>
@@ -174,7 +171,7 @@ export default function GameModal() {
 
         {/* ПРАВАЯ ЧАСТЬ */}
         <div className="flex flex-col flex-1 overflow-y-auto no-scrollbar bg-[#0a0f1e]">
-          <div className="flex flex-col flex-1 p-4 md:p-10 gap-3 md:gap-5">
+          <div className="flex flex-col flex-1 p-4 md:p-10 gap-3 md:gap-5 pb-0">
 
             {/* Бейджи */}
             <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
@@ -301,7 +298,7 @@ export default function GameModal() {
               </div>
             )}
 
-            {/* Инструкция — скрыта на мобилке */}
+            {/* Инструкция — только десктоп */}
             <div className="hidden md:flex items-center gap-4 p-4 bg-white/[0.02] border border-white/5 rounded-2xl overflow-x-auto no-scrollbar">
               {[
                 { step: "1", text: "Купи карту PSN" },
@@ -319,64 +316,64 @@ export default function GameModal() {
                 </React.Fragment>
               ))}
             </div>
+          </div>
 
-            {/* Итого и кнопка */}
-            <div className="pt-3 border-t border-white/5 sticky bottom-0 bg-[#0a0f1e] pb-4 md:pb-0">
-              <div className="flex items-center justify-between mb-3">
-                <div>
-                  <span className="text-[9px] text-white/20 uppercase font-bold tracking-widest block">Итого к оплате</span>
-                  <span className="text-[#63f3f7] text-[10px] font-black mt-0.5 block">
-                    Экономия {savings.toLocaleString()} ₽ {currentRegion.flag}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 md:gap-4">
-                  <span className="text-white/20 text-base md:text-xl line-through font-black">
-                    {originalPrice.toLocaleString()} ₽
-                  </span>
-                  <div className="flex items-baseline gap-1">
-                    <span className="font-black italic text-3xl md:text-5xl text-white">{displayPrice.toLocaleString()}</span>
-                    <span className="text-[#63f3f7] font-black text-base md:text-xl">₽</span>
-                  </div>
+          {/* Итого и кнопка — прилипает к низу */}
+          <div className="sticky bottom-0 bg-[#0a0f1e] border-t border-white/5 p-4 md:p-10 md:pt-5">
+            <div className="flex items-center justify-between mb-3">
+              <div>
+                <span className="text-[9px] text-white/20 uppercase font-bold tracking-widest block">Итого к оплате</span>
+                <span className="text-[#63f3f7] text-[10px] font-black mt-0.5 block">
+                  Экономия {savings.toLocaleString()} ₽ {currentRegion.flag}
+                </span>
+              </div>
+              <div className="flex items-center gap-2 md:gap-4">
+                <span className="text-white/20 text-base md:text-xl line-through font-black">
+                  {originalPrice.toLocaleString()} ₽
+                </span>
+                <div className="flex items-baseline gap-1">
+                  <span className="font-black italic text-3xl md:text-5xl text-white">{displayPrice.toLocaleString()}</span>
+                  <span className="text-[#63f3f7] font-black text-base md:text-xl">₽</span>
                 </div>
               </div>
+            </div>
 
-              <div className="relative">
-                <AnimatePresence>
-                  {showCardAnimation && currentEdition?.cards && (
-                    <div className="absolute inset-0 flex items-center justify-center gap-3 z-10 pointer-events-none">
-                      {currentEdition.cards.map((card: any, idx: number) => (
-                        <PSNCard key={idx} value={card.value} animate={showCardAnimation} />
-                      ))}
-                    </div>
-                  )}
-                </AnimatePresence>
+            <div className="relative">
+              <AnimatePresence>
+                {showCardAnimation && currentEdition?.cards && (
+                  <div className="absolute inset-0 flex items-center justify-center gap-3 z-10 pointer-events-none">
+                    {currentEdition.cards.map((card: any, idx: number) => (
+                      <PSNCard key={idx} value={card.value} animate={showCardAnimation} />
+                    ))}
+                  </div>
+                )}
+              </AnimatePresence>
 
-                <motion.button
-                  onClick={handleAddToCart}
-                  disabled={showCardAnimation}
-                  whileTap={{ scale: 0.97 }}
-                  className={`group relative w-full h-14 md:h-16 rounded-2xl flex items-center justify-center gap-3 transition-all overflow-hidden text-sm ${
-                    isAdded
-                      ? "bg-[#63f3f7] shadow-[0_0_30px_rgba(99,243,247,0.4)]"
-                      : showCardAnimation
-                      ? "bg-[#63f3f7]/50 cursor-wait"
-                      : "bg-[#63f3f7] hover:shadow-[0_0_30px_rgba(99,243,247,0.3)]"
-                  }`}
-                >
-                  <div className={`flex items-center gap-3 transition-all duration-300 ${isAdded || showCardAnimation ? "translate-y-10 opacity-0" : "translate-y-0 opacity-100"}`}>
-                    <ShoppingCart size={18} className="text-black" />
-                    <span className="text-black font-black uppercase tracking-[0.15em] text-sm">Добавить в корзину</span>
-                  </div>
-                  <div className={`absolute inset-0 flex items-center justify-center gap-3 transition-all duration-300 ${showCardAnimation ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"}`}>
-                    <CreditCard size={18} className="text-black animate-bounce" />
-                    <span className="text-black font-black uppercase tracking-[0.15em] text-sm">Добавляем...</span>
-                  </div>
-                  <div className={`absolute inset-0 flex items-center justify-center gap-3 transition-all duration-300 ${isAdded ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"}`}>
-                    <Check size={18} className="text-black" />
-                    <span className="text-black font-black uppercase tracking-[0.15em] text-sm">Товар добавлен!</span>
-                  </div>
-                </motion.button>
-              </div>
+              <motion.button
+                onClick={handleAddToCart}
+                disabled={showCardAnimation}
+                whileTap={{ scale: 0.97 }}
+                className={`group relative w-full h-14 md:h-16 rounded-2xl flex items-center justify-center gap-3 transition-all overflow-hidden text-sm ${
+                  isAdded
+                    ? "bg-[#63f3f7] shadow-[0_0_30px_rgba(99,243,247,0.4)]"
+                    : showCardAnimation
+                    ? "bg-[#63f3f7]/50 cursor-wait"
+                    : "bg-[#63f3f7] hover:shadow-[0_0_30px_rgba(99,243,247,0.3)]"
+                }`}
+              >
+                <div className={`flex items-center gap-3 transition-all duration-300 ${isAdded || showCardAnimation ? "translate-y-10 opacity-0" : "translate-y-0 opacity-100"}`}>
+                  <ShoppingCart size={18} className="text-black" />
+                  <span className="text-black font-black uppercase tracking-[0.15em] text-sm">Добавить в корзину</span>
+                </div>
+                <div className={`absolute inset-0 flex items-center justify-center gap-3 transition-all duration-300 ${showCardAnimation ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"}`}>
+                  <CreditCard size={18} className="text-black animate-bounce" />
+                  <span className="text-black font-black uppercase tracking-[0.15em] text-sm">Добавляем...</span>
+                </div>
+                <div className={`absolute inset-0 flex items-center justify-center gap-3 transition-all duration-300 ${isAdded ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"}`}>
+                  <Check size={18} className="text-black" />
+                  <span className="text-black font-black uppercase tracking-[0.15em] text-sm">Товар добавлен!</span>
+                </div>
+              </motion.button>
             </div>
           </div>
         </div>
