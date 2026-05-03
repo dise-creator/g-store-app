@@ -11,17 +11,19 @@ const supabase = createClient(
   process.env.SUPABASE_KEY!
 );
 
-const SITE_URL = "https://твой-сайт.ru";
+const SITE_URL = "https://clicps.ru";
+const MINI_APP_URL = "https://t.me/clicps_bot/clic";
 
 // Главное меню
 const mainMenu = () =>
   Markup.inlineKeyboard([
+    [Markup.button.webApp("🛍 ОТКРЫТЬ МАГАЗИН", SITE_URL)],
     [Markup.button.callback("🎮  КАТАЛОГ ИГР", "catalog")],
     [
       Markup.button.callback("🛒  КОРЗИНА", "cart"),
       Markup.button.callback("❤️  ИЗБРАННОЕ", "wishlist"),
     ],
-    [Markup.button.url("🌐  ОТКРЫТЬ САЙТ", SITE_URL)],
+    [Markup.button.url("🌐  САЙТ", SITE_URL)],
   ]);
 
 // /start
@@ -90,7 +92,8 @@ bot.action("catalog", async (ctx) => {
           caption,
           parse_mode: "Markdown",
           ...Markup.inlineKeyboard([
-            [Markup.button.callback(`🛒 В корзину — ${price.toLocaleString()} ₽`, `add_${game.id}`)],
+            [Markup.button.webApp(`🛍 Купить — ${price.toLocaleString()} ₽`, SITE_URL)],
+            [Markup.button.callback(`🛒 В корзину бота — ${price.toLocaleString()} ₽`, `add_${game.id}`)],
           ]),
         }
       );
@@ -98,7 +101,8 @@ bot.action("catalog", async (ctx) => {
       await ctx.reply(caption, {
         parse_mode: "Markdown",
         ...Markup.inlineKeyboard([
-          [Markup.button.callback(`🛒 В корзину — ${price.toLocaleString()} ₽`, `add_${game.id}`)],
+          [Markup.button.webApp(`🛍 Купить — ${price.toLocaleString()} ₽`, SITE_URL)],
+          [Markup.button.callback(`🛒 В корзину бота — ${price.toLocaleString()} ₽`, `add_${game.id}`)],
         ]),
       });
     }
@@ -206,6 +210,7 @@ bot.action("cart", async (ctx) => {
   await ctx.reply(text, {
     parse_mode: "Markdown",
     ...Markup.inlineKeyboard([
+      [Markup.button.webApp("🛍 Оформить на сайте", SITE_URL)],
       [Markup.button.callback("🗑 Очистить корзину", "clear_cart")],
       [Markup.button.callback("🎮 Продолжить покупки", "catalog")],
       [Markup.button.callback("⬅️ Главное меню", "back_home")],
@@ -237,7 +242,7 @@ bot.action("wishlist", async (ctx) => {
     {
       parse_mode: "MarkdownV2",
       ...Markup.inlineKeyboard([
-        [Markup.button.url("🌐 Открыть сайт", SITE_URL)],
+        [Markup.button.webApp("🛍 Открыть магазин", SITE_URL)],
         [Markup.button.callback("⬅️ Главное меню", "back_home")],
       ]),
     }
