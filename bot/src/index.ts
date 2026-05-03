@@ -50,7 +50,7 @@ bot.start(async (ctx) => {
 
   try {
     await ctx.replyWithPhoto(
-      { url: "https://clicps.ru/hero/1.jpg" },
+      { url: "https://clicps.ru/banner.png" },
       {
         caption: [
           `🎮 *CLIC STORE* — Цифровые ключи`,
