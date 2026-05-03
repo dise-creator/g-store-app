@@ -115,12 +115,11 @@ export default function GameModal() {
     <div className="fixed inset-0 z-[200] flex items-end md:items-center justify-center md:p-4 animate-in fade-in duration-300">
       <div className="absolute inset-0 bg-black/90 backdrop-blur-2xl" onClick={closeModal} />
 
-      {/* Модалка */}
       <div
         className="relative z-[210] w-full max-w-[1300px] bg-[#0a0f1e] md:border md:border-[#1a2a4a] rounded-t-[2rem] md:rounded-[2.5rem] overflow-hidden flex flex-col md:flex-row shadow-2xl"
         style={{
           boxShadow: "0 0 80px rgba(0, 60, 160, 0.2)",
-          maxHeight: "92vh",
+          maxHeight: "95vh",
           height: "auto",
         }}
       >
@@ -136,7 +135,7 @@ export default function GameModal() {
         <div className="md:hidden w-12 h-1 bg-white/20 rounded-full mx-auto mt-3 mb-1 shrink-0" />
 
         {/* ЛЕВАЯ ЧАСТЬ: Слайдер */}
-        <div className="relative w-full md:w-[48%] h-[30vh] md:h-full group bg-[#060b16] shrink-0">
+        <div className="relative w-full md:w-[48%] h-[25vh] md:h-full group bg-[#060b16] shrink-0">
           {screenshots[currentSlide] && (
             <Image
               key={currentSlide}
@@ -166,7 +165,6 @@ export default function GameModal() {
             </>
           )}
 
-          {/* Название на мобилке поверх картинки */}
           <div className="absolute bottom-6 left-4 md:hidden">
             <h2 className="font-black italic uppercase text-2xl text-white tracking-tighter leading-none drop-shadow-2xl">
               {selectedGame?.title}
@@ -176,9 +174,9 @@ export default function GameModal() {
 
         {/* ПРАВАЯ ЧАСТЬ */}
         <div className="flex flex-col flex-1 overflow-y-auto no-scrollbar bg-[#0a0f1e]">
-          <div className="flex flex-col flex-1 p-5 md:p-10 gap-4 md:gap-5">
+          <div className="flex flex-col flex-1 p-4 md:p-10 gap-3 md:gap-5">
 
-            {/* Бейджи — скролл на мобилке */}
+            {/* Бейджи */}
             <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
               <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#003087]/20 border border-[#003087]/40 rounded-xl shrink-0">
                 <PSIcon className="w-3.5 h-3.5 text-[#0070d1]" />
@@ -198,7 +196,7 @@ export default function GameModal() {
               </div>
             </div>
 
-            {/* Заголовок — скрыт на мобилке (показан поверх картинки) */}
+            {/* Заголовок — только десктоп */}
             <div className="hidden md:block">
               <h2 className="font-black italic uppercase text-5xl md:text-6xl text-white tracking-tighter leading-none mb-2">
                 {selectedGame?.title}
@@ -219,7 +217,7 @@ export default function GameModal() {
                     <button
                       key={index}
                       onClick={() => setSelectedEditionIndex(index)}
-                      className={`flex flex-col p-4 rounded-2xl border transition-all text-left ${
+                      className={`flex flex-col p-3 md:p-4 rounded-2xl border transition-all text-left ${
                         selectedEditionIndex === index
                           ? "bg-blue-900/20 border-[#63f3f7] shadow-[0_0_25px_rgba(99,243,247,0.08)]"
                           : "border-white/5 hover:border-white/15 bg-white/[0.02]"
@@ -266,7 +264,7 @@ export default function GameModal() {
 
             {/* Сравнение цен */}
             {rates && (
-              <div className={`p-3 md:p-4 rounded-2xl border ${isCurrentCheapest ? "bg-green-500/5 border-green-500/20" : "bg-[#f59e0b]/5 border-[#f59e0b]/20"}`}>
+              <div className={`p-3 rounded-2xl border ${isCurrentCheapest ? "bg-green-500/5 border-green-500/20" : "bg-[#f59e0b]/5 border-[#f59e0b]/20"}`}>
                 <div className="flex items-center gap-2 mb-2">
                   <TrendingDown size={12} className={isCurrentCheapest ? "text-green-400" : "text-[#f59e0b]"} />
                   <span className={`text-[9px] font-black uppercase tracking-widest ${isCurrentCheapest ? "text-green-400" : "text-[#f59e0b]"}`}>
@@ -303,8 +301,8 @@ export default function GameModal() {
               </div>
             )}
 
-            {/* Инструкция */}
-            <div className="flex items-center gap-2 md:gap-4 p-3 md:p-4 bg-white/[0.02] border border-white/5 rounded-2xl overflow-x-auto no-scrollbar">
+            {/* Инструкция — скрыта на мобилке */}
+            <div className="hidden md:flex items-center gap-4 p-4 bg-white/[0.02] border border-white/5 rounded-2xl overflow-x-auto no-scrollbar">
               {[
                 { step: "1", text: "Купи карту PSN" },
                 { step: "2", text: "Получи код" },
@@ -312,10 +310,10 @@ export default function GameModal() {
               ].map((item, i) => (
                 <React.Fragment key={item.step}>
                   <div className="flex items-center gap-2 shrink-0">
-                    <div className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-[#63f3f7]/10 border border-[#63f3f7]/20 flex items-center justify-center shrink-0">
+                    <div className="w-6 h-6 rounded-full bg-[#63f3f7]/10 border border-[#63f3f7]/20 flex items-center justify-center shrink-0">
                       <span className="text-[#63f3f7] text-[8px] font-black">{item.step}</span>
                     </div>
-                    <span className="text-white/40 text-[10px] md:text-xs font-bold whitespace-nowrap">{item.text}</span>
+                    <span className="text-white/40 text-xs font-bold whitespace-nowrap">{item.text}</span>
                   </div>
                   {i < 2 && <div className="flex-1 h-px bg-white/10 min-w-[12px]" />}
                 </React.Fragment>
@@ -323,8 +321,8 @@ export default function GameModal() {
             </div>
 
             {/* Итого и кнопка */}
-            <div className="pt-3 border-t border-white/5">
-              <div className="flex items-center justify-between mb-4">
+            <div className="pt-3 border-t border-white/5 sticky bottom-0 bg-[#0a0f1e] pb-4 md:pb-0">
+              <div className="flex items-center justify-between mb-3">
                 <div>
                   <span className="text-[9px] text-white/20 uppercase font-bold tracking-widest block">Итого к оплате</span>
                   <span className="text-[#63f3f7] text-[10px] font-black mt-0.5 block">
