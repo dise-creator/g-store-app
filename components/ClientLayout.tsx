@@ -11,6 +11,7 @@ import { SessionProvider } from "next-auth/react";
 import { useRouter, usePathname } from "next/navigation";
 import { useRegionStore } from "@/store/useRegion";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTelegramAuth } from "../hooks/useTelegramAuth";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
@@ -29,6 +30,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
   return (
     <SessionProvider>
+      <TelegramAuthProvider />
       <div className="relative flex flex-col min-h-screen bg-[#0a0a0c] text-white isolate overflow-x-hidden">
 
         {/* HEADER */}
@@ -78,6 +80,12 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       </div>
     </SessionProvider>
   );
+}
+
+// Отдельный компонент чтобы хук работал внутри SessionProvider
+function TelegramAuthProvider() {
+  useTelegramAuth();
+  return null;
 }
 
 function RatesLoader() {
