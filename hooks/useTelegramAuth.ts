@@ -7,6 +7,31 @@ export function useTelegramAuth() {
   const { data: session } = useSession();
 
   useEffect(() => {
+    const tg = (window as any).Telegram?.WebApp;
+    if (!tg) return;
+
+    // Раскрываем на весь экран
+    tg.expand();
+
+    // Применяем цвета Telegram
+    const colorScheme = tg.colorScheme; // "light" или "dark"
+    const themeParams = tg.themeParams;
+
+    if (colorScheme === "light") {
+      document.documentElement.style.setProperty("--tg-bg", themeParams.bg_color || "#ffffff");
+      document.documentElement.style.setProperty("--tg-text", themeParams.text_color || "#000000");
+      document.body.style.backgroundColor = themeParams.bg_color || "#ffffff";
+      document.body.classList.add("tg-light");
+    } else {
+      document.body.classList.add("tg-dark");
+    }
+
+    tg.setHeaderColor(colorScheme === "light" ? "#ffffff" : "#0a0a0c");
+    tg.setBackgroundColor(colorScheme === "light" ? "#ffffff" : "#0a0a0c");
+
+  }, []);
+
+  useEffect(() => {
     if (session) return;
 
     const tg = (window as any).Telegram?.WebApp;
