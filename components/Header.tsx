@@ -40,8 +40,12 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
       window.requestAnimationFrame(() => setScrolled(window.scrollY > 20));
     };
 
-    const handleHide = () => setHeaderVisible(false);
-    const handleShow = () => setHeaderVisible(true);
+    const handleHide = () => {
+      if (window.innerWidth < 768) setHeaderVisible(false);
+    };
+    const handleShow = () => {
+      if (window.innerWidth < 768) setHeaderVisible(true);
+    };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("headerHide", handleHide);

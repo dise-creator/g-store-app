@@ -1,6 +1,7 @@
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import YandexProvider from "next-auth/providers/yandex";
+import VkProvider from "next-auth/providers/vk";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { createClient } from "@supabase/supabase-js";
 
@@ -18,6 +19,10 @@ export const authOptions: NextAuthOptions = {
     YandexProvider({
       clientId: process.env.YANDEX_CLIENT_ID!,
       clientSecret: process.env.YANDEX_CLIENT_SECRET!,
+    }),
+    VkProvider({
+      clientId: process.env.VK_CLIENT_ID!,
+      clientSecret: process.env.VK_CLIENT_SECRET!,
     }),
     CredentialsProvider({
       id: "credentials",
