@@ -50,7 +50,7 @@ export default function MobileNav() {
         // Скролл вниз — прячем хедер, через 300мс показываем бар
         window.dispatchEvent(new CustomEvent("headerHide"));
         if (showTimer.current) clearTimeout(showTimer.current);
-        showTimer.current = setTimeout(() => setVisible(true), 300);
+        showTimer.current = setTimeout(() => setVisible(true), 100);
       } else if (currentY < lastScrollY.current - 10) {
         // Скролл вверх — прячем бар, показываем хедер
         if (showTimer.current) clearTimeout(showTimer.current);
