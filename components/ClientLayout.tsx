@@ -29,6 +29,12 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     fetchRates();
   }, [fetchRates]);
 
+  useEffect(() => {
+    const handler = () => setIsCartOpen(true);
+    window.addEventListener("openCart", handler);
+    return () => window.removeEventListener("openCart", handler);
+  }, []);
+
   return (
     <SessionProvider>
       <TelegramAuthProvider />
@@ -62,7 +68,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -16 }}
-              transition={{ duration: 0.25, ease: "easeInOut" }}
+              transition={{ duration: 0.12, ease: "easeInOut" }}
             >
               {children}
             </motion.div>

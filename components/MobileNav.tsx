@@ -9,7 +9,7 @@ import { useWishlistStore } from "@/store/useWishlist";
 
 const NAV_ITEMS = [
   { id: "home", icon: Home, label: "Главная", href: "/" },
-  { id: "catalog", icon: Gamepad2, label: "Каталог", href: "/" },
+  { id: "catalog", icon: Gamepad2, label: "Каталог", href: "/catalog" },
   { id: "wishlist", icon: Heart, label: "Избранное", href: "/wishlist" },
   { id: "profile", icon: User, label: "Профиль", href: "/profile" },
 ];
@@ -42,17 +42,14 @@ export default function MobileNav() {
       const currentY = window.scrollY;
 
       if (currentY < 60) {
-        // Вверху — прячем бар, показываем хедер
         if (showTimer.current) clearTimeout(showTimer.current);
         setVisible(false);
         window.dispatchEvent(new CustomEvent("headerShow"));
       } else if (currentY > lastScrollY.current + 10) {
-        // Скролл вниз — прячем хедер, через 300мс показываем бар
         window.dispatchEvent(new CustomEvent("headerHide"));
         if (showTimer.current) clearTimeout(showTimer.current);
-        showTimer.current = setTimeout(() => setVisible(true), 100);
+        showTimer.current = setTimeout(() => setVisible(true), 150);
       } else if (currentY < lastScrollY.current - 10) {
-        // Скролл вверх — прячем бар, показываем хедер
         if (showTimer.current) clearTimeout(showTimer.current);
         setVisible(false);
         window.dispatchEvent(new CustomEvent("headerShow"));
@@ -70,7 +67,7 @@ export default function MobileNav() {
 
   const getActive = (id: string) => {
     if (id === "home") return pathname === "/";
-    if (id === "catalog") return false;
+    if (id === "catalog") return pathname === "/catalog";
     if (id === "wishlist") return pathname === "/wishlist";
     if (id === "profile") return pathname === "/profile";
     return false;
@@ -144,6 +141,7 @@ export default function MobileNav() {
 
             {/* Корзина */}
             <motion.button
+              onClick={() => window.dispatchEvent(new CustomEvent("openCart"))}
               whileTap={{ scale: 0.85 }}
               animate={cartPulse ? { scale: [1, 1.2, 1] } : { scale: 1 }}
               className="relative flex flex-col items-center justify-center px-4 py-2 rounded-2xl ml-1 no-hover"
