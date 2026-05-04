@@ -41,7 +41,10 @@ export default function SignInPage() {
     script.src = "https://telegram.org/js/telegram-widget.js?22";
     script.setAttribute("data-telegram-login", "clicps_bot");
     script.setAttribute("data-size", "large");
-    script.setAttribute("data-auth-url", "https://clicps.ru/api/auth/telegram-redirect");
+    script.setAttribute(
+      "data-auth-url",
+      "https://clicps.ru/api/auth/telegram-redirect",
+    );
     script.setAttribute("data-request-access", "write");
     script.async = true;
     document.getElementById("telegram-widget")?.appendChild(script);
@@ -104,20 +107,28 @@ export default function SignInPage() {
 
   const dark3D = {
     color: "#2D3748",
-    textShadow: "0 1px 0 #1a202c, 0 2px 0 #1a202c, 0 3px 0 #1a202c, 0 5px 10px rgba(0,0,0,0.7)"
+    textShadow:
+      "0 1px 0 #1a202c, 0 2px 0 #1a202c, 0 3px 0 #1a202c, 0 5px 10px rgba(0,0,0,0.7)",
   };
 
   const viper3D = {
     color: "#00FFFF",
-    textShadow: "0 1px 0 #00e6e6, 0 2px 0 #00cccc, 0 0 20px rgba(0, 255, 255, 0.8), 0 5px 12px rgba(0,0,0,0.6)"
+    textShadow:
+      "0 1px 0 #00e6e6, 0 2px 0 #00cccc, 0 0 20px rgba(0, 255, 255, 0.8), 0 5px 12px rgba(0,0,0,0.6)",
   };
 
   return (
     <main className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[#050505]">
       <AnimatedBackground />
 
-      <Link href="/" className="absolute top-10 right-10 p-4 bg-white/5 hover:bg-white/10 rounded-full border border-white/10 transition-all z-50 group">
-        <X size={24} className="text-white/40 group-hover:text-[#00ffff] transition-colors" />
+      <Link
+        href="/"
+        className="absolute top-10 right-10 p-4 bg-white/5 hover:bg-white/10 rounded-full border border-white/10 transition-all z-50 group"
+      >
+        <X
+          size={24}
+          className="text-white/40 group-hover:text-[#00ffff] transition-colors"
+        />
       </Link>
 
       <motion.div
@@ -127,10 +138,18 @@ export default function SignInPage() {
       >
         <div className="text-center mb-16 relative">
           <h1 className="flex items-center justify-center font-black italic uppercase tracking-tighter select-none scale-110">
-            <span style={dark3D} className="text-7xl">C</span>
-            <span style={dark3D} className="text-7xl mr-3">L</span>
-            <span style={viper3D} className="text-8xl">I</span>
-            <span style={viper3D} className="text-8xl">C</span>
+            <span style={dark3D} className="text-7xl">
+              C
+            </span>
+            <span style={dark3D} className="text-7xl mr-3">
+              L
+            </span>
+            <span style={viper3D} className="text-8xl">
+              I
+            </span>
+            <span style={viper3D} className="text-8xl">
+              C
+            </span>
           </h1>
           <div className="h-[2px] w-16 bg-gradient-to-r from-transparent via-[#00ffff]/50 to-transparent mx-auto mt-8 shadow-[0_0_15px_#00ffff]" />
         </div>
@@ -169,7 +188,11 @@ export default function SignInPage() {
         </div>
 
         <p className="mt-14 text-center text-[8px] text-white/10 uppercase font-bold tracking-[0.2em]">
-          Нажмите <span className="text-white/30 border border-white/10 px-2 py-0.5 rounded mx-1">ESC</span> для отмены
+          Нажмите{" "}
+          <span className="text-white/30 border border-white/10 px-2 py-0.5 rounded mx-1">
+            ESC
+          </span>{" "}
+          для отмены
         </p>
       </motion.div>
 
@@ -188,7 +211,9 @@ export default function SignInPage() {
               className="w-full max-w-[400px] bg-[#0a0a0c] border border-white/10 rounded-[2rem] p-8 flex flex-col gap-5"
             >
               <div>
-                <p className="text-white font-black uppercase italic text-xl">Почти готово!</p>
+                <p className="text-white font-black uppercase italic text-xl">
+                  Почти готово!
+                </p>
                 <p className="text-white/30 text-xs mt-1">
                   Привет, {telegramUser?.first_name}! Введи email для аккаунта
                 </p>
@@ -196,8 +221,8 @@ export default function SignInPage() {
               <input
                 type="email"
                 value={email}
-                onChange={e => setEmail(e.target.value)}
-                onKeyDown={e => e.key === "Enter" && handleEmailSubmit()}
+                onChange={(e) => setEmail(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleEmailSubmit()}
                 placeholder="your@email.com"
                 className="w-full px-5 py-4 bg-white/5 border border-white/10 focus:border-[#63f3f7]/40 rounded-2xl text-white font-bold text-sm outline-none transition-all placeholder-white/20"
               />
