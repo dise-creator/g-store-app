@@ -27,6 +27,7 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
   const [mounted, setMounted] = useState(false);
   const [searchActivated, setSearchActivated] = useState(false);
   const [wishlistPulse, setWishlistPulse] = useState(false);
+  const [headerVisible, setHeaderVisible] = useState(true);
   const prevWishlist = useRef(0);
 
   const items = useCartStore((state) => state.items);
@@ -34,11 +35,23 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
 
   useEffect(() => {
     setMounted(true);
+
     const handleScroll = () => {
       window.requestAnimationFrame(() => setScrolled(window.scrollY > 20));
     };
+
+    const handleHide = () => setHeaderVisible(false);
+    const handleShow = () => setHeaderVisible(true);
+
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("headerHide", handleHide);
+    window.addEventListener("headerShow", handleShow);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("headerHide", handleHide);
+      window.removeEventListener("headerShow", handleShow);
+    };
   }, []);
 
   const totalAmount = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -76,12 +89,15 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
         )}
       </AnimatePresence>
 
-      <header className={`fixed top-2 md:top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-[1440px] z-[100] px-4 md:px-8 rounded-[1.5rem] md:rounded-[2.5rem] transition-all duration-700 flex justify-between items-center transform-gpu ${
-        scrolled
-          ? "py-2 md:py-3 bg-black/[0.15] backdrop-blur-[40px] border border-white/[0.1] shadow-2xl"
-          : "py-3 md:py-6 bg-transparent backdrop-blur-[10px] border border-white/[0.05]"
-      }`}>
-
+      <motion.header
+        animate={{ y: headerVisible ? 0 : "-120%", opacity: headerVisible ? 1 : 0 }}
+        transition={{ type: "spring", damping: 25, stiffness: 300 }}
+        className={`fixed top-2 md:top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-[1440px] z-[100] px-4 md:px-8 rounded-[1.5rem] md:rounded-[2.5rem] transition-all duration-700 flex justify-between items-center transform-gpu ${
+          scrolled
+            ? "py-2 md:py-3 bg-black/[0.15] backdrop-blur-[40px] border border-white/[0.1] shadow-2xl"
+            : "py-3 md:py-6 bg-transparent backdrop-blur-[10px] border border-white/[0.05]"
+        }`}
+      >
         {/* Логотип */}
         <Link href="/">
           <motion.div
@@ -201,12 +217,10 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className="relative flex items-center gap-1.5 md:gap-4"
         >
-          {/* RegionSwitcher на мобилке */}
           <div className="block md:hidden">
             {mounted && <RegionSwitcher />}
           </div>
 
-          {/* Кнопка поиска */}
           <motion.button
             onClick={handleSearchClick}
             whileHover={{ scale: 1.05 }}
@@ -222,7 +236,6 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
             <Search size={18} className="text-white/40 group-hover:text-[#63f3f7] transition-colors relative z-10" />
           </motion.button>
 
-          {/* Вишлист — скрываем на мобилке */}
           <motion.button
             onClick={onWishlistClick}
             whileTap={{ scale: 0.8 }}
@@ -309,7 +322,7 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
             />
           </div>
         </motion.div>
-      </header>
+      </motion.header>
     </>
   );
 }

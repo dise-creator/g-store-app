@@ -143,3 +143,19 @@ body.modal-open {
   overflow: hidden;
   height: 100vh;
 }
+/* Глобальный стиль кнопок при наведении */
+button:hover,
+a:hover {
+  --tw-bg-opacity: 1;
+}
+
+.btn-hover:hover {
+  background-color: rgba(99, 243, 247, 0.08) !important;
+  border-color: rgba(99, 243, 247, 0.25) !important;
+}
+button:not([disabled]):not(.no-hover):hover,
+a[class*="rounded"]:not(.no-hover):hover {
+  background-color: rgba(99, 243, 247, 0.08) !important;
+  border-color: rgba(99, 243, 247, 0.2) !important;
+  transition: all 0.2s ease;
+}

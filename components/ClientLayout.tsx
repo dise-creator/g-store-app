@@ -6,6 +6,7 @@ import SearchModal from "./SearchModal";
 import CartDrawer from "./CartDrawer";
 import GameModal from "./GameModal";
 import Footer from "./Footer";
+import MobileNav from "./MobileNav";
 import { useGamesStore } from "@/store/games";
 import { SessionProvider } from "next-auth/react";
 import { useRouter, usePathname } from "next/navigation";
@@ -54,7 +55,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         {mounted && <RatesLoader />}
 
         {/* MAIN с анимацией */}
-        <main className="relative z-10 flex-grow w-full">
+        <main className="relative z-10 flex-grow w-full pb-24 md:pb-0">
           <AnimatePresence mode="wait">
             <motion.div
               key={pathname}
@@ -71,6 +72,9 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         {/* FOOTER */}
         <Footer />
 
+        {/* MOBILE NAV */}
+        <MobileNav />
+
         {/* GAME MODAL */}
         <div className="fixed inset-0 z-[999] pointer-events-none">
           <div className="pointer-events-auto">
@@ -82,7 +86,6 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   );
 }
 
-// Отдельный компонент чтобы хук работал внутри SessionProvider
 function TelegramAuthProvider() {
   useTelegramAuth();
   return null;
@@ -94,7 +97,7 @@ function RatesLoader() {
   if (!isLoadingRates) return null;
 
   return (
-    <div className="fixed bottom-6 left-6 z-[500] flex items-center gap-2 px-4 py-2.5 bg-[#0a0a0b] border border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl">
+    <div className="fixed bottom-24 left-6 z-[500] flex items-center gap-2 px-4 py-2.5 bg-[#0a0a0b] border border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl md:bottom-6">
       <div className="w-3 h-3 border border-[#63f3f7] border-t-transparent rounded-full animate-spin" />
       <span className="text-[9px] text-white/40 uppercase font-black tracking-widest">
         Обновляем курсы...
