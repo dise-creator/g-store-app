@@ -8,7 +8,7 @@ import { useGameModal } from "@/store/useGameModal";
 import { Tag } from "lucide-react";
 import Image from "next/image";
 
-const BG = "#0d1528";
+const BG = "#0a0f1e";
 
 const FONT_CLASSES = [
   "font-[family-name:var(--font-bangers)] tracking-wider",

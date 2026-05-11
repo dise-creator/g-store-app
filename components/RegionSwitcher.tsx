@@ -6,7 +6,10 @@ import { ChevronDown, Check } from "lucide-react";
 import Image from "next/image";
 import { useRegionStore, REGIONS, type Region } from "@/store/useRegion";
 
-const regionColors: Record<Region, { bg: string; border: string; text: string; glow: string; iconBg: string }> = {
+const regionColors: Record<
+  Region,
+  { bg: string; border: string; text: string; glow: string; iconBg: string }
+> = {
   TR: {
     bg: "bg-[#2e0a0a]",
     border: "border-[#cc2222]",
@@ -53,7 +56,6 @@ export default function RegionSwitcher() {
 
   return (
     <div ref={ref} className="relative">
-
       {/* Десктоп */}
       <div className="hidden md:flex items-center gap-1.5 p-1 bg-white/[0.03] border border-white/5 rounded-2xl">
         {Object.values(REGIONS).map((r) => {
@@ -70,14 +72,25 @@ export default function RegionSwitcher() {
                   : "bg-transparent border-transparent hover:bg-white/5"
               }`}
             >
-              <div className={`w-8 h-8 rounded-xl overflow-hidden shrink-0 flex items-center justify-center ${
-                isActive ? c.iconBg : "bg-white/10"
-              }`}>
-                <Image src={flagUrls[r.code]} alt={r.name} width={32} height={32} className="object-cover" unoptimized />
+              <div
+                className={`w-8 h-8 rounded-xl overflow-hidden shrink-0 flex items-center justify-center ${
+                  isActive ? c.iconBg : "bg-white/10"
+                }`}
+              >
+                <Image
+                  src={flagUrls[r.code]}
+                  alt={r.name}
+                  width={32}
+                  height={32}
+                  className="object-cover"
+                  unoptimized
+                />
               </div>
-              <span className={`text-sm font-black uppercase tracking-wide transition-colors ${
-                isActive ? c.text : "text-white/25"
-              }`}>
+              <span
+                className={`text-sm font-black uppercase tracking-wide transition-colors ${
+                  isActive ? c.text : "text-white/25"
+                }`}
+              >
                 {r.name}
               </span>
               {isActive && (
@@ -99,8 +112,17 @@ export default function RegionSwitcher() {
           whileTap={{ scale: 0.93 }}
           className={`flex items-center gap-2 px-2.5 py-1.5 rounded-xl border transition-all duration-300 ${colors.bg} ${colors.border} ${colors.glow}`}
         >
-          <div className={`w-6 h-6 rounded-lg overflow-hidden shrink-0 ${colors.iconBg}`}>
-            <Image src={flagUrls[region]} alt={currentRegion.name} width={24} height={24} className="object-cover" unoptimized />
+          <div
+            className={`w-6 h-6 rounded-lg overflow-hidden shrink-0 ${colors.iconBg}`}
+          >
+            <Image
+              src={flagUrls[region]}
+              alt={currentRegion.name}
+              width={24}
+              height={24}
+              className="object-cover"
+              unoptimized
+            />
           </div>
           <span className={`text-xs font-black uppercase ${colors.text}`}>
             {currentRegion.name}
@@ -128,7 +150,10 @@ export default function RegionSwitcher() {
                 return (
                   <motion.button
                     key={r.code}
-                    onClick={() => { setRegion(r.code); setIsOpen(false); }}
+                    onClick={() => {
+                      setRegion(r.code);
+                      setIsOpen(false);
+                    }}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.06 }}
@@ -138,11 +163,22 @@ export default function RegionSwitcher() {
                         : "hover:bg-white/5 border-l-2 border-transparent"
                     }`}
                   >
-                    <div className={`w-8 h-8 rounded-xl overflow-hidden shrink-0 ${isActive ? c.iconBg : "bg-white/10"}`}>
-                      <Image src={flagUrls[r.code]} alt={r.name} width={32} height={32} className="object-cover" unoptimized />
+                    <div
+                      className={`w-8 h-8 rounded-xl overflow-hidden shrink-0 ${isActive ? c.iconBg : "bg-white/10"}`}
+                    >
+                      <Image
+                        src={flagUrls[r.code]}
+                        alt={r.name}
+                        width={32}
+                        height={32}
+                        className="object-cover"
+                        unoptimized
+                      />
                     </div>
                     <div className="flex flex-col items-start">
-                      <span className={`text-sm font-black uppercase ${isActive ? c.text : "text-white/60"}`}>
+                      <span
+                        className={`text-sm font-black uppercase ${isActive ? c.text : "text-white/60"}`}
+                      >
                         {r.name}
                       </span>
                       <span className="text-white/20 text-[9px] font-black uppercase tracking-widest">
@@ -150,7 +186,11 @@ export default function RegionSwitcher() {
                       </span>
                     </div>
                     {isActive && (
-                      <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="ml-auto">
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        className="ml-auto"
+                      >
                         <Check size={14} className={c.text} />
                       </motion.div>
                     )}
