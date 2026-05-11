@@ -127,7 +127,7 @@ export default function AdminNewsPage() {
         <div className="flex items-center gap-4 mb-10">
           <Link
             href="/"
-            className="w-10 h-10 rounded-xl bg-white/5 border border-[#00d68f]/20 flex items-center justify-center text-white/40 hover:text-[#00d68f] transition-all"
+            className="w-10 h-10 rounded-xl bg-white/5 border border-[#00d68f]/40 flex items-center justify-center text-white/40 hover:text-[#00d68f] transition-all"
           >
             <ChevronLeft size={20} />
           </Link>
@@ -142,7 +142,7 @@ export default function AdminNewsPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white/[0.03] border border-[#00d68f]/20 rounded-[2rem] p-6 flex flex-col gap-4">
+          <div className="bg-[#0a1860]/60 border border-[#00d68f]/40 rounded-[2rem] p-6 flex flex-col gap-4">
             <p className="text-white/30 text-[10px] uppercase font-black tracking-widest">
               {editId ? "Редактировать новость" : "Новая новость"}
             </p>
@@ -157,7 +157,7 @@ export default function AdminNewsPage() {
                   setForm((p) => ({ ...p, title: e.target.value }))
                 }
                 placeholder="Заголовок новости..."
-                className="w-full px-4 py-3 bg-white/5 border border-[#00d68f]/20 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#00d68f]/40 transition-all placeholder-white/20"
+                className="w-full px-4 py-3 bg-white/5 border border-[#00d68f]/40 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#00d68f]/40 transition-all placeholder-white/20"
               />
             </div>
 
@@ -172,7 +172,7 @@ export default function AdminNewsPage() {
                 }
                 placeholder="Текст новости..."
                 rows={4}
-                className="w-full px-4 py-3 bg-white/5 border border-[#00d68f]/20 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#00d68f]/40 transition-all placeholder-white/20 resize-none"
+                className="w-full px-4 py-3 bg-white/5 border border-[#00d68f]/40 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#00d68f]/40 transition-all placeholder-white/20 resize-none"
               />
             </div>
 
@@ -186,7 +186,7 @@ export default function AdminNewsPage() {
                   setForm((p) => ({ ...p, image: e.target.value }))
                 }
                 placeholder="https://... или /hero/1.jpg"
-                className="w-full px-4 py-3 bg-white/5 border border-[#00d68f]/20 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#00d68f]/40 transition-all placeholder-white/20"
+                className="w-full px-4 py-3 bg-white/5 border border-[#00d68f]/40 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#00d68f]/40 transition-all placeholder-white/20"
               />
             </div>
 
@@ -200,7 +200,7 @@ export default function AdminNewsPage() {
                   setForm((p) => ({ ...p, game_id: e.target.value }))
                 }
                 placeholder="gow-1, tlou-1..."
-                className="w-full px-4 py-3 bg-white/5 border border-[#00d68f]/20 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#00d68f]/40 transition-all placeholder-white/20"
+                className="w-full px-4 py-3 bg-white/5 border border-[#00d68f]/40 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#00d68f]/40 transition-all placeholder-white/20"
               />
             </div>
 
@@ -213,7 +213,7 @@ export default function AdminNewsPage() {
                   <button
                     key={tag}
                     onClick={() => setForm((p) => ({ ...p, tag }))}
-                    className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase  border transition-all ${form.tag === tag ? "bg-[#00d68f] text-black border-transparent" : "bg-white/5 border-[#00d68f]/20 text-white/40 hover:text-white"}`}
+                    className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase  border transition-all ${form.tag === tag ? "bg-[#00d68f] text-black border-transparent" : "bg-white/5 border-[#00d68f]/40 text-white/40 hover:text-white"}`}
                   >
                     {tag}
                   </button>
@@ -222,7 +222,7 @@ export default function AdminNewsPage() {
             </div>
 
             {form.image && (
-              <div className="relative h-32 rounded-2xl overflow-hidden border border-[#00d68f]/20">
+              <div className="relative h-32 rounded-2xl overflow-hidden border border-[#00d68f]/40">
                 <img
                   src={form.image}
                   alt="preview"
@@ -235,7 +235,7 @@ export default function AdminNewsPage() {
               {editId && (
                 <button
                   onClick={handleCancel}
-                  className="flex-1 py-3 bg-white/5 border border-[#00d68f]/20 text-white/40 font-black uppercase  text-xs rounded-2xl hover:text-white transition-all"
+                  className="flex-1 py-3 bg-white/5 border border-[#00d68f]/40 text-white/40 font-black uppercase  text-xs rounded-2xl hover:text-white transition-all"
                 >
                   Отмена
                 </button>
@@ -260,7 +260,7 @@ export default function AdminNewsPage() {
             </div>
           </div>
 
-          <div className="bg-white/[0.03] border border-[#00d68f]/20 rounded-[2rem] p-6">
+          <div className="bg-[#0a1860]/60 border border-[#00d68f]/40 rounded-[2rem] p-6">
             <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-4">
               Все новости ({news.length})
             </p>
@@ -285,13 +285,13 @@ export default function AdminNewsPage() {
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0 }}
-                      className={`p-4 rounded-2xl border transition-all cursor-pointer hover:border-[#00d68f]/20 ${editId === item.id ? "border-[#00d68f]/30 bg-[#00d68f]/5" : "border-[#00d68f]/15 bg-white/[0.02]"}`}
+                      className={`p-4 rounded-2xl border transition-all cursor-pointer hover:border-[#00d68f]/40 ${editId === item.id ? "border-[#00d68f]/30 bg-[#00d68f]/5" : "border-[#00d68f]/30 bg-[#0a1860]/40"}`}
                       onClick={() => handleEdit(item)}
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="text-[9px] bg-[#00d68f]/10 border border-[#00d68f]/20 text-[#00d68f] px-2 py-0.5 rounded-lg font-black uppercase">
+                            <span className="text-[9px] bg-[#00d68f]/10 border border-[#00d68f]/40 text-[#00d68f] px-2 py-0.5 rounded-lg font-black uppercase">
                               {item.tag}
                             </span>
                             <span className="text-white/20 text-[9px] font-black">

@@ -100,7 +100,7 @@ export default function AdminPage() {
               >
                 <Link
                   href={section.href}
-                  className="group flex items-center gap-4 p-5 bg-white/[0.03] hover:bg-white/[0.06] border border-[#00d68f]/20 hover:border-white/20 rounded-[2rem] transition-all"
+                  className="group flex items-center gap-4 p-5 bg-[#0a1860]/60 hover:bg-white/[0.06] border border-[#00d68f]/40 hover:border-white/20 rounded-[2rem] transition-all"
                 >
                   <div
                     className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-all"
@@ -136,7 +136,7 @@ export default function AdminPage() {
         >
           <Link
             href="/"
-            className="flex items-center justify-center gap-2 py-4 bg-white/[0.02] border border-[#00d68f]/15 text-white/30 hover:text-white rounded-[2rem] font-black text-xs uppercase transition-all"
+            className="flex items-center justify-center gap-2 py-4 bg-[#0a1860]/40 border border-[#00d68f]/30 text-white/30 hover:text-white rounded-[2rem] font-black text-xs uppercase transition-all"
           >
             ← На главную
           </Link>

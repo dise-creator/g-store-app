@@ -34,7 +34,7 @@ export default function GamePage({ params }: GamePageProps) {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
           {/* Левая колонка: Изображение */}
-          <div className="relative aspect-[3/4] w-full rounded-[2.5rem] overflow-hidden border border-[#00d68f]/20 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+          <div className="relative aspect-[3/4] w-full rounded-[2.5rem] overflow-hidden border border-[#00d68f]/40 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
             <Image
               src={game.image}
               alt={game.title}
@@ -73,7 +73,7 @@ export default function GamePage({ params }: GamePageProps) {
               <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity" />
             </button>
 
-            <div className="p-6 rounded-2xl bg-white/5 border border-[#00d68f]/20 text-white/40 text-xs uppercase tracking-widest font-michroma">
+            <div className="p-6 rounded-2xl bg-white/5 border border-[#00d68f]/40 text-white/40 text-xs uppercase tracking-widest font-michroma">
               Мгновенная доставка на email • Лицензионный ключ
             </div>
           </div>

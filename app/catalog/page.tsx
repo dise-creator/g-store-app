@@ -50,7 +50,7 @@ export default function CatalogPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Найти игру..."
-          className="w-full pl-10 pr-4 py-3 bg-white/[0.03] border border-[#00d68f]/20 focus:border-[#00d68f]/40 rounded-2xl text-white text-sm outline-none transition-all placeholder-white/20 font-bold"
+          className="w-full pl-10 pr-4 py-3 bg-[#0a1860]/60 border border-[#00d68f]/40 focus:border-[#00d68f]/40 rounded-2xl text-white text-sm outline-none transition-all placeholder-white/20 font-bold"
         />
       </div>
 

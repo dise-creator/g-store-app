@@ -143,7 +143,7 @@ export default function PromoPage() {
         <div className="flex items-center gap-4 mb-10">
           <Link
             href="/"
-            className="w-10 h-10 rounded-xl bg-white/5 border border-[#00d68f]/20 flex items-center justify-center text-white/40 hover:text-[#00d68f] transition-all"
+            className="w-10 h-10 rounded-xl bg-white/5 border border-[#00d68f]/40 flex items-center justify-center text-white/40 hover:text-[#00d68f] transition-all"
           >
             <ChevronLeft size={20} />
           </Link>
@@ -158,7 +158,7 @@ export default function PromoPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white/[0.03] border border-[#00d68f]/20 rounded-[2rem] p-6 flex flex-col gap-4">
+          <div className="bg-[#0a1860]/60 border border-[#00d68f]/40 rounded-[2rem] p-6 flex flex-col gap-4">
             <p className="text-white/30 text-[10px] uppercase font-black tracking-widest">
               Новый промокод
             </p>
@@ -168,7 +168,7 @@ export default function PromoPage() {
                 <button
                   key={t}
                   onClick={() => setType(t)}
-                  className={`flex-1 py-3 rounded-2xl font-black text-xs uppercase  transition-all ${type === t ? "bg-[#00d68f] text-black" : "bg-white/5 border border-[#00d68f]/20 text-white/40 hover:text-white"}`}
+                  className={`flex-1 py-3 rounded-2xl font-black text-xs uppercase  transition-all ${type === t ? "bg-[#00d68f] text-black" : "bg-white/5 border border-[#00d68f]/40 text-white/40 hover:text-white"}`}
                 >
                   {t === "percent" ? "Скидка %" : "Сумма ₽"}
                 </button>
@@ -184,7 +184,7 @@ export default function PromoPage() {
                   ? "Например: 15 (15%)"
                   : "Например: 500 (500₽)"
               }
-              className="w-full px-4 py-3 bg-white/5 border border-[#00d68f]/20 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#00d68f]/40 transition-all placeholder-white/20"
+              className="w-full px-4 py-3 bg-white/5 border border-[#00d68f]/40 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#00d68f]/40 transition-all placeholder-white/20"
             />
 
             <input
@@ -193,14 +193,14 @@ export default function PromoPage() {
               onChange={(e) => setMaxUses(e.target.value)}
               placeholder="Кол-во использований"
               min="1"
-              className="w-full px-4 py-3 bg-white/5 border border-[#00d68f]/20 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#00d68f]/40 transition-all placeholder-white/20"
+              className="w-full px-4 py-3 bg-white/5 border border-[#00d68f]/40 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#00d68f]/40 transition-all placeholder-white/20"
             />
 
             <input
               type="datetime-local"
               value={expiresAt}
               onChange={(e) => setExpiresAt(e.target.value)}
-              className="w-full px-4 py-3 bg-white/5 border border-[#00d68f]/20 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#00d68f]/40 transition-all"
+              className="w-full px-4 py-3 bg-white/5 border border-[#00d68f]/40 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#00d68f]/40 transition-all"
             />
             <p className="text-white/20 text-[10px] font-black -mt-2">
               Дата истечения (необязательно)
@@ -220,7 +220,7 @@ export default function PromoPage() {
             </button>
           </div>
 
-          <div className="bg-white/[0.03] border border-[#00d68f]/20 rounded-[2rem] p-6">
+          <div className="bg-[#0a1860]/60 border border-[#00d68f]/40 rounded-[2rem] p-6">
             <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-4">
               Все промокоды ({promos.length})
             </p>
@@ -239,7 +239,7 @@ export default function PromoPage() {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
-                    className={`p-3 rounded-2xl border transition-all ${p.is_active ? "border-[#00d68f]/10 bg-[#00d68f]/[0.02]" : "border-[#00d68f]/15 bg-white/[0.01] opacity-40"}`}
+                    className={`p-3 rounded-2xl border transition-all ${p.is_active ? "border-[#00d68f]/10 bg-[#00d68f]/[0.02]" : "border-[#00d68f]/30 bg-white/[0.01] opacity-40"}`}
                   >
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2 min-w-0">

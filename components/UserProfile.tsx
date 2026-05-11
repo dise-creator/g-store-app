@@ -36,7 +36,7 @@ export default function UserProfile() {
         className={`relative p-3 rounded-2xl border transition-all overflow-hidden ${
           isOpen && session
             ? "bg-[#a855f7]/20 border-[#a855f7]/50 shadow-[0_0_25px_rgba(168,85,247,0.4)]"
-            : "bg-white/5 border-[#00d68f]/15 hover:bg-white/10 hover:border-[#a855f7]/20"
+            : "bg-white/5 border-[#00d68f]/30 hover:bg-white/10 hover:border-[#a855f7]/20"
         }`}
       >
         <AnimatePresence>
@@ -113,7 +113,7 @@ export default function UserProfile() {
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.05 }}
-                  className="flex items-center gap-4 pb-5 border-b border-[#00d68f]/15"
+                  className="flex items-center gap-4 pb-5 border-b border-[#00d68f]/30"
                 >
                   <div className="relative shrink-0">
                     <div className="absolute inset-0 rounded-full bg-[#a855f7]/30 blur-md" />
@@ -165,9 +165,9 @@ export default function UserProfile() {
                     }}
                     whileHover={{ x: 4 }}
                     whileTap={{ scale: 0.97 }}
-                    className="w-full py-4 px-5 bg-white/[0.03] hover:bg-[#a855f7]/10 border border-[#00d68f]/15 hover:border-[#a855f7]/30 text-white/60 hover:text-[#a855f7] rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all flex items-center gap-3 group"
+                    className="w-full py-4 px-5 bg-[#0a1860]/60 hover:bg-[#a855f7]/10 border border-[#00d68f]/30 hover:border-[#a855f7]/30 text-white/60 hover:text-[#a855f7] rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all flex items-center gap-3 group"
                   >
-                    <div className="w-7 h-7 rounded-xl bg-white/5 group-hover:bg-[#a855f7]/20 border border-[#00d68f]/15 group-hover:border-[#a855f7]/30 flex items-center justify-center transition-all">
+                    <div className="w-7 h-7 rounded-xl bg-white/5 group-hover:bg-[#a855f7]/20 border border-[#00d68f]/30 group-hover:border-[#a855f7]/30 flex items-center justify-center transition-all">
                       <Sparkles
                         size={13}
                         className="group-hover:text-[#a855f7] transition-colors"

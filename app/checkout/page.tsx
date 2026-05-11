@@ -296,7 +296,7 @@ export default function CheckoutPage() {
         >
           <Link
             href="/"
-            className="w-10 h-10 rounded-xl bg-white/5 border border-[#00d68f]/20 flex items-center justify-center text-white/40 hover:text-[#00d68f] transition-all"
+            className="w-10 h-10 rounded-xl bg-white/5 border border-[#00d68f]/40 flex items-center justify-center text-white/40 hover:text-[#00d68f] transition-all"
           >
             <ChevronLeft size={20} />
           </Link>
@@ -317,10 +317,10 @@ export default function CheckoutPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-white/[0.03] border border-[#00d68f]/20 rounded-[2rem] p-7"
+              className="bg-[#0a1860]/60 border border-[#00d68f]/40 rounded-[2rem] p-7"
             >
               <div className="flex items-center gap-3 mb-5">
-                <div className="w-8 h-8 rounded-xl bg-[#00d68f]/10 border border-[#00d68f]/20 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-[#00d68f]/10 border border-[#00d68f]/40 flex items-center justify-center">
                   <Mail size={15} className="text-[#00d68f]" />
                 </div>
                 <p className="text-white font-black uppercase text-sm tracking-widest">
@@ -332,7 +332,7 @@ export default function CheckoutPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="your@email.com"
-                className="w-full px-5 py-4 bg-white/5 border border-[#00d68f]/20 focus:border-[#00d68f]/40 rounded-2xl text-white font-bold text-sm outline-none transition-all placeholder-white/20"
+                className="w-full px-5 py-4 bg-white/5 border border-[#00d68f]/40 focus:border-[#00d68f]/40 rounded-2xl text-white font-bold text-sm outline-none transition-all placeholder-white/20"
               />
               <p className="text-white/20 text-[10px] uppercase font-black tracking-widest mt-3">
                 Ключи активации придут на этот адрес сразу после оплаты
@@ -344,10 +344,10 @@ export default function CheckoutPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-white/[0.03] border border-[#00d68f]/20 rounded-[2rem] p-7"
+              className="bg-[#0a1860]/60 border border-[#00d68f]/40 rounded-[2rem] p-7"
             >
               <div className="flex items-center gap-3 mb-5">
-                <div className="w-8 h-8 rounded-xl bg-[#00d68f]/10 border border-[#00d68f]/20 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-[#00d68f]/10 border border-[#00d68f]/40 flex items-center justify-center">
                   <CreditCard size={15} className="text-[#00d68f]" />
                 </div>
                 <p className="text-white font-black uppercase text-sm tracking-widest">
@@ -366,10 +366,10 @@ export default function CheckoutPage() {
                       }
                       className={`flex items-center justify-between p-4 rounded-2xl border transition-all text-left ${
                         !method.available
-                          ? "opacity-40 cursor-not-allowed border-[#00d68f]/15 bg-white/[0.01]"
+                          ? "opacity-40 cursor-not-allowed border-[#00d68f]/30 bg-white/[0.01]"
                           : isSelected
                             ? "border-[#00d68f]/40 bg-[#00d68f]/5 shadow-[0_0_20px_rgba(99,243,247,0.05)]"
-                            : "border-[#00d68f]/20 hover:border-white/20 bg-white/[0.02]"
+                            : "border-[#00d68f]/40 hover:border-white/20 bg-[#0a1860]/40"
                       }`}
                     >
                       <div className="flex items-center gap-4">
@@ -396,7 +396,7 @@ export default function CheckoutPage() {
                       </div>
                       <div className="flex items-center gap-2">
                         {method.soon && (
-                          <span className="text-[8px] bg-[#00d68f]/10 border border-[#00d68f]/20 text-[#00d68f] px-2 py-1 rounded-lg font-black uppercase">
+                          <span className="text-[8px] bg-[#00d68f]/10 border border-[#00d68f]/40 text-[#00d68f] px-2 py-1 rounded-lg font-black uppercase">
                             Скоро
                           </span>
                         )}
@@ -422,7 +422,7 @@ export default function CheckoutPage() {
               {TRUST_BADGES.map((item) => (
                 <div
                   key={item.text}
-                  className="flex flex-col items-center gap-2 p-4 bg-white/[0.02] border border-[#00d68f]/15 rounded-2xl"
+                  className="flex flex-col items-center gap-2 p-4 bg-[#0a1860]/40 border border-[#00d68f]/30 rounded-2xl"
                 >
                   <item.icon size={18} className="text-[#00d68f]" />
                   <p className="text-white/30 text-[9px] uppercase font-black tracking-widest text-center">
@@ -441,13 +441,13 @@ export default function CheckoutPage() {
             className="flex flex-col gap-4"
           >
             {/* Список товаров */}
-            <div className="bg-white/[0.03] border border-[#00d68f]/20 rounded-[2rem] p-6 flex flex-col gap-4">
+            <div className="bg-[#0a1860]/60 border border-[#00d68f]/40 rounded-[2rem] p-6 flex flex-col gap-4">
               <p className="text-white/20 text-[10px] uppercase font-black tracking-[0.3em]">
                 Ваш заказ
               </p>
               {items.map((item) => (
                 <div key={item.cartItemId} className="flex items-center gap-3">
-                  <div className="w-12 h-14 relative rounded-xl overflow-hidden shrink-0 border border-[#00d68f]/15">
+                  <div className="w-12 h-14 relative rounded-xl overflow-hidden shrink-0 border border-[#00d68f]/30">
                     <Image
                       src={item.image}
                       alt={item.title}
@@ -474,9 +474,9 @@ export default function CheckoutPage() {
             </div>
 
             {/* Промокод */}
-            <div className="bg-white/[0.03] border border-[#00d68f]/20 rounded-[2rem] p-6">
+            <div className="bg-[#0a1860]/60 border border-[#00d68f]/40 rounded-[2rem] p-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-xl bg-[#00d68f]/10 border border-[#00d68f]/20 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-xl bg-[#00d68f]/10 border border-[#00d68f]/40 flex items-center justify-center">
                   <Tag size={15} className="text-[#00d68f]" />
                 </div>
                 <p className="text-white font-black uppercase text-sm tracking-widest">
@@ -485,7 +485,7 @@ export default function CheckoutPage() {
               </div>
 
               {appliedPromo ? (
-                <div className="flex items-center justify-between p-3 bg-[#00d68f]/10 border border-[#00d68f]/20 rounded-2xl">
+                <div className="flex items-center justify-between p-3 bg-[#00d68f]/10 border border-[#00d68f]/40 rounded-2xl">
                   <div>
                     <p className="text-[#00d68f] font-black text-sm">
                       {promoInput.toUpperCase()}
@@ -515,12 +515,12 @@ export default function CheckoutPage() {
                     }
                     onKeyDown={(e) => e.key === "Enter" && handleApplyPromo()}
                     placeholder="CLIC-XXXX-XXXX"
-                    className="flex-1 px-4 py-3 bg-white/5 border border-[#00d68f]/20 rounded-2xl text-white font-mono text-sm focus:outline-none focus:border-[#00d68f]/40 transition-all placeholder-white/20"
+                    className="flex-1 px-4 py-3 bg-white/5 border border-[#00d68f]/40 rounded-2xl text-white font-mono text-sm focus:outline-none focus:border-[#00d68f]/40 transition-all placeholder-white/20"
                   />
                   <button
                     onClick={handleApplyPromo}
                     disabled={promoLoading || !promoInput}
-                    className="px-4 py-3 bg-[#00d68f]/10 border border-[#00d68f]/20 text-[#00d68f] rounded-2xl font-black text-xs uppercase hover:bg-[#00d68f]/20 transition-all disabled:opacity-40 flex items-center gap-1"
+                    className="px-4 py-3 bg-[#00d68f]/10 border border-[#00d68f]/40 text-[#00d68f] rounded-2xl font-black text-xs uppercase hover:bg-[#00d68f]/20 transition-all disabled:opacity-40 flex items-center gap-1"
                   >
                     {promoLoading ? (
                       <Loader2 size={14} className="animate-spin" />
@@ -540,7 +540,7 @@ export default function CheckoutPage() {
             </div>
 
             {/* Итого */}
-            <div className="bg-white/[0.03] border border-[#00d68f]/20 rounded-[2rem] p-6 flex flex-col gap-4">
+            <div className="bg-[#0a1860]/60 border border-[#00d68f]/40 rounded-[2rem] p-6 flex flex-col gap-4">
               {loyalty.discount > 0 && (
                 <>
                   <div className="flex justify-between items-center">

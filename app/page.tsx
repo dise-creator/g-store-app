@@ -125,7 +125,7 @@ export default function Home() {
                   className={`relative px-4 py-2.5 rounded-2xl text-xs font-black uppercase tracking-widest whitespace-nowrap transition-all shrink-0 ${
                     activeCategory === cat.key
                       ? "text-black"
-                      : "text-white/40 hover:text-white bg-white/[0.03] border border-[#00d68f]/20 hover:border-white/20"
+                      : "text-white/40 hover:text-white bg-[#0a1860]/60 border border-[#00d68f]/40 hover:border-white/20"
                   }`}
                 >
                   {activeCategory === cat.key && (
@@ -150,7 +150,7 @@ export default function Home() {
               className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black uppercase tracking-widest shrink-0 transition-all border ${
                 showFilters || activeSort !== "newest"
                   ? "bg-[#00d68f]/10 border-[#00d68f]/30 text-[#00d68f]"
-                  : "bg-white/[0.03] border-[#00d68f]/20 text-white/40 hover:text-white"
+                  : "bg-[#0a1860]/60 border-[#00d68f]/40 text-white/40 hover:text-white"
               }`}
             >
               <SlidersHorizontal size={14} />
@@ -167,7 +167,7 @@ export default function Home() {
                 transition={{ duration: 0.3 }}
                 className="overflow-hidden"
               >
-                <div className="flex items-center gap-2 p-4 bg-white/[0.03] border border-[#00d68f]/20 rounded-2xl flex-wrap">
+                <div className="flex items-center gap-2 p-4 bg-[#0a1860]/60 border border-[#00d68f]/40 rounded-2xl flex-wrap">
                   <span className="text-white/20 text-[10px] uppercase font-black tracking-widest mr-2">
                     Сортировать:
                   </span>
@@ -178,7 +178,7 @@ export default function Home() {
                       className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border ${
                         activeSort === opt.key
                           ? "bg-[#00d68f] text-black border-transparent"
-                          : "bg-white/[0.03] border-[#00d68f]/20 text-white/40 hover:text-white"
+                          : "bg-[#0a1860]/60 border-[#00d68f]/40 text-white/40 hover:text-white"
                       }`}
                     >
                       {opt.label}

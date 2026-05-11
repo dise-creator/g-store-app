@@ -185,7 +185,7 @@ export default function KeysPage() {
         <div className="flex items-center gap-4 mb-10">
           <Link
             href="/"
-            className="w-10 h-10 rounded-xl bg-white/5 border border-[#00d68f]/20 flex items-center justify-center text-white/40 hover:text-[#00d68f] transition-all"
+            className="w-10 h-10 rounded-xl bg-white/5 border border-[#00d68f]/40 flex items-center justify-center text-white/40 hover:text-[#00d68f] transition-all"
           >
             <ChevronLeft size={20} />
           </Link>
@@ -201,7 +201,7 @@ export default function KeysPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="flex flex-col gap-4">
-            <div className="bg-white/[0.03] border border-[#00d68f]/20 rounded-[2rem] p-6">
+            <div className="bg-[#0a1860]/60 border border-[#00d68f]/40 rounded-[2rem] p-6">
               <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-3">
                 Регион карты
               </p>
@@ -213,7 +213,7 @@ export default function KeysPage() {
                     className={`flex-1 py-3 rounded-2xl font-black text-sm transition-all flex items-center justify-center gap-2 ${
                       region === r.code
                         ? "bg-[#00d68f] text-black"
-                        : "bg-white/5 border border-[#00d68f]/20 text-white/40 hover:text-white"
+                        : "bg-white/5 border border-[#00d68f]/40 text-white/40 hover:text-white"
                     }`}
                   >
                     <span className="text-lg">{r.flag}</span>
@@ -223,7 +223,7 @@ export default function KeysPage() {
               </div>
             </div>
 
-            <div className="bg-white/[0.03] border border-[#00d68f]/20 rounded-[2rem] p-6">
+            <div className="bg-[#0a1860]/60 border border-[#00d68f]/40 rounded-[2rem] p-6">
               <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-3">
                 Номинал карты PSN
               </p>
@@ -235,7 +235,7 @@ export default function KeysPage() {
                     className={`py-3 rounded-2xl font-black text-sm transition-all flex items-center justify-center gap-1.5 ${
                       denomination === d
                         ? "bg-[#00d68f] text-black"
-                        : "bg-white/5 border border-[#00d68f]/20 text-white/40 hover:text-white"
+                        : "bg-white/5 border border-[#00d68f]/40 text-white/40 hover:text-white"
                     }`}
                   >
                     <CreditCard size={12} />
@@ -245,11 +245,11 @@ export default function KeysPage() {
               </div>
             </div>
 
-            <div className="bg-white/[0.03] border border-[#00d68f]/20 rounded-[2rem] p-6">
+            <div className="bg-[#0a1860]/60 border border-[#00d68f]/40 rounded-[2rem] p-6">
               <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-3">
                 Файл с ключами (.txt)
               </p>
-              <label className="flex flex-col items-center justify-center gap-3 p-6 border-2 border-dashed border-[#00d68f]/20 rounded-2xl cursor-pointer hover:border-[#00d68f]/30 transition-all group">
+              <label className="flex flex-col items-center justify-center gap-3 p-6 border-2 border-dashed border-[#00d68f]/40 rounded-2xl cursor-pointer hover:border-[#00d68f]/30 transition-all group">
                 <Upload
                   size={24}
                   className="text-white/20 group-hover:text-[#00d68f]/50 transition-all"
@@ -272,7 +272,7 @@ export default function KeysPage() {
                 onChange={(e) => setKeysText(e.target.value)}
                 placeholder={"XXXXX-XXXXX-XXXXX\nXXXXX-XXXXX-XXXXX"}
                 rows={5}
-                className="w-full px-4 py-3 bg-white/5 border border-[#00d68f]/20 rounded-2xl text-white/70 font-mono text-xs focus:outline-none focus:border-[#00d68f]/40 transition-all placeholder-white/10 resize-none"
+                className="w-full px-4 py-3 bg-white/5 border border-[#00d68f]/40 rounded-2xl text-white/70 font-mono text-xs focus:outline-none focus:border-[#00d68f]/40 transition-all placeholder-white/10 resize-none"
               />
               {keysText && (
                 <p className="text-[#00d68f] text-[10px] font-black mt-2">
@@ -300,7 +300,7 @@ export default function KeysPage() {
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
-                  className="p-4 bg-[#00d68f]/10 border border-[#00d68f]/20 rounded-2xl text-[#00d68f] text-sm font-bold"
+                  className="p-4 bg-[#00d68f]/10 border border-[#00d68f]/40 rounded-2xl text-[#00d68f] text-sm font-bold"
                 >
                   {success}
                 </motion.div>
@@ -327,7 +327,7 @@ export default function KeysPage() {
           </div>
 
           <div className="flex flex-col gap-4">
-            <div className="bg-white/[0.03] border border-[#00d68f]/20 rounded-[2rem] p-6">
+            <div className="bg-[#0a1860]/60 border border-[#00d68f]/40 rounded-[2rem] p-6">
               <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-3">
                 Фильтр по региону
               </p>
@@ -341,7 +341,7 @@ export default function KeysPage() {
                     className={`flex-1 py-2 rounded-2xl font-black text-xs transition-all flex items-center justify-center gap-1.5 ${
                       filterRegion === r.code
                         ? "bg-[#00d68f] text-black"
-                        : "bg-white/5 border border-[#00d68f]/20 text-white/40 hover:text-white"
+                        : "bg-white/5 border border-[#00d68f]/40 text-white/40 hover:text-white"
                     }`}
                   >
                     {r.flag} {r.label}
@@ -351,7 +351,7 @@ export default function KeysPage() {
             </div>
 
             {denominationStats.length > 0 && (
-              <div className="bg-white/[0.03] border border-[#00d68f]/20 rounded-[2rem] p-6">
+              <div className="bg-[#0a1860]/60 border border-[#00d68f]/40 rounded-[2rem] p-6">
                 <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-3">
                   По номиналам
                 </p>
@@ -367,7 +367,7 @@ export default function KeysPage() {
                       className={`flex items-center justify-between p-3 rounded-2xl border transition-all ${
                         filterDenomination === d.value
                           ? "border-[#00d68f]/30 bg-[#00d68f]/5"
-                          : "border-[#00d68f]/15 hover:border-[#00d68f]/20"
+                          : "border-[#00d68f]/30 hover:border-[#00d68f]/40"
                       }`}
                     >
                       <div className="flex items-center gap-2">
@@ -377,10 +377,10 @@ export default function KeysPage() {
                         </span>
                       </div>
                       <div className="flex gap-1">
-                        <span className="text-[9px] bg-white/5 border border-[#00d68f]/20 text-white/50 px-1.5 py-1 rounded-lg font-black">
+                        <span className="text-[9px] bg-white/5 border border-[#00d68f]/40 text-white/50 px-1.5 py-1 rounded-lg font-black">
                           🇹🇷 {d.TR.free} св
                         </span>
-                        <span className="text-[9px] bg-white/5 border border-[#00d68f]/20 text-white/50 px-1.5 py-1 rounded-lg font-black">
+                        <span className="text-[9px] bg-white/5 border border-[#00d68f]/40 text-white/50 px-1.5 py-1 rounded-lg font-black">
                           🇮🇳 {d.IN.free} св
                         </span>
                       </div>
@@ -401,16 +401,16 @@ export default function KeysPage() {
               </div>
             )}
 
-            <div className="bg-white/[0.03] border border-[#00d68f]/20 rounded-[2rem] p-6 flex-1">
+            <div className="bg-[#0a1860]/60 border border-[#00d68f]/40 rounded-[2rem] p-6 flex-1">
               <div className="flex items-center justify-between mb-4">
                 <p className="text-white/30 text-[10px] uppercase font-black tracking-widest">
                   Все ключи
                 </p>
                 <div className="flex gap-2">
-                  <span className="text-[10px] bg-[#00d68f]/10 border border-[#00d68f]/20 text-[#00d68f] px-2 py-1 rounded-lg font-black">
+                  <span className="text-[10px] bg-[#00d68f]/10 border border-[#00d68f]/40 text-[#00d68f] px-2 py-1 rounded-lg font-black">
                     {freeCount} своб
                   </span>
-                  <span className="text-[10px] bg-white/5 border border-[#00d68f]/20 text-white/30 px-2 py-1 rounded-lg font-black">
+                  <span className="text-[10px] bg-white/5 border border-[#00d68f]/40 text-white/30 px-2 py-1 rounded-lg font-black">
                     {usedCount} исп
                   </span>
                 </div>
@@ -431,7 +431,7 @@ export default function KeysPage() {
                 {filteredVouchers.map((v) => (
                   <div
                     key={v.id}
-                    className={`flex items-center justify-between gap-2 p-3 rounded-xl border ${v.is_used ? "border-[#00d68f]/15 bg-white/[0.01] opacity-40" : "border-[#00d68f]/10 bg-[#00d68f]/[0.02]"}`}
+                    className={`flex items-center justify-between gap-2 p-3 rounded-xl border ${v.is_used ? "border-[#00d68f]/30 bg-white/[0.01] opacity-40" : "border-[#00d68f]/10 bg-[#00d68f]/[0.02]"}`}
                   >
                     <div className="flex items-center gap-2 min-w-0">
                       <Key
@@ -449,7 +449,7 @@ export default function KeysPage() {
                         {REGIONS.find((r) => r.code === v.region)?.flag}
                       </span>
                       {v.denomination > 0 && (
-                        <span className="text-[9px] bg-[#00d68f]/10 border border-[#00d68f]/20 text-[#00d68f] px-1.5 py-0.5 rounded-lg font-black">
+                        <span className="text-[9px] bg-[#00d68f]/10 border border-[#00d68f]/40 text-[#00d68f] px-1.5 py-0.5 rounded-lg font-black">
                           {v.denomination.toLocaleString()} ₽
                         </span>
                       )}

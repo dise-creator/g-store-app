@@ -180,7 +180,7 @@ export default function GameModal() {
         {/* Закрытие */}
         <button
           onClick={closeModal}
-          className="absolute top-4 right-4 z-[250] w-9 h-9 flex items-center justify-center bg-white/10 hover:bg-red-500/20 border border-[#00d68f]/20 rounded-full text-white/50 hover:text-red-400 transition-all"
+          className="absolute top-4 right-4 z-[250] w-9 h-9 flex items-center justify-center bg-white/10 hover:bg-red-500/20 border border-[#00d68f]/40 rounded-full text-white/50 hover:text-red-400 transition-all"
         >
           <X size={18} />
         </button>
@@ -204,13 +204,13 @@ export default function GameModal() {
             <>
               <button
                 onClick={prevSlide}
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/50 backdrop-blur-xl border border-[#00d68f]/20 rounded-full text-white flex items-center justify-center transition-all hover:bg-[#00d68f] hover:text-black"
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/50 backdrop-blur-xl border border-[#00d68f]/40 rounded-full text-white flex items-center justify-center transition-all hover:bg-[#00d68f] hover:text-black"
               >
                 <ChevronLeft size={18} />
               </button>
               <button
                 onClick={nextSlide}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/50 backdrop-blur-xl border border-[#00d68f]/20 rounded-full text-white flex items-center justify-center transition-all hover:bg-[#00d68f] hover:text-black"
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/50 backdrop-blur-xl border border-[#00d68f]/40 rounded-full text-white flex items-center justify-center transition-all hover:bg-[#00d68f] hover:text-black"
               >
                 <ChevronRight size={18} />
               </button>
@@ -245,19 +245,19 @@ export default function GameModal() {
                   PS5
                 </span>
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white/5 rounded-xl border border-[#00d68f]/15 shrink-0">
+              <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white/5 rounded-xl border border-[#00d68f]/30 shrink-0">
                 <ShieldCheck size={11} className="text-[#00d68f]" />
                 <span className="text-[9px] text-white/50 uppercase font-bold tracking-widest">
                   Карта пополнения
                 </span>
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white/5 rounded-xl border border-[#00d68f]/15 shrink-0">
+              <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white/5 rounded-xl border border-[#00d68f]/30 shrink-0">
                 <Zap size={11} className="text-[#00d68f]" />
                 <span className="text-[9px] text-white/50 uppercase font-bold tracking-widest">
                   Моментально
                 </span>
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#00d68f]/10 border border-[#00d68f]/20 rounded-xl shrink-0">
+              <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#00d68f]/10 border border-[#00d68f]/40 rounded-xl shrink-0">
                 <span className="text-sm">{currentRegion.flag}</span>
                 <span className="text-[9px] text-[#00d68f] uppercase font-black tracking-widest">
                   {currentRegion.name}
@@ -303,7 +303,7 @@ export default function GameModal() {
                       className={`flex flex-col p-3 md:p-4 rounded-2xl border transition-all text-left ${
                         isSelected
                           ? "bg-blue-900/20 border-[#00d68f] shadow-[0_0_25px_rgba(99,243,247,0.08)]"
-                          : "border-[#00d68f]/15 hover:border-white/15 bg-white/[0.02]"
+                          : "border-[#00d68f]/30 hover:border-white/15 bg-[#0a1860]/40"
                       }`}
                     >
                       <div className="flex justify-between items-center w-full gap-2">
@@ -329,7 +329,7 @@ export default function GameModal() {
                           {edition.cards.map((card: Card, cIdx: number) => (
                             <div
                               key={cIdx}
-                              className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-[9px] font-black ${isSelected ? "bg-[#00d68f]/10 border-[#00d68f]/20 text-[#00d68f]" : "bg-white/[0.03] border-[#00d68f]/15 text-white/20"}`}
+                              className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-[9px] font-black ${isSelected ? "bg-[#00d68f]/10 border-[#00d68f]/40 text-[#00d68f]" : "bg-[#0a1860]/60 border-[#00d68f]/30 text-white/20"}`}
                             >
                               <CreditCard size={9} />
                               {card.quantity > 1 && (
@@ -388,7 +388,7 @@ export default function GameModal() {
                           ? "bg-blue-900/20 border-blue-700/40"
                           : idx === 0
                             ? "bg-green-500/10 border-green-500/20"
-                            : "bg-white/[0.02] border-[#00d68f]/15"
+                            : "bg-[#0a1860]/40 border-[#00d68f]/30"
                       }`}
                     >
                       <div className="flex items-center gap-1.5">
@@ -411,7 +411,7 @@ export default function GameModal() {
             )}
 
             {/* Инструкция — только десктоп */}
-            <div className="hidden md:flex items-center gap-4 p-4 bg-white/[0.02] border border-[#00d68f]/15 rounded-2xl overflow-x-auto no-scrollbar">
+            <div className="hidden md:flex items-center gap-4 p-4 bg-[#0a1860]/40 border border-[#00d68f]/30 rounded-2xl overflow-x-auto no-scrollbar">
               {[
                 { step: "1", text: "Купи карту PSN" },
                 { step: "2", text: "Получи код" },
@@ -419,7 +419,7 @@ export default function GameModal() {
               ].map((item, i) => (
                 <React.Fragment key={item.step}>
                   <div className="flex items-center gap-2 shrink-0">
-                    <div className="w-6 h-6 rounded-full bg-[#00d68f]/10 border border-[#00d68f]/20 flex items-center justify-center shrink-0">
+                    <div className="w-6 h-6 rounded-full bg-[#00d68f]/10 border border-[#00d68f]/40 flex items-center justify-center shrink-0">
                       <span className="text-[#00d68f] text-[8px] font-black">
                         {item.step}
                       </span>
@@ -437,7 +437,7 @@ export default function GameModal() {
           </div>
 
           {/* Итого */}
-          <div className="sticky bottom-0 bg-[#0d1f6e] border-t border-[#00d68f]/15 p-4 md:p-10 md:pt-5">
+          <div className="sticky bottom-0 bg-[#0d1f6e] border-t border-[#00d68f]/30 p-4 md:p-10 md:pt-5">
             <div className="flex items-center justify-between mb-3">
               <div>
                 <span className="text-[9px] text-white/20 uppercase font-bold tracking-widest block">

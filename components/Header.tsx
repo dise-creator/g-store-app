@@ -266,7 +266,7 @@ export default function Header({
             onClick={handleSearchClick}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.85, rotate: 15 }}
-            className="p-2 md:p-3 bg-white/[0.03] hover:bg-white/[0.08] rounded-xl md:rounded-2xl border border-[#00d68f]/15 transition-colors group relative overflow-hidden"
+            className="p-2 md:p-3 bg-[#0a1860]/60 hover:bg-white/[0.08] rounded-xl md:rounded-2xl border border-[#00d68f]/30 transition-colors group relative overflow-hidden"
           >
             <motion.div
               className="absolute inset-0 rounded-2xl bg-[#00d68f]/10"
@@ -283,7 +283,7 @@ export default function Header({
           <motion.button
             onClick={onWishlistClick}
             whileTap={{ scale: 0.8 }}
-            className="relative p-2 md:p-3 bg-white/[0.03] hover:bg-white/[0.08] rounded-xl md:rounded-2xl border border-[#00d68f]/15 transition-all group overflow-visible hidden md:flex"
+            className="relative p-2 md:p-3 bg-[#0a1860]/60 hover:bg-white/[0.08] rounded-xl md:rounded-2xl border border-[#00d68f]/30 transition-all group overflow-visible hidden md:flex"
           >
             <motion.div
               className="absolute inset-0 rounded-2xl bg-[#00d68f]/10"

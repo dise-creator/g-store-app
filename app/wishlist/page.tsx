@@ -49,7 +49,7 @@ export default function WishlistPage() {
           <div className="flex items-center gap-6">
             <Link
               href="/"
-              className="group flex items-center justify-center w-10 h-10 rounded-full border border-[#00d68f]/20 text-white/30 hover:text-[#00d68f] hover:border-[#00d68f]/40 hover:bg-[#00d68f]/5 transition-all"
+              className="group flex items-center justify-center w-10 h-10 rounded-full border border-[#00d68f]/40 text-white/30 hover:text-[#00d68f] hover:border-[#00d68f]/40 hover:bg-[#00d68f]/5 transition-all"
             >
               <ChevronLeft
                 size={20}
@@ -74,7 +74,7 @@ export default function WishlistPage() {
                 className={`flex items-center gap-2 px-4 py-3 rounded-2xl border text-xs font-black uppercase tracking-wider transition-all ${
                   confirmClear
                     ? "bg-red-500/20 border-red-500/40 text-red-400"
-                    : "bg-white/[0.03] border-[#00d68f]/15 text-white/30 hover:bg-red-500/10 hover:border-red-500/20 hover:text-red-400"
+                    : "bg-[#0a1860]/60 border-[#00d68f]/30 text-white/30 hover:bg-red-500/10 hover:border-red-500/20 hover:text-red-400"
                 }`}
               >
                 <Trash2 size={14} />
@@ -82,7 +82,7 @@ export default function WishlistPage() {
               </motion.button>
             )}
 
-            <div className="flex items-center gap-3 px-5 py-3 bg-white/[0.03] border border-[#00d68f]/15 rounded-2xl">
+            <div className="flex items-center gap-3 px-5 py-3 bg-[#0a1860]/60 border border-[#00d68f]/30 rounded-2xl">
               <Heart size={16} className="text-[#00d68f] fill-[#00d68f]/20" />
               <span className="text-white font-michroma text-xl leading-none">
                 {items.length}
@@ -126,7 +126,7 @@ export default function WishlistPage() {
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="h-[50vh] flex flex-col items-center justify-center text-center space-y-8 border border-[#00d68f]/15 rounded-[3rem] bg-white/[0.01]"
+                className="h-[50vh] flex flex-col items-center justify-center text-center space-y-8 border border-[#00d68f]/30 rounded-[3rem] bg-white/[0.01]"
               >
                 <div className="relative">
                   <Heart size={80} className="text-white/[0.03]" />

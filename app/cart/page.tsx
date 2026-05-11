@@ -76,7 +76,7 @@ export default function CartPage() {
         {items.map((item, index) => (
           <div
             key={`${item.cartItemId}-${index}`}
-            className="bg-white/5 border border-[#00d68f]/20 rounded-3xl p-5 flex items-center gap-6 backdrop-blur-sm"
+            className="bg-white/5 border border-[#00d68f]/40 rounded-3xl p-5 flex items-center gap-6 backdrop-blur-sm"
           >
             <div className="relative w-24 h-28 rounded-2xl overflow-hidden flex-shrink-0 bg-white/10">
               <Image
@@ -97,7 +97,7 @@ export default function CartPage() {
               </p>
             </div>
 
-            <div className="flex items-center gap-4 bg-black/40 rounded-2xl px-4 py-2 border border-[#00d68f]/20">
+            <div className="flex items-center gap-4 bg-black/40 rounded-2xl px-4 py-2 border border-[#00d68f]/40">
               <button
                 onClick={() =>
                   updateQuantity(
@@ -132,10 +132,10 @@ export default function CartPage() {
         ))}
       </div>
 
-      <div className="bg-white/5 border border-[#00d68f]/20 rounded-[32px] p-8 backdrop-blur-md">
+      <div className="bg-white/5 border border-[#00d68f]/40 rounded-[32px] p-8 backdrop-blur-md">
         {/* Скидка лояльности */}
         {loyalty.discount > 0 && (
-          <div className="flex flex-col gap-2 mb-6 p-4 bg-[#00d68f]/5 border border-[#00d68f]/20 rounded-2xl">
+          <div className="flex flex-col gap-2 mb-6 p-4 bg-[#00d68f]/5 border border-[#00d68f]/40 rounded-2xl">
             <div className="flex justify-between items-center">
               <span className="text-white/40 uppercase font-black text-xs">
                 Цена без скидки

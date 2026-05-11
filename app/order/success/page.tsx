@@ -81,7 +81,7 @@ function SuccessContent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="w-full bg-white/[0.03] border border-[#00d68f]/20 rounded-[2rem] p-6 flex flex-col gap-4"
+            className="w-full bg-[#0a1860]/60 border border-[#00d68f]/40 rounded-[2rem] p-6 flex flex-col gap-4"
           >
             <p className="text-white/20 text-[10px] uppercase font-black tracking-[0.3em]">
               Ваши ключи активации
@@ -92,7 +92,7 @@ function SuccessContent() {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4 + i * 0.1 }}
-                className="flex items-center justify-between p-4 bg-white/[0.02] border border-[#00d68f]/15 rounded-2xl gap-4"
+                className="flex items-center justify-between p-4 bg-[#0a1860]/40 border border-[#00d68f]/30 rounded-2xl gap-4"
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 mb-1">
@@ -104,7 +104,7 @@ function SuccessContent() {
                     {voucher.code}
                   </p>
                   <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-1 px-2 py-1 bg-[#00d68f]/10 border border-[#00d68f]/20 rounded-lg">
+                    <div className="flex items-center gap-1 px-2 py-1 bg-[#00d68f]/10 border border-[#00d68f]/40 rounded-lg">
                       <CreditCard size={10} className="text-[#00d68f]" />
                       <span className="text-[#00d68f] text-[9px] font-black">
                         PSN {voucher.denomination.toLocaleString()} ₽
@@ -121,7 +121,7 @@ function SuccessContent() {
                   className={`shrink-0 p-3 rounded-xl border transition-all ${
                     copied === voucher.id
                       ? "bg-[#00d68f]/10 border-[#00d68f]/30 text-[#00d68f]"
-                      : "bg-white/5 border-[#00d68f]/20 text-white/30 hover:text-white"
+                      : "bg-white/5 border-[#00d68f]/40 text-white/30 hover:text-white"
                   }`}
                 >
                   {copied === voucher.id ? (
@@ -153,7 +153,7 @@ function SuccessContent() {
         >
           <Link
             href="/profile"
-            className="flex-1 flex items-center justify-center gap-2 py-4 bg-white/5 border border-[#00d68f]/20 text-white/50 hover:text-white rounded-2xl font-black text-xs uppercase  tracking-widest transition-all"
+            className="flex-1 flex items-center justify-center gap-2 py-4 bg-white/5 border border-[#00d68f]/40 text-white/50 hover:text-white rounded-2xl font-black text-xs uppercase  tracking-widest transition-all"
           >
             <ShoppingBag size={16} />
             Мои заказы
