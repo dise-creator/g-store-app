@@ -2,12 +2,23 @@
 
 import React, { useState, useMemo, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search as SearchIcon, X, Clock, TrendingUp, ShoppingCart, Check } from "lucide-react";
+import {
+  Search as SearchIcon,
+  X,
+  Clock,
+  TrendingUp,
+  ShoppingCart,
+  Check,
+} from "lucide-react";
 import Image from "next/image";
 import { useCartStore } from "@/store/useCart";
 import { useRegionStore } from "@/store/useRegion";
 import { useGameModal } from "@/store/useGameModal";
-import { getActiveDiscount, getDiscountedPrice, type Game } from "@/store/games";
+import {
+  getActiveDiscount,
+  getDiscountedPrice,
+  type Game,
+} from "@/store/games";
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -18,10 +29,10 @@ interface SearchModalProps {
 const searchMap: Record<string, string> = {
   "Cyberpunk 2077": "Киберпанк 2077 cp77",
   "Counter-Strike 2": "Контр Страйк 2 кс cs cs2",
-  "Minecraft": "Майнкрафт mc мс",
+  Minecraft: "Майнкрафт mc мс",
   "Elden Ring": "Элден Ринг",
   "GTA V": "ГТА 5 gta 5 gta5",
-  "Starfield": "Старфилд",
+  Starfield: "Старфилд",
 };
 
 const HISTORY_KEY = "clic-search-history";
@@ -44,7 +55,11 @@ function saveHistory(history: string[]) {
   } catch {}
 }
 
-export default function SearchModal({ isOpen, onClose, games = [] }: SearchModalProps) {
+export default function SearchModal({
+  isOpen,
+  onClose,
+  games = [],
+}: SearchModalProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [history, setHistory] = useState<string[]>([]);
   const [justAdded, setJustAdded] = useState<string | null>(null);
@@ -54,7 +69,8 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
   const { getPrice } = useRegionStore();
   const openModal = useGameModal((state) => state.openModal);
 
-  const isInCart = (gameId: string) => items.some(item => String(item.id) === String(gameId));
+  const isInCart = (gameId: string) =>
+    items.some((item) => String(item.id) === String(gameId));
 
   useEffect(() => {
     if (isOpen) {
@@ -69,20 +85,22 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
   }, [isOpen]);
 
   useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
     if (isOpen) window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, [isOpen, onClose]);
 
   const addToHistory = (query: string) => {
     if (!query.trim()) return;
-    const next = [query, ...history.filter(h => h !== query)].slice(0, 5);
+    const next = [query, ...history.filter((h) => h !== query)].slice(0, 5);
     setHistory(next);
     saveHistory(next);
   };
 
   const removeFromHistory = (item: string) => {
-    const next = history.filter(h => h !== item);
+    const next = history.filter((h) => h !== item);
     setHistory(next);
     saveHistory(next);
   };
@@ -93,7 +111,11 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
     onClose();
   };
 
-  const handleAddToCart = (e: React.MouseEvent, game: Game, displayPrice: number) => {
+  const handleAddToCart = (
+    e: React.MouseEvent,
+    game: Game,
+    displayPrice: number,
+  ) => {
     e.stopPropagation();
     if (isInCart(game.id)) return;
     addItem({ ...game, price: displayPrice });
@@ -117,10 +139,10 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
       });
   }, [searchQuery, games]);
 
- const popularGames = useMemo(() =>
-  [...games].sort((a, b) => b.price - a.price).slice(0, 6),
-  [games]
-);
+  const popularGames = useMemo(
+    () => [...games].sort((a, b) => b.price - a.price).slice(0, 6),
+    [games],
+  );
 
   return (
     <AnimatePresence>
@@ -143,7 +165,8 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
             className="fixed top-8 left-1/2 -translate-x-1/2 z-[160] w-full max-w-[900px] mx-auto bg-[#0a0f1e] border border-white/10 rounded-[2.5rem] overflow-hidden flex flex-col"
             style={{
               maxHeight: "85vh",
-              boxShadow: "0 40px 100px rgba(0,0,0,0.8), 0 0 40px rgba(0,60,160,0.15)"
+              boxShadow:
+                "0 40px 100px rgba(0,0,0,0.8), 0 0 40px rgba(0,60,160,0.15)",
             }}
             onClick={(e) => e.stopPropagation()}
             onWheel={(e) => e.stopPropagation()}
@@ -151,14 +174,17 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
             {/* Строка поиска */}
             <div className="flex items-center gap-4 p-6 border-b border-white/5 shrink-0">
               <div className="relative flex-1">
-                <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-[#63f3f7]" size={20} />
+                <SearchIcon
+                  className="absolute left-4 top-1/2 -translate-y-1/2 text-[#00d68f]"
+                  size={20}
+                />
                 <input
                   ref={inputRef}
                   type="text"
                   placeholder="Найти игру..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 focus:border-[#63f3f7]/40 rounded-2xl py-4 pl-12 pr-4 text-white text-base outline-none transition-all font-bold tracking-tight placeholder:text-white/20"
+                  className="w-full bg-white/5 border border-white/10 focus:border-[#00d68f]/40 rounded-2xl py-4 pl-12 pr-4 text-white text-base outline-none transition-all font-bold tracking-tight placeholder:text-white/20"
                 />
               </div>
               <button
@@ -171,15 +197,16 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
 
             {/* Контент */}
             <div className="p-6 overflow-y-auto no-scrollbar flex-1">
-
               {searchQuery.length > 0 ? (
                 <div>
                   {searchResults.length > 0 ? (
                     <div className="flex flex-col gap-3">
                       {searchResults.map((game, i) => {
-                        const added = isInCart(game.id) || justAdded === game.id;
+                        const added =
+                          isInCart(game.id) || justAdded === game.id;
                         const discount = getActiveDiscount(game);
-                        const basePrice = discount > 0 ? getDiscountedPrice(game) : game.price;
+                        const basePrice =
+                          discount > 0 ? getDiscountedPrice(game) : game.price;
                         const displayPrice = getPrice(basePrice);
 
                         return (
@@ -189,7 +216,7 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: i * 0.05 }}
-                            className="flex items-center justify-between bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 hover:border-[#63f3f7]/20 rounded-2xl p-4 transition-all group cursor-pointer"
+                            className="flex items-center justify-between bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 hover:border-[#00d68f]/20 rounded-2xl p-4 transition-all group cursor-pointer"
                             onClick={() => handleGameClick(game)}
                           >
                             <div className="flex items-center gap-4">
@@ -216,7 +243,7 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
                                   {game.shortDescription}
                                 </p>
                                 <div className="flex items-center gap-2 mt-1">
-                                  <p className="text-[#63f3f7] text-lg font-black leading-none">
+                                  <p className="text-[#00d68f] text-lg font-black leading-none">
                                     {displayPrice.toLocaleString()} ₽
                                   </p>
                                   {discount > 0 && (
@@ -229,15 +256,21 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
                             </div>
 
                             <motion.button
-                              onClick={(e) => handleAddToCart(e, game, displayPrice)}
+                              onClick={(e) =>
+                                handleAddToCart(e, game, displayPrice)
+                              }
                               whileTap={{ scale: 0.9 }}
                               className={`shrink-0 flex items-center gap-2 px-5 py-3 rounded-2xl text-xs font-black uppercase transition-all ${
                                 added
-                                  ? "bg-[#63f3f7] text-black shadow-[0_0_15px_rgba(99,243,247,0.3)]"
-                                  : "bg-white/5 text-white/40 border border-white/10 hover:bg-[#63f3f7]/10 hover:text-[#63f3f7] hover:border-[#63f3f7]/30"
+                                  ? "bg-[#00d68f] text-black shadow-[0_0_15px_rgba(99,243,247,0.3)]"
+                                  : "bg-white/5 text-white/40 border border-white/10 hover:bg-[#00d68f]/10 hover:text-[#00d68f] hover:border-[#00d68f]/30"
                               }`}
                             >
-                              {added ? <Check size={14} /> : <ShoppingCart size={14} />}
+                              {added ? (
+                                <Check size={14} />
+                              ) : (
+                                <ShoppingCart size={14} />
+                              )}
                               {added ? "Добавлено" : "В корзину"}
                             </motion.button>
                           </motion.div>
@@ -246,29 +279,42 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
                     </div>
                   ) : (
                     <div className="text-center py-16">
-                      <p className="text-white/10 uppercase font-black text-2xl tracking-tighter">Ничего не найдено</p>
-                      <p className="text-white/5 text-xs uppercase mt-2 tracking-widest">Попробуй другое название</p>
+                      <p className="text-white/10 uppercase font-black text-2xl tracking-tighter">
+                        Ничего не найдено
+                      </p>
+                      <p className="text-white/5 text-xs uppercase mt-2 tracking-widest">
+                        Попробуй другое название
+                      </p>
                     </div>
                   )}
                 </div>
               ) : (
                 <div className="flex flex-col gap-8">
-
                   {history.length > 0 && (
                     <div>
                       <div className="flex items-center gap-2 mb-4">
                         <Clock size={14} className="text-white/20" />
-                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Недавно искали</p>
+                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20">
+                          Недавно искали
+                        </p>
                       </div>
                       <div className="flex flex-col gap-1">
                         {history.map((item) => (
-                          <div key={item} className="flex items-center justify-between px-4 py-3 rounded-xl hover:bg-white/5 transition-all group">
+                          <div
+                            key={item}
+                            className="flex items-center justify-between px-4 py-3 rounded-xl hover:bg-white/5 transition-all group"
+                          >
                             <button
-                              onClick={() => { setSearchQuery(item); inputRef.current?.focus(); }}
+                              onClick={() => {
+                                setSearchQuery(item);
+                                inputRef.current?.focus();
+                              }}
                               className="flex items-center gap-3 flex-1 text-left"
                             >
                               <SearchIcon size={14} className="text-white/20" />
-                              <span className="text-white/50 text-sm font-bold group-hover:text-white transition-colors">{item}</span>
+                              <span className="text-white/50 text-sm font-bold group-hover:text-white transition-colors">
+                                {item}
+                              </span>
                             </button>
                             <button
                               onClick={() => removeFromHistory(item)}
@@ -284,13 +330,16 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
 
                   <div>
                     <div className="flex items-center gap-2 mb-5">
-                      <TrendingUp size={14} className="text-[#63f3f7]" />
-                      <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Популярные игры</p>
+                      <TrendingUp size={14} className="text-[#00d68f]" />
+                      <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20">
+                        Популярные игры
+                      </p>
                     </div>
                     <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
                       {popularGames.map((game) => {
                         const discount = getActiveDiscount(game);
-                        const basePrice = discount > 0 ? getDiscountedPrice(game) : game.price;
+                        const basePrice =
+                          discount > 0 ? getDiscountedPrice(game) : game.price;
                         const displayPrice = getPrice(basePrice);
 
                         return (
@@ -301,7 +350,7 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
                             whileTap={{ scale: 0.97 }}
                             className="flex flex-col gap-2 group"
                           >
-                            <div className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden border border-white/5 group-hover:border-[#63f3f7]/30 transition-all bg-[#161618] shadow-lg group-hover:shadow-[0_8px_20px_rgba(0,0,0,0.4)]">
+                            <div className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden border border-white/5 group-hover:border-[#00d68f]/30 transition-all bg-[#161618] shadow-lg group-hover:shadow-[0_8px_20px_rgba(0,0,0,0.4)]">
                               <Image
                                 src={game.image}
                                 alt={game.title}
@@ -320,7 +369,7 @@ export default function SearchModal({ isOpen, onClose, games = [] }: SearchModal
                               <p className="text-white/60 text-[9px] uppercase font-black truncate group-hover:text-white transition-colors leading-tight">
                                 {game.title}
                               </p>
-                              <p className="text-[#63f3f7] text-[10px] font-black mt-0.5">
+                              <p className="text-[#00d68f] text-[10px] font-black mt-0.5">
                                 {displayPrice.toLocaleString()} ₽
                               </p>
                             </div>

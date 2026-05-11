@@ -28,11 +28,11 @@ export default function MobileNav() {
 
   const totalItems = useMemo(
     () => items.reduce((sum, item) => sum + item.quantity, 0),
-    [items]
+    [items],
   );
   const totalPrice = useMemo(
     () => items.reduce((sum, item) => sum + item.price * item.quantity, 0),
-    [items]
+    [items],
   );
 
   useEffect(() => {
@@ -91,7 +91,8 @@ export default function MobileNav() {
           >
             {NAV_ITEMS.map((item) => {
               const Icon = item.icon;
-              const isActive = item.id === "home" ? pathname === "/" : pathname === item.href;
+              const isActive =
+                item.id === "home" ? pathname === "/" : pathname === item.href;
               const isWishlist = item.id === "wishlist";
 
               return (
@@ -107,10 +108,14 @@ export default function MobileNav() {
                       layoutId="nav-indicator"
                       className="absolute inset-0 rounded-2xl"
                       style={{
-                        background: "rgba(99, 243, 247, 0.1)",
-                        border: "1px solid rgba(99, 243, 247, 0.25)",
+                        background: "rgba(0, 214, 143, 0.1)",
+                        border: "1px solid rgba(0, 214, 143, 0.25)",
                       }}
-                      transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                      transition={{
+                        type: "spring",
+                        damping: 25,
+                        stiffness: 300,
+                      }}
                     />
                   )}
 
@@ -118,18 +123,24 @@ export default function MobileNav() {
                     <Icon
                       size={20}
                       className="transition-all"
-                      style={{ color: isActive ? "#63f3f7" : "rgba(255,255,255,0.35)" }}
+                      style={{
+                        color: isActive ? "#00d68f" : "rgba(255,255,255,0.35)",
+                      }}
                     />
                     {isWishlist && wishlistItems.length > 0 && (
-                      <div className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#63f3f7] rounded-full flex items-center justify-center">
-                        <span className="text-black text-[8px] font-black">{wishlistItems.length}</span>
+                      <div className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#00d68f] rounded-full flex items-center justify-center">
+                        <span className="text-black text-[8px] font-black">
+                          {wishlistItems.length}
+                        </span>
                       </div>
                     )}
                   </div>
 
                   <span
                     className="text-[9px] font-black uppercase tracking-wider mt-0.5 transition-all"
-                    style={{ color: isActive ? "#63f3f7" : "rgba(255,255,255,0.25)" }}
+                    style={{
+                      color: isActive ? "#00d68f" : "rgba(255,255,255,0.25)",
+                    }}
                   >
                     {item.label}
                   </span>
@@ -150,28 +161,33 @@ export default function MobileNav() {
                   initial={{ scale: 1, opacity: 0.5 }}
                   animate={{ scale: 2, opacity: 0 }}
                   transition={{ duration: 0.6 }}
-                  className="absolute inset-0 rounded-2xl bg-[#63f3f7]"
+                  className="absolute inset-0 rounded-2xl bg-[#00d68f]"
                 />
               )}
 
               <div className="relative">
                 <ShoppingCart
                   size={20}
-                  style={{ color: totalItems > 0 ? "#63f3f7" : "rgba(255,255,255,0.35)" }}
+                  style={{
+                    color:
+                      totalItems > 0 ? "#00d68f" : "rgba(255,255,255,0.35)",
+                  }}
                 />
                 {totalItems > 0 && (
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#63f3f7] rounded-full flex items-center justify-center"
+                    className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#00d68f] rounded-full flex items-center justify-center"
                   >
-                    <span className="text-black text-[8px] font-black">{totalItems}</span>
+                    <span className="text-black text-[8px] font-black">
+                      {totalItems}
+                    </span>
                   </motion.div>
                 )}
               </div>
 
               {totalItems > 0 ? (
-                <span className="text-[9px] font-black text-[#63f3f7] mt-0.5">
+                <span className="text-[9px] font-black text-[#00d68f] mt-0.5">
                   {totalPrice.toLocaleString()} ₽
                 </span>
               ) : (

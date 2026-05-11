@@ -27,7 +27,9 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
   const currentRegion = REGIONS[region];
 
-  useEffect(() => { setIsMounted(true); }, []);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     async function loadUserData() {
@@ -57,10 +59,11 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   }, [isOpen, onClose]);
 
   const originalAmount = items.reduce(
-    (sum, item) => sum + (Number(item.price) || 0) * (item.quantity || 0), 0
+    (sum, item) => sum + (Number(item.price) || 0) * (item.quantity || 0),
+    0,
   );
   const loyalty = getLoyaltyInfo(totalSpent);
-  const discountAmount = Math.round(originalAmount * loyalty.discount / 100);
+  const discountAmount = Math.round((originalAmount * loyalty.discount) / 100);
   const finalAmount = originalAmount - discountAmount;
 
   const handleCheckout = () => {
@@ -102,7 +105,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               </h2>
               <button
                 onClick={onClose}
-                className="w-12 h-12 flex items-center justify-center bg-white/5 hover:bg-[#63f3f7] hover:text-black rounded-full transition-all text-white/50 border border-white/10"
+                className="w-12 h-12 flex items-center justify-center bg-white/5 hover:bg-[#00d68f] hover:text-black rounded-full transition-all text-white/50 border border-white/10"
               >
                 <X size={24} strokeWidth={3} />
               </button>
@@ -119,10 +122,16 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
-                      className="group flex items-center gap-4 bg-white/[0.03] p-4 rounded-[1.8rem] border border-white/10 hover:border-[#63f3f7]/30 transition-all"
+                      className="group flex items-center gap-4 bg-white/[0.03] p-4 rounded-[1.8rem] border border-white/10 hover:border-[#00d68f]/30 transition-all"
                     >
                       <div className="relative w-16 h-20 shrink-0 rounded-2xl overflow-hidden border border-white/10">
-                        <Image src={item.image} alt={item.title} fill className="object-cover" unoptimized />
+                        <Image
+                          src={item.image}
+                          alt={item.title}
+                          fill
+                          className="object-cover"
+                          unoptimized
+                        />
                       </div>
 
                       <div className="flex-1 min-w-0">
@@ -131,15 +140,22 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         </h3>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-1.5">
-                            <p className="text-[#63f3f7] font-black text-base leading-none">
+                            <p className="text-[#00d68f] font-black text-base leading-none">
                               {(Number(item.price) || 0).toLocaleString()} ₽
                             </p>
-                            <span className="text-xs opacity-50">{currentRegion.flag}</span>
+                            <span className="text-xs opacity-50">
+                              {currentRegion.flag}
+                            </span>
                           </div>
                           <div className="flex items-center gap-2.5 bg-black/40 px-2.5 py-1.5 rounded-xl border border-white/5">
                             <button
-                              onClick={() => updateQuantity(item.cartItemId, item.quantity - 1)}
-                              className="text-white/30 hover:text-[#63f3f7] transition-colors p-0.5"
+                              onClick={() =>
+                                updateQuantity(
+                                  item.cartItemId,
+                                  item.quantity - 1,
+                                )
+                              }
+                              className="text-white/30 hover:text-[#00d68f] transition-colors p-0.5"
                             >
                               <Minus size={12} strokeWidth={2.5} />
                             </button>
@@ -147,8 +163,13 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                               {item.quantity}
                             </span>
                             <button
-                              onClick={() => updateQuantity(item.cartItemId, item.quantity + 1)}
-                              className="text-white/30 hover:text-[#63f3f7] transition-colors p-0.5"
+                              onClick={() =>
+                                updateQuantity(
+                                  item.cartItemId,
+                                  item.quantity + 1,
+                                )
+                              }
+                              className="text-white/30 hover:text-[#00d68f] transition-colors p-0.5"
                             >
                               <Plus size={12} strokeWidth={2.5} />
                             </button>
@@ -167,8 +188,14 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 </AnimatePresence>
               ) : (
                 <div className="h-full flex flex-col items-center justify-center opacity-10">
-                  <ShoppingBag size={48} strokeWidth={1} className="mb-2 text-white" />
-                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white">Пусто</p>
+                  <ShoppingBag
+                    size={48}
+                    strokeWidth={1}
+                    className="mb-2 text-white"
+                  />
+                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white">
+                    Пусто
+                  </p>
                 </div>
               )}
             </div>
@@ -177,21 +204,31 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             {items.length > 0 && (
               <div className="p-8 bg-black/80 backdrop-blur-xl border-t border-white/10 space-y-5">
                 {loyalty.discount > 0 && (
-                  <div className="flex flex-col gap-2 p-4 bg-[#63f3f7]/5 border border-[#63f3f7]/20 rounded-2xl">
+                  <div className="flex flex-col gap-2 p-4 bg-[#00d68f]/5 border border-[#00d68f]/20 rounded-2xl">
                     <div className="flex justify-between items-center">
-                      <span className="text-white/30 text-[9px] uppercase font-black tracking-widest">Без скидки</span>
-                      <span className="text-white/30 font-black text-sm line-through">{originalAmount.toLocaleString()} ₽</span>
+                      <span className="text-white/30 text-[9px] uppercase font-black tracking-widest">
+                        Без скидки
+                      </span>
+                      <span className="text-white/30 font-black text-sm line-through">
+                        {originalAmount.toLocaleString()} ₽
+                      </span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-[#63f3f7] text-[9px] uppercase font-black tracking-widest">Скидка {loyalty.discount}% · {loyalty.level}</span>
-                      <span className="text-[#63f3f7] font-black text-sm">−{discountAmount.toLocaleString()} ₽</span>
+                      <span className="text-[#00d68f] text-[9px] uppercase font-black tracking-widest">
+                        Скидка {loyalty.discount}% · {loyalty.level}
+                      </span>
+                      <span className="text-[#00d68f] font-black text-sm">
+                        −{discountAmount.toLocaleString()} ₽
+                      </span>
                     </div>
                   </div>
                 )}
 
                 <div className="flex justify-between items-end">
-                  <span className="text-[10px] font-black uppercase text-white/30 tracking-widest">Итого:</span>
-                  <span className="text-4xl font-black text-[#63f3f7] tracking-tighter leading-none">
+                  <span className="text-[10px] font-black uppercase text-white/30 tracking-widest">
+                    Итого:
+                  </span>
+                  <span className="text-4xl font-black text-[#00d68f] tracking-tighter leading-none">
                     {finalAmount.toLocaleString()} ₽
                   </span>
                 </div>
@@ -199,7 +236,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 <div className="flex flex-col gap-4">
                   <button
                     onClick={handleCheckout}
-                    className="w-full py-6 rounded-2xl font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 bg-[#63f3f7] text-black hover:scale-[1.02] active:scale-95 shadow-[0_0_30px_rgba(99,243,247,0.1)]"
+                    className="w-full py-6 rounded-2xl font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 bg-[#00d68f] text-black hover:scale-[1.02] active:scale-95 shadow-[0_0_30px_rgba(99,243,247,0.1)]"
                   >
                     <CreditCard size={18} />
                     <span className="text-sm">Перейти к оплате</span>

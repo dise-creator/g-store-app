@@ -3,7 +3,11 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { Heart } from "lucide-react";
-import { type Game, getActiveDiscount, getDiscountedPrice } from "@/store/games";
+import {
+  type Game,
+  getActiveDiscount,
+  getDiscountedPrice,
+} from "@/store/games";
 import { useWishlistStore } from "@/store/useWishlist";
 import { useGameModal } from "@/store/useGameModal";
 import { useRegionStore, REGIONS } from "@/store/useRegion";
@@ -45,13 +49,19 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
 
   return (
     <div className="group relative flex flex-col gap-3 transition-all">
-
       <button
         onClick={handleHeartClick}
         type="button"
-        className="absolute top-3 right-3 z-[60] w-9 h-9 flex items-center justify-center bg-black/40 backdrop-blur-md rounded-xl border border-white/10 text-white/40 hover:text-[#63f3f7] transition-all active:scale-90"
+        className="absolute top-3 right-3 z-[60] w-9 h-9 flex items-center justify-center bg-black/40 backdrop-blur-md rounded-xl border border-white/10 text-white/40 hover:text-[#00d68f] transition-all active:scale-90"
       >
-        <Heart size={16} className={isFavorite ? "fill-[#63f3f7] text-[#63f3f7] drop-shadow-[0_0_5px_#63f3f7]" : ""} />
+        <Heart
+          size={16}
+          className={
+            isFavorite
+              ? "fill-[#00d68f] text-[#00d68f] drop-shadow-[0_0_5px_#00d68f]"
+              : ""
+          }
+        />
       </button>
 
       {hasDiscount && (
@@ -62,11 +72,15 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
         </div>
       )}
 
-      <div className={`absolute z-[60] flex items-center gap-1 px-2 py-1 bg-black/60 backdrop-blur-md rounded-lg border border-white/10 ${
-        hasDiscount ? "top-12 left-3" : "top-3 left-3"
-      }`}>
+      <div
+        className={`absolute z-[60] flex items-center gap-1 px-2 py-1 bg-black/60 backdrop-blur-md rounded-lg border border-white/10 ${
+          hasDiscount ? "top-12 left-3" : "top-3 left-3"
+        }`}
+      >
         <span className="text-xs">{currentRegion.flag}</span>
-        <span className="text-[8px] text-white/50 font-black uppercase">{currentRegion.code}</span>
+        <span className="text-[8px] text-white/50 font-black uppercase">
+          {currentRegion.code}
+        </span>
       </div>
 
       <button
@@ -89,7 +103,9 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center bg-[#161618]">
-            <span className="text-white/20 text-xs font-black uppercase">Нет фото</span>
+            <span className="text-white/20 text-xs font-black uppercase">
+              Нет фото
+            </span>
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -97,7 +113,11 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
         {hasDiscount && game.discount_until && (
           <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-red-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
             <p className="text-[9px] text-red-300 font-black uppercase tracking-widest text-center">
-              🔥 Скидка до {new Date(game.discount_until).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })}
+              🔥 Скидка до{" "}
+              {new Date(game.discount_until).toLocaleDateString("ru-RU", {
+                day: "numeric",
+                month: "long",
+              })}
             </p>
           </div>
         )}
@@ -109,13 +129,22 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
         </h3>
         <div className="flex items-center gap-2 flex-wrap">
           <div className="flex items-center gap-1.5">
-            <span className={`font-michroma text-lg leading-none ${hasDiscount ? "text-red-400" : "text-white"}`}>
+            <span
+              className={`font-michroma text-lg leading-none ${hasDiscount ? "text-red-400" : "text-white"}`}
+            >
               {displayPrice.toLocaleString()}
             </span>
-            <span className={`font-michroma text-[10px] mt-1 ${hasDiscount ? "text-red-400" : "text-[#63f3f7]"}`}>₽</span>
+            <span
+              className={`font-michroma text-[10px] mt-1 ${hasDiscount ? "text-red-400" : "text-[#00d68f]"}`}
+            >
+              ₽
+            </span>
           </div>
           <span className="font-michroma text-xs text-white/20 line-through leading-none mt-1">
-            {hasDiscount ? originalDisplayPrice.toLocaleString() : game.price.toLocaleString()} ₽
+            {hasDiscount
+              ? originalDisplayPrice.toLocaleString()
+              : game.price.toLocaleString()}{" "}
+            ₽
           </span>
         </div>
       </div>

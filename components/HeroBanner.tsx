@@ -21,7 +21,7 @@ const COLORS = [
   "#a8c0d8",
   "#ef4444",
   "#4ade80",
-  "#63f3f7",
+  "#00d68f",
   "#f5a623",
   "#a855f7",
   "#f472b6",
@@ -44,21 +44,23 @@ export default function HeroBanner() {
     return () => clearInterval(timer);
   }, [bannerGames.length]);
 
-  if (!isMounted || bannerGames.length === 0) return (
-    <div
-      className="w-full h-[380px] md:h-[580px] mt-4 md:mt-8 rounded-[2rem] md:rounded-[2.5rem]"
-      style={{ backgroundColor: BG }}
-    />
-  );
+  if (!isMounted || bannerGames.length === 0)
+    return (
+      <div
+        className="w-full h-[380px] md:h-[580px] mt-4 md:mt-8 rounded-[2rem] md:rounded-[2.5rem]"
+        style={{ backgroundColor: BG }}
+      />
+    );
 
   const current = bannerGames[index];
   const color = COLORS[index % COLORS.length];
   const fontClass = FONT_CLASSES[index % FONT_CLASSES.length];
   const displayPrice = getPrice(current.price);
   const discount = current.discount_percent ?? 0;
-  const discountedPrice = discount > 0
-    ? Math.round(displayPrice * (1 - discount / 100))
-    : displayPrice;
+  const discountedPrice =
+    discount > 0
+      ? Math.round(displayPrice * (1 - discount / 100))
+      : displayPrice;
 
   const words = current.title.split(" ");
   const mid = Math.ceil(words.length / 2);
@@ -97,8 +99,10 @@ export default function HeroBanner() {
               fill
               className="object-contain transition-transform duration-[10000ms] scale-100 group-hover:scale-[1.03]"
               style={{
-                maskImage: "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 8%, black 85%, transparent 100%)",
-                WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 8%, black 85%, transparent 100%)",
+                maskImage:
+                  "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 8%, black 85%, transparent 100%)",
+                WebkitMaskImage:
+                  "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 8%, black 85%, transparent 100%)",
                 maskComposite: "intersect",
                 WebkitMaskComposite: "source-in",
               }}
@@ -108,11 +112,15 @@ export default function HeroBanner() {
 
           <div
             className="absolute inset-y-0 left-0 z-10 w-full md:w-[55%]"
-            style={{ background: `linear-gradient(to right, ${BG} 0%, ${BG}ee 30%, ${BG}99 60%, transparent 100%)` }}
+            style={{
+              background: `linear-gradient(to right, ${BG} 0%, ${BG}ee 30%, ${BG}99 60%, transparent 100%)`,
+            }}
           />
           <div
             className="absolute bottom-0 left-0 right-0 z-10 h-32 md:h-40"
-            style={{ background: `linear-gradient(to top, ${BG} 0%, transparent 100%)` }}
+            style={{
+              background: `linear-gradient(to top, ${BG} 0%, transparent 100%)`,
+            }}
           />
 
           <div className="absolute inset-0 z-20 flex flex-col justify-end md:justify-center px-6 md:px-24 pb-12 md:pb-0">
@@ -143,9 +151,13 @@ export default function HeroBanner() {
                 </motion.div>
               )}
 
-              <h1 className={`${fontClass} text-4xl sm:text-5xl md:text-8xl font-black uppercase text-white leading-[0.85] drop-shadow-2xl`}>
+              <h1
+                className={`${fontClass} text-4xl sm:text-5xl md:text-8xl font-black uppercase text-white leading-[0.85] drop-shadow-2xl`}
+              >
                 {firstPart} <br />
-                <span style={{ color }} className="opacity-95">{secondPart}</span>
+                <span style={{ color }} className="opacity-95">
+                  {secondPart}
+                </span>
               </h1>
 
               <div className="flex items-center gap-3 md:gap-6">
@@ -155,7 +167,10 @@ export default function HeroBanner() {
                       {displayPrice.toLocaleString()} ₽
                     </span>
                   )}
-                  <span className="font-black text-2xl md:text-4xl" style={{ color }}>
+                  <span
+                    className="font-black text-2xl md:text-4xl"
+                    style={{ color }}
+                  >
                     {discountedPrice.toLocaleString()} ₽
                   </span>
                 </div>
@@ -177,9 +192,14 @@ export default function HeroBanner() {
         {bannerGames.map((_, i) => (
           <button
             key={i}
-            onClick={(e) => { e.stopPropagation(); setIndex(i); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIndex(i);
+            }}
             className={`h-1 md:h-1.5 rounded-full transition-all duration-500 ${
-              i === index ? "w-8 md:w-12" : "w-2 md:w-2.5 bg-white/10 hover:bg-white/30"
+              i === index
+                ? "w-8 md:w-12"
+                : "w-2 md:w-2.5 bg-white/10 hover:bg-white/30"
             }`}
             style={{ backgroundColor: i === index ? color : "" }}
           />

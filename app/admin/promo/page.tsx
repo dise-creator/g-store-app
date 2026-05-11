@@ -115,7 +115,7 @@ export default function PromoPage() {
   if (adminLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-[#63f3f7] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#00d68f] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -129,7 +129,7 @@ export default function PromoPage() {
         </p>
         <Link
           href="/"
-          className="px-6 py-3 bg-[#63f3f7] text-black font-black uppercase  text-xs rounded-2xl"
+          className="px-6 py-3 bg-[#00d68f] text-black font-black uppercase  text-xs rounded-2xl"
         >
           На главную
         </Link>
@@ -143,13 +143,13 @@ export default function PromoPage() {
         <div className="flex items-center gap-4 mb-10">
           <Link
             href="/"
-            className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#63f3f7] transition-all"
+            className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#00d68f] transition-all"
           >
             <ChevronLeft size={20} />
           </Link>
           <div>
             <h1 className="text-3xl font-black  uppercase text-white tracking-tighter">
-              Промо<span className="text-[#63f3f7]">коды</span>
+              Промо<span className="text-[#00d68f]">коды</span>
             </h1>
             <p className="text-white/30 text-xs mt-1">
               Создавай и управляй скидочными кодами
@@ -168,7 +168,7 @@ export default function PromoPage() {
                 <button
                   key={t}
                   onClick={() => setType(t)}
-                  className={`flex-1 py-3 rounded-2xl font-black text-xs uppercase  transition-all ${type === t ? "bg-[#63f3f7] text-black" : "bg-white/5 border border-white/10 text-white/40 hover:text-white"}`}
+                  className={`flex-1 py-3 rounded-2xl font-black text-xs uppercase  transition-all ${type === t ? "bg-[#00d68f] text-black" : "bg-white/5 border border-white/10 text-white/40 hover:text-white"}`}
                 >
                   {t === "percent" ? "Скидка %" : "Сумма ₽"}
                 </button>
@@ -184,7 +184,7 @@ export default function PromoPage() {
                   ? "Например: 15 (15%)"
                   : "Например: 500 (500₽)"
               }
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#63f3f7]/40 transition-all placeholder-white/20"
+              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#00d68f]/40 transition-all placeholder-white/20"
             />
 
             <input
@@ -193,14 +193,14 @@ export default function PromoPage() {
               onChange={(e) => setMaxUses(e.target.value)}
               placeholder="Кол-во использований"
               min="1"
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#63f3f7]/40 transition-all placeholder-white/20"
+              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#00d68f]/40 transition-all placeholder-white/20"
             />
 
             <input
               type="datetime-local"
               value={expiresAt}
               onChange={(e) => setExpiresAt(e.target.value)}
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#63f3f7]/40 transition-all"
+              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#00d68f]/40 transition-all"
             />
             <p className="text-white/20 text-[10px] font-black -mt-2">
               Дата истечения (необязательно)
@@ -209,7 +209,7 @@ export default function PromoPage() {
             <button
               onClick={handleCreate}
               disabled={creating || !value}
-              className="w-full py-4 bg-[#63f3f7] text-black font-black uppercase  text-sm rounded-2xl hover:shadow-[0_0_30px_rgba(99,243,247,0.3)] transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2"
+              className="w-full py-4 bg-[#00d68f] text-black font-black uppercase  text-sm rounded-2xl hover:shadow-[0_0_30px_rgba(99,243,247,0.3)] transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {creating ? (
                 <Loader2 size={16} className="animate-spin" />
@@ -227,7 +227,7 @@ export default function PromoPage() {
 
             {loading && (
               <div className="flex justify-center py-10">
-                <Loader2 size={20} className="animate-spin text-[#63f3f7]" />
+                <Loader2 size={20} className="animate-spin text-[#00d68f]" />
               </div>
             )}
 
@@ -239,11 +239,11 @@ export default function PromoPage() {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
-                    className={`p-3 rounded-2xl border transition-all ${p.is_active ? "border-[#63f3f7]/10 bg-[#63f3f7]/[0.02]" : "border-white/5 bg-white/[0.01] opacity-40"}`}
+                    className={`p-3 rounded-2xl border transition-all ${p.is_active ? "border-[#00d68f]/10 bg-[#00d68f]/[0.02]" : "border-white/5 bg-white/[0.01] opacity-40"}`}
                   >
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2 min-w-0">
-                        <Tag size={12} className="text-[#63f3f7] shrink-0" />
+                        <Tag size={12} className="text-[#00d68f] shrink-0" />
                         <p className="font-mono text-xs text-white font-black truncate">
                           {p.code}
                         </p>
@@ -251,7 +251,7 @@ export default function PromoPage() {
                       <div className="flex items-center gap-1 shrink-0">
                         <button
                           onClick={() => copyCode(p.code)}
-                          className="text-white/20 hover:text-[#63f3f7] transition-all"
+                          className="text-white/20 hover:text-[#00d68f] transition-all"
                         >
                           {copied === p.code ? (
                             <Check size={12} />
@@ -274,7 +274,7 @@ export default function PromoPage() {
                       </div>
                     </div>
                     <div className="flex items-center gap-2 mt-1.5">
-                      <span className="text-[#63f3f7] text-[10px] font-black">
+                      <span className="text-[#00d68f] text-[10px] font-black">
                         {p.type === "percent" ? `−${p.value}%` : `−${p.value}₽`}
                       </span>
                       <span className="text-white/20 text-[10px]">

@@ -51,7 +51,7 @@ export default function Home() {
           .select("*")
           .order("created_at", { ascending: false });
 
-        const loaded = (!error && data?.length) ? data as Game[] : ALL_GAMES;
+        const loaded = !error && data?.length ? (data as Game[]) : ALL_GAMES;
         setGames(loaded);
         setAllGames(loaded);
       } catch {
@@ -65,36 +65,48 @@ export default function Home() {
   }, [setAllGames]);
 
   const getSectionGames = (sectionKey: string) => {
-    const filtered = games.filter(g => g.category?.toUpperCase() === sectionKey.toUpperCase());
+    const filtered = games.filter(
+      (g) => g.category?.toUpperCase() === sectionKey.toUpperCase(),
+    );
     return filtered.length > 0 ? filtered : games.slice(0, 8);
   };
 
   const filteredGames = useMemo(() => {
-    let result = activeCategory === "ALL"
-      ? [...games]
-      : games.filter(g => g.category?.toUpperCase() === activeCategory);
+    let result =
+      activeCategory === "ALL"
+        ? [...games]
+        : games.filter((g) => g.category?.toUpperCase() === activeCategory);
 
     switch (activeSort) {
-      case "price_asc": result.sort((a, b) => a.price - b.price); break;
-      case "price_desc": result.sort((a, b) => b.price - a.price); break;
-      case "discount": result.sort((a, b) => (b.discount_percent ?? 0) - (a.discount_percent ?? 0)); break;
+      case "price_asc":
+        result.sort((a, b) => a.price - b.price);
+        break;
+      case "price_desc":
+        result.sort((a, b) => b.price - a.price);
+        break;
+      case "discount":
+        result.sort(
+          (a, b) => (b.discount_percent ?? 0) - (a.discount_percent ?? 0),
+        );
+        break;
     }
     return result;
   }, [games, activeCategory, activeSort]);
 
   const isFiltered = activeCategory !== "ALL" || activeSort !== "newest";
 
-  const resetFilters = () => { setActiveCategory("ALL"); setActiveSort("newest"); };
+  const resetFilters = () => {
+    setActiveCategory("ALL");
+    setActiveSort("newest");
+  };
 
   return (
     <main className="relative min-h-screen pt-28 md:pt-32 pb-24 overflow-x-hidden">
-
       <div className="fixed inset-0 z-0">
         <AnimatedBackground />
       </div>
 
       <div className="relative z-10 max-w-[1440px] mx-auto px-4 md:px-10 flex flex-col gap-16 md:gap-24">
-
         <section className="w-full">
           <HeroBanner />
         </section>
@@ -119,8 +131,12 @@ export default function Home() {
                   {activeCategory === cat.key && (
                     <motion.div
                       layoutId="category-bg"
-                      className="absolute inset-0 bg-[#63f3f7] rounded-2xl"
-                      transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                      className="absolute inset-0 bg-[#00d68f] rounded-2xl"
+                      transition={{
+                        type: "spring",
+                        damping: 25,
+                        stiffness: 300,
+                      }}
                     />
                   )}
                   <span className="relative z-10">{cat.label}</span>
@@ -133,7 +149,7 @@ export default function Home() {
               whileTap={{ scale: 0.95 }}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black uppercase tracking-widest shrink-0 transition-all border ${
                 showFilters || activeSort !== "newest"
-                  ? "bg-[#63f3f7]/10 border-[#63f3f7]/30 text-[#63f3f7]"
+                  ? "bg-[#00d68f]/10 border-[#00d68f]/30 text-[#00d68f]"
                   : "bg-white/[0.03] border-white/10 text-white/40 hover:text-white"
               }`}
             >
@@ -152,14 +168,16 @@ export default function Home() {
                 className="overflow-hidden"
               >
                 <div className="flex items-center gap-2 p-4 bg-white/[0.03] border border-white/10 rounded-2xl flex-wrap">
-                  <span className="text-white/20 text-[10px] uppercase font-black tracking-widest mr-2">Сортировать:</span>
+                  <span className="text-white/20 text-[10px] uppercase font-black tracking-widest mr-2">
+                    Сортировать:
+                  </span>
                   {SORT_OPTIONS.map((opt) => (
                     <button
                       key={opt.key}
                       onClick={() => setActiveSort(opt.key)}
                       className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border ${
                         activeSort === opt.key
-                          ? "bg-[#63f3f7] text-black border-transparent"
+                          ? "bg-[#00d68f] text-black border-transparent"
                           : "bg-white/[0.03] border-white/10 text-white/40 hover:text-white"
                       }`}
                     >
@@ -191,7 +209,12 @@ export default function Home() {
         <div className="flex flex-col gap-12 md:gap-20">
           {loading ? (
             SECTIONS.map((s) => (
-              <GameSlider key={s.key} title={s.title} games={[]} isLoading={true} />
+              <GameSlider
+                key={s.key}
+                title={s.title}
+                games={[]}
+                isLoading={true}
+              />
             ))
           ) : isFiltered ? (
             <motion.div
@@ -200,15 +223,20 @@ export default function Home() {
               transition={{ duration: 0.4 }}
             >
               <GameSlider
-                title={CATEGORIES.find(c => c.key === activeCategory)?.label ?? "Все игры"}
+                title={
+                  CATEGORIES.find((c) => c.key === activeCategory)?.label ??
+                  "Все игры"
+                }
                 games={filteredGames}
               />
               {filteredGames.length === 0 && (
                 <div className="flex flex-col items-center justify-center h-40 gap-3">
-                  <p className="text-white/20 font-black uppercase text-xl">Ничего не найдено</p>
+                  <p className="text-white/20 font-black uppercase text-xl">
+                    Ничего не найдено
+                  </p>
                   <button
                     onClick={resetFilters}
-                    className="px-6 py-3 bg-[#63f3f7] text-black font-black uppercase text-xs rounded-2xl"
+                    className="px-6 py-3 bg-[#00d68f] text-black font-black uppercase text-xs rounded-2xl"
                   >
                     Сбросить фильтры
                   </button>

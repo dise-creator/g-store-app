@@ -37,7 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         ${nunito.variable}
         ${barlowCondensed.variable}
         ${bangers.variable}
-        antialiased text-white
+        antialiased text-white bg-[#00071a]
       `}>
         <ClientLayout>{children}</ClientLayout>
       </body>

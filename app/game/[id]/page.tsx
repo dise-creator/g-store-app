@@ -21,7 +21,7 @@ export default function GamePage({ params }: GamePageProps) {
       <div className="max-w-[1200px] mx-auto">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-white/30 hover:text-[#63f3f7] mb-12 transition-colors group"
+          className="inline-flex items-center gap-2 text-white/30 hover:text-[#00d68f] mb-12 transition-colors group"
         >
           <ChevronLeft
             size={20}
@@ -51,7 +51,7 @@ export default function GamePage({ params }: GamePageProps) {
               <h1 className="text-4xl md:text-6xl font-michroma font-black text-white uppercase  leading-tight">
                 {game.title}
               </h1>
-              <div className="h-1 w-24 bg-[#63f3f7]" />
+              <div className="h-1 w-24 bg-[#00d68f]" />
             </div>
 
             <p className="text-white/60 text-lg font-light leading-relaxed">
@@ -62,10 +62,10 @@ export default function GamePage({ params }: GamePageProps) {
               <span className="text-5xl font-michroma text-white">
                 {game.price.toLocaleString()}
               </span>
-              <span className="text-2xl font-michroma text-[#63f3f7]">₽</span>
+              <span className="text-2xl font-michroma text-[#00d68f]">₽</span>
             </div>
 
-            <button className="group relative w-full h-20 bg-[#63f3f7] text-black rounded-2xl font-black uppercase  tracking-widest overflow-hidden transition-all hover:scale-[1.02] active:scale-95">
+            <button className="group relative w-full h-20 bg-[#00d68f] text-black rounded-2xl font-black uppercase  tracking-widest overflow-hidden transition-all hover:scale-[1.02] active:scale-95">
               <div className="relative z-10 flex items-center justify-center gap-3">
                 <ShoppingCart size={24} />
                 <span>Купить сейчас</span>

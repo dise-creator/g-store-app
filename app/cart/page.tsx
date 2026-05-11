@@ -92,7 +92,7 @@ export default function CartPage() {
               <h3 className="font-black text-xl uppercase  leading-tight mb-1">
                 {item.title}
               </h3>
-              <p className="text-[#63f3f7] font-black text-lg">
+              <p className="text-[#00d68f] font-black text-lg">
                 {(item.price || 0).toLocaleString()} ₽
               </p>
             </div>
@@ -105,7 +105,7 @@ export default function CartPage() {
                     Math.max(1, item.quantity - 1),
                   )
                 }
-                className="hover:text-[#63f3f7] opacity-50 hover:opacity-100 p-1 transition-all"
+                className="hover:text-[#00d68f] opacity-50 hover:opacity-100 p-1 transition-all"
               >
                 <Minus size={20} />
               </button>
@@ -116,7 +116,7 @@ export default function CartPage() {
                 onClick={() =>
                   updateQuantity(item.cartItemId, item.quantity + 1)
                 }
-                className="hover:text-[#63f3f7] opacity-50 hover:opacity-100 p-1 transition-all"
+                className="hover:text-[#00d68f] opacity-50 hover:opacity-100 p-1 transition-all"
               >
                 <Plus size={20} />
               </button>
@@ -135,7 +135,7 @@ export default function CartPage() {
       <div className="bg-white/5 border border-white/10 rounded-[32px] p-8 backdrop-blur-md">
         {/* Скидка лояльности */}
         {loyalty.discount > 0 && (
-          <div className="flex flex-col gap-2 mb-6 p-4 bg-[#63f3f7]/5 border border-[#63f3f7]/20 rounded-2xl">
+          <div className="flex flex-col gap-2 mb-6 p-4 bg-[#00d68f]/5 border border-[#00d68f]/20 rounded-2xl">
             <div className="flex justify-between items-center">
               <span className="text-white/40 uppercase font-black text-xs">
                 Цена без скидки
@@ -145,10 +145,10 @@ export default function CartPage() {
               </span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-[#63f3f7] uppercase font-black text-xs">
+              <span className="text-[#00d68f] uppercase font-black text-xs">
                 Скидка {loyalty.discount}% ({loyalty.level})
               </span>
-              <span className="text-[#63f3f7] font-black">
+              <span className="text-[#00d68f] font-black">
                 −{discountAmount.toLocaleString()} ₽
               </span>
             </div>
@@ -160,16 +160,16 @@ export default function CartPage() {
             Итого к оплате
           </span>
           <div className="flex items-baseline gap-1">
-            <span className="text-5xl font-black text-[#63f3f7] ">
+            <span className="text-5xl font-black text-[#00d68f] ">
               {finalPrice.toLocaleString()}
             </span>
-            <span className="text-[#63f3f7] font-black text-xl">₽</span>
+            <span className="text-[#00d68f] font-black text-xl">₽</span>
           </div>
         </div>
 
         <button
           onClick={handleCheckout}
-          className="w-full py-6 rounded-2xl font-black uppercase  text-black transition-all flex items-center justify-center gap-3 text-lg bg-[#63f3f7] hover:shadow-[0_0_30px_rgba(99,243,247,0.3)] active:scale-95"
+          className="w-full py-6 rounded-2xl font-black uppercase  text-black transition-all flex items-center justify-center gap-3 text-lg bg-[#00d68f] hover:shadow-[0_0_30px_rgba(99,243,247,0.3)] active:scale-95"
         >
           <CreditCard size={24} />
           Перейти к оплате

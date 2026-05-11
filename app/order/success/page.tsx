@@ -54,9 +54,9 @@ function SuccessContent() {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          className="w-24 h-24 rounded-full bg-[#63f3f7]/20 border-2 border-[#63f3f7]/40 flex items-center justify-center shadow-[0_0_40px_rgba(99,243,247,0.3)]"
+          className="w-24 h-24 rounded-full bg-[#00d68f]/20 border-2 border-[#00d68f]/40 flex items-center justify-center shadow-[0_0_40px_rgba(99,243,247,0.3)]"
         >
-          <Check size={40} className="text-[#63f3f7]" />
+          <Check size={40} className="text-[#00d68f]" />
         </motion.div>
 
         {/* Заголовок */}
@@ -67,7 +67,7 @@ function SuccessContent() {
           className="text-center"
         >
           <h1 className="text-4xl font-black  uppercase text-white tracking-tighter mb-2">
-            Заказ <span className="text-[#63f3f7]">оформлен!</span>
+            Заказ <span className="text-[#00d68f]">оформлен!</span>
           </h1>
           <p className="text-white/40 text-sm">
             Ключи отправлены на{" "}
@@ -100,13 +100,13 @@ function SuccessContent() {
                       {voucher.game_title}
                     </p>
                   </div>
-                  <p className="text-[#63f3f7] font-black text-sm font-mono tracking-widest mb-2">
+                  <p className="text-[#00d68f] font-black text-sm font-mono tracking-widest mb-2">
                     {voucher.code}
                   </p>
                   <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-1 px-2 py-1 bg-[#63f3f7]/10 border border-[#63f3f7]/20 rounded-lg">
-                      <CreditCard size={10} className="text-[#63f3f7]" />
-                      <span className="text-[#63f3f7] text-[9px] font-black">
+                    <div className="flex items-center gap-1 px-2 py-1 bg-[#00d68f]/10 border border-[#00d68f]/20 rounded-lg">
+                      <CreditCard size={10} className="text-[#00d68f]" />
+                      <span className="text-[#00d68f] text-[9px] font-black">
                         PSN {voucher.denomination.toLocaleString()} ₽
                       </span>
                     </div>
@@ -120,7 +120,7 @@ function SuccessContent() {
                   whileTap={{ scale: 0.9 }}
                   className={`shrink-0 p-3 rounded-xl border transition-all ${
                     copied === voucher.id
-                      ? "bg-[#63f3f7]/10 border-[#63f3f7]/30 text-[#63f3f7]"
+                      ? "bg-[#00d68f]/10 border-[#00d68f]/30 text-[#00d68f]"
                       : "bg-white/5 border-white/10 text-white/30 hover:text-white"
                   }`}
                 >
@@ -133,9 +133,9 @@ function SuccessContent() {
               </motion.div>
             ))}
 
-            <div className="p-4 bg-[#63f3f7]/5 border border-[#63f3f7]/10 rounded-2xl">
+            <div className="p-4 bg-[#00d68f]/5 border border-[#00d68f]/10 rounded-2xl">
               <p className="text-white/40 text-xs leading-relaxed">
-                <span className="text-[#63f3f7] font-black">
+                <span className="text-[#00d68f] font-black">
                   Как активировать:
                 </span>{" "}
                 Зайди в PS Store → Пополнить баланс → Введи код
@@ -160,7 +160,7 @@ function SuccessContent() {
           </Link>
           <Link
             href="/"
-            className="flex-1 flex items-center justify-center gap-2 py-4 bg-[#63f3f7] text-black rounded-2xl font-black text-xs uppercase  tracking-widest hover:shadow-[0_0_20px_rgba(99,243,247,0.3)] transition-all"
+            className="flex-1 flex items-center justify-center gap-2 py-4 bg-[#00d68f] text-black rounded-2xl font-black text-xs uppercase  tracking-widest hover:shadow-[0_0_20px_rgba(99,243,247,0.3)] transition-all"
           >
             <Home size={16} />В магазин
           </Link>

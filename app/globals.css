@@ -2,10 +2,11 @@
 @import "tailwindcss";
 
 @layer base {
-  html, body {
+  html,
+  body {
     margin: 0;
     padding: 0;
-    background-color: #0a0f1e;
+    background-color: #00071a;
     color: white;
     min-height: 100vh;
     font-feature-settings: "kern" 1;
@@ -16,7 +17,7 @@
 
   * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(99, 243, 247, 0.2) transparent;
+    scrollbar-color: rgba(0, 214, 143, 0.2) transparent;
   }
 
   body {
@@ -29,9 +30,21 @@
     inset: 0;
     z-index: -1;
     background:
-      radial-gradient(ellipse at 20% 50%, rgba(0, 60, 160, 0.25) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 20%, rgba(0, 40, 120, 0.2) 0%, transparent 50%),
-      radial-gradient(ellipse at 60% 80%, rgba(0, 30, 100, 0.15) 0%, transparent 50%),
+      radial-gradient(
+        ellipse at 20% 50%,
+        rgba(0, 60, 160, 0.25) 0%,
+        transparent 60%
+      ),
+      radial-gradient(
+        ellipse at 80% 20%,
+        rgba(0, 40, 120, 0.2) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        ellipse at 60% 80%,
+        rgba(0, 30, 100, 0.15) 0%,
+        transparent 50%
+      ),
       linear-gradient(160deg, #0d1530 0%, #080d1a 50%, #060a14 100%);
     pointer-events: none;
   }
@@ -48,52 +61,62 @@
     background-size: 128px 128px;
   }
 
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
   ::-webkit-scrollbar-thumb {
-    background: rgba(99, 243, 247, 0.2);
+    background: rgba(0, 214, 143, 0.2);
     border-radius: 99px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(99, 243, 247, 0.5);
+    background: rgba(0, 214, 143, 0.5);
   }
 }
 
 @layer utilities {
-  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
 
-  .custom-scrollbar::-webkit-scrollbar { width: 3px; }
-  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 3px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(99, 243, 247, 0.15);
+    background: rgba(0, 214, 143, 0.15);
     border-radius: 99px;
   }
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(99, 243, 247, 0.4);
+    background: rgba(0, 214, 143, 0.4);
   }
 
   .clic-3d-dark {
-    color: #2D3748 !important;
-    text-shadow: 
+    color: #2d3748 !important;
+    text-shadow:
       0 1px 0 #1a202c,
       0 2px 0 #1a202c,
       0 3px 0 #1a202c,
-      0 4px 1px rgba(0,0,0,0.6),
-      0 0 5px rgba(0,0,0,0.3),
-      0 8px 15px rgba(0,0,0,0.5);
+      0 4px 1px rgba(0, 0, 0, 0.6),
+      0 0 5px rgba(0, 0, 0, 0.3),
+      0 8px 15px rgba(0, 0, 0, 0.5);
   }
 
   .clic-3d-viper {
-    color: #00FFFF !important;
-    text-shadow: 
+    color: #00ffff !important;
+    text-shadow:
       0 1px 0 #00e6e6,
       0 2px 0 #00cccc,
       0 3px 0 #00b3b3,
-      0 4px 1px rgba(0,0,0,0.7),
+      0 4px 1px rgba(0, 0, 0, 0.7),
       0 0 15px rgba(0, 255, 255, 1),
       0 0 25px rgba(0, 255, 255, 0.6),
       0 0 50px rgba(0, 255, 255, 0.4);
@@ -110,12 +133,18 @@
     text-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
   }
   .bg-viper-gradient {
-    background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(0, 255, 255, 0.03) 100%);
+    background: linear-gradient(
+      135deg,
+      rgba(0, 255, 255, 0.1) 0%,
+      rgba(0, 255, 255, 0.03) 100%
+    );
   }
 
   .nav-button-active {
-    background-color: #00FFFF !important;
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    background-color: #00ffff !important;
+    box-shadow:
+      0 0 15px rgba(0, 255, 255, 0.4),
+      inset 0 2px 4px rgba(255, 255, 255, 0.3);
     transition: all 0.3s ease;
   }
   .nav-button-active:hover {
@@ -137,7 +166,7 @@ body.modal-open {
 
 button:not([disabled]):not(.no-hover):hover,
 a[class*="rounded"]:not(.no-hover):hover {
-  background-color: rgba(99, 243, 247, 0.08) !important;
-  border-color: rgba(99, 243, 247, 0.2) !important;
+  background-color: rgba(0, 214, 143, 0.08) !important;
+  border-color: rgba(0, 214, 143, 0.2) !important;
   transition: all 0.2s ease;
 }

@@ -15,7 +15,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTelegramAuth } from "../hooks/useTelegramAuth";
 import { useState } from "react";
 
-export default function ClientLayout({ children }: { children: React.ReactNode }) {
+export default function ClientLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
@@ -38,7 +42,6 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     <SessionProvider>
       <TelegramAuthProvider />
       <div className="relative flex flex-col min-h-screen text-white isolate overflow-x-hidden">
-
         <div className="sticky top-0 z-[100] w-full">
           <Header
             onSearchClick={() => setIsSearchOpen(true)}
@@ -89,7 +92,7 @@ function RatesLoader() {
 
   return (
     <div className="fixed bottom-24 left-6 z-[500] flex items-center gap-2 px-4 py-2.5 bg-[#0a0a0b] border border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl md:bottom-6">
-      <div className="w-3 h-3 border border-[#63f3f7] border-t-transparent rounded-full animate-spin" />
+      <div className="w-3 h-3 border border-[#00d68f] border-t-transparent rounded-full animate-spin" />
       <span className="text-[9px] text-white/40 uppercase font-black tracking-widest">
         Обновляем курсы...
       </span>

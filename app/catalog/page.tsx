@@ -7,7 +7,16 @@ import GameCard from "@/components/GameCard";
 import { useGameModal } from "@/store/useGameModal";
 import { Search } from "lucide-react";
 
-const CATEGORIES = ["Все", "PS5", "PS4", "Indie", "Action", "RPG", "Sport", "Racing"];
+const CATEGORIES = [
+  "Все",
+  "PS5",
+  "PS4",
+  "Indie",
+  "Action",
+  "RPG",
+  "Sport",
+  "Racing",
+];
 
 export default function CatalogPage() {
   const { allGames } = useGamesStore();
@@ -17,28 +26,31 @@ export default function CatalogPage() {
 
   const filtered = allGames.filter((game) => {
     const matchSearch = game.title.toLowerCase().includes(search.toLowerCase());
-    const matchCategory = activeCategory === "Все" || game.category === activeCategory;
+    const matchCategory =
+      activeCategory === "Все" || game.category === activeCategory;
     return matchSearch && matchCategory;
   });
 
   return (
     <div className="min-h-screen px-4 md:px-8 py-8 max-w-[1620px] mx-auto">
-
       <div className="flex items-center gap-4 mb-8">
-        <div className="w-1 h-8 bg-[#63f3f7] rounded-full shadow-[0_0_15px_#63f3f7]" />
+        <div className="w-1 h-8 bg-[#00d68f] rounded-full shadow-[0_0_15px_#00d68f]" />
         <h1 className="text-2xl md:text-4xl font-michroma text-white uppercase tracking-[0.15em] font-black">
           Каталог
         </h1>
       </div>
 
       <div className="relative mb-6">
-        <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" />
+        <Search
+          size={16}
+          className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30"
+        />
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Найти игру..."
-          className="w-full pl-10 pr-4 py-3 bg-white/[0.03] border border-white/10 focus:border-[#63f3f7]/40 rounded-2xl text-white text-sm outline-none transition-all placeholder-white/20 font-bold"
+          className="w-full pl-10 pr-4 py-3 bg-white/[0.03] border border-white/10 focus:border-[#00d68f]/40 rounded-2xl text-white text-sm outline-none transition-all placeholder-white/20 font-bold"
         />
       </div>
 
@@ -49,9 +61,13 @@ export default function CatalogPage() {
             onClick={() => setActiveCategory(cat)}
             className="shrink-0 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all"
             style={{
-              background: activeCategory === cat ? "rgba(99,243,247,0.15)" : "rgba(255,255,255,0.03)",
+              background:
+                activeCategory === cat
+                  ? "rgba(99,243,247,0.15)"
+                  : "rgba(255,255,255,0.03)",
               border: `1px solid ${activeCategory === cat ? "rgba(99,243,247,0.4)" : "rgba(255,255,255,0.08)"}`,
-              color: activeCategory === cat ? "#63f3f7" : "rgba(255,255,255,0.4)",
+              color:
+                activeCategory === cat ? "#00d68f" : "rgba(255,255,255,0.4)",
             }}
           >
             {cat}

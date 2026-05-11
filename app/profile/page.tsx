@@ -229,7 +229,7 @@ export default function ProfilePage() {
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-          className="w-8 h-8 border-2 border-[#63f3f7] border-t-transparent rounded-full"
+          className="w-8 h-8 border-2 border-[#00d68f] border-t-transparent rounded-full"
         />
       </div>
     );
@@ -248,7 +248,7 @@ export default function ProfilePage() {
 
   const statusLabel: Record<string, { label: string; color: string }> = {
     pending: { label: "В обработке", color: "#f59e0b" },
-    completed: { label: "Выполнен", color: "#63f3f7" },
+    completed: { label: "Выполнен", color: "#00d68f" },
     cancelled: { label: "Отменён", color: "#ef4444" },
   };
 
@@ -264,13 +264,13 @@ export default function ProfilePage() {
       <div className="relative z-10 max-w-[1200px] mx-auto px-4 md:px-10 overflow-x-hidden">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 mb-6 px-4 py-2.5 bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-[#63f3f7]/30 rounded-2xl transition-all group"
+          className="inline-flex items-center gap-2 mb-6 px-4 py-2.5 bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 hover:border-[#00d68f]/30 rounded-2xl transition-all group"
         >
           <ChevronLeft
             size={16}
-            className="text-white/40 group-hover:text-[#63f3f7] transition-colors"
+            className="text-white/40 group-hover:text-[#00d68f] transition-colors"
           />
-          <span className="text-white/40 group-hover:text-[#63f3f7] transition-colors text-xs font-black uppercase  tracking-widest">
+          <span className="text-white/40 group-hover:text-[#00d68f] transition-colors text-xs font-black uppercase  tracking-widest">
             В магазин
           </span>
         </Link>
@@ -278,7 +278,7 @@ export default function ProfilePage() {
         <h1 className="text-3xl md:text-5xl font-black  uppercase tracking-tighter mb-6 md:mb-10">
           <span className="text-white">МОЁ </span>
           <span
-            className="text-[#63f3f7]"
+            className="text-[#00d68f]"
             style={{ textShadow: "0 0 30px rgba(99,243,247,0.5)" }}
           >
             ПРОСТРАНСТВО
@@ -314,7 +314,7 @@ export default function ProfilePage() {
                   {session.user?.name?.[0]}
                 </div>
               )}
-              <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-[#63f3f7] rounded-full flex items-center justify-center z-20">
+              <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-[#00d68f] rounded-full flex items-center justify-center z-20">
                 <Shield size={10} className="text-black" />
               </div>
             </div>
@@ -360,7 +360,7 @@ export default function ProfilePage() {
                   {isActive && (
                     <motion.div
                       layoutId="mobile-tab-bg"
-                      className="absolute inset-0 bg-[#63f3f7] rounded-xl"
+                      className="absolute inset-0 bg-[#00d68f] rounded-xl"
                       transition={{
                         type: "spring",
                         damping: 25,
@@ -425,7 +425,7 @@ export default function ProfilePage() {
                     {session.user?.name?.[0]}
                   </div>
                 )}
-                <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-[#63f3f7] rounded-full flex items-center justify-center z-20 shadow-[0_0_10px_rgba(99,243,247,0.5)]">
+                <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-[#00d68f] rounded-full flex items-center justify-center z-20 shadow-[0_0_10px_rgba(99,243,247,0.5)]">
                   <Shield size={13} className="text-black" />
                 </div>
               </div>
@@ -512,12 +512,12 @@ export default function ProfilePage() {
                     transition={{ delay: 0.2 + i * 0.05 }}
                     whileHover={{ x: 4 }}
                     whileTap={{ scale: 0.97 }}
-                    className={`relative flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all text-left overflow-hidden ${isActive ? "text-[#63f3f7]" : "text-white/40 hover:text-white hover:bg-white/5"}`}
+                    className={`relative flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all text-left overflow-hidden ${isActive ? "text-[#00d68f]" : "text-white/40 hover:text-white hover:bg-white/5"}`}
                   >
                     {isActive && (
                       <motion.div
                         layoutId="tab-bg"
-                        className="absolute inset-0 bg-[#63f3f7]/10 border border-[#63f3f7]/20 rounded-xl"
+                        className="absolute inset-0 bg-[#00d68f]/10 border border-[#00d68f]/20 rounded-xl"
                         transition={{
                           type: "spring",
                           damping: 25,
@@ -532,7 +532,7 @@ export default function ProfilePage() {
                     {isActive && (
                       <motion.div
                         layoutId="tab-dot"
-                        className="ml-auto w-1.5 h-1.5 rounded-full bg-[#63f3f7] relative z-10"
+                        className="ml-auto w-1.5 h-1.5 rounded-full bg-[#00d68f] relative z-10"
                       />
                     )}
                   </motion.button>
@@ -567,7 +567,7 @@ export default function ProfilePage() {
                   transition={{ duration: 0.3 }}
                 >
                   <h3 className="text-white font-black  uppercase text-xl md:text-2xl mb-5 tracking-tight flex items-center gap-3">
-                    <User size={20} className="text-[#63f3f7]" /> Мой профиль
+                    <User size={20} className="text-[#00d68f]" /> Мой профиль
                   </h3>
                   <div className="flex flex-col gap-3">
                     {[
@@ -637,7 +637,7 @@ export default function ProfilePage() {
                   transition={{ duration: 0.3 }}
                 >
                   <h3 className="text-white font-black  uppercase text-xl md:text-2xl mb-5 tracking-tight flex items-center gap-3">
-                    <BarChart3 size={20} className="text-[#63f3f7]" /> Моя
+                    <BarChart3 size={20} className="text-[#00d68f]" /> Моя
                     статистика
                   </h3>
                   <div className="grid grid-cols-2 gap-3 mb-4">
@@ -646,7 +646,7 @@ export default function ProfilePage() {
                         label: "Всего потрачено",
                         value: `${totalSpent.toLocaleString()} ₽`,
                         icon: TrendingUp,
-                        color: "#63f3f7",
+                        color: "#00d68f",
                       },
                       {
                         label: "Куплено игр",
@@ -707,7 +707,7 @@ export default function ProfilePage() {
                               whileHover={{ scale: 1.05 }}
                               className="aspect-square bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center p-2 relative overflow-hidden group"
                             >
-                              <div className="absolute inset-0 bg-gradient-to-br from-[#63f3f7]/5 to-transparent opacity-0 group-hover:opacity-100 transition-all" />
+                              <div className="absolute inset-0 bg-gradient-to-br from-[#00d68f]/5 to-transparent opacity-0 group-hover:opacity-100 transition-all" />
                               <p className="text-white/50 text-[8px] font-black uppercase  text-center leading-tight">
                                 {item.title.split("(")[0].trim()}
                               </p>
@@ -736,7 +736,7 @@ export default function ProfilePage() {
                   transition={{ duration: 0.3 }}
                 >
                   <h3 className="text-white font-black  uppercase text-xl md:text-2xl mb-5 tracking-tight flex items-center gap-3">
-                    <ShoppingBag size={20} className="text-[#63f3f7]" /> Мои
+                    <ShoppingBag size={20} className="text-[#00d68f]" /> Мои
                     заказы
                   </h3>
                   {loadingOrders ? (
@@ -748,7 +748,7 @@ export default function ProfilePage() {
                           repeat: Infinity,
                           ease: "linear",
                         }}
-                        className="w-6 h-6 border-2 border-[#63f3f7] border-t-transparent rounded-full"
+                        className="w-6 h-6 border-2 border-[#00d68f] border-t-transparent rounded-full"
                       />
                     </div>
                   ) : orders.length === 0 ? (
@@ -759,7 +759,7 @@ export default function ProfilePage() {
                       </p>
                       <Link
                         href="/"
-                        className="px-6 py-3 bg-[#63f3f7] text-black text-xs font-black uppercase  rounded-2xl"
+                        className="px-6 py-3 bg-[#00d68f] text-black text-xs font-black uppercase  rounded-2xl"
                       >
                         В магазин
                       </Link>
@@ -812,7 +812,7 @@ export default function ProfilePage() {
                                 <span className="text-white/70 text-xs font-bold  truncate max-w-[60%]">
                                   {item.title}
                                 </span>
-                                <span className="text-[#63f3f7] text-xs font-black">
+                                <span className="text-[#00d68f] text-xs font-black">
                                   {(
                                     item.price * item.quantity
                                   ).toLocaleString()}{" "}
@@ -845,7 +845,7 @@ export default function ProfilePage() {
                   transition={{ duration: 0.3 }}
                 >
                   <h3 className="text-white font-black  uppercase text-xl md:text-2xl mb-5 tracking-tight flex items-center gap-3">
-                    <Key size={20} className="text-[#63f3f7]" /> Мои ключи
+                    <Key size={20} className="text-[#00d68f]" /> Мои ключи
                   </h3>
                   {loadingVouchers ? (
                     <div className="flex items-center justify-center h-40">
@@ -856,7 +856,7 @@ export default function ProfilePage() {
                           repeat: Infinity,
                           ease: "linear",
                         }}
-                        className="w-6 h-6 border-2 border-[#63f3f7] border-t-transparent rounded-full"
+                        className="w-6 h-6 border-2 border-[#00d68f] border-t-transparent rounded-full"
                       />
                     </div>
                   ) : vouchers.length === 0 ? (
@@ -867,7 +867,7 @@ export default function ProfilePage() {
                       </p>
                       <Link
                         href="/"
-                        className="px-6 py-3 bg-[#63f3f7] text-black text-xs font-black uppercase  rounded-2xl"
+                        className="px-6 py-3 bg-[#00d68f] text-black text-xs font-black uppercase  rounded-2xl"
                       >
                         В магазин
                       </Link>
@@ -880,23 +880,23 @@ export default function ProfilePage() {
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: i * 0.07 }}
-                          className="p-4 bg-white/[0.02] border border-white/5 hover:border-[#63f3f7]/20 rounded-2xl flex items-center justify-between gap-3 group transition-all"
+                          className="p-4 bg-white/[0.02] border border-white/5 hover:border-[#00d68f]/20 rounded-2xl flex items-center justify-between gap-3 group transition-all"
                         >
                           <div className="flex flex-col gap-1 min-w-0">
                             <p className="text-white/30 text-[9px] uppercase font-black tracking-widest truncate">
                               {voucher.game_title || "PSN карта"}
                             </p>
-                            <p className="text-[#63f3f7] font-black text-sm tracking-widest font-mono truncate">
+                            <p className="text-[#00d68f] font-black text-sm tracking-widest font-mono truncate">
                               {voucher.code}
                             </p>
                             <div className="flex items-center gap-2 mt-1">
                               {voucher.denomination > 0 && (
-                                <div className="flex items-center gap-1 px-2 py-0.5 bg-[#63f3f7]/10 border border-[#63f3f7]/20 rounded-lg">
+                                <div className="flex items-center gap-1 px-2 py-0.5 bg-[#00d68f]/10 border border-[#00d68f]/20 rounded-lg">
                                   <CreditCard
                                     size={9}
-                                    className="text-[#63f3f7]"
+                                    className="text-[#00d68f]"
                                   />
-                                  <span className="text-[#63f3f7] text-[9px] font-black">
+                                  <span className="text-[#00d68f] text-[9px] font-black">
                                     PSN {voucher.denomination.toLocaleString()}{" "}
                                     ₽
                                   </span>
@@ -934,7 +934,7 @@ export default function ProfilePage() {
                                 handleCopy(voucher.id, voucher.code)
                               }
                               whileTap={{ scale: 0.9 }}
-                              className={`p-3 rounded-xl border transition-all ${copiedId === voucher.id ? "bg-[#63f3f7]/10 border-[#63f3f7]/30 text-[#63f3f7]" : "bg-white/[0.03] border-white/10 text-white/30 hover:text-white"}`}
+                              className={`p-3 rounded-xl border transition-all ${copiedId === voucher.id ? "bg-[#00d68f]/10 border-[#00d68f]/30 text-[#00d68f]" : "bg-white/[0.03] border-white/10 text-white/30 hover:text-white"}`}
                             >
                               {copiedId === voucher.id ? (
                                 <Check size={16} />
@@ -959,7 +959,7 @@ export default function ProfilePage() {
                   transition={{ duration: 0.3 }}
                 >
                   <h3 className="text-white font-black  uppercase text-xl md:text-2xl mb-2 tracking-tight flex items-center gap-3">
-                    <Trophy size={20} className="text-[#63f3f7]" /> Достижения
+                    <Trophy size={20} className="text-[#00d68f]" /> Достижения
                   </h3>
                   <p className="text-white/30 text-xs mb-5">
                     {unlockedAchievements.length} из {ACHIEVEMENTS.length}{" "}
@@ -974,10 +974,10 @@ export default function ProfilePage() {
                           initial={{ opacity: 0, scale: 0.9 }}
                           animate={{ opacity: 1, scale: 1 }}
                           transition={{ delay: i * 0.06 }}
-                          className={`p-4 rounded-2xl border flex items-center gap-3 transition-all ${unlocked ? "border-[#63f3f7]/20 bg-[#63f3f7]/5" : "border-white/5 bg-white/[0.01] opacity-40"}`}
+                          className={`p-4 rounded-2xl border flex items-center gap-3 transition-all ${unlocked ? "border-[#00d68f]/20 bg-[#00d68f]/5" : "border-white/5 bg-white/[0.01] opacity-40"}`}
                         >
                           <div
-                            className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shrink-0 ${unlocked ? "bg-[#63f3f7]/10" : "bg-white/5"}`}
+                            className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shrink-0 ${unlocked ? "bg-[#00d68f]/10" : "bg-white/5"}`}
                           >
                             {unlocked ? ach.icon : "🔒"}
                           </div>
@@ -993,7 +993,7 @@ export default function ProfilePage() {
                           </div>
                           {unlocked && (
                             <div className="ml-auto shrink-0">
-                              <div className="w-6 h-6 rounded-full bg-[#63f3f7] flex items-center justify-center">
+                              <div className="w-6 h-6 rounded-full bg-[#00d68f] flex items-center justify-center">
                                 <Check size={12} className="text-black" />
                               </div>
                             </div>
@@ -1014,7 +1014,7 @@ export default function ProfilePage() {
                   transition={{ duration: 0.3 }}
                 >
                   <h3 className="text-white font-black  uppercase text-xl md:text-2xl mb-5 tracking-tight flex items-center gap-3">
-                    <Gift size={20} className="text-[#63f3f7]" /> Программа
+                    <Gift size={20} className="text-[#00d68f]" /> Программа
                     лояльности
                   </h3>
                   <div className="flex flex-col gap-4">
@@ -1142,7 +1142,7 @@ export default function ProfilePage() {
                               {l.level}
                             </span>
                             {loyalty.level === l.level && (
-                              <span className="text-[8px] bg-[#63f3f7]/10 border border-[#63f3f7]/20 text-[#63f3f7] px-1.5 py-0.5 rounded-lg font-black uppercase">
+                              <span className="text-[8px] bg-[#00d68f]/10 border border-[#00d68f]/20 text-[#00d68f] px-1.5 py-0.5 rounded-lg font-black uppercase">
                                 текущий
                               </span>
                             )}
@@ -1152,7 +1152,7 @@ export default function ProfilePage() {
                               от {l.threshold}
                             </span>
                             <span
-                              className={`text-xs font-black ${loyalty.level === l.level ? "text-[#63f3f7]" : "text-white/20"}`}
+                              className={`text-xs font-black ${loyalty.level === l.level ? "text-[#00d68f]" : "text-white/20"}`}
                             >
                               −{l.discount}
                             </span>
@@ -1173,11 +1173,11 @@ export default function ProfilePage() {
                   transition={{ duration: 0.3 }}
                 >
                   <h3 className="text-white font-black  uppercase text-xl md:text-2xl mb-5 tracking-tight flex items-center gap-3">
-                    <Users size={20} className="text-[#63f3f7]" /> Пригласи
+                    <Users size={20} className="text-[#00d68f]" /> Пригласи
                     друга
                   </h3>
                   <div className="flex flex-col gap-4">
-                    <div className="relative p-6 rounded-2xl overflow-hidden bg-gradient-to-br from-[#63f3f7]/10 to-[#a855f7]/10 border border-[#63f3f7]/20">
+                    <div className="relative p-6 rounded-2xl overflow-hidden bg-gradient-to-br from-[#00d68f]/10 to-[#a855f7]/10 border border-[#00d68f]/20">
                       <motion.div
                         animate={{ x: ["-100%", "200%"] }}
                         transition={{
@@ -1200,8 +1200,8 @@ export default function ProfilePage() {
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Zap size={14} className="text-[#63f3f7]" />
-                        <span className="text-[#63f3f7] text-xs font-black">
+                        <Zap size={14} className="text-[#00d68f]" />
+                        <span className="text-[#00d68f] text-xs font-black">
                           Скоро: реферальные бонусы будут активированы
                         </span>
                       </div>
@@ -1217,7 +1217,7 @@ export default function ProfilePage() {
                         <motion.button
                           onClick={handleCopyRef}
                           whileTap={{ scale: 0.9 }}
-                          className={`px-4 py-3 rounded-2xl border font-black text-xs uppercase transition-all ${copiedRef ? "bg-[#63f3f7]/10 border-[#63f3f7]/30 text-[#63f3f7]" : "bg-white/5 border-white/10 text-white/40 hover:text-white"}`}
+                          className={`px-4 py-3 rounded-2xl border font-black text-xs uppercase transition-all ${copiedRef ? "bg-[#00d68f]/10 border-[#00d68f]/30 text-[#00d68f]" : "bg-white/5 border-white/10 text-white/40 hover:text-white"}`}
                         >
                           {copiedRef ? <Check size={16} /> : <Copy size={16} />}
                         </motion.button>
@@ -1251,8 +1251,8 @@ export default function ProfilePage() {
                           transition={{ delay: i * 0.1 }}
                           className="flex items-center gap-3 p-3 bg-white/[0.02] border border-white/5 rounded-2xl"
                         >
-                          <div className="w-8 h-8 rounded-xl bg-[#63f3f7]/10 border border-[#63f3f7]/20 flex items-center justify-center shrink-0">
-                            <span className="text-[#63f3f7] text-xs font-black">
+                          <div className="w-8 h-8 rounded-xl bg-[#00d68f]/10 border border-[#00d68f]/20 flex items-center justify-center shrink-0">
+                            <span className="text-[#00d68f] text-xs font-black">
                               {item.step}
                             </span>
                           </div>

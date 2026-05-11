@@ -19,12 +19,11 @@ export default function GameSlider({
   games = [],
   title,
   isLoading = false,
-  onSelectGame
+  onSelectGame,
 }: GameSliderProps) {
-
-  const displayGames = useMemo(() =>
-    games.length > 0 && games.length < 8 ? [...games, ...games] : games,
-    [games]
+  const displayGames = useMemo(
+    () => (games.length > 0 && games.length < 8 ? [...games, ...games] : games),
+    [games],
   );
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -42,7 +41,8 @@ export default function GameSlider({
     <div
       className="w-full py-8 transform-gpu relative rounded-[2.5rem] overflow-hidden"
       style={{
-        background: "linear-gradient(135deg, rgba(29,51,147,0.25) 0%, rgba(20,38,120,0.18) 50%, rgba(29,51,147,0.12) 100%)",
+        background:
+          "linear-gradient(135deg, rgba(29,51,147,0.25) 0%, rgba(20,38,120,0.18) 50%, rgba(29,51,147,0.12) 100%)",
         border: "1px solid rgba(29,51,147,0.4)",
         boxShadow: "inset 0 0 60px rgba(29,51,147,0.1)",
       }}
@@ -52,7 +52,7 @@ export default function GameSlider({
       {/* Шапка */}
       <div className="relative flex items-center justify-between mb-6 px-8">
         <div className="flex items-center gap-4">
-          <div className="w-1 h-8 bg-[#63f3f7] rounded-full shadow-[0_0_15px_#63f3f7]" />
+          <div className="w-1 h-8 bg-[#00d68f] rounded-full shadow-[0_0_15px_#00d68f]" />
           <h2
             className="text-2xl md:text-3xl font-michroma text-white uppercase tracking-[0.15em] leading-none font-black"
             style={{ WebkitTextStroke: "0.5px rgba(255,255,255,0.3)" }}
@@ -64,13 +64,13 @@ export default function GameSlider({
         <div className="flex gap-2">
           <button
             onClick={scrollPrev}
-            className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-white/40 hover:text-[#63f3f7] hover:border-[#63f3f7]/50 hover:bg-[#63f3f7]/5 transition-all active:scale-90"
+            className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-white/40 hover:text-[#00d68f] hover:border-[#00d68f]/50 hover:bg-[#00d68f]/5 transition-all active:scale-90"
           >
             <ChevronLeft size={20} />
           </button>
           <button
             onClick={scrollNext}
-            className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-white/40 hover:text-[#63f3f7] hover:border-[#63f3f7]/50 hover:bg-[#63f3f7]/5 transition-all active:scale-90"
+            className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-white/40 hover:text-[#00d68f] hover:border-[#00d68f]/50 hover:bg-[#00d68f]/5 transition-all active:scale-90"
           >
             <ChevronRight size={20} />
           </button>
@@ -85,33 +85,46 @@ export default function GameSlider({
         >
           <div className="flex gap-4">
             {isLoading
-              ? Array(8).fill(0).map((_, i) => (
-                  <motion.div
-                    key={`skeleton-${i}`}
-                    className="flex-[0_0_65%] sm:flex-[0_0_30%] md:flex-[0_0_22%] lg:flex-[0_0_16.6%]"
-                    initial={{ opacity: 0, scale: 0.7 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ type: "spring", stiffness: 260, damping: 22, delay: i * 0.06 }}
-                  >
-                    <GameCardSkeleton />
-                  </motion.div>
-                ))
+              ? Array(8)
+                  .fill(0)
+                  .map((_, i) => (
+                    <motion.div
+                      key={`skeleton-${i}`}
+                      className="flex-[0_0_65%] sm:flex-[0_0_30%] md:flex-[0_0_22%] lg:flex-[0_0_16.6%]"
+                      initial={{ opacity: 0, scale: 0.7 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 260,
+                        damping: 22,
+                        delay: i * 0.06,
+                      }}
+                    >
+                      <GameCardSkeleton />
+                    </motion.div>
+                  ))
               : displayGames.map((game, index) => (
                   <motion.div
                     key={`${game.id}-${index}`}
                     className="flex-[0_0_65%] sm:flex-[0_0_30%] md:flex-[0_0_22%] lg:flex-[0_0_16.6%] min-w-0 select-none"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ type: "spring", stiffness: 200, damping: 20, delay: (index % 8) * 0.07 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 200,
+                      damping: 20,
+                      delay: (index % 8) * 0.07,
+                    }}
                     whileHover={{ y: -6, transition: { duration: 0.2 } }}
                   >
                     <GameCard
                       game={game}
-                      onSelect={onSelectGame ? () => onSelectGame(game) : undefined}
+                      onSelect={
+                        onSelectGame ? () => onSelectGame(game) : undefined
+                      }
                     />
                   </motion.div>
-                ))
-            }
+                ))}
           </div>
         </div>
       </div>

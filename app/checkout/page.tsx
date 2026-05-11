@@ -11,8 +11,17 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import {
-  ChevronLeft, CreditCard, Wallet, ShieldCheck,
-  Zap, Mail, Check, Lock, Tag, X, Loader2
+  ChevronLeft,
+  CreditCard,
+  Wallet,
+  ShieldCheck,
+  Zap,
+  Mail,
+  Check,
+  Lock,
+  Tag,
+  X,
+  Loader2,
 } from "lucide-react";
 
 const PAYMENT_METHODS = [
@@ -88,9 +97,11 @@ export default function CheckoutPage() {
 
   const loyalty = getLoyaltyInfo(totalSpent);
   const originalPrice = getTotalPrice(items);
-  const loyaltyDiscount = Math.round(originalPrice * loyalty.discount / 100);
+  const loyaltyDiscount = Math.round((originalPrice * loyalty.discount) / 100);
   const priceAfterLoyalty = originalPrice - loyaltyDiscount;
-  const promoDiscount = appliedPromo ? Math.min(appliedPromo.discount, priceAfterLoyalty) : 0;
+  const promoDiscount = appliedPromo
+    ? Math.min(appliedPromo.discount, priceAfterLoyalty)
+    : 0;
   const finalPrice = priceAfterLoyalty - promoDiscount;
 
   const handleApplyPromo = async () => {
@@ -125,14 +136,23 @@ export default function CheckoutPage() {
   };
 
   const handleCheckout = async () => {
-    if (!email) { alert("Введи email"); return; }
-    if (items.length === 0) { alert("Корзина пуста"); return; }
-    if (!session?.user?.email) { alert("Войдите в аккаунт"); return; }
+    if (!email) {
+      alert("Введи email");
+      return;
+    }
+    if (items.length === 0) {
+      alert("Корзина пуста");
+      return;
+    }
+    if (!session?.user?.email) {
+      alert("Войдите в аккаунт");
+      return;
+    }
 
     setIsSubmitting(true);
 
     try {
-      const preparedItems = items.map(item => ({
+      const preparedItems = items.map((item) => ({
         game_id: item.id,
         title: item.title,
         price: item.price,
@@ -142,21 +162,25 @@ export default function CheckoutPage() {
 
       const { data: order, error: orderError } = await supabase
         .from("orders")
-        .insert([{
-          items: preparedItems,
-          total_price: finalPrice,
-          status: "completed",
-          user_email: session.user.email,
-          promo_id: appliedPromo?.promo_id || null,
-          promo_discount: promoDiscount || null,
-        }])
+        .insert([
+          {
+            items: preparedItems,
+            total_price: finalPrice,
+            status: "completed",
+            user_email: session.user.email,
+            promo_id: appliedPromo?.promo_id || null,
+            promo_discount: promoDiscount || null,
+          },
+        ])
         .select()
         .single();
 
       if (orderError) throw orderError;
 
       if (appliedPromo) {
-        await supabase.rpc("increment_promo_usage", { promo_id: appliedPromo.promo_id });
+        await supabase.rpc("increment_promo_usage", {
+          promo_id: appliedPromo.promo_id,
+        });
       }
 
       const newTotalSpent = totalSpent + finalPrice;
@@ -170,7 +194,11 @@ export default function CheckoutPage() {
         })
         .eq("email", session.user.email);
 
-      const allVouchers: { code: string; game_title: string; denomination: number }[] = [];
+      const allVouchers: {
+        code: string;
+        game_title: string;
+        denomination: number;
+      }[] = [];
 
       for (const item of items) {
         const itemRegion = item.region || "TR";
@@ -190,7 +218,9 @@ export default function CheckoutPage() {
                 .single();
 
               if (!voucher) {
-                throw new Error(`Нет ключей номинала ${card.value} ₽ для региона ${itemRegion}. Обратитесь в поддержку.`);
+                throw new Error(
+                  `Нет ключей номинала ${card.value} ₽ для региона ${itemRegion}. Обратитесь в поддержку.`,
+                );
               }
 
               await supabase
@@ -227,8 +257,9 @@ export default function CheckoutPage() {
       }).catch(() => {});
 
       clearCart();
-      router.push(`/order/success?orderId=${order.id}&email=${encodeURIComponent(email)}`);
-
+      router.push(
+        `/order/success?orderId=${order.id}&email=${encodeURIComponent(email)}`,
+      );
     } catch (err) {
       const message = err instanceof Error ? err.message : "Неизвестная ошибка";
       alert("Ошибка: " + message);
@@ -242,8 +273,13 @@ export default function CheckoutPage() {
   if (items.length === 0) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-6">
-        <p className="text-white/30 font-black uppercase text-2xl">Корзина пуста</p>
-        <Link href="/" className="px-8 py-4 bg-[#63f3f7] text-black font-black uppercase rounded-2xl">
+        <p className="text-white/30 font-black uppercase text-2xl">
+          Корзина пуста
+        </p>
+        <Link
+          href="/"
+          className="px-8 py-4 bg-[#00d68f] text-black font-black uppercase rounded-2xl"
+        >
           В магазин
         </Link>
       </div>
@@ -253,26 +289,29 @@ export default function CheckoutPage() {
   return (
     <main className="min-h-screen pt-32 pb-20 px-6">
       <div className="max-w-[1100px] mx-auto">
-
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center gap-4 mb-10"
         >
-          <Link href="/" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#63f3f7] transition-all">
+          <Link
+            href="/"
+            className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#00d68f] transition-all"
+          >
             <ChevronLeft size={20} />
           </Link>
           <div>
             <h1 className="text-3xl font-black uppercase text-white tracking-tighter">
-              Оформление <span className="text-[#63f3f7]">заказа</span>
+              Оформление <span className="text-[#00d68f]">заказа</span>
             </h1>
-            <p className="text-white/30 text-xs mt-0.5">{items.length} товар{items.length > 1 ? "а" : ""} в корзине</p>
+            <p className="text-white/30 text-xs mt-0.5">
+              {items.length} товар{items.length > 1 ? "а" : ""} в корзине
+            </p>
           </div>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-8">
           <div className="flex flex-col gap-6">
-
             {/* Email */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -281,17 +320,19 @@ export default function CheckoutPage() {
               className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-7"
             >
               <div className="flex items-center gap-3 mb-5">
-                <div className="w-8 h-8 rounded-xl bg-[#63f3f7]/10 border border-[#63f3f7]/20 flex items-center justify-center">
-                  <Mail size={15} className="text-[#63f3f7]" />
+                <div className="w-8 h-8 rounded-xl bg-[#00d68f]/10 border border-[#00d68f]/20 flex items-center justify-center">
+                  <Mail size={15} className="text-[#00d68f]" />
                 </div>
-                <p className="text-white font-black uppercase text-sm tracking-widest">Email для получения ключей</p>
+                <p className="text-white font-black uppercase text-sm tracking-widest">
+                  Email для получения ключей
+                </p>
               </div>
               <input
                 type="email"
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="your@email.com"
-                className="w-full px-5 py-4 bg-white/5 border border-white/10 focus:border-[#63f3f7]/40 rounded-2xl text-white font-bold text-sm outline-none transition-all placeholder-white/20"
+                className="w-full px-5 py-4 bg-white/5 border border-white/10 focus:border-[#00d68f]/40 rounded-2xl text-white font-bold text-sm outline-none transition-all placeholder-white/20"
               />
               <p className="text-white/20 text-[10px] uppercase font-black tracking-widest mt-3">
                 Ключи активации придут на этот адрес сразу после оплаты
@@ -306,10 +347,12 @@ export default function CheckoutPage() {
               className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-7"
             >
               <div className="flex items-center gap-3 mb-5">
-                <div className="w-8 h-8 rounded-xl bg-[#63f3f7]/10 border border-[#63f3f7]/20 flex items-center justify-center">
-                  <CreditCard size={15} className="text-[#63f3f7]" />
+                <div className="w-8 h-8 rounded-xl bg-[#00d68f]/10 border border-[#00d68f]/20 flex items-center justify-center">
+                  <CreditCard size={15} className="text-[#00d68f]" />
                 </div>
-                <p className="text-white font-black uppercase text-sm tracking-widest">Способ оплаты</p>
+                <p className="text-white font-black uppercase text-sm tracking-widest">
+                  Способ оплаты
+                </p>
               </div>
               <div className="flex flex-col gap-3">
                 {PAYMENT_METHODS.map((method) => {
@@ -318,34 +361,47 @@ export default function CheckoutPage() {
                   return (
                     <button
                       key={method.id}
-                      onClick={() => method.available && setPaymentMethod(method.id)}
+                      onClick={() =>
+                        method.available && setPaymentMethod(method.id)
+                      }
                       className={`flex items-center justify-between p-4 rounded-2xl border transition-all text-left ${
                         !method.available
                           ? "opacity-40 cursor-not-allowed border-white/5 bg-white/[0.01]"
                           : isSelected
-                          ? "border-[#63f3f7]/40 bg-[#63f3f7]/5 shadow-[0_0_20px_rgba(99,243,247,0.05)]"
-                          : "border-white/10 hover:border-white/20 bg-white/[0.02]"
+                            ? "border-[#00d68f]/40 bg-[#00d68f]/5 shadow-[0_0_20px_rgba(99,243,247,0.05)]"
+                            : "border-white/10 hover:border-white/20 bg-white/[0.02]"
                       }`}
                     >
                       <div className="flex items-center gap-4">
-                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isSelected ? "bg-[#63f3f7]/20" : "bg-white/5"}`}>
-                          <Icon size={18} className={isSelected ? "text-[#63f3f7]" : "text-white/40"} />
+                        <div
+                          className={`w-10 h-10 rounded-xl flex items-center justify-center ${isSelected ? "bg-[#00d68f]/20" : "bg-white/5"}`}
+                        >
+                          <Icon
+                            size={18}
+                            className={
+                              isSelected ? "text-[#00d68f]" : "text-white/40"
+                            }
+                          />
                         </div>
                         <div>
-                          <p className={`font-black text-sm uppercase ${isSelected ? "text-white" : "text-white/50"}`}>
+                          <p
+                            className={`font-black text-sm uppercase ${isSelected ? "text-white" : "text-white/50"}`}
+                          >
                             {method.label}
                           </p>
-                          <p className="text-white/20 text-[10px] font-bold">{method.desc}</p>
+                          <p className="text-white/20 text-[10px] font-bold">
+                            {method.desc}
+                          </p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
                         {method.soon && (
-                          <span className="text-[8px] bg-[#63f3f7]/10 border border-[#63f3f7]/20 text-[#63f3f7] px-2 py-1 rounded-lg font-black uppercase">
+                          <span className="text-[8px] bg-[#00d68f]/10 border border-[#00d68f]/20 text-[#00d68f] px-2 py-1 rounded-lg font-black uppercase">
                             Скоро
                           </span>
                         )}
                         {isSelected && method.available && (
-                          <div className="w-5 h-5 rounded-full bg-[#63f3f7] flex items-center justify-center">
+                          <div className="w-5 h-5 rounded-full bg-[#00d68f] flex items-center justify-center">
                             <Check size={12} className="text-black" />
                           </div>
                         )}
@@ -364,9 +420,14 @@ export default function CheckoutPage() {
               className="grid grid-cols-3 gap-3"
             >
               {TRUST_BADGES.map((item) => (
-                <div key={item.text} className="flex flex-col items-center gap-2 p-4 bg-white/[0.02] border border-white/5 rounded-2xl">
-                  <item.icon size={18} className="text-[#63f3f7]" />
-                  <p className="text-white/30 text-[9px] uppercase font-black tracking-widest text-center">{item.text}</p>
+                <div
+                  key={item.text}
+                  className="flex flex-col items-center gap-2 p-4 bg-white/[0.02] border border-white/5 rounded-2xl"
+                >
+                  <item.icon size={18} className="text-[#00d68f]" />
+                  <p className="text-white/30 text-[9px] uppercase font-black tracking-widest text-center">
+                    {item.text}
+                  </p>
                 </div>
               ))}
             </motion.div>
@@ -381,19 +442,31 @@ export default function CheckoutPage() {
           >
             {/* Список товаров */}
             <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6 flex flex-col gap-4">
-              <p className="text-white/20 text-[10px] uppercase font-black tracking-[0.3em]">Ваш заказ</p>
+              <p className="text-white/20 text-[10px] uppercase font-black tracking-[0.3em]">
+                Ваш заказ
+              </p>
               {items.map((item) => (
                 <div key={item.cartItemId} className="flex items-center gap-3">
                   <div className="w-12 h-14 relative rounded-xl overflow-hidden shrink-0 border border-white/5">
-                    <Image src={item.image} alt={item.title} fill className="object-cover" unoptimized />
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      className="object-cover"
+                      unoptimized
+                    />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-white/70 text-xs font-black uppercase truncate">{item.title}</p>
+                    <p className="text-white/70 text-xs font-black uppercase truncate">
+                      {item.title}
+                    </p>
                     {item.quantity > 1 && (
-                      <p className="text-white/30 text-[10px]">× {item.quantity}</p>
+                      <p className="text-white/30 text-[10px]">
+                        × {item.quantity}
+                      </p>
                     )}
                   </div>
-                  <p className="text-[#63f3f7] text-sm font-black shrink-0">
+                  <p className="text-[#00d68f] text-sm font-black shrink-0">
                     {(item.price * item.quantity).toLocaleString()} ₽
                   </p>
                 </div>
@@ -403,21 +476,32 @@ export default function CheckoutPage() {
             {/* Промокод */}
             <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-xl bg-[#63f3f7]/10 border border-[#63f3f7]/20 flex items-center justify-center">
-                  <Tag size={15} className="text-[#63f3f7]" />
+                <div className="w-8 h-8 rounded-xl bg-[#00d68f]/10 border border-[#00d68f]/20 flex items-center justify-center">
+                  <Tag size={15} className="text-[#00d68f]" />
                 </div>
-                <p className="text-white font-black uppercase text-sm tracking-widest">Промокод</p>
+                <p className="text-white font-black uppercase text-sm tracking-widest">
+                  Промокод
+                </p>
               </div>
 
               {appliedPromo ? (
-                <div className="flex items-center justify-between p-3 bg-[#63f3f7]/10 border border-[#63f3f7]/20 rounded-2xl">
+                <div className="flex items-center justify-between p-3 bg-[#00d68f]/10 border border-[#00d68f]/20 rounded-2xl">
                   <div>
-                    <p className="text-[#63f3f7] font-black text-sm">{promoInput.toUpperCase()}</p>
-                    <p className="text-[#63f3f7]/60 text-[10px] font-black">
-                      −{appliedPromo.type === "percent" ? `${appliedPromo.value}%` : `${appliedPromo.value}₽`} применено
+                    <p className="text-[#00d68f] font-black text-sm">
+                      {promoInput.toUpperCase()}
+                    </p>
+                    <p className="text-[#00d68f]/60 text-[10px] font-black">
+                      −
+                      {appliedPromo.type === "percent"
+                        ? `${appliedPromo.value}%`
+                        : `${appliedPromo.value}₽`}{" "}
+                      применено
                     </p>
                   </div>
-                  <button onClick={handleRemovePromo} className="text-white/30 hover:text-red-400 transition-all">
+                  <button
+                    onClick={handleRemovePromo}
+                    className="text-white/30 hover:text-red-400 transition-all"
+                  >
                     <X size={16} />
                   </button>
                 </div>
@@ -426,24 +510,32 @@ export default function CheckoutPage() {
                   <input
                     type="text"
                     value={promoInput}
-                    onChange={e => setPromoInput(e.target.value.toUpperCase())}
-                    onKeyDown={e => e.key === "Enter" && handleApplyPromo()}
+                    onChange={(e) =>
+                      setPromoInput(e.target.value.toUpperCase())
+                    }
+                    onKeyDown={(e) => e.key === "Enter" && handleApplyPromo()}
                     placeholder="CLIC-XXXX-XXXX"
-                    className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white font-mono text-sm focus:outline-none focus:border-[#63f3f7]/40 transition-all placeholder-white/20"
+                    className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white font-mono text-sm focus:outline-none focus:border-[#00d68f]/40 transition-all placeholder-white/20"
                   />
                   <button
                     onClick={handleApplyPromo}
                     disabled={promoLoading || !promoInput}
-                    className="px-4 py-3 bg-[#63f3f7]/10 border border-[#63f3f7]/20 text-[#63f3f7] rounded-2xl font-black text-xs uppercase hover:bg-[#63f3f7]/20 transition-all disabled:opacity-40 flex items-center gap-1"
+                    className="px-4 py-3 bg-[#00d68f]/10 border border-[#00d68f]/20 text-[#00d68f] rounded-2xl font-black text-xs uppercase hover:bg-[#00d68f]/20 transition-all disabled:opacity-40 flex items-center gap-1"
                   >
-                    {promoLoading ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />}
+                    {promoLoading ? (
+                      <Loader2 size={14} className="animate-spin" />
+                    ) : (
+                      <Check size={14} />
+                    )}
                     OK
                   </button>
                 </div>
               )}
 
               {promoError && (
-                <p className="text-red-400 text-[10px] font-black mt-2">{promoError}</p>
+                <p className="text-red-400 text-[10px] font-black mt-2">
+                  {promoError}
+                </p>
               )}
             </div>
 
@@ -452,12 +544,20 @@ export default function CheckoutPage() {
               {loyalty.discount > 0 && (
                 <>
                   <div className="flex justify-between items-center">
-                    <span className="text-white/30 text-xs font-black uppercase">Сумма</span>
-                    <span className="text-white/30 text-sm font-black line-through">{originalPrice.toLocaleString()} ₽</span>
+                    <span className="text-white/30 text-xs font-black uppercase">
+                      Сумма
+                    </span>
+                    <span className="text-white/30 text-sm font-black line-through">
+                      {originalPrice.toLocaleString()} ₽
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-[#63f3f7] text-xs font-black uppercase">Скидка {loyalty.discount}%</span>
-                    <span className="text-[#63f3f7] text-sm font-black">−{loyaltyDiscount.toLocaleString()} ₽</span>
+                    <span className="text-[#00d68f] text-xs font-black uppercase">
+                      Скидка {loyalty.discount}%
+                    </span>
+                    <span className="text-[#00d68f] text-sm font-black">
+                      −{loyaltyDiscount.toLocaleString()} ₽
+                    </span>
                   </div>
                   <div className="h-px bg-white/5" />
                 </>
@@ -466,20 +566,26 @@ export default function CheckoutPage() {
               {appliedPromo && (
                 <>
                   <div className="flex justify-between items-center">
-                    <span className="text-[#63f3f7] text-xs font-black uppercase flex items-center gap-1">
+                    <span className="text-[#00d68f] text-xs font-black uppercase flex items-center gap-1">
                       <Tag size={10} /> Промокод
                     </span>
-                    <span className="text-[#63f3f7] text-sm font-black">−{promoDiscount.toLocaleString()} ₽</span>
+                    <span className="text-[#00d68f] text-sm font-black">
+                      −{promoDiscount.toLocaleString()} ₽
+                    </span>
                   </div>
                   <div className="h-px bg-white/5" />
                 </>
               )}
 
               <div className="flex justify-between items-center">
-                <span className="text-white/40 text-xs font-black uppercase tracking-widest">Итого</span>
+                <span className="text-white/40 text-xs font-black uppercase tracking-widest">
+                  Итого
+                </span>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-white font-black text-3xl">{finalPrice.toLocaleString()}</span>
-                  <span className="text-[#63f3f7] font-black">₽</span>
+                  <span className="text-white font-black text-3xl">
+                    {finalPrice.toLocaleString()}
+                  </span>
+                  <span className="text-[#00d68f] font-black">₽</span>
                 </div>
               </div>
 
@@ -488,8 +594,8 @@ export default function CheckoutPage() {
                 disabled={isSubmitting}
                 className={`w-full py-5 rounded-2xl font-black uppercase text-sm tracking-widest transition-all flex items-center justify-center gap-2 ${
                   isSubmitting
-                    ? "bg-[#63f3f7]/50 cursor-wait text-black"
-                    : "bg-[#63f3f7] text-black hover:shadow-[0_0_30px_rgba(99,243,247,0.3)] active:scale-95"
+                    ? "bg-[#00d68f]/50 cursor-wait text-black"
+                    : "bg-[#00d68f] text-black hover:shadow-[0_0_30px_rgba(99,243,247,0.3)] active:scale-95"
                 }`}
               >
                 <CreditCard size={18} />

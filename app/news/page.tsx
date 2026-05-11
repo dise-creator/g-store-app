@@ -23,7 +23,7 @@ interface NewsItem {
 const TAG_COLORS: Record<string, string> = {
   Обновление: "bg-blue-500/20 text-blue-400 border-blue-500/30",
   Скидки: "bg-red-500/20 text-red-400 border-red-500/30",
-  Анонс: "bg-[#63f3f7]/10 text-[#63f3f7] border-[#63f3f7]/20",
+  Анонс: "bg-[#00d68f]/10 text-[#00d68f] border-[#00d68f]/20",
 };
 
 function NewsPageCard({ item, index }: { item: NewsItem; index: number }) {
@@ -63,7 +63,9 @@ function NewsPageCard({ item, index }: { item: NewsItem; index: number }) {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#0a0f1e]/60 hidden md:block" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1e]/80 to-transparent md:hidden" />
-        <div className={`absolute top-4 left-4 px-3 py-1.5 rounded-xl border text-[10px] font-black uppercase tracking-widest ${TAG_COLORS[item.tag] ?? "bg-white/10 text-white/50 border-white/10"}`}>
+        <div
+          className={`absolute top-4 left-4 px-3 py-1.5 rounded-xl border text-[10px] font-black uppercase tracking-widest ${TAG_COLORS[item.tag] ?? "bg-white/10 text-white/50 border-white/10"}`}
+        >
           {item.tag}
         </div>
       </div>
@@ -89,12 +91,24 @@ function NewsPageCard({ item, index }: { item: NewsItem; index: number }) {
           <div className="flex items-center justify-between gap-4 pt-6 border-t border-white/5">
             <div className="flex items-center gap-4">
               <div className="relative w-14 h-14 rounded-2xl overflow-hidden border border-white/10 shrink-0">
-                <Image src={linkedGame.image} alt={linkedGame.title} fill className="object-cover" unoptimized />
+                <Image
+                  src={linkedGame.image}
+                  alt={linkedGame.title}
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
               </div>
               <div>
-                <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-1">Купить игру</p>
-                <p className="text-white font-black text-base uppercase">{linkedGame.title}</p>
-                <p className="text-[#63f3f7] text-xl font-black">{displayPrice.toLocaleString()} ₽</p>
+                <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-1">
+                  Купить игру
+                </p>
+                <p className="text-white font-black text-base uppercase">
+                  {linkedGame.title}
+                </p>
+                <p className="text-[#00d68f] text-xl font-black">
+                  {displayPrice.toLocaleString()} ₽
+                </p>
               </div>
             </div>
 
@@ -102,8 +116,8 @@ function NewsPageCard({ item, index }: { item: NewsItem; index: number }) {
               onClick={handleAdd}
               className={`shrink-0 flex items-center gap-2.5 px-6 py-4 rounded-2xl text-sm font-black uppercase tracking-wider transition-all ${
                 added
-                  ? "bg-[#63f3f7] text-black shadow-[0_0_25px_rgba(99,243,247,0.3)]"
-                  : "bg-white/5 border border-white/10 text-white/50 hover:bg-[#63f3f7]/10 hover:border-[#63f3f7]/30 hover:text-[#63f3f7]"
+                  ? "bg-[#00d68f] text-black shadow-[0_0_25px_rgba(99,243,247,0.3)]"
+                  : "bg-white/5 border border-white/10 text-white/50 hover:bg-[#00d68f]/10 hover:border-[#00d68f]/30 hover:text-[#00d68f]"
               }`}
             >
               {added ? <Check size={16} /> : <ShoppingCart size={16} />}
@@ -123,7 +137,10 @@ export default function NewsPage() {
   useEffect(() => {
     fetch("/api/news")
       .then((r) => r.json())
-      .then((data) => { setNews(data); setLoading(false); })
+      .then((data) => {
+        setNews(data);
+        setLoading(false);
+      })
       .catch(() => setLoading(false));
   }, []);
 
@@ -134,15 +151,18 @@ export default function NewsPage() {
         <div className="flex items-center gap-6 mb-12">
           <Link
             href="/"
-            className="group flex items-center justify-center w-10 h-10 rounded-full border border-white/10 text-white/30 hover:text-[#63f3f7] hover:border-[#63f3f7]/40 hover:bg-[#63f3f7]/5 transition-all shrink-0"
+            className="group flex items-center justify-center w-10 h-10 rounded-full border border-white/10 text-white/30 hover:text-[#00d68f] hover:border-[#00d68f]/40 hover:bg-[#00d68f]/5 transition-all shrink-0"
           >
-            <ChevronLeft size={20} className="group-hover:-translate-x-0.5 transition-transform" />
+            <ChevronLeft
+              size={20}
+              className="group-hover:-translate-x-0.5 transition-transform"
+            />
           </Link>
           <div className="flex items-baseline gap-1">
             <h1 className="text-3xl md:text-4xl font-michroma font-black uppercase tracking-tighter text-white">
               ИГ
             </h1>
-            <h1 className="text-3xl md:text-4xl font-michroma font-black uppercase tracking-tighter text-[#63f3f7] drop-shadow-[0_0_20px_rgba(99,243,247,0.4)]">
+            <h1 className="text-3xl md:text-4xl font-michroma font-black uppercase tracking-tighter text-[#00d68f] drop-shadow-[0_0_20px_rgba(99,243,247,0.4)]">
               РОВЫЕ НОВОСТИ
             </h1>
           </div>
@@ -150,13 +170,17 @@ export default function NewsPage() {
 
         <div className="flex flex-col gap-6">
           {loading
-            ? Array(3).fill(0).map((_, i) => (
-                <div key={i} className="h-56 rounded-[2.5rem] bg-white/[0.02] animate-pulse" />
-              ))
+            ? Array(3)
+                .fill(0)
+                .map((_, i) => (
+                  <div
+                    key={i}
+                    className="h-56 rounded-[2.5rem] bg-white/[0.02] animate-pulse"
+                  />
+                ))
             : news.map((item, i) => (
                 <NewsPageCard key={item.id} item={item} index={i} />
-              ))
-          }
+              ))}
         </div>
       </div>
     </main>

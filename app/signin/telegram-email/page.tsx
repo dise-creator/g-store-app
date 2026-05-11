@@ -97,7 +97,7 @@ function TelegramEmailContent() {
             onChange={(e) => setEmail(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
             placeholder="your@email.com"
-            className="w-full px-5 py-4 bg-white/5 border border-white/10 focus:border-[#63f3f7]/40 rounded-2xl text-white font-bold text-sm outline-none transition-all placeholder-white/20"
+            className="w-full px-5 py-4 bg-white/5 border border-white/10 focus:border-[#00d68f]/40 rounded-2xl text-white font-bold text-sm outline-none transition-all placeholder-white/20"
           />
 
           {error && <p className="text-red-400 text-xs font-black">{error}</p>}
@@ -105,7 +105,7 @@ function TelegramEmailContent() {
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className="w-full py-5 bg-[#63f3f7] text-black font-black uppercase  text-sm rounded-2xl disabled:opacity-50 transition-all hover:shadow-[0_0_20px_rgba(99,243,247,0.3)]"
+            className="w-full py-5 bg-[#00d68f] text-black font-black uppercase  text-sm rounded-2xl disabled:opacity-50 transition-all hover:shadow-[0_0_20px_rgba(99,243,247,0.3)]"
           >
             {loading ? "Входим..." : "Войти"}
           </button>

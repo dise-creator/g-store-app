@@ -16,7 +16,9 @@ export default function WishlistPage() {
   const items = useWishlistStore((state) => state.items);
   const clearAll = useWishlistStore((state) => state.clearAll);
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -47,15 +49,18 @@ export default function WishlistPage() {
           <div className="flex items-center gap-6">
             <Link
               href="/"
-              className="group flex items-center justify-center w-10 h-10 rounded-full border border-white/10 text-white/30 hover:text-[#63f3f7] hover:border-[#63f3f7]/40 hover:bg-[#63f3f7]/5 transition-all"
+              className="group flex items-center justify-center w-10 h-10 rounded-full border border-white/10 text-white/30 hover:text-[#00d68f] hover:border-[#00d68f]/40 hover:bg-[#00d68f]/5 transition-all"
             >
-              <ChevronLeft size={20} className="group-hover:-translate-x-0.5 transition-transform" />
+              <ChevronLeft
+                size={20}
+                className="group-hover:-translate-x-0.5 transition-transform"
+              />
             </Link>
             <div className="flex items-baseline gap-1">
               <h1 className="text-3xl md:text-4xl font-michroma font-black uppercase tracking-tighter text-white">
                 ИЗБРАН
               </h1>
-              <h1 className="text-3xl md:text-4xl font-michroma font-black uppercase tracking-tighter text-[#63f3f7] drop-shadow-[0_0_20px_rgba(99,243,247,0.4)]">
+              <h1 className="text-3xl md:text-4xl font-michroma font-black uppercase tracking-tighter text-[#00d68f] drop-shadow-[0_0_20px_rgba(99,243,247,0.4)]">
                 НОЕ
               </h1>
             </div>
@@ -78,9 +83,13 @@ export default function WishlistPage() {
             )}
 
             <div className="flex items-center gap-3 px-5 py-3 bg-white/[0.03] border border-white/5 rounded-2xl">
-              <Heart size={16} className="text-[#63f3f7] fill-[#63f3f7]/20" />
-              <span className="text-white font-michroma text-xl leading-none">{items.length}</span>
-              <span className="text-white/20 uppercase text-[9px] font-black tracking-[0.2em]">игр</span>
+              <Heart size={16} className="text-[#00d68f] fill-[#00d68f]/20" />
+              <span className="text-white font-michroma text-xl leading-none">
+                {items.length}
+              </span>
+              <span className="text-white/20 uppercase text-[9px] font-black tracking-[0.2em]">
+                игр
+              </span>
             </div>
           </div>
         </div>
@@ -98,8 +107,16 @@ export default function WishlistPage() {
                     layout
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
-                    transition={{ delay: index * 0.06, ease: [0.25, 0.46, 0.45, 0.94], duration: 0.5 }}
+                    exit={{
+                      opacity: 0,
+                      scale: 0.9,
+                      transition: { duration: 0.2 },
+                    }}
+                    transition={{
+                      delay: index * 0.06,
+                      ease: [0.25, 0.46, 0.45, 0.94],
+                      duration: 0.5,
+                    }}
                   >
                     <GameCard game={game} />
                   </motion.div>
@@ -113,13 +130,18 @@ export default function WishlistPage() {
               >
                 <div className="relative">
                   <Heart size={80} className="text-white/[0.03]" />
-                  <ShoppingBag size={32} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white/10" />
+                  <ShoppingBag
+                    size={32}
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white/10"
+                  />
                 </div>
                 <div className="space-y-6">
-                  <p className="text-white/20 font-michroma text-xs uppercase tracking-[0.4em]">Список пуст</p>
+                  <p className="text-white/20 font-michroma text-xs uppercase tracking-[0.4em]">
+                    Список пуст
+                  </p>
                   <Link
                     href="/"
-                    className="inline-block px-10 py-4 bg-[#63f3f7] text-black rounded-2xl font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-[0_0_40px_rgba(99,243,247,0.2)] text-sm"
+                    className="inline-block px-10 py-4 bg-[#00d68f] text-black rounded-2xl font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-[0_0_40px_rgba(99,243,247,0.2)] text-sm"
                   >
                     Перейти к покупкам
                   </Link>
