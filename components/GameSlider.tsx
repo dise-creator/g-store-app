@@ -64,13 +64,13 @@ export default function GameSlider({
         <div className="flex gap-2">
           <button
             onClick={scrollPrev}
-            className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-white/40 hover:text-[#00d68f] hover:border-[#00d68f]/50 hover:bg-[#00d68f]/5 transition-all active:scale-90"
+            className="w-10 h-10 rounded-xl bg-white/[0.03] border border-[#00d68f]/20 flex items-center justify-center text-white/40 hover:text-[#00d68f] hover:border-[#00d68f]/50 hover:bg-[#00d68f]/5 transition-all active:scale-90"
           >
             <ChevronLeft size={20} />
           </button>
           <button
             onClick={scrollNext}
-            className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-white/40 hover:text-[#00d68f] hover:border-[#00d68f]/50 hover:bg-[#00d68f]/5 transition-all active:scale-90"
+            className="w-10 h-10 rounded-xl bg-white/[0.03] border border-[#00d68f]/20 flex items-center justify-center text-white/40 hover:text-[#00d68f] hover:border-[#00d68f]/50 hover:bg-[#00d68f]/5 transition-all active:scale-90"
           >
             <ChevronRight size={20} />
           </button>

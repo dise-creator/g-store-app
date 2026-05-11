@@ -36,7 +36,7 @@ export const AboutContent = () => (
       ].map((item) => (
         <div
           key={item.label}
-          className="p-5 bg-white/[0.03] border border-white/5 rounded-2xl flex flex-col gap-3"
+          className="p-5 bg-white/[0.03] border border-[#00d68f]/15 rounded-2xl flex flex-col gap-3"
         >
           <item.icon size={22} className="text-[#00d68f]" />
           <p className="text-white font-black text-sm uppercase">
@@ -93,7 +93,7 @@ export const ContactsContent = () => (
         href={item.href}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center justify-between p-5 bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 hover:border-white/10 rounded-2xl transition-all group"
+        className="flex items-center justify-between p-5 bg-white/[0.03] hover:bg-white/[0.06] border border-[#00d68f]/15 hover:border-[#00d68f]/20 rounded-2xl transition-all group"
       >
         <div>
           <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-1">
@@ -111,7 +111,7 @@ export const ContactsContent = () => (
         </div>
       </a>
     ))}
-    <div className="p-5 bg-white/[0.02] border border-white/5 rounded-2xl">
+    <div className="p-5 bg-white/[0.02] border border-[#00d68f]/15 rounded-2xl">
       <p className="text-white/20 text-[10px] uppercase font-black tracking-widest mb-1">
         Время ответа
       </p>
@@ -164,7 +164,7 @@ export const ReviewsContent = () => (
     ].map((review) => (
       <div
         key={review.name}
-        className="p-5 bg-white/[0.03] border border-white/5 rounded-2xl flex flex-col gap-4"
+        className="p-5 bg-white/[0.03] border border-[#00d68f]/15 rounded-2xl flex flex-col gap-4"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -219,7 +219,7 @@ export const SupportContent = () => (
     ].map((item, i) => (
       <div
         key={i}
-        className="p-5 bg-white/[0.03] border border-white/5 rounded-2xl flex flex-col gap-2"
+        className="p-5 bg-white/[0.03] border border-[#00d68f]/15 rounded-2xl flex flex-col gap-2"
       >
         <p className="text-white font-black text-sm uppercase">{item.q}</p>
         <p className="text-white/50 text-sm leading-relaxed">{item.a}</p>
@@ -263,7 +263,7 @@ export const AgreementContent = () => (
     ].map((item) => (
       <div
         key={item.title}
-        className="p-5 bg-white/[0.02] border border-white/5 rounded-xl"
+        className="p-5 bg-white/[0.02] border border-[#00d68f]/15 rounded-xl"
       >
         <p className="text-white font-black text-sm mb-2 uppercase">
           {item.title}
@@ -300,7 +300,7 @@ export const PrivacyContent = () => (
     ].map((item) => (
       <div
         key={item.title}
-        className="p-5 bg-white/[0.02] border border-white/5 rounded-xl"
+        className="p-5 bg-white/[0.02] border border-[#00d68f]/15 rounded-xl"
       >
         <p className="text-white font-black text-sm mb-2 uppercase">
           {item.title}

@@ -156,7 +156,7 @@ export default function ImportPage() {
         <div className="flex items-center gap-4 mb-10">
           <Link
             href="/"
-            className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#00d68f] transition-all"
+            className="w-10 h-10 rounded-xl bg-white/5 border border-[#00d68f]/20 flex items-center justify-center text-white/40 hover:text-[#00d68f] transition-all"
           >
             <ChevronLeft size={20} />
           </Link>
@@ -182,7 +182,7 @@ export default function ImportPage() {
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && search()}
               placeholder="Введи название игры..."
-              className="w-full pl-11 pr-5 py-4 bg-white/[0.03] border border-white/10 rounded-2xl text-white placeholder-white/20 font-bold text-sm focus:outline-none focus:border-[#00d68f]/40 transition-all"
+              className="w-full pl-11 pr-5 py-4 bg-white/[0.03] border border-[#00d68f]/20 rounded-2xl text-white placeholder-white/20 font-bold text-sm focus:outline-none focus:border-[#00d68f]/40 transition-all"
             />
           </div>
           <button
@@ -223,7 +223,7 @@ export default function ImportPage() {
                     transition={{ delay: i * 0.05 }}
                     className="flex flex-col gap-2"
                   >
-                    <div className="relative aspect-[3/4] rounded-2xl overflow-hidden border border-white/5 bg-white/[0.02]">
+                    <div className="relative aspect-[3/4] rounded-2xl overflow-hidden border border-[#00d68f]/15 bg-white/[0.02]">
                       {game.background_image ? (
                         <Image
                           src={game.background_image}
@@ -258,7 +258,7 @@ export default function ImportPage() {
                         }))
                       }
                       placeholder="Цена ₽"
-                      className="w-full px-3 py-2 bg-white/[0.03] border border-white/10 rounded-xl text-white text-xs font-bold focus:outline-none focus:border-[#00d68f]/40 transition-all placeholder-white/20"
+                      className="w-full px-3 py-2 bg-white/[0.03] border border-[#00d68f]/20 rounded-xl text-white text-xs font-bold focus:outline-none focus:border-[#00d68f]/40 transition-all placeholder-white/20"
                     />
 
                     <button
@@ -268,7 +268,7 @@ export default function ImportPage() {
                         isAdded
                           ? "bg-[#00d68f]/10 border border-[#00d68f]/20 text-[#00d68f] cursor-default"
                           : isAdding
-                            ? "bg-white/5 border border-white/10 text-white/30 cursor-wait"
+                            ? "bg-white/5 border border-[#00d68f]/20 text-white/30 cursor-wait"
                             : "bg-[#00d68f] text-black hover:shadow-[0_0_15px_rgba(99,243,247,0.3)] active:scale-95"
                       }`}
                     >

@@ -51,7 +51,7 @@ function NewsPageCard({ item, index }: { item: NewsItem; index: number }) {
         duration: 0.5,
         ease: [0.25, 0.46, 0.45, 0.94],
       }}
-      className="group flex flex-col md:flex-row bg-white/[0.03] border border-white/5 rounded-[2.5rem] overflow-hidden hover:border-white/10 hover:bg-white/[0.05] transition-all"
+      className="group flex flex-col md:flex-row bg-white/[0.03] border border-[#00d68f]/15 rounded-[2.5rem] overflow-hidden hover:border-[#00d68f]/20 hover:bg-white/[0.05] transition-all"
     >
       <div className="relative w-full md:w-96 h-56 md:h-auto shrink-0 overflow-hidden">
         <Image
@@ -64,7 +64,7 @@ function NewsPageCard({ item, index }: { item: NewsItem; index: number }) {
         <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#0d1f6e]/60 hidden md:block" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0d1f6e]/80 to-transparent md:hidden" />
         <div
-          className={`absolute top-4 left-4 px-3 py-1.5 rounded-xl border text-[10px] font-black uppercase tracking-widest ${TAG_COLORS[item.tag] ?? "bg-white/10 text-white/50 border-white/10"}`}
+          className={`absolute top-4 left-4 px-3 py-1.5 rounded-xl border text-[10px] font-black uppercase tracking-widest ${TAG_COLORS[item.tag] ?? "bg-white/10 text-white/50 border-[#00d68f]/20"}`}
         >
           {item.tag}
         </div>
@@ -88,9 +88,9 @@ function NewsPageCard({ item, index }: { item: NewsItem; index: number }) {
         </div>
 
         {linkedGame && displayPrice !== null && (
-          <div className="flex items-center justify-between gap-4 pt-6 border-t border-white/5">
+          <div className="flex items-center justify-between gap-4 pt-6 border-t border-[#00d68f]/15">
             <div className="flex items-center gap-4">
-              <div className="relative w-14 h-14 rounded-2xl overflow-hidden border border-white/10 shrink-0">
+              <div className="relative w-14 h-14 rounded-2xl overflow-hidden border border-[#00d68f]/20 shrink-0">
                 <Image
                   src={linkedGame.image}
                   alt={linkedGame.title}
@@ -117,7 +117,7 @@ function NewsPageCard({ item, index }: { item: NewsItem; index: number }) {
               className={`shrink-0 flex items-center gap-2.5 px-6 py-4 rounded-2xl text-sm font-black uppercase tracking-wider transition-all ${
                 added
                   ? "bg-[#00d68f] text-black shadow-[0_0_25px_rgba(99,243,247,0.3)]"
-                  : "bg-white/5 border border-white/10 text-white/50 hover:bg-[#00d68f]/10 hover:border-[#00d68f]/30 hover:text-[#00d68f]"
+                  : "bg-white/5 border border-[#00d68f]/20 text-white/50 hover:bg-[#00d68f]/10 hover:border-[#00d68f]/30 hover:text-[#00d68f]"
               }`}
             >
               {added ? <Check size={16} /> : <ShoppingCart size={16} />}
@@ -151,7 +151,7 @@ export default function NewsPage() {
         <div className="flex items-center gap-6 mb-12">
           <Link
             href="/"
-            className="group flex items-center justify-center w-10 h-10 rounded-full border border-white/10 text-white/30 hover:text-[#00d68f] hover:border-[#00d68f]/40 hover:bg-[#00d68f]/5 transition-all shrink-0"
+            className="group flex items-center justify-center w-10 h-10 rounded-full border border-[#00d68f]/20 text-white/30 hover:text-[#00d68f] hover:border-[#00d68f]/40 hover:bg-[#00d68f]/5 transition-all shrink-0"
           >
             <ChevronLeft
               size={20}

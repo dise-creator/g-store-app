@@ -36,7 +36,7 @@ export default function UserProfile() {
         className={`relative p-3 rounded-2xl border transition-all overflow-hidden ${
           isOpen && session
             ? "bg-[#a855f7]/20 border-[#a855f7]/50 shadow-[0_0_25px_rgba(168,85,247,0.4)]"
-            : "bg-white/5 border-white/5 hover:bg-white/10 hover:border-[#a855f7]/20"
+            : "bg-white/5 border-[#00d68f]/15 hover:bg-white/10 hover:border-[#a855f7]/20"
         }`}
       >
         <AnimatePresence>
@@ -64,14 +64,20 @@ export default function UserProfile() {
             />
           </motion.div>
         ) : (
-          <User size={24} className={`relative z-10 transition-colors ${isOpen && session ? "text-[#a855f7]" : "text-white"}`} />
+          <User
+            size={24}
+            className={`relative z-10 transition-colors ${isOpen && session ? "text-[#a855f7]" : "text-white"}`}
+          />
         )}
       </motion.button>
 
       <AnimatePresence>
         {isOpen && session && (
           <>
-            <div className="fixed inset-0 z-[100]" onClick={() => setIsOpen(false)} />
+            <div
+              className="fixed inset-0 z-[100]"
+              onClick={() => setIsOpen(false)}
+            />
 
             <motion.div
               initial={{ opacity: 0, y: 16, scale: 0.92, filter: "blur(8px)" }}
@@ -83,26 +89,31 @@ export default function UserProfile() {
                 background: "linear-gradient(135deg, #0d0a1a 0%, #0a0a0f 100%)",
                 border: "1px solid rgba(168,85,247,0.15)",
                 borderRadius: "2rem",
-                boxShadow: "0 30px 80px rgba(0,0,0,0.6), 0 0 40px rgba(168,85,247,0.08), inset 0 1px 0 rgba(255,255,255,0.05)"
+                boxShadow:
+                  "0 30px 80px rgba(0,0,0,0.6), 0 0 40px rgba(168,85,247,0.08), inset 0 1px 0 rgba(255,255,255,0.05)",
               }}
             >
               <div className="absolute top-0 left-0 right-0 h-32 rounded-t-[2rem] overflow-hidden pointer-events-none">
                 <div className="absolute inset-0 bg-gradient-to-b from-[#a855f7]/10 to-transparent" />
                 <motion.div
                   animate={{ x: ["-100%", "200%"] }}
-                  transition={{ duration: 3, repeat: Infinity, repeatDelay: 2, ease: "easeInOut" }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    repeatDelay: 2,
+                    ease: "easeInOut",
+                  }}
                   className="absolute inset-0 bg-gradient-to-r from-transparent via-[#a855f7]/10 to-transparent -skew-x-12"
                 />
               </div>
 
               <div className="relative p-6 flex flex-col gap-4">
-
                 {/* Профиль */}
                 <motion.div
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.05 }}
-                  className="flex items-center gap-4 pb-5 border-b border-white/5"
+                  className="flex items-center gap-4 pb-5 border-b border-[#00d68f]/15"
                 >
                   <div className="relative shrink-0">
                     <div className="absolute inset-0 rounded-full bg-[#a855f7]/30 blur-md" />
@@ -125,12 +136,18 @@ export default function UserProfile() {
                   </div>
 
                   <div className="overflow-hidden flex-1">
-                    <p className="text-white font-black text-base truncate">{session.user?.name}</p>
+                    <p className="text-white font-black text-base truncate">
+                      {session.user?.name}
+                    </p>
                     <div className="flex items-center gap-1.5 mt-1">
                       <Shield size={10} className="text-[#a855f7]" />
-                      <p className="text-[#a855f7] text-[9px] uppercase font-black tracking-widest">Игрок</p>
+                      <p className="text-[#a855f7] text-[9px] uppercase font-black tracking-widest">
+                        Игрок
+                      </p>
                     </div>
-                    <p className="text-white/20 text-[9px] truncate mt-0.5">{session.user?.email}</p>
+                    <p className="text-white/20 text-[9px] truncate mt-0.5">
+                      {session.user?.email}
+                    </p>
                   </div>
                 </motion.div>
 
@@ -142,13 +159,19 @@ export default function UserProfile() {
                   className="flex flex-col gap-2.5"
                 >
                   <motion.button
-                    onClick={() => { router.push("/profile"); setIsOpen(false); }}
+                    onClick={() => {
+                      router.push("/profile");
+                      setIsOpen(false);
+                    }}
                     whileHover={{ x: 4 }}
                     whileTap={{ scale: 0.97 }}
-                    className="w-full py-4 px-5 bg-white/[0.03] hover:bg-[#a855f7]/10 border border-white/5 hover:border-[#a855f7]/30 text-white/60 hover:text-[#a855f7] rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all flex items-center gap-3 group"
+                    className="w-full py-4 px-5 bg-white/[0.03] hover:bg-[#a855f7]/10 border border-[#00d68f]/15 hover:border-[#a855f7]/30 text-white/60 hover:text-[#a855f7] rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all flex items-center gap-3 group"
                   >
-                    <div className="w-7 h-7 rounded-xl bg-white/5 group-hover:bg-[#a855f7]/20 border border-white/5 group-hover:border-[#a855f7]/30 flex items-center justify-center transition-all">
-                      <Sparkles size={13} className="group-hover:text-[#a855f7] transition-colors" />
+                    <div className="w-7 h-7 rounded-xl bg-white/5 group-hover:bg-[#a855f7]/20 border border-[#00d68f]/15 group-hover:border-[#a855f7]/30 flex items-center justify-center transition-all">
+                      <Sparkles
+                        size={13}
+                        className="group-hover:text-[#a855f7] transition-colors"
+                      />
                     </div>
                     Моё пространство
                     <motion.span

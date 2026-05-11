@@ -95,17 +95,17 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             animate={{ x: 0 }}
             exit={{ x: "-110%" }}
             transition={{ type: "spring", damping: 28, stiffness: 220 }}
-            className="relative h-full w-full max-w-[420px] flex flex-col bg-[#0a0a0c] border border-white/10 shadow-2xl overflow-hidden rounded-[2.5rem] md:rounded-[3rem]"
+            className="relative h-full w-full max-w-[420px] flex flex-col bg-[#0a0a0c] border border-[#00d68f]/20 shadow-2xl overflow-hidden rounded-[2.5rem] md:rounded-[3rem]"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Шапка */}
-            <div className="p-8 flex items-center justify-between border-b border-white/10 bg-white/[0.02]">
+            <div className="p-8 flex items-center justify-between border-b border-[#00d68f]/20 bg-white/[0.02]">
               <h2 className="text-4xl font-black uppercase tracking-tighter text-white">
                 Корзина
               </h2>
               <button
                 onClick={onClose}
-                className="w-12 h-12 flex items-center justify-center bg-white/5 hover:bg-[#00d68f] hover:text-black rounded-full transition-all text-white/50 border border-white/10"
+                className="w-12 h-12 flex items-center justify-center bg-white/5 hover:bg-[#00d68f] hover:text-black rounded-full transition-all text-white/50 border border-[#00d68f]/20"
               >
                 <X size={24} strokeWidth={3} />
               </button>
@@ -122,9 +122,9 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
-                      className="group flex items-center gap-4 bg-white/[0.03] p-4 rounded-[1.8rem] border border-white/10 hover:border-[#00d68f]/30 transition-all"
+                      className="group flex items-center gap-4 bg-white/[0.03] p-4 rounded-[1.8rem] border border-[#00d68f]/20 hover:border-[#00d68f]/30 transition-all"
                     >
-                      <div className="relative w-16 h-20 shrink-0 rounded-2xl overflow-hidden border border-white/10">
+                      <div className="relative w-16 h-20 shrink-0 rounded-2xl overflow-hidden border border-[#00d68f]/20">
                         <Image
                           src={item.image}
                           alt={item.title}
@@ -147,7 +147,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                               {currentRegion.flag}
                             </span>
                           </div>
-                          <div className="flex items-center gap-2.5 bg-black/40 px-2.5 py-1.5 rounded-xl border border-white/5">
+                          <div className="flex items-center gap-2.5 bg-black/40 px-2.5 py-1.5 rounded-xl border border-[#00d68f]/15">
                             <button
                               onClick={() =>
                                 updateQuantity(
@@ -202,7 +202,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
             {/* Футер */}
             {items.length > 0 && (
-              <div className="p-8 bg-black/80 backdrop-blur-xl border-t border-white/10 space-y-5">
+              <div className="p-8 bg-black/80 backdrop-blur-xl border-t border-[#00d68f]/20 space-y-5">
                 {loyalty.discount > 0 && (
                   <div className="flex flex-col gap-2 p-4 bg-[#00d68f]/5 border border-[#00d68f]/20 rounded-2xl">
                     <div className="flex justify-between items-center">

@@ -180,7 +180,7 @@ export default function AnalyticsPage() {
         <div className="flex items-center gap-4 mb-10">
           <Link
             href="/"
-            className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#00d68f] transition-all"
+            className="w-10 h-10 rounded-xl bg-white/5 border border-[#00d68f]/20 flex items-center justify-center text-white/40 hover:text-[#00d68f] transition-all"
           >
             <ChevronLeft size={20} />
           </Link>
@@ -207,7 +207,7 @@ export default function AnalyticsPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.07 }}
-                  className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6"
+                  className="bg-white/[0.03] border border-[#00d68f]/20 rounded-[2rem] p-6"
                 >
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-8 h-8 rounded-xl bg-[#00d68f]/10 border border-[#00d68f]/20 flex items-center justify-center">
@@ -226,7 +226,7 @@ export default function AnalyticsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6"
+              className="bg-white/[0.03] border border-[#00d68f]/20 rounded-[2rem] p-6"
             >
               <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-6">
                 Выручка за последние 14 дней
@@ -288,7 +288,7 @@ export default function AnalyticsPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6"
+                className="bg-white/[0.03] border border-[#00d68f]/20 rounded-[2rem] p-6"
               >
                 <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-4">
                   Топ игр по выручке
@@ -325,7 +325,7 @@ export default function AnalyticsPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6"
+                className="bg-white/[0.03] border border-[#00d68f]/20 rounded-[2rem] p-6"
               >
                 <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-4">
                   Статистика промокодов
@@ -339,7 +339,7 @@ export default function AnalyticsPage() {
                     {promos.map((p) => (
                       <div
                         key={p.id}
-                        className={`flex items-center justify-between gap-2 p-3 rounded-2xl border ${p.is_active ? "border-[#00d68f]/10 bg-[#00d68f]/[0.02]" : "border-white/5 opacity-40"}`}
+                        className={`flex items-center justify-between gap-2 p-3 rounded-2xl border ${p.is_active ? "border-[#00d68f]/10 bg-[#00d68f]/[0.02]" : "border-[#00d68f]/15 opacity-40"}`}
                       >
                         <div>
                           <p className="font-mono text-xs text-white font-black">
@@ -353,7 +353,7 @@ export default function AnalyticsPage() {
                           </p>
                         </div>
                         <span
-                          className={`text-[9px] px-2 py-1 rounded-lg font-black uppercase border ${p.is_active ? "bg-[#00d68f]/10 border-[#00d68f]/20 text-[#00d68f]" : "bg-white/5 border-white/10 text-white/30"}`}
+                          className={`text-[9px] px-2 py-1 rounded-lg font-black uppercase border ${p.is_active ? "bg-[#00d68f]/10 border-[#00d68f]/20 text-[#00d68f]" : "bg-white/5 border-[#00d68f]/20 text-white/30"}`}
                         >
                           {p.is_active ? "Активен" : "Выкл"}
                         </span>
@@ -368,7 +368,7 @@ export default function AnalyticsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6"
+              className="bg-white/[0.03] border border-[#00d68f]/20 rounded-[2rem] p-6"
             >
               <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-4">
                 Последние заказы
@@ -382,7 +382,7 @@ export default function AnalyticsPage() {
                   {orders.slice(0, 10).map((o) => (
                     <div
                       key={o.id}
-                      className="flex items-center justify-between gap-4 p-3 bg-white/[0.02] border border-white/5 rounded-2xl"
+                      className="flex items-center justify-between gap-4 p-3 bg-white/[0.02] border border-[#00d68f]/15 rounded-2xl"
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <p className="font-mono text-[10px] text-white/30 shrink-0">

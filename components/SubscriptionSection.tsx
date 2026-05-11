@@ -163,7 +163,7 @@ export default function SubscriptionSection() {
           </h2>
         </div>
 
-        <div className="flex items-center gap-1 p-1 bg-white/[0.03] border border-white/10 rounded-2xl self-start md:self-auto">
+        <div className="flex items-center gap-1 p-1 bg-white/[0.03] border border-[#00d68f]/20 rounded-2xl self-start md:self-auto">
           {periods.map((period) => (
             <button
               key={period.id}
@@ -238,7 +238,7 @@ export default function SubscriptionSection() {
         <div className="flex items-center justify-center gap-4 mt-5">
           <button
             onClick={() => scrollToCard(Math.max(0, activePlan - 1))}
-            className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#00d68f] hover:border-[#00d68f]/30 transition-all active:scale-90"
+            className="w-9 h-9 rounded-xl bg-white/5 border border-[#00d68f]/20 flex items-center justify-center text-white/40 hover:text-[#00d68f] hover:border-[#00d68f]/30 transition-all active:scale-90"
           >
             <ChevronLeft size={16} />
           </button>
@@ -257,7 +257,7 @@ export default function SubscriptionSection() {
             onClick={() =>
               scrollToCard(Math.min(plans.length - 1, activePlan + 1))
             }
-            className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#00d68f] hover:border-[#00d68f]/30 transition-all active:scale-90"
+            className="w-9 h-9 rounded-xl bg-white/5 border border-[#00d68f]/20 flex items-center justify-center text-white/40 hover:text-[#00d68f] hover:border-[#00d68f]/30 transition-all active:scale-90"
           >
             <ChevronRight size={16} />
           </button>
@@ -287,7 +287,7 @@ function PlanCard({
       className={`relative flex flex-col rounded-[2rem] border overflow-hidden transition-all duration-300 hover:scale-[1.02] ${
         plan.popular
           ? "border-[#f5a623]/40 shadow-[0_0_40px_rgba(245,166,35,0.15)]"
-          : "border-white/10 hover:border-white/20"
+          : "border-[#00d68f]/20 hover:border-white/20"
       }`}
       style={{ background: "#0d1f6e" }}
     >
@@ -367,7 +367,7 @@ function PlanCard({
               ? "bg-[#00d68f] text-black shadow-[0_0_20px_rgba(99,243,247,0.3)]"
               : plan.popular
                 ? "bg-[#f5a623] text-black hover:shadow-[0_0_30px_rgba(245,166,35,0.3)]"
-                : "bg-white/[0.05] border border-white/10 text-white hover:bg-white/[0.1] hover:border-[#00d68f]/20 hover:text-[#00d68f]"
+                : "bg-white/[0.05] border border-[#00d68f]/20 text-white hover:bg-white/[0.1] hover:border-[#00d68f]/20 hover:text-[#00d68f]"
           }`}
         >
           {isAdded ? (

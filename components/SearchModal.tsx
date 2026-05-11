@@ -162,7 +162,7 @@ export default function SearchModal({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.98 }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
-            className="fixed top-8 left-1/2 -translate-x-1/2 z-[160] w-full max-w-[900px] mx-auto bg-[#0d1f6e] border border-white/10 rounded-[2.5rem] overflow-hidden flex flex-col"
+            className="fixed top-8 left-1/2 -translate-x-1/2 z-[160] w-full max-w-[900px] mx-auto bg-[#0d1f6e] border border-[#00d68f]/20 rounded-[2.5rem] overflow-hidden flex flex-col"
             style={{
               maxHeight: "85vh",
               boxShadow:
@@ -172,7 +172,7 @@ export default function SearchModal({
             onWheel={(e) => e.stopPropagation()}
           >
             {/* Строка поиска */}
-            <div className="flex items-center gap-4 p-6 border-b border-white/5 shrink-0">
+            <div className="flex items-center gap-4 p-6 border-b border-[#00d68f]/15 shrink-0">
               <div className="relative flex-1">
                 <SearchIcon
                   className="absolute left-4 top-1/2 -translate-y-1/2 text-[#00d68f]"
@@ -184,12 +184,12 @@ export default function SearchModal({
                   placeholder="Найти игру..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 focus:border-[#00d68f]/40 rounded-2xl py-4 pl-12 pr-4 text-white text-base outline-none transition-all font-bold tracking-tight placeholder:text-white/20"
+                  className="w-full bg-white/5 border border-[#00d68f]/20 focus:border-[#00d68f]/40 rounded-2xl py-4 pl-12 pr-4 text-white text-base outline-none transition-all font-bold tracking-tight placeholder:text-white/20"
                 />
               </div>
               <button
                 onClick={onClose}
-                className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/30 hover:text-white hover:bg-white/10 transition-all text-[10px] font-black uppercase shrink-0"
+                className="w-12 h-12 rounded-2xl bg-white/5 border border-[#00d68f]/20 flex items-center justify-center text-white/30 hover:text-white hover:bg-white/10 transition-all text-[10px] font-black uppercase shrink-0"
               >
                 ESC
               </button>
@@ -216,11 +216,11 @@ export default function SearchModal({
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: i * 0.05 }}
-                            className="flex items-center justify-between bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 hover:border-[#00d68f]/20 rounded-2xl p-4 transition-all group cursor-pointer"
+                            className="flex items-center justify-between bg-white/[0.03] hover:bg-white/[0.06] border border-[#00d68f]/15 hover:border-[#00d68f]/20 rounded-2xl p-4 transition-all group cursor-pointer"
                             onClick={() => handleGameClick(game)}
                           >
                             <div className="flex items-center gap-4">
-                              <div className="w-20 h-24 relative rounded-2xl overflow-hidden border border-white/10 shrink-0 shadow-lg">
+                              <div className="w-20 h-24 relative rounded-2xl overflow-hidden border border-[#00d68f]/20 shrink-0 shadow-lg">
                                 <Image
                                   src={game.image}
                                   alt={game.title}
@@ -263,7 +263,7 @@ export default function SearchModal({
                               className={`shrink-0 flex items-center gap-2 px-5 py-3 rounded-2xl text-xs font-black uppercase transition-all ${
                                 added
                                   ? "bg-[#00d68f] text-black shadow-[0_0_15px_rgba(99,243,247,0.3)]"
-                                  : "bg-white/5 text-white/40 border border-white/10 hover:bg-[#00d68f]/10 hover:text-[#00d68f] hover:border-[#00d68f]/30"
+                                  : "bg-white/5 text-white/40 border border-[#00d68f]/20 hover:bg-[#00d68f]/10 hover:text-[#00d68f] hover:border-[#00d68f]/30"
                               }`}
                             >
                               {added ? (
@@ -350,7 +350,7 @@ export default function SearchModal({
                             whileTap={{ scale: 0.97 }}
                             className="flex flex-col gap-2 group"
                           >
-                            <div className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden border border-white/5 group-hover:border-[#00d68f]/30 transition-all bg-[#161618] shadow-lg group-hover:shadow-[0_8px_20px_rgba(0,0,0,0.4)]">
+                            <div className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden border border-[#00d68f]/15 group-hover:border-[#00d68f]/30 transition-all bg-[#161618] shadow-lg group-hover:shadow-[0_8px_20px_rgba(0,0,0,0.4)]">
                               <Image
                                 src={game.image}
                                 alt={game.title}

@@ -52,7 +52,7 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
       <button
         onClick={handleHeartClick}
         type="button"
-        className="absolute top-3 right-3 z-[60] w-9 h-9 flex items-center justify-center bg-black/40 backdrop-blur-md rounded-xl border border-white/10 text-white/40 hover:text-[#00d68f] transition-all active:scale-90"
+        className="absolute top-3 right-3 z-[60] w-9 h-9 flex items-center justify-center bg-black/40 backdrop-blur-md rounded-xl border border-[#00d68f]/20 text-white/40 hover:text-[#00d68f] transition-all active:scale-90"
       >
         <Heart
           size={16}
@@ -73,7 +73,7 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
       )}
 
       <div
-        className={`absolute z-[60] flex items-center gap-1 px-2 py-1 bg-black/60 backdrop-blur-md rounded-lg border border-white/10 ${
+        className={`absolute z-[60] flex items-center gap-1 px-2 py-1 bg-black/60 backdrop-blur-md rounded-lg border border-[#00d68f]/20 ${
           hasDiscount ? "top-12 left-3" : "top-3 left-3"
         }`}
       >
@@ -90,7 +90,7 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
         aria-label={`Открыть ${game.title}`}
       />
 
-      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[2rem] border border-white/5 transition-all bg-[#161618]">
+      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[2rem] border border-[#00d68f]/15 transition-all bg-[#161618]">
         {!imgError ? (
           <Image
             src={game.image}

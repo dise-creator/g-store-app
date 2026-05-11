@@ -79,7 +79,7 @@ function TelegramEmailContent() {
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="relative z-10 w-full max-w-[440px] px-8 py-16 bg-black/60 backdrop-blur-3xl border border-white/10 rounded-[4rem] shadow-[0_0_100px_rgba(0,255,255,0.1)]"
+        className="relative z-10 w-full max-w-[440px] px-8 py-16 bg-black/60 backdrop-blur-3xl border border-[#00d68f]/20 rounded-[4rem] shadow-[0_0_100px_rgba(0,255,255,0.1)]"
       >
         <div className="text-center mb-10">
           <p className="text-white font-black  uppercase text-2xl">
@@ -97,7 +97,7 @@ function TelegramEmailContent() {
             onChange={(e) => setEmail(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
             placeholder="your@email.com"
-            className="w-full px-5 py-4 bg-white/5 border border-white/10 focus:border-[#00d68f]/40 rounded-2xl text-white font-bold text-sm outline-none transition-all placeholder-white/20"
+            className="w-full px-5 py-4 bg-white/5 border border-[#00d68f]/20 focus:border-[#00d68f]/40 rounded-2xl text-white font-bold text-sm outline-none transition-all placeholder-white/20"
           />
 
           {error && <p className="text-red-400 text-xs font-black">{error}</p>}
