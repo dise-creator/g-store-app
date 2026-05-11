@@ -31,7 +31,7 @@ export default function AnimatedBackground() {
   }
 
   return (
-    <div className="fixed inset-0 -z-50 bg-[#1d3a9e] overflow-hidden pointer-events-none">
+    <div className="fixed inset-0 -z-50 bg-[#0d1f6e] overflow-hidden pointer-events-none">
       <motion.div
         animate={{
           x: ["-30%", "10%", "-30%"],

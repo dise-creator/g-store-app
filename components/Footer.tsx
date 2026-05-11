@@ -76,7 +76,7 @@ function Modal({ id, onClose }: { id: ModalId; onClose: () => void }) {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 20, scale: 0.95 }}
         transition={{ type: "spring", damping: 25, stiffness: 300 }}
-        className="relative z-10 w-full max-w-2xl bg-[#1d3a9e] border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl"
+        className="relative z-10 w-full max-w-2xl bg-[#0d1f6e] border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl"
         style={{ boxShadow: "0 0 60px rgba(0,60,160,0.2)" }}
       >
         <div className="flex items-center justify-between px-8 py-6 border-b border-white/5">

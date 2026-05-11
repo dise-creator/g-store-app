@@ -162,7 +162,7 @@ export default function SearchModal({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -20, scale: 0.98 }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
-            className="fixed top-8 left-1/2 -translate-x-1/2 z-[160] w-full max-w-[900px] mx-auto bg-[#1d3a9e] border border-white/10 rounded-[2.5rem] overflow-hidden flex flex-col"
+            className="fixed top-8 left-1/2 -translate-x-1/2 z-[160] w-full max-w-[900px] mx-auto bg-[#0d1f6e] border border-white/10 rounded-[2.5rem] overflow-hidden flex flex-col"
             style={{
               maxHeight: "85vh",
               boxShadow:

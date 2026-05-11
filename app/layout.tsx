@@ -42,7 +42,7 @@ export default function RootLayout({
         ${nunito.variable}
         ${barlowCondensed.variable}
         ${bangers.variable}
-        antialiased text-white bg-[#1d3a9e]
+        antialiased text-white bg-[#0d1f6e]
       `}
       >
         <ClientLayout>{children}</ClientLayout>
