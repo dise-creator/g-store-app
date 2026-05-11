@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, BarChart3, Trophy, Gift, TrendingDown } from "lucide-react";
+import { X, BarChart3, Trophy, Gift, TrendingDown, Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import AnimatedBackground from "@/components/AnimatedBackground";
 
@@ -43,61 +43,61 @@ const BENEFITS = [
   { icon: TrendingDown, text: "Скидка до 15% на все покупки" },
 ];
 
+const providers = [
+  { id: "yandex", label: "Яндекс", icon: <YandexIcon />, color: "#FC3F1D", bg: "rgba(252,63,29,0.12)" },
+  { id: "google", label: "Google", icon: <GoogleIcon />, color: "#34a853", bg: "rgba(52,168,83,0.12)" },
+  { id: "vk", label: "VK ID", icon: <VKIcon />, color: "#0077ff", bg: "rgba(0,119,255,0.12)" },
+  { id: "telegram", label: "Войти через бота", icon: <TelegramIcon />, color: "#29b6f6", bg: "rgba(41,182,246,0.12)" },
+];
+
 export default function SignInPage() {
   const router = useRouter();
-  const [showEmailModal, setShowEmailModal] = useState(false);
-  const [telegramUser, setTelegramUser] = useState<any>(null);
-  const [email, setEmail] = useState("");
-  const [emailLoading, setEmailLoading] = useState(false);
-  const [emailError, setEmailError] = useState("");
+  const [tab, setTab] = useState<"social" | "login" | "register">("social");
   const [hoveredProvider, setHoveredProvider] = useState<string | null>(null);
+
+  // Email форма
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && !showEmailModal) router.push("/");
+      if (e.key === "Escape") router.push("/");
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [router, showEmailModal]);
+  }, [router]);
 
-  const handleEmailSubmit = async () => {
-    if (!email.includes("@")) {
-      setEmailError("Введи корректный email");
-      return;
-    }
-    setEmailLoading(true);
-    setEmailError("");
+  const handleEmailAuth = async () => {
+    if (!email.includes("@")) { setError("Введи корректный email"); return; }
+    if (password.length < 6) { setError("Пароль минимум 6 символов"); return; }
+    if (tab === "register" && !name.trim()) { setError("Введи имя"); return; }
+
+    setLoading(true);
+    setError("");
+
     try {
-      const res = await fetch("/api/auth/telegram-signin-cookie", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          tgId: String(telegramUser.id),
-          tgName: telegramUser.first_name,
-          tgPhoto: telegramUser.photo_url,
-        }),
-      });
-      const data = await res.json();
-      if (!data.ok) {
-        setEmailError(data.error || "Ошибка");
-        return;
-      }
-      const result = await signIn("credentials", {
+      const result = await signIn("email-password", {
         email,
-        telegramId: data.telegramId,
+        password,
+        name,
+        isRegister: tab === "register" ? "true" : "false",
         callbackUrl: "/",
         redirect: false,
       });
+
       if (result?.ok) {
         window.location.href = "/";
       } else {
-        setEmailError("Ошибка входа: " + result?.error);
+        setError(result?.error || "Ошибка входа");
       }
     } catch (e) {
-      setEmailError("Ошибка входа, попробуй снова");
+      setError("Ошибка, попробуй снова");
     } finally {
-      setEmailLoading(false);
+      setLoading(false);
     }
   };
 
@@ -111,13 +111,6 @@ export default function SignInPage() {
     textShadow: "0 1px 0 #00e6e6, 0 2px 0 #00cccc, 0 0 20px rgba(0, 255, 255, 0.8), 0 5px 12px rgba(0,0,0,0.6)"
   };
 
-  const providers = [
-    { id: "yandex", label: "Яндекс", icon: <YandexIcon />, color: "#FC3F1D", bg: "rgba(252,63,29,0.12)" },
-    { id: "google", label: "Google", icon: <GoogleIcon />, color: "#34a853", bg: "rgba(52,168,83,0.12)" },
-    { id: "vk", label: "VK ID", icon: <VKIcon />, color: "#0077ff", bg: "rgba(0,119,255,0.12)" },
-    { id: "telegram", label: "Войти через бота", icon: <TelegramIcon />, color: "#29b6f6", bg: "rgba(41,182,246,0.12)" },
-  ];
-
   return (
     <main className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[#050505] py-10">
       <AnimatedBackground />
@@ -128,7 +121,7 @@ export default function SignInPage() {
 
       <div className="relative z-10 w-full max-w-[900px] mx-4 flex flex-col md:flex-row gap-6">
 
-        {/* Левая часть — преимущества */}
+        {/* Левая часть */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -165,123 +158,181 @@ export default function SignInPage() {
           </div>
         </motion.div>
 
-        {/* Правая часть — кнопки */}
+        {/* Правая часть */}
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.15 }}
-          className="w-full md:w-[340px] px-8 py-10 bg-black/60 backdrop-blur-3xl border border-white/10 rounded-[3rem] shadow-[0_0_100px_rgba(0,255,255,0.08)]"
+          className="w-full md:w-[360px] px-8 py-8 bg-black/60 backdrop-blur-3xl border border-white/10 rounded-[3rem] shadow-[0_0_100px_rgba(0,255,255,0.08)]"
         >
-          <p className="text-white/20 text-[10px] uppercase tracking-widest font-black mb-6 text-center">
-            Выбери способ входа
-          </p>
+          {/* Табы */}
+          <div className="flex gap-1 p-1 bg-white/[0.03] border border-white/5 rounded-2xl mb-6">
+            {[
+              { id: "social", label: "Соцсети" },
+              { id: "login", label: "Войти" },
+              { id: "register", label: "Регистрация" },
+            ].map((t) => (
+              <button
+                key={t.id}
+                onClick={() => { setTab(t.id as any); setError(""); }}
+                className="flex-1 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all no-hover"
+                style={{
+                  background: tab === t.id ? "rgba(99,243,247,0.15)" : "transparent",
+                  color: tab === t.id ? "#63f3f7" : "rgba(255,255,255,0.3)",
+                  border: tab === t.id ? "1px solid rgba(99,243,247,0.3)" : "1px solid transparent",
+                }}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
 
-          <div className="flex flex-col gap-3">
-            {providers.map((provider) => {
-              const isHovered = hoveredProvider === provider.id;
-              return (
-                <motion.button
-                  key={provider.id}
-                  onClick={() => {
-                    if (provider.id === "telegram") {
-                      window.open("https://t.me/clicps_bot", "_blank");
-                    } else {
-                      signIn(provider.id, { callbackUrl: "/" });
-                    }
-                  }}
-                  whileTap={{ scale: 0.97 }}
-                  onHoverStart={() => setHoveredProvider(provider.id)}
-                  onHoverEnd={() => setHoveredProvider(null)}
-                  className="relative w-full py-4 px-5 rounded-2xl overflow-hidden transition-all duration-300 flex items-center gap-3"
-                  style={{
-                    background: isHovered ? provider.bg : "rgba(255,255,255,0.04)",
-                    border: `1px solid ${isHovered ? provider.color + "50" : "rgba(255,255,255,0.08)"}`,
-                    boxShadow: isHovered ? `0 0 25px ${provider.color}15` : "none",
-                  }}
-                >
-                  <AnimatePresence>
-                    {isHovered && (
-                      <motion.div
-                        initial={{ opacity: 0, x: "-100%" }}
-                        animate={{ opacity: 1, x: "200%" }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="absolute inset-0 -skew-x-12 pointer-events-none"
-                        style={{ background: `linear-gradient(90deg, transparent, ${provider.color}15, transparent)` }}
-                      />
-                    )}
-                  </AnimatePresence>
+          <AnimatePresence mode="wait">
 
-                  <div className="shrink-0 transition-transform duration-300" style={{ transform: isHovered ? "scale(1.1)" : "scale(1)" }}>
-                    {provider.icon}
+            {/* Соцсети */}
+            {tab === "social" && (
+              <motion.div
+                key="social"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="flex flex-col gap-3"
+              >
+                {providers.map((provider) => {
+                  const isHovered = hoveredProvider === provider.id;
+                  return (
+                    <motion.button
+                      key={provider.id}
+                      onClick={() => {
+                        if (provider.id === "telegram") {
+                          window.open("https://t.me/clicps_bot", "_blank");
+                        } else {
+                          signIn(provider.id, { callbackUrl: "/" });
+                        }
+                      }}
+                      whileTap={{ scale: 0.97 }}
+                      onHoverStart={() => setHoveredProvider(provider.id)}
+                      onHoverEnd={() => setHoveredProvider(null)}
+                      className="relative w-full py-4 px-5 rounded-2xl overflow-hidden transition-all duration-300 flex items-center gap-3"
+                      style={{
+                        background: isHovered ? provider.bg : "rgba(255,255,255,0.04)",
+                        border: `1px solid ${isHovered ? provider.color + "50" : "rgba(255,255,255,0.08)"}`,
+                        boxShadow: isHovered ? `0 0 25px ${provider.color}15` : "none",
+                      }}
+                    >
+                      <AnimatePresence>
+                        {isHovered && (
+                          <motion.div
+                            initial={{ opacity: 0, x: "-100%" }}
+                            animate={{ opacity: 1, x: "200%" }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.5 }}
+                            className="absolute inset-0 -skew-x-12 pointer-events-none"
+                            style={{ background: `linear-gradient(90deg, transparent, ${provider.color}15, transparent)` }}
+                          />
+                        )}
+                      </AnimatePresence>
+                      <div className="shrink-0" style={{ transform: isHovered ? "scale(1.1)" : "scale(1)", transition: "transform 0.3s" }}>
+                        {provider.icon}
+                      </div>
+                      <span
+                        className="relative z-10 font-black text-xs uppercase italic tracking-widest transition-colors duration-300"
+                        style={{ color: isHovered ? provider.color : "rgba(255,255,255,0.5)" }}
+                      >
+                        {provider.id === "telegram" ? provider.label : `Войти через ${provider.label}`}
+                      </span>
+                    </motion.button>
+                  );
+                })}
+
+                <div className="mt-2 p-3 bg-[#29b6f6]/5 border border-[#29b6f6]/15 rounded-2xl">
+                  <p className="text-[#29b6f6]/60 text-[9px] text-center font-bold leading-relaxed">
+                    При входе через Telegram откроется наш бот — авторизация произойдёт автоматически
+                  </p>
+                </div>
+              </motion.div>
+            )}
+
+            {/* Вход по email */}
+            {(tab === "login" || tab === "register") && (
+              <motion.div
+                key={tab}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="flex flex-col gap-3"
+              >
+                {tab === "register" && (
+                  <div className="relative">
+                    <User size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" />
+                    <input
+                      type="text"
+                      value={name}
+                      onChange={e => setName(e.target.value)}
+                      placeholder="Твоё имя"
+                      className="w-full pl-10 pr-4 py-4 bg-white/[0.04] border border-white/10 focus:border-[#63f3f7]/40 rounded-2xl text-white font-bold text-sm outline-none transition-all placeholder-white/20"
+                    />
                   </div>
+                )}
 
-                  <span
-                    className="relative z-10 font-black text-xs uppercase italic tracking-widest transition-colors duration-300"
-                    style={{ color: isHovered ? provider.color : "rgba(255,255,255,0.5)" }}
+                <div className="relative">
+                  <Mail size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" />
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    placeholder="Email"
+                    className="w-full pl-10 pr-4 py-4 bg-white/[0.04] border border-white/10 focus:border-[#63f3f7]/40 rounded-2xl text-white font-bold text-sm outline-none transition-all placeholder-white/20"
+                  />
+                </div>
+
+                <div className="relative">
+                  <Lock size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" />
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    onKeyDown={e => e.key === "Enter" && handleEmailAuth()}
+                    placeholder="Пароль"
+                    className="w-full pl-10 pr-10 py-4 bg-white/[0.04] border border-white/10 focus:border-[#63f3f7]/40 rounded-2xl text-white font-bold text-sm outline-none transition-all placeholder-white/20"
+                  />
+                  <button
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors no-hover"
                   >
-                    {provider.id === "telegram" ? provider.label : `Войти через ${provider.label}`}
-                  </span>
-                </motion.button>
-              );
-            })}
-          </div>
+                    {showPassword ? <EyeOff size={14} /> : <Eye size={14} />}
+                  </button>
+                </div>
 
-          {/* Подсказка для Telegram */}
-          <div className="mt-4 p-3 bg-[#29b6f6]/5 border border-[#29b6f6]/15 rounded-2xl">
-            <p className="text-[#29b6f6]/60 text-[9px] text-center font-bold leading-relaxed">
-              При входе через Telegram откроется наш бот — авторизация произойдёт автоматически
-            </p>
-          </div>
+                {error && (
+                  <p className="text-red-400 text-xs font-black text-center">{error}</p>
+                )}
+
+                <motion.button
+                  onClick={handleEmailAuth}
+                  disabled={loading}
+                  whileTap={{ scale: 0.97 }}
+                  className="w-full py-4 bg-[#63f3f7] text-black font-black uppercase italic text-sm rounded-2xl disabled:opacity-50 transition-all hover:shadow-[0_0_20px_rgba(99,243,247,0.3)] no-hover mt-1"
+                >
+                  {loading ? "Подождите..." : tab === "register" ? "Создать аккаунт" : "Войти"}
+                </motion.button>
+
+                <p className="text-center text-[10px] text-white/20 font-bold mt-1">
+                  {tab === "login" ? (
+                    <>Нет аккаунта? <button onClick={() => setTab("register")} className="text-[#63f3f7]/60 hover:text-[#63f3f7] transition-colors no-hover">Зарегистрироваться</button></>
+                  ) : (
+                    <>Уже есть аккаунт? <button onClick={() => setTab("login")} className="text-[#63f3f7]/60 hover:text-[#63f3f7] transition-colors no-hover">Войти</button></>
+                  )}
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <p className="mt-6 text-center text-[8px] text-white/10 uppercase font-bold tracking-[0.2em]">
             Нажмите <span className="text-white/20 border border-white/10 px-2 py-0.5 rounded mx-1">ESC</span> для отмены
           </p>
         </motion.div>
       </div>
-
-      <AnimatePresence>
-        {showEmailModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-md px-6"
-          >
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              className="w-full max-w-[400px] bg-[#0a0a0c] border border-white/10 rounded-[2rem] p-8 flex flex-col gap-5"
-            >
-              <div>
-                <p className="text-white font-black uppercase italic text-xl">Почти готово!</p>
-                <p className="text-white/30 text-xs mt-1">
-                  Привет, {telegramUser?.first_name}! Введи email для аккаунта
-                </p>
-              </div>
-              <input
-                type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                onKeyDown={e => e.key === "Enter" && handleEmailSubmit()}
-                placeholder="your@email.com"
-                className="w-full px-5 py-4 bg-white/5 border border-white/10 focus:border-[#63f3f7]/40 rounded-2xl text-white font-bold text-sm outline-none transition-all placeholder-white/20"
-              />
-              {emailError && (
-                <p className="text-red-400 text-xs font-black">{emailError}</p>
-              )}
-              <button
-                onClick={handleEmailSubmit}
-                disabled={emailLoading}
-                className="w-full py-4 bg-[#63f3f7] text-black font-black uppercase italic text-sm rounded-2xl disabled:opacity-50 transition-all hover:shadow-[0_0_20px_rgba(99,243,247,0.3)]"
-              >
-                {emailLoading ? "Входим..." : "Войти"}
-              </button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </main>
   );
 }
