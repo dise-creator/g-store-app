@@ -61,7 +61,7 @@ function NewsCard({ item, index }: { item: NewsItem; index: number }) {
           className="object-cover transition-transform duration-700 group-hover:scale-105"
           unoptimized
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0d1f6e] via-[#0d1f6e]/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a1860] via-[#0a1860]/20 to-transparent" />
         <div
           className={`absolute top-4 left-4 px-3 py-1.5 rounded-xl border text-[10px] font-black uppercase tracking-widest ${TAG_COLORS[item.tag] ?? "bg-white/10 text-white/50 border-[#00d68f]/40"}`}
         >
@@ -86,7 +86,7 @@ function NewsCard({ item, index }: { item: NewsItem; index: number }) {
         </div>
 
         {linkedGame && displayPrice !== null && (
-          <div className="mt-auto pt-4 border-t border-[#00d68f]/30 flex items-center justify-between gap-3">
+          <div className="mt-auto pt-4 border-t border-[#00d68f]/15 flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <div className="relative w-12 h-12 rounded-xl overflow-hidden border border-[#00d68f]/40 shrink-0">
                 <Image
