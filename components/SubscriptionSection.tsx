@@ -33,20 +33,8 @@ interface Plan {
 
 const periods: Period[] = [
   { id: "1", label: "1 мес", fullLabel: "1 месяц", multiplier: 1 },
-  {
-    id: "3",
-    label: "3 мес",
-    fullLabel: "3 месяца",
-    multiplier: 2.7,
-    badge: "-10%",
-  },
-  {
-    id: "12",
-    label: "12 мес",
-    fullLabel: "12 месяцев",
-    multiplier: 9.6,
-    badge: "-20%",
-  },
+  { id: "3", label: "3 мес", fullLabel: "3 месяца", multiplier: 2.7, badge: "-10%" },
+  { id: "12", label: "12 мес", fullLabel: "12 месяцев", multiplier: 9.6, badge: "-20%" },
 ];
 
 const plans: Plan[] = [
@@ -103,9 +91,7 @@ export default function SubscriptionSection() {
   const currentPeriod = periods.find((p) => p.id === activePeriod)!;
 
   const handleAdd = (plan: Plan) => {
-    const price = Math.round(
-      getPrice(plan.basePrice) * currentPeriod.multiplier,
-    );
+    const price = Math.round(getPrice(plan.basePrice) * currentPeriod.multiplier);
     addItem({
       id: `${plan.id}-${activePeriod}`,
       title: `PS Plus ${plan.name} — ${currentPeriod.fullLabel}`,
@@ -124,12 +110,7 @@ export default function SubscriptionSection() {
   const scrollToCard = (idx: number) => {
     if (!scrollRef.current) return;
     const card = scrollRef.current.children[idx] as HTMLElement;
-    if (card)
-      card.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: "center",
-      });
+    if (card) card.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
     setActivePlan(idx);
   };
 
@@ -137,16 +118,14 @@ export default function SubscriptionSection() {
     <section
       className="w-full relative rounded-[2rem] md:rounded-[3rem] overflow-hidden py-8 md:py-10 px-4 md:px-8"
       style={{
-        background:
-          "linear-gradient(135deg, rgba(0,60,160,0.12) 0%, rgba(0,40,120,0.08) 50%, rgba(0,60,160,0.06) 100%)",
-        border: "1px solid rgba(99,243,247,0.06)",
-        boxShadow: "inset 0 0 80px rgba(0,60,160,0.08)",
+        background: "#08113d",
+        border: "1px solid rgba(0, 214, 143, 0.35)",
+        boxShadow: "inset 0 0 80px rgba(0,20,80,0.3), 0 0 40px rgba(0, 214, 143, 0.05)",
       }}
     >
       <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/5 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#00d68f]/[0.03] blur-[100px] rounded-full pointer-events-none" />
 
-      {/* Шапка */}
       <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
           <p className="text-white/20 text-[10px] uppercase font-black tracking-[0.3em] mb-1">
@@ -154,16 +133,13 @@ export default function SubscriptionSection() {
           </p>
           <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter">
             <span className="text-white">ПОДПИСКИ </span>
-            <span
-              className="text-[#00d68f]"
-              style={{ textShadow: "0 0 30px rgba(99,243,247,0.4)" }}
-            >
+            <span className="text-[#00d68f]" style={{ textShadow: "0 0 30px rgba(0,214,143,0.4)" }}>
               PS PLUS
             </span>
           </h2>
         </div>
 
-        <div className="flex items-center gap-1 p-1 bg-[#0a1860]/60 border border-[#00d68f]/40 rounded-2xl self-start md:self-auto">
+        <div className="flex items-center gap-1 p-1 bg-[#060e30] border border-[#00d68f]/40 rounded-2xl self-start md:self-auto">
           {periods.map((period) => (
             <button
               key={period.id}
@@ -177,9 +153,7 @@ export default function SubscriptionSection() {
                   transition={{ type: "spring", damping: 25, stiffness: 300 }}
                 />
               )}
-              <span
-                className={`relative z-10 transition-colors ${activePeriod === period.id ? "text-black" : "text-white/40"}`}
-              >
+              <span className={`relative z-10 transition-colors ${activePeriod === period.id ? "text-black" : "text-white/40"}`}>
                 {period.label}
               </span>
               {period.badge && activePeriod !== period.id && (
@@ -192,12 +166,9 @@ export default function SubscriptionSection() {
         </div>
       </div>
 
-      {/* Десктоп */}
       <div className="relative hidden md:grid grid-cols-3 gap-5">
         {plans.map((plan) => {
-          const price = Math.round(
-            getPrice(plan.basePrice) * currentPeriod.multiplier,
-          );
+          const price = Math.round(getPrice(plan.basePrice) * currentPeriod.multiplier);
           return (
             <PlanCard
               key={plan.id}
@@ -211,16 +182,10 @@ export default function SubscriptionSection() {
         })}
       </div>
 
-      {/* Мобилка */}
       <div className="md:hidden">
-        <div
-          ref={scrollRef}
-          className="flex gap-4 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-2"
-        >
+        <div ref={scrollRef} className="flex gap-4 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-2">
           {plans.map((plan) => {
-            const price = Math.round(
-              getPrice(plan.basePrice) * currentPeriod.multiplier,
-            );
+            const price = Math.round(getPrice(plan.basePrice) * currentPeriod.multiplier);
             return (
               <div key={plan.id} className="snap-center shrink-0 w-[85vw]">
                 <PlanCard
@@ -238,7 +203,7 @@ export default function SubscriptionSection() {
         <div className="flex items-center justify-center gap-4 mt-5">
           <button
             onClick={() => scrollToCard(Math.max(0, activePlan - 1))}
-            className="w-9 h-9 rounded-xl bg-white/5 border border-[#00d68f]/40 flex items-center justify-center text-white/40 hover:text-[#00d68f] hover:border-[#00d68f]/30 transition-all active:scale-90"
+            className="w-9 h-9 rounded-xl bg-[#060e30] border border-[#00d68f]/40 flex items-center justify-center text-white/40 hover:text-[#00d68f] transition-all active:scale-90"
           >
             <ChevronLeft size={16} />
           </button>
@@ -247,17 +212,13 @@ export default function SubscriptionSection() {
               <button
                 key={i}
                 onClick={() => scrollToCard(i)}
-                className={`h-1.5 rounded-full transition-all duration-300 ${
-                  i === activePlan ? "w-8 bg-[#00d68f]" : "w-2 bg-white/20"
-                }`}
+                className={`h-1.5 rounded-full transition-all duration-300 ${i === activePlan ? "w-8 bg-[#00d68f]" : "w-2 bg-white/20"}`}
               />
             ))}
           </div>
           <button
-            onClick={() =>
-              scrollToCard(Math.min(plans.length - 1, activePlan + 1))
-            }
-            className="w-9 h-9 rounded-xl bg-white/5 border border-[#00d68f]/40 flex items-center justify-center text-white/40 hover:text-[#00d68f] hover:border-[#00d68f]/30 transition-all active:scale-90"
+            onClick={() => scrollToCard(Math.min(plans.length - 1, activePlan + 1))}
+            className="w-9 h-9 rounded-xl bg-[#060e30] border border-[#00d68f]/40 flex items-center justify-center text-white/40 hover:text-[#00d68f] transition-all active:scale-90"
           >
             <ChevronRight size={16} />
           </button>
@@ -268,11 +229,7 @@ export default function SubscriptionSection() {
 }
 
 function PlanCard({
-  plan,
-  price,
-  isAdded,
-  currentPeriod,
-  onAdd,
+  plan, price, isAdded, currentPeriod, onAdd,
 }: {
   plan: Plan;
   price: number;
@@ -287,31 +244,23 @@ function PlanCard({
       className={`relative flex flex-col rounded-[2rem] border overflow-hidden transition-all duration-300 hover:scale-[1.02] ${
         plan.popular
           ? "border-[#f5a623]/40 shadow-[0_0_40px_rgba(245,166,35,0.15)]"
-          : "border-[#00d68f]/40 hover:border-white/20"
+          : "border-[#00d68f]/30 hover:border-[#00d68f]/50"
       }`}
-      style={{ background: "#0d1f6e" }}
+      style={{ background: "#0a1650" }}
     >
       {plan.popular && (
         <div className="absolute top-4 right-4 z-10 px-3 py-1 bg-[#f5a623] rounded-xl">
-          <span className="text-black text-[8px] font-black uppercase tracking-widest">
-            Популярное
-          </span>
+          <span className="text-black text-[8px] font-black uppercase tracking-widest">Популярное</span>
         </div>
       )}
 
-      <div
-        className={`relative h-40 md:h-44 bg-gradient-to-br ${plan.gradient} flex flex-col items-center justify-center overflow-hidden`}
-      >
+      <div className={`relative h-40 md:h-44 bg-gradient-to-br ${plan.gradient} flex flex-col items-center justify-center overflow-hidden`}>
         <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-white/10" />
         <div className="absolute -bottom-6 -left-6 w-24 h-24 rounded-full bg-white/5" />
         <PSIcon className="w-8 h-8 text-black/30 mb-1 relative z-10" />
-        <p className="text-black/50 text-xs font-bold relative z-10">
-          PlayStation Plus
-        </p>
-        <p
-          className="text-black font-black text-3xl uppercase tracking-tighter relative z-10"
-          style={{ textShadow: "0 2px 10px rgba(0,0,0,0.3)" }}
-        >
+        <p className="text-black/50 text-xs font-bold relative z-10">PlayStation Plus</p>
+        <p className="text-black font-black text-3xl uppercase tracking-tighter relative z-10"
+          style={{ textShadow: "0 2px 10px rgba(0,0,0,0.3)" }}>
           {plan.name}
         </p>
       </div>
@@ -326,9 +275,7 @@ function PlanCard({
             transition={{ duration: 0.2 }}
           >
             <div className="flex items-baseline gap-1.5">
-              <span className="text-white font-black text-3xl">
-                {price.toLocaleString()}
-              </span>
+              <span className="text-white font-black text-3xl">{price.toLocaleString()}</span>
               <span className="text-[#00d68f] font-black text-sm">₽</span>
             </div>
             <p className="text-white/30 text-xs font-bold mt-0.5">
@@ -342,19 +289,11 @@ function PlanCard({
             <div key={i} className="flex items-start gap-3">
               <div
                 className="w-4 h-4 rounded-full flex items-center justify-center shrink-0 mt-0.5"
-                style={{
-                  background: plan.accentColor + "30",
-                  border: `1px solid ${plan.accentColor}50`,
-                }}
+                style={{ background: plan.accentColor + "30", border: `1px solid ${plan.accentColor}50` }}
               >
-                <div
-                  className="w-1.5 h-1.5 rounded-full"
-                  style={{ background: plan.accentColor }}
-                />
+                <div className="w-1.5 h-1.5 rounded-full" style={{ background: plan.accentColor }} />
               </div>
-              <span className="text-white/50 text-xs font-bold leading-relaxed">
-                {feature}
-              </span>
+              <span className="text-white/50 text-xs font-bold leading-relaxed">{feature}</span>
             </div>
           ))}
         </div>
@@ -364,19 +303,13 @@ function PlanCard({
           whileTap={{ scale: 0.97 }}
           className={`w-full py-4 rounded-2xl font-black text-xs uppercase tracking-[0.15em] transition-all flex items-center justify-center gap-2 ${
             isAdded
-              ? "bg-[#00d68f] text-black shadow-[0_0_20px_rgba(99,243,247,0.3)]"
+              ? "bg-[#00d68f] text-black shadow-[0_0_20px_rgba(0,214,143,0.3)]"
               : plan.popular
-                ? "bg-[#f5a623] text-black hover:shadow-[0_0_30px_rgba(245,166,35,0.3)]"
-                : "bg-white/[0.05] border border-[#00d68f]/40 text-white hover:bg-white/[0.1] hover:border-[#00d68f]/40 hover:text-[#00d68f]"
+              ? "bg-[#f5a623] text-black hover:shadow-[0_0_30px_rgba(245,166,35,0.3)]"
+              : "bg-[#060e30] border border-[#00d68f]/40 text-white hover:bg-[#0a1650] hover:border-[#00d68f]/60 hover:text-[#00d68f]"
           }`}
         >
-          {isAdded ? (
-            <>
-              <Check size={14} /> Добавлено!
-            </>
-          ) : (
-            "Купить подписку"
-          )}
+          {isAdded ? <><Check size={14} /> Добавлено!</> : "Купить подписку"}
         </motion.button>
       </div>
     </motion.div>
