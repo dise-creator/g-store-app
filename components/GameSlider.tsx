@@ -40,12 +40,11 @@ export default function GameSlider({
   return (
     <div
       className="w-full py-8 transform-gpu relative rounded-[2.5rem] overflow-hidden"
-      style={{
-        background:
-          "linear-gradient(135deg, rgba(29,51,147,0.25) 0%, rgba(20,38,120,0.18) 50%, rgba(29,51,147,0.12) 100%)",
-        border: "1px solid rgba(29,51,147,0.4)",
-        boxShadow: "inset 0 0 60px rgba(29,51,147,0.1)",
-      }}
+    style={{
+  background: "#08113d",
+  border: "1px solid rgba(0, 214, 143, 0.35)",
+  boxShadow: "inset 0 0 60px rgba(0,20,80,0.3), 0 0 40px rgba(0, 214, 143, 0.05)",
+}}
     >
       <div className="absolute top-0 right-1/4 w-80 h-40 bg-[#1d3393]/10 blur-[80px] rounded-full pointer-events-none" />
 
