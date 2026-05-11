@@ -51,6 +51,16 @@ export default function SignInPage() {
   const [emailLoading, setEmailLoading] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [hoveredProvider, setHoveredProvider] = useState<string | null>(null);
+  const [isTelegramApp, setIsTelegramApp] = useState(false);
+
+  useEffect(() => {
+    const tg = (window as any).Telegram?.WebApp;
+    if (tg?.initData) {
+      setIsTelegramApp(true);
+      // Автоматически авторизуем если открыто в Mini App
+      window.location.href = "/";
+    }
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -61,6 +71,8 @@ export default function SignInPage() {
   }, [router, showEmailModal]);
 
   useEffect(() => {
+    if (isTelegramApp) return; // не грузим виджет в Mini App
+
     (window as any).onTelegramAuth = async (user: any) => {
       const res = await fetch("/api/auth/telegram", {
         method: "POST",
@@ -85,7 +97,7 @@ export default function SignInPage() {
     return () => {
       delete (window as any).onTelegramAuth;
     };
-  }, []);
+  }, [isTelegramApp]);
 
   const handleEmailSubmit = async () => {
     if (!email.includes("@")) {
@@ -138,12 +150,17 @@ export default function SignInPage() {
     textShadow: "0 1px 0 #00e6e6, 0 2px 0 #00cccc, 0 0 20px rgba(0, 255, 255, 0.8), 0 5px 12px rgba(0,0,0,0.6)"
   };
 
-  const providers = [
+  const allProviders = [
     { id: "yandex", label: "Яндекс", icon: <YandexIcon />, color: "#FC3F1D", bg: "rgba(252,63,29,0.12)" },
     { id: "google", label: "Google", icon: <GoogleIcon />, color: "#34a853", bg: "rgba(52,168,83,0.12)" },
     { id: "vk", label: "VK ID", icon: <VKIcon />, color: "#0077ff", bg: "rgba(0,119,255,0.12)" },
     { id: "telegram", label: "Telegram", icon: <TelegramIcon />, color: "#29b6f6", bg: "rgba(41,182,246,0.12)" },
   ];
+
+  // Скрываем Telegram кнопку в Mini App
+  const providers = isTelegramApp
+    ? allProviders.filter(p => p.id !== "telegram")
+    : allProviders;
 
   return (
     <main className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[#050505] py-10">
