@@ -17,10 +17,7 @@ export default function AnimatedBackground() {
     return (
       <div
         className="fixed inset-0 -z-50 overflow-hidden pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(160deg, #0d1530 0%, #080d1a 50%, #060a14 100%)",
-        }}
+        style={{ background: "linear-gradient(160deg, #0d1f6e 0%, #08113d 50%, #060e30 100%)" }}
       >
         <div className="absolute top-[-20%] left-[-10%] w-[80%] h-[80%] bg-blue-700/20 blur-[100px] rounded-full opacity-50" />
         <div className="absolute bottom-[-20%] right-[-10%] w-[80%] h-[80%] bg-blue-900/15 blur-[100px] rounded-full opacity-40" />
