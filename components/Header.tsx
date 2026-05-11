@@ -33,19 +33,18 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
   const items = useCartStore((state) => state.items);
   const wishlistItems = useWishlistStore((state) => state.items);
 
+  const totalAmount = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+  const wishlistCount = wishlistItems.length;
+
   useEffect(() => {
     setMounted(true);
 
     const handleScroll = () => {
       window.requestAnimationFrame(() => setScrolled(window.scrollY > 20));
     };
-
-    const handleHide = () => {
-      if (window.innerWidth < 768) setHeaderVisible(false);
-    };
-    const handleShow = () => {
-      if (window.innerWidth < 768) setHeaderVisible(true);
-    };
+    const handleHide = () => { if (window.innerWidth < 768) setHeaderVisible(false); };
+    const handleShow = () => { if (window.innerWidth < 768) setHeaderVisible(true); };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     window.addEventListener("headerHide", handleHide);
@@ -57,10 +56,6 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
       window.removeEventListener("headerShow", handleShow);
     };
   }, []);
-
-  const totalAmount = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-  const wishlistCount = wishlistItems.length;
 
   useEffect(() => {
     if (wishlistCount > prevWishlist.current) {
@@ -75,7 +70,7 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
     setTimeout(() => {
       setSearchActivated(false);
       onSearchClick();
-    }, 600);
+    }, 300);
   };
 
   return (
@@ -153,7 +148,7 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
           </motion.div>
         </Link>
 
-        {/* Центр — скрываем на мобилке */}
+        {/* Центр — только десктоп */}
         <div className="absolute left-1/2 -translate-x-1/2 hidden md:block">
           <AnimatePresence mode="wait">
             {searchActivated ? (
@@ -181,7 +176,7 @@ export default function Header({ onSearchClick, onCartClick, onWishlistClick }: 
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.15 }}
-                  className="text-white/50 text-sm font-bold italic tracking-wide whitespace-nowrap"
+                  className="text-white/50 text-sm font-bold tracking-wide whitespace-nowrap"
                 >
                   Найти игру...
                 </motion.span>

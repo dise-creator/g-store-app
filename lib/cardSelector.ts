@@ -6,7 +6,7 @@ export interface CardSet {
 const DENOMINATIONS = [5000, 3000, 2000, 1000, 500, 250];
 
 export function selectCards(price: number): CardSet[] {
-  const result: Map<number, number> = new Map();
+  const result = new Map<number, number>();
   let remaining = price;
 
   for (const denom of DENOMINATIONS) {
@@ -19,9 +19,9 @@ export function selectCards(price: number): CardSet[] {
   }
 
   if (remaining > 0) {
-    const covering = [...DENOMINATIONS].reverse().find((d: number) => d >= remaining);
+    const covering = [...DENOMINATIONS].reverse().find(d => d >= remaining);
     if (covering) {
-      result.set(covering, (result.get(covering) || 0) + 1);
+      result.set(covering, (result.get(covering) ?? 0) + 1);
     }
   }
 
@@ -30,10 +30,10 @@ export function selectCards(price: number): CardSet[] {
     changed = false;
     for (const [denom, qty] of result.entries()) {
       if (qty >= 2) {
-        const bigger = DENOMINATIONS.find((d: number) => d === denom * 2);
+        const bigger = DENOMINATIONS.find(d => d === denom * 2);
         if (bigger) {
           result.set(denom, qty - 2);
-          result.set(bigger, (result.get(bigger) || 0) + 1);
+          result.set(bigger, (result.get(bigger) ?? 0) + 1);
           if (result.get(denom) === 0) result.delete(denom);
           changed = true;
           break;
@@ -53,8 +53,7 @@ export function getTotalCards(cards: CardSet[]): number {
 }
 
 export function getCardsHint(price: number): string {
-  const cards = selectCards(price);
-  return cards
+  return selectCards(price)
     .map(c => c.quantity > 1 ? `${c.quantity}× ${c.value.toLocaleString()} ₽` : `${c.value.toLocaleString()} ₽`)
     .join(" + ");
 }

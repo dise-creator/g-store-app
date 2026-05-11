@@ -82,7 +82,7 @@ function TelegramEmailContent() {
         className="relative z-10 w-full max-w-[440px] px-8 py-16 bg-black/60 backdrop-blur-3xl border border-white/10 rounded-[4rem] shadow-[0_0_100px_rgba(0,255,255,0.1)]"
       >
         <div className="text-center mb-10">
-          <p className="text-white font-black italic uppercase text-2xl">
+          <p className="text-white font-black  uppercase text-2xl">
             Почти готово!
           </p>
           <p className="text-white/30 text-sm mt-2">
@@ -105,7 +105,7 @@ function TelegramEmailContent() {
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className="w-full py-5 bg-[#63f3f7] text-black font-black uppercase italic text-sm rounded-2xl disabled:opacity-50 transition-all hover:shadow-[0_0_20px_rgba(99,243,247,0.3)]"
+            className="w-full py-5 bg-[#63f3f7] text-black font-black uppercase  text-sm rounded-2xl disabled:opacity-50 transition-all hover:shadow-[0_0_20px_rgba(99,243,247,0.3)]"
           >
             {loading ? "Входим..." : "Войти"}
           </button>

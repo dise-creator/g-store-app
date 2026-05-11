@@ -8,6 +8,20 @@ import { useCartStore } from "@/store/useCart";
 import { useRegionStore, REGIONS } from "@/store/useRegion";
 import { X, ShoppingCart, ChevronLeft, ChevronRight, Check, ShieldCheck, Zap, CreditCard, TrendingDown } from "lucide-react";
 
+// --- Типы ---
+interface Card {
+  value: number;
+  quantity: number;
+}
+
+interface Edition {
+  name: string;
+  price: number;
+  features?: string[];
+  cards?: Card[];
+}
+
+// --- Вспомогательные компоненты ---
 const PSIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
     <path d="M8.985 2.596v17.548l3.915 1.261V6.688c0-.69.304-1.151.794-.998.636.2.76.893.76 1.582v5.815c2.77 1.397 4.851-.29 4.851-3.652 0-3.5-1.201-5.135-4.851-6.457 0 0-3.143-1.012-5.469-1.382zm-4.732 14.5c-2.361-.766-2.75-2.355-1.674-3.27.981-.858 2.639-1.491 2.639-1.491l.01 2.86s-1.016.35-1.534.668c-.519.319-.525.757.108.98.894.315 1.813.162 1.813.162v2.005s-.407.08-.928.08c-.961 0-2.153-.26-2.974-.77l.54-.224zm11.49 1.639l-4.223-1.362v-2.15l4.223 1.487v2.025z"/>
@@ -38,6 +52,7 @@ const PSNCard = ({ value, animate }: { value: number; animate: boolean }) => (
   </motion.div>
 );
 
+// --- Главный компонент ---
 export default function GameModal() {
   const { isOpen, selectedGame, closeModal } = useGameModal();
   const addItem = useCartStore((state) => state.addItem);
@@ -62,33 +77,30 @@ export default function GameModal() {
   }, [isOpen, selectedGame]);
 
   useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") closeModal();
-    };
+    const handleEsc = (e: KeyboardEvent) => { if (e.key === "Escape") closeModal(); };
     if (isOpen) window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, [isOpen, closeModal]);
 
   if (!isOpen || !selectedGame) return null;
 
-  const screenshots = selectedGame?.screenshots?.length > 0
+  const screenshots = selectedGame.screenshots?.length > 0
     ? selectedGame.screenshots
-    : [selectedGame?.image || ""];
+    : [selectedGame.image || ""];
 
-  const editions = selectedGame?.editions?.length > 0
+  const editions: Edition[] = selectedGame.editions?.length > 0
     ? selectedGame.editions
-    : [{ name: "Standard Edition", price: selectedGame?.price || 0, features: ["Базовая игра"] }];
+    : [{ name: "Standard Edition", price: selectedGame.price || 0, features: ["Базовая игра"] }];
 
-  const currentEdition = editions[selectedEditionIndex] || editions[0];
+  const currentEdition = editions[selectedEditionIndex] ?? editions[0];
   const currentRegion = REGIONS[region];
-  const displayPrice = getPrice(currentEdition?.price || 0);
-  const originalPrice = currentEdition?.price || 0;
+  const displayPrice = getPrice(currentEdition.price);
+  const originalPrice = currentEdition.price;
   const savings = originalPrice - displayPrice;
 
-  const allRegionPrices = Object.values(REGIONS).map(r => ({
-    region: r,
-    price: getPriceForRegion(originalPrice, r.code)
-  })).sort((a, b) => a.price - b.price);
+  const allRegionPrices = Object.values(REGIONS)
+    .map(r => ({ region: r, price: getPriceForRegion(originalPrice, r.code) }))
+    .sort((a, b) => a.price - b.price);
 
   const cheapestRegion = allRegionPrices[0];
   const isCurrentCheapest = cheapestRegion.region.code === region;
@@ -97,7 +109,6 @@ export default function GameModal() {
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + screenshots.length) % screenshots.length);
 
   const handleAddToCart = () => {
-    if (!selectedGame || !currentEdition) return;
     setShowCardAnimation(true);
     setTimeout(() => {
       addItem({
@@ -117,13 +128,9 @@ export default function GameModal() {
 
       <div
         className="relative z-[210] w-full max-w-[1300px] bg-[#0a0f1e] md:border md:border-[#1a2a4a] md:rounded-[2.5rem] overflow-hidden flex flex-col md:flex-row shadow-2xl"
-        style={{
-          boxShadow: "0 0 80px rgba(0, 60, 160, 0.2)",
-          height: "100dvh",
-          maxHeight: "100dvh",
-        }}
+        style={{ boxShadow: "0 0 80px rgba(0, 60, 160, 0.2)", height: "100dvh", maxHeight: "100dvh" }}
       >
-        {/* Кнопка закрытия */}
+        {/* Закрытие */}
         <button
           onClick={closeModal}
           className="absolute top-4 right-4 z-[250] w-9 h-9 flex items-center justify-center bg-white/10 hover:bg-red-500/20 border border-white/10 rounded-full text-white/50 hover:text-red-400 transition-all"
@@ -131,13 +138,13 @@ export default function GameModal() {
           <X size={18} />
         </button>
 
-        {/* ЛЕВАЯ ЧАСТЬ: Слайдер */}
+        {/* СЛАЙДЕР */}
         <div className="relative w-full md:w-[48%] h-[28vh] md:h-full group bg-[#060b16] shrink-0">
           {screenshots[currentSlide] && (
             <Image
               key={currentSlide}
               src={screenshots[currentSlide]}
-              alt="Gameplay"
+              alt={selectedGame.title}
               fill
               className="object-cover transition-all duration-700 ease-in-out"
               unoptimized
@@ -162,9 +169,10 @@ export default function GameModal() {
             </>
           )}
 
+          {/* Заголовок на мобилке */}
           <div className="absolute bottom-4 left-4 md:hidden">
-            <h2 className="font-black italic uppercase text-xl text-white tracking-tighter leading-none drop-shadow-2xl">
-              {selectedGame?.title}
+            <h2 className="font-black uppercase text-xl text-white tracking-tighter leading-none drop-shadow-2xl">
+              {selectedGame.title}
             </h2>
           </div>
         </div>
@@ -193,60 +201,61 @@ export default function GameModal() {
               </div>
             </div>
 
-            {/* Заголовок — только десктоп */}
+            {/* Заголовок десктоп */}
             <div className="hidden md:block">
-              <h2 className="font-black italic uppercase text-5xl md:text-6xl text-white tracking-tighter leading-none mb-2">
-                {selectedGame?.title}
+              <h2 className="font-black uppercase text-5xl md:text-6xl text-white tracking-tighter leading-none mb-2">
+                {selectedGame.title}
               </h2>
-              <p className="text-white/40 text-sm leading-relaxed line-clamp-2">{selectedGame?.shortDescription}</p>
+              <p className="text-white/40 text-sm leading-relaxed line-clamp-2">{selectedGame.shortDescription}</p>
             </div>
 
-   {/* Описание на мобилке */}
-<div className="md:hidden flex flex-col gap-2">
-  <p className="text-white/50 text-sm leading-relaxed">
-    {selectedGame?.description || selectedGame?.shortDescription}
-  </p>
-  {(selectedGame?.full_description || selectedGame?.fullDescription) && (
-    <p className="text-white/25 text-xs leading-relaxed line-clamp-4">
-      {selectedGame?.full_description || selectedGame?.fullDescription}
-    </p>
-  )}
-</div>
+            {/* Описание мобилка */}
+            <div className="md:hidden flex flex-col gap-2">
+              <p className="text-white/50 text-sm leading-relaxed">
+                {selectedGame.shortDescription}
+              </p>
+              {selectedGame.fullDescription && (
+                <p className="text-white/25 text-xs leading-relaxed line-clamp-4">
+                  {selectedGame.fullDescription}
+                </p>
+              )}
+            </div>
 
             {/* Выбор издания */}
             <div>
               <p className="text-[10px] text-white/20 uppercase font-black tracking-[0.3em] mb-2">Выберите вариант</p>
               <div className="flex flex-col gap-2">
                 {editions.map((edition, index) => {
-                  const editionDisplayPrice = getPrice(edition?.price || 0);
+                  const editionDisplayPrice = getPrice(edition.price);
+                  const isSelected = selectedEditionIndex === index;
                   return (
                     <button
                       key={index}
                       onClick={() => setSelectedEditionIndex(index)}
                       className={`flex flex-col p-3 md:p-4 rounded-2xl border transition-all text-left ${
-                        selectedEditionIndex === index
+                        isSelected
                           ? "bg-blue-900/20 border-[#63f3f7] shadow-[0_0_25px_rgba(99,243,247,0.08)]"
                           : "border-white/5 hover:border-white/15 bg-white/[0.02]"
                       }`}
                     >
                       <div className="flex justify-between items-center w-full gap-2">
-                        <span className={`text-sm font-black uppercase italic truncate ${selectedEditionIndex === index ? "text-white" : "text-white/30"}`}>
-                          {edition?.name}
+                        <span className={`text-sm font-black uppercase truncate ${isSelected ? "text-white" : "text-white/30"}`}>
+                          {edition.name}
                         </span>
                         <div className="flex items-center gap-2 shrink-0">
                           <span className="text-white/20 text-xs line-through font-black">
-                            {edition?.price?.toLocaleString()} ₽
+                            {edition.price.toLocaleString()} ₽
                           </span>
-                          <span className={`font-black text-base ${selectedEditionIndex === index ? "text-[#63f3f7]" : "text-white/20"}`}>
+                          <span className={`font-black text-base ${isSelected ? "text-[#63f3f7]" : "text-white/20"}`}>
                             {editionDisplayPrice.toLocaleString()} ₽
                           </span>
                         </div>
                       </div>
 
-                      {edition?.cards && edition.cards.length > 0 && (
+                      {edition.cards && edition.cards.length > 0 && (
                         <div className="flex flex-wrap gap-1.5 mt-2">
-                          {edition.cards.map((card: any, cIdx: number) => (
-                            <div key={cIdx} className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-[9px] font-black ${selectedEditionIndex === index ? "bg-[#63f3f7]/10 border-[#63f3f7]/20 text-[#63f3f7]" : "bg-white/[0.03] border-white/5 text-white/20"}`}>
+                          {edition.cards.map((card: Card, cIdx: number) => (
+                            <div key={cIdx} className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-[9px] font-black ${isSelected ? "bg-[#63f3f7]/10 border-[#63f3f7]/20 text-[#63f3f7]" : "bg-white/[0.03] border-white/5 text-white/20"}`}>
                               <CreditCard size={9} />
                               {card.quantity > 1 && <span>{card.quantity}×</span>}
                               <span>PSN {card.value.toLocaleString()} ₽</span>
@@ -255,9 +264,9 @@ export default function GameModal() {
                         </div>
                       )}
 
-                      {(!edition?.cards || edition.cards.length === 0) && (
+                      {(!edition.cards || edition.cards.length === 0) && (
                         <div className="flex flex-wrap gap-x-3 mt-1">
-                          {edition?.features?.map((feature: string, fIdx: number) => (
+                          {edition.features?.map((feature, fIdx) => (
                             <span key={fIdx} className="text-[9px] text-white/20 uppercase">• {feature}</span>
                           ))}
                         </div>
@@ -268,7 +277,7 @@ export default function GameModal() {
               </div>
             </div>
 
-            {/* Сравнение цен */}
+            {/* Сравнение цен по регионам */}
             {rates && (
               <div className={`p-3 rounded-2xl border ${isCurrentCheapest ? "bg-green-500/5 border-green-500/20" : "bg-[#f59e0b]/5 border-[#f59e0b]/20"}`}>
                 <div className="flex items-center gap-2 mb-2">
@@ -276,8 +285,7 @@ export default function GameModal() {
                   <span className={`text-[9px] font-black uppercase tracking-widest ${isCurrentCheapest ? "text-green-400" : "text-[#f59e0b]"}`}>
                     {isCurrentCheapest
                       ? "🏆 Лучшая цена в вашем регионе!"
-                      : `💡 Дешевле в ${cheapestRegion.region.name} — ${cheapestRegion.price.toLocaleString()} ₽`
-                    }
+                      : `💡 Дешевле в ${cheapestRegion.region.name} — ${cheapestRegion.price.toLocaleString()} ₽`}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -285,11 +293,9 @@ export default function GameModal() {
                     <div
                       key={r.code}
                       className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border flex-1 justify-between ${
-                        r.code === region
-                          ? "bg-blue-900/20 border-blue-700/40"
-                          : idx === 0
-                          ? "bg-green-500/10 border-green-500/20"
-                          : "bg-white/[0.02] border-white/5"
+                        r.code === region ? "bg-blue-900/20 border-blue-700/40"
+                        : idx === 0 ? "bg-green-500/10 border-green-500/20"
+                        : "bg-white/[0.02] border-white/5"
                       }`}
                     >
                       <div className="flex items-center gap-1.5">
@@ -327,7 +333,7 @@ export default function GameModal() {
             </div>
           </div>
 
-          {/* Итого и кнопка — прилипает к низу */}
+          {/* Итого */}
           <div className="sticky bottom-0 bg-[#0a0f1e] border-t border-white/5 p-4 md:p-10 md:pt-5">
             <div className="flex items-center justify-between mb-3">
               <div>
@@ -341,7 +347,7 @@ export default function GameModal() {
                   {originalPrice.toLocaleString()} ₽
                 </span>
                 <div className="flex items-baseline gap-1">
-                  <span className="font-black italic text-3xl md:text-5xl text-white">{displayPrice.toLocaleString()}</span>
+                  <span className="font-black text-3xl md:text-5xl text-white">{displayPrice.toLocaleString()}</span>
                   <span className="text-[#63f3f7] font-black text-base md:text-xl">₽</span>
                 </div>
               </div>
@@ -349,9 +355,9 @@ export default function GameModal() {
 
             <div className="relative">
               <AnimatePresence>
-                {showCardAnimation && currentEdition?.cards && (
+                {showCardAnimation && currentEdition.cards && (
                   <div className="absolute inset-0 flex items-center justify-center gap-3 z-10 pointer-events-none">
-                    {currentEdition.cards.map((card: any, idx: number) => (
+                    {currentEdition.cards.map((card: Card, idx: number) => (
                       <PSNCard key={idx} value={card.value} animate={showCardAnimation} />
                     ))}
                   </div>
@@ -363,11 +369,9 @@ export default function GameModal() {
                 disabled={showCardAnimation}
                 whileTap={{ scale: 0.97 }}
                 className={`group relative w-full h-14 md:h-16 rounded-2xl flex items-center justify-center gap-3 transition-all overflow-hidden text-sm ${
-                  isAdded
-                    ? "bg-[#63f3f7] shadow-[0_0_30px_rgba(99,243,247,0.4)]"
-                    : showCardAnimation
-                    ? "bg-[#63f3f7]/50 cursor-wait"
-                    : "bg-[#63f3f7] hover:shadow-[0_0_30px_rgba(99,243,247,0.3)]"
+                  isAdded ? "bg-[#63f3f7] shadow-[0_0_30px_rgba(99,243,247,0.4)]"
+                  : showCardAnimation ? "bg-[#63f3f7]/50 cursor-wait"
+                  : "bg-[#63f3f7] hover:shadow-[0_0_30px_rgba(99,243,247,0.3)]"
                 }`}
               >
                 <div className={`flex items-center gap-3 transition-all duration-300 ${isAdded || showCardAnimation ? "translate-y-10 opacity-0" : "translate-y-0 opacity-100"}`}>

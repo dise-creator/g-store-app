@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Game } from "./games";
+import type { Game } from "./games";
 
 interface GameModalStore {
   isOpen: boolean;

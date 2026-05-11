@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { Heart } from "lucide-react"; 
-import { Game, getActiveDiscount, getDiscountedPrice } from "@/store/games";
+import { Heart } from "lucide-react";
+import { type Game, getActiveDiscount, getDiscountedPrice } from "@/store/games";
 import { useWishlistStore } from "@/store/useWishlist";
 import { useGameModal } from "@/store/useGameModal";
 import { useRegionStore, REGIONS } from "@/store/useRegion";
@@ -18,13 +18,12 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
   const openModal = useGameModal((state) => state.openModal);
   const { region, getPrice } = useRegionStore();
   const [imgError, setImgError] = useState(false);
-  
-  const isFavorite = isInWishlist ? isInWishlist(game.id) : false;
+
+  const isFavorite = isInWishlist(game.id);
 
   const discount = getActiveDiscount(game);
   const hasDiscount = discount > 0;
   const basePrice = hasDiscount ? getDiscountedPrice(game) : game.price;
-
   const displayPrice = getPrice(basePrice);
   const originalDisplayPrice = getPrice(game.price);
   const currentRegion = REGIONS[region];
@@ -37,14 +36,17 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
 
   const handleCardClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (onSelect) onSelect(game);
-    openModal(game);
+    if (onSelect) {
+      onSelect(game);
+    } else {
+      openModal(game);
+    }
   };
 
   return (
     <div className="group relative flex flex-col gap-3 transition-all">
-      
-      <button 
+
+      <button
         onClick={handleHeartClick}
         type="button"
         className="absolute top-3 right-3 z-[60] w-9 h-9 flex items-center justify-center bg-black/40 backdrop-blur-md rounded-xl border border-white/10 text-white/40 hover:text-[#63f3f7] transition-all active:scale-90"
@@ -74,12 +76,11 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
         aria-label={`Открыть ${game.title}`}
       />
 
-      {/* Изображение */}
       <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[2rem] border border-white/5 transition-all bg-[#161618]">
         {!imgError ? (
-          <Image 
-            src={game.image} 
-            alt={game.title} 
+          <Image
+            src={game.image}
+            alt={game.title}
             fill
             sizes="(max-width: 640px) 65vw, (max-width: 768px) 30vw, (max-width: 1024px) 22vw, 16vw"
             className="object-cover object-top transition-transform duration-700 group-hover:scale-110"
@@ -93,17 +94,17 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-        {hasDiscount && (
+        {hasDiscount && game.discount_until && (
           <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-red-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
             <p className="text-[9px] text-red-300 font-black uppercase tracking-widest text-center">
-              🔥 Скидка до {new Date(game.discount_until!).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })}
+              🔥 Скидка до {new Date(game.discount_until).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' })}
             </p>
           </div>
         )}
       </div>
 
       <div className="flex flex-col gap-1 px-2 pointer-events-none">
-        <h3 className="font-michroma text-[9px] md:text-[10px] uppercase tracking-[0.15em] text-white/30 group-hover:text-white/80 italic truncate">
+        <h3 className="font-michroma text-[9px] md:text-[10px] uppercase tracking-[0.15em] text-white/30 group-hover:text-white/80 truncate">
           {game.title}
         </h3>
         <div className="flex items-center gap-2 flex-wrap">
@@ -113,7 +114,6 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
             </span>
             <span className={`font-michroma text-[10px] mt-1 ${hasDiscount ? "text-red-400" : "text-[#63f3f7]"}`}>₽</span>
           </div>
-
           <span className="font-michroma text-xs text-white/20 line-through leading-none mt-1">
             {hasDiscount ? originalDisplayPrice.toLocaleString() : game.price.toLocaleString()} ₽
           </span>

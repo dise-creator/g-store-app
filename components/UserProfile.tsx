@@ -5,6 +5,7 @@ import { signOut, useSession } from "next-auth/react";
 import { User, LogOut, Sparkles, Shield } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function UserProfile() {
   const { data: session } = useSession();
@@ -21,7 +22,7 @@ export default function UserProfile() {
 
   const handleProfileClick = () => {
     if (!session) {
-      router.push('/signin');
+      router.push("/signin");
     } else {
       setIsOpen(!isOpen);
     }
@@ -29,7 +30,6 @@ export default function UserProfile() {
 
   return (
     <div className="relative">
-      {/* Кнопка профиля */}
       <motion.button
         onClick={handleProfileClick}
         whileTap={{ scale: 0.88 }}
@@ -39,7 +39,6 @@ export default function UserProfile() {
             : "bg-white/5 border-white/5 hover:bg-white/10 hover:border-[#a855f7]/20"
         }`}
       >
-        {/* Свечение при открытии */}
         <AnimatePresence>
           {isOpen && session && (
             <motion.div
@@ -52,12 +51,18 @@ export default function UserProfile() {
         </AnimatePresence>
 
         {session?.user?.image ? (
-          <motion.img
-            src={session.user.image}
-            className="w-6 h-6 rounded-full relative z-10"
-            alt="avatar"
+          <motion.div
             animate={isOpen ? { scale: 1.1 } : { scale: 1 }}
-          />
+            className="relative w-6 h-6 rounded-full overflow-hidden z-10"
+          >
+            <Image
+              src={session.user.image}
+              alt="avatar"
+              fill
+              className="object-cover"
+              unoptimized
+            />
+          </motion.div>
         ) : (
           <User size={24} className={`relative z-10 transition-colors ${isOpen && session ? "text-[#a855f7]" : "text-white"}`} />
         )}
@@ -81,7 +86,6 @@ export default function UserProfile() {
                 boxShadow: "0 30px 80px rgba(0,0,0,0.6), 0 0 40px rgba(168,85,247,0.08), inset 0 1px 0 rgba(255,255,255,0.05)"
               }}
             >
-              {/* Декоративный градиент сверху */}
               <div className="absolute top-0 left-0 right-0 h-32 rounded-t-[2rem] overflow-hidden pointer-events-none">
                 <div className="absolute inset-0 bg-gradient-to-b from-[#a855f7]/10 to-transparent" />
                 <motion.div
@@ -100,26 +104,28 @@ export default function UserProfile() {
                   transition={{ delay: 0.05 }}
                   className="flex items-center gap-4 pb-5 border-b border-white/5"
                 >
-                  {/* Аватар с рамкой */}
                   <div className="relative shrink-0">
                     <div className="absolute inset-0 rounded-full bg-[#a855f7]/30 blur-md" />
                     {session.user?.image ? (
-                      <img
-                        src={session.user.image}
-                        className="relative w-14 h-14 rounded-full border-2 border-[#a855f7]/40 z-10"
-                        alt="avatar"
-                      />
+                      <div className="relative w-14 h-14 rounded-full overflow-hidden border-2 border-[#a855f7]/40 z-10">
+                        <Image
+                          src={session.user.image}
+                          alt="avatar"
+                          fill
+                          className="object-cover"
+                          unoptimized
+                        />
+                      </div>
                     ) : (
                       <div className="relative w-14 h-14 rounded-full bg-[#a855f7]/20 flex items-center justify-center font-black text-xl text-[#a855f7] border-2 border-[#a855f7]/40 z-10">
                         {session.user?.name?.[0]}
                       </div>
                     )}
-                    {/* Онлайн индикатор */}
                     <div className="absolute bottom-0.5 right-0.5 w-3 h-3 bg-green-400 rounded-full border-2 border-[#0a0a0f] z-20" />
                   </div>
 
                   <div className="overflow-hidden flex-1">
-                    <p className="text-white font-black text-base italic truncate">{session.user?.name}</p>
+                    <p className="text-white font-black text-base truncate">{session.user?.name}</p>
                     <div className="flex items-center gap-1.5 mt-1">
                       <Shield size={10} className="text-[#a855f7]" />
                       <p className="text-[#a855f7] text-[9px] uppercase font-black tracking-widest">Игрок</p>
@@ -135,12 +141,11 @@ export default function UserProfile() {
                   transition={{ delay: 0.1 }}
                   className="flex flex-col gap-2.5"
                 >
-                  {/* Моё пространство */}
                   <motion.button
-                    onClick={() => { router.push('/profile'); setIsOpen(false); }}
+                    onClick={() => { router.push("/profile"); setIsOpen(false); }}
                     whileHover={{ x: 4 }}
                     whileTap={{ scale: 0.97 }}
-                    className="w-full py-4 px-5 bg-white/[0.03] hover:bg-[#a855f7]/10 border border-white/5 hover:border-[#a855f7]/30 text-white/60 hover:text-[#a855f7] rounded-2xl font-black text-[10px] uppercase italic tracking-widest transition-all flex items-center gap-3 group"
+                    className="w-full py-4 px-5 bg-white/[0.03] hover:bg-[#a855f7]/10 border border-white/5 hover:border-[#a855f7]/30 text-white/60 hover:text-[#a855f7] rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all flex items-center gap-3 group"
                   >
                     <div className="w-7 h-7 rounded-xl bg-white/5 group-hover:bg-[#a855f7]/20 border border-white/5 group-hover:border-[#a855f7]/30 flex items-center justify-center transition-all">
                       <Sparkles size={13} className="group-hover:text-[#a855f7] transition-colors" />
@@ -155,12 +160,11 @@ export default function UserProfile() {
                     </motion.span>
                   </motion.button>
 
-                  {/* Выйти */}
                   <motion.button
                     onClick={() => signOut()}
                     whileHover={{ x: 4 }}
                     whileTap={{ scale: 0.97 }}
-                    className="w-full py-4 px-5 bg-red-500/5 hover:bg-red-500/10 border border-red-500/10 hover:border-red-500/25 text-red-500/60 hover:text-red-400 rounded-2xl font-black text-[10px] uppercase italic tracking-widest transition-all flex items-center gap-3 group"
+                    className="w-full py-4 px-5 bg-red-500/5 hover:bg-red-500/10 border border-red-500/10 hover:border-red-500/25 text-red-500/60 hover:text-red-400 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all flex items-center gap-3 group"
                   >
                     <div className="w-7 h-7 rounded-xl bg-red-500/5 group-hover:bg-red-500/15 border border-red-500/10 group-hover:border-red-500/25 flex items-center justify-center transition-all">
                       <LogOut size={13} />

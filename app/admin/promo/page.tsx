@@ -3,7 +3,16 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, Plus, Trash2, Copy, Check, Loader2, Tag, ShieldX } from "lucide-react";
+import {
+  ChevronLeft,
+  Plus,
+  Trash2,
+  Copy,
+  Check,
+  Loader2,
+  Tag,
+  ShieldX,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAdmin } from "@/lib/useAdmin";
@@ -23,7 +32,10 @@ interface PromoCode {
 function generateCode(): string {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   const part = (n: number) =>
-    Array.from({ length: n }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+    Array.from(
+      { length: n },
+      () => chars[Math.floor(Math.random() * chars.length)],
+    ).join("");
   return `CLIC-${part(4)}-${part(4)}`;
 }
 
@@ -63,12 +75,19 @@ export default function PromoPage() {
     setCreating(true);
     const code = generateCode();
     const { error } = await supabase.from("promo_codes").insert({
-      code, type, value: Number(value),
+      code,
+      type,
+      value: Number(value),
       max_uses: Number(maxUses),
       expires_at: expiresAt || null,
       is_active: true,
     });
-    if (!error) { setValue(""); setMaxUses("1"); setExpiresAt(""); await loadPromos(); }
+    if (!error) {
+      setValue("");
+      setMaxUses("1");
+      setExpiresAt("");
+      await loadPromos();
+    }
     setCreating(false);
   };
 
@@ -78,8 +97,13 @@ export default function PromoPage() {
   };
 
   const handleToggle = async (id: string, current: boolean) => {
-    await supabase.from("promo_codes").update({ is_active: !current }).eq("id", id);
-    setPromos((prev) => prev.map((p) => (p.id === id ? { ...p, is_active: !current } : p)));
+    await supabase
+      .from("promo_codes")
+      .update({ is_active: !current })
+      .eq("id", id);
+    setPromos((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, is_active: !current } : p)),
+    );
   };
 
   const copyCode = (code: string) => {
@@ -100,8 +124,13 @@ export default function PromoPage() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4">
         <ShieldX size={48} className="text-red-400" />
-        <p className="text-white/30 font-black uppercase italic text-xl">Нет доступа</p>
-        <Link href="/" className="px-6 py-3 bg-[#63f3f7] text-black font-black uppercase italic text-xs rounded-2xl">
+        <p className="text-white/30 font-black uppercase  text-xl">
+          Нет доступа
+        </p>
+        <Link
+          href="/"
+          className="px-6 py-3 bg-[#63f3f7] text-black font-black uppercase  text-xs rounded-2xl"
+        >
           На главную
         </Link>
       </div>
@@ -111,48 +140,82 @@ export default function PromoPage() {
   return (
     <main className="min-h-screen pt-10 pb-20 px-8">
       <div className="max-w-[900px] mx-auto">
-
         <div className="flex items-center gap-4 mb-10">
-          <Link href="/" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#63f3f7] transition-all">
+          <Link
+            href="/"
+            className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#63f3f7] transition-all"
+          >
             <ChevronLeft size={20} />
           </Link>
           <div>
-            <h1 className="text-3xl font-black italic uppercase text-white tracking-tighter">
+            <h1 className="text-3xl font-black  uppercase text-white tracking-tighter">
               Промо<span className="text-[#63f3f7]">коды</span>
             </h1>
-            <p className="text-white/30 text-xs mt-1">Создавай и управляй скидочными кодами</p>
+            <p className="text-white/30 text-xs mt-1">
+              Создавай и управляй скидочными кодами
+            </p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
           <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6 flex flex-col gap-4">
-            <p className="text-white/30 text-[10px] uppercase font-black tracking-widest">Новый промокод</p>
+            <p className="text-white/30 text-[10px] uppercase font-black tracking-widest">
+              Новый промокод
+            </p>
 
             <div className="flex gap-2">
               {(["percent", "fixed"] as const).map((t) => (
-                <button key={t} onClick={() => setType(t)}
-                  className={`flex-1 py-3 rounded-2xl font-black text-xs uppercase italic transition-all ${type === t ? "bg-[#63f3f7] text-black" : "bg-white/5 border border-white/10 text-white/40 hover:text-white"}`}>
+                <button
+                  key={t}
+                  onClick={() => setType(t)}
+                  className={`flex-1 py-3 rounded-2xl font-black text-xs uppercase  transition-all ${type === t ? "bg-[#63f3f7] text-black" : "bg-white/5 border border-white/10 text-white/40 hover:text-white"}`}
+                >
                   {t === "percent" ? "Скидка %" : "Сумма ₽"}
                 </button>
               ))}
             </div>
 
-            <input type="number" value={value} onChange={(e) => setValue(e.target.value)}
-              placeholder={type === "percent" ? "Например: 15 (15%)" : "Например: 500 (500₽)"}
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#63f3f7]/40 transition-all placeholder-white/20" />
+            <input
+              type="number"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              placeholder={
+                type === "percent"
+                  ? "Например: 15 (15%)"
+                  : "Например: 500 (500₽)"
+              }
+              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#63f3f7]/40 transition-all placeholder-white/20"
+            />
 
-            <input type="number" value={maxUses} onChange={(e) => setMaxUses(e.target.value)}
-              placeholder="Кол-во использований" min="1"
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#63f3f7]/40 transition-all placeholder-white/20" />
+            <input
+              type="number"
+              value={maxUses}
+              onChange={(e) => setMaxUses(e.target.value)}
+              placeholder="Кол-во использований"
+              min="1"
+              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#63f3f7]/40 transition-all placeholder-white/20"
+            />
 
-            <input type="datetime-local" value={expiresAt} onChange={(e) => setExpiresAt(e.target.value)}
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#63f3f7]/40 transition-all" />
-            <p className="text-white/20 text-[10px] font-black -mt-2">Дата истечения (необязательно)</p>
+            <input
+              type="datetime-local"
+              value={expiresAt}
+              onChange={(e) => setExpiresAt(e.target.value)}
+              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#63f3f7]/40 transition-all"
+            />
+            <p className="text-white/20 text-[10px] font-black -mt-2">
+              Дата истечения (необязательно)
+            </p>
 
-            <button onClick={handleCreate} disabled={creating || !value}
-              className="w-full py-4 bg-[#63f3f7] text-black font-black uppercase italic text-sm rounded-2xl hover:shadow-[0_0_30px_rgba(99,243,247,0.3)] transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2">
-              {creating ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />}
+            <button
+              onClick={handleCreate}
+              disabled={creating || !value}
+              className="w-full py-4 bg-[#63f3f7] text-black font-black uppercase  text-sm rounded-2xl hover:shadow-[0_0_30px_rgba(99,243,247,0.3)] transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2"
+            >
+              {creating ? (
+                <Loader2 size={16} className="animate-spin" />
+              ) : (
+                <Plus size={16} />
+              )}
               Сгенерировать
             </button>
           </div>
@@ -171,21 +234,41 @@ export default function PromoPage() {
             <div className="flex flex-col gap-2 max-h-[500px] overflow-y-auto pr-1">
               <AnimatePresence>
                 {promos.map((p) => (
-                  <motion.div key={p.id} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                    className={`p-3 rounded-2xl border transition-all ${p.is_active ? "border-[#63f3f7]/10 bg-[#63f3f7]/[0.02]" : "border-white/5 bg-white/[0.01] opacity-40"}`}>
+                  <motion.div
+                    key={p.id}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    className={`p-3 rounded-2xl border transition-all ${p.is_active ? "border-[#63f3f7]/10 bg-[#63f3f7]/[0.02]" : "border-white/5 bg-white/[0.01] opacity-40"}`}
+                  >
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2 min-w-0">
                         <Tag size={12} className="text-[#63f3f7] shrink-0" />
-                        <p className="font-mono text-xs text-white font-black truncate">{p.code}</p>
+                        <p className="font-mono text-xs text-white font-black truncate">
+                          {p.code}
+                        </p>
                       </div>
                       <div className="flex items-center gap-1 shrink-0">
-                        <button onClick={() => copyCode(p.code)} className="text-white/20 hover:text-[#63f3f7] transition-all">
-                          {copied === p.code ? <Check size={12} /> : <Copy size={12} />}
+                        <button
+                          onClick={() => copyCode(p.code)}
+                          className="text-white/20 hover:text-[#63f3f7] transition-all"
+                        >
+                          {copied === p.code ? (
+                            <Check size={12} />
+                          ) : (
+                            <Copy size={12} />
+                          )}
                         </button>
-                        <button onClick={() => handleToggle(p.id, p.is_active)} className="text-white/20 hover:text-yellow-400 transition-all text-[10px] font-black px-1">
+                        <button
+                          onClick={() => handleToggle(p.id, p.is_active)}
+                          className="text-white/20 hover:text-yellow-400 transition-all text-[10px] font-black px-1"
+                        >
                           {p.is_active ? "OFF" : "ON"}
                         </button>
-                        <button onClick={() => handleDelete(p.id)} className="text-white/20 hover:text-red-400 transition-all">
+                        <button
+                          onClick={() => handleDelete(p.id)}
+                          className="text-white/20 hover:text-red-400 transition-all"
+                        >
                           <Trash2 size={12} />
                         </button>
                       </div>
@@ -194,9 +277,13 @@ export default function PromoPage() {
                       <span className="text-[#63f3f7] text-[10px] font-black">
                         {p.type === "percent" ? `−${p.value}%` : `−${p.value}₽`}
                       </span>
-                      <span className="text-white/20 text-[10px]">{p.used_count}/{p.max_uses} использований</span>
+                      <span className="text-white/20 text-[10px]">
+                        {p.used_count}/{p.max_uses} использований
+                      </span>
                       {p.expires_at && (
-                        <span className="text-white/20 text-[10px]">до {new Date(p.expires_at).toLocaleDateString()}</span>
+                        <span className="text-white/20 text-[10px]">
+                          до {new Date(p.expires_at).toLocaleDateString()}
+                        </span>
                       )}
                     </div>
                   </motion.div>

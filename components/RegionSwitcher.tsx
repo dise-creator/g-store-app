@@ -3,9 +3,10 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Check } from "lucide-react";
+import Image from "next/image";
 import { useRegionStore, REGIONS, type Region } from "@/store/useRegion";
 
-const regionColors: Record<string, { bg: string; border: string; text: string; glow: string; iconBg: string }> = {
+const regionColors: Record<Region, { bg: string; border: string; text: string; glow: string; iconBg: string }> = {
   TR: {
     bg: "bg-[#2e0a0a]",
     border: "border-[#cc2222]",
@@ -22,7 +23,12 @@ const regionColors: Record<string, { bg: string; border: string; text: string; g
   },
 };
 
-const flagUrls: Record<string, string> = {
+const DISCOUNT_LABELS: Record<Region, string> = {
+  TR: "Скидка до 65%",
+  IN: "Скидка до 45%",
+};
+
+const flagUrls: Record<Region, string> = {
   TR: "https://flagcdn.com/w40/tr.png",
   IN: "https://flagcdn.com/w40/in.png",
 };
@@ -35,7 +41,6 @@ export default function RegionSwitcher() {
   const currentRegion = REGIONS[region];
   const colors = regionColors[region];
 
-  // Закрытие по клику вне
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) {
@@ -49,7 +54,7 @@ export default function RegionSwitcher() {
   return (
     <div ref={ref} className="relative">
 
-      {/* Десктоп — обычный switcher */}
+      {/* Десктоп */}
       <div className="hidden md:flex items-center gap-1.5 p-1 bg-white/[0.03] border border-white/5 rounded-2xl">
         {Object.values(REGIONS).map((r) => {
           const isActive = region === r.code;
@@ -57,7 +62,7 @@ export default function RegionSwitcher() {
           return (
             <motion.button
               key={r.code}
-              onClick={() => setRegion(r.code as Region)}
+              onClick={() => setRegion(r.code)}
               whileTap={{ scale: 0.93 }}
               className={`relative flex items-center gap-3 px-3 py-2 rounded-xl border transition-all duration-300 ${
                 isActive
@@ -68,9 +73,9 @@ export default function RegionSwitcher() {
               <div className={`w-8 h-8 rounded-xl overflow-hidden shrink-0 flex items-center justify-center ${
                 isActive ? c.iconBg : "bg-white/10"
               }`}>
-                <img src={flagUrls[r.code]} alt={r.name} className="w-full h-full object-cover" />
+                <Image src={flagUrls[r.code]} alt={r.name} width={32} height={32} className="object-cover" unoptimized />
               </div>
-              <span className={`text-sm font-black uppercase italic tracking-wide transition-colors ${
+              <span className={`text-sm font-black uppercase tracking-wide transition-colors ${
                 isActive ? c.text : "text-white/25"
               }`}>
                 {r.name}
@@ -87,26 +92,19 @@ export default function RegionSwitcher() {
         })}
       </div>
 
-      {/* Мобилка — компактная кнопка с дропдауном */}
+      {/* Мобилка */}
       <div className="flex md:hidden">
         <motion.button
           onClick={() => setIsOpen(!isOpen)}
           whileTap={{ scale: 0.93 }}
-          className={`flex items-center gap-2 px-2.5 py-1.5 rounded-xl border transition-all duration-300 ${
-            colors.bg
-          } ${colors.border} ${colors.glow}`}
+          className={`flex items-center gap-2 px-2.5 py-1.5 rounded-xl border transition-all duration-300 ${colors.bg} ${colors.border} ${colors.glow}`}
         >
-          {/* Флаг */}
           <div className={`w-6 h-6 rounded-lg overflow-hidden shrink-0 ${colors.iconBg}`}>
-            <img src={flagUrls[region]} alt={currentRegion.name} className="w-full h-full object-cover" />
+            <Image src={flagUrls[region]} alt={currentRegion.name} width={24} height={24} className="object-cover" unoptimized />
           </div>
-
-          {/* Название */}
-          <span className={`text-xs font-black uppercase italic ${colors.text}`}>
+          <span className={`text-xs font-black uppercase ${colors.text}`}>
             {currentRegion.name}
           </span>
-
-          {/* Стрелка */}
           <motion.div
             animate={{ rotate: isOpen ? 180 : 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
@@ -115,7 +113,6 @@ export default function RegionSwitcher() {
           </motion.div>
         </motion.button>
 
-        {/* Дропдаун */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
@@ -131,7 +128,7 @@ export default function RegionSwitcher() {
                 return (
                   <motion.button
                     key={r.code}
-                    onClick={() => { setRegion(r.code as Region); setIsOpen(false); }}
+                    onClick={() => { setRegion(r.code); setIsOpen(false); }}
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.06 }}
@@ -141,28 +138,19 @@ export default function RegionSwitcher() {
                         : "hover:bg-white/5 border-l-2 border-transparent"
                     }`}
                   >
-                    {/* Флаг */}
                     <div className={`w-8 h-8 rounded-xl overflow-hidden shrink-0 ${isActive ? c.iconBg : "bg-white/10"}`}>
-                      <img src={flagUrls[r.code]} alt={r.name} className="w-full h-full object-cover" />
+                      <Image src={flagUrls[r.code]} alt={r.name} width={32} height={32} className="object-cover" unoptimized />
                     </div>
-
-                    {/* Инфо */}
                     <div className="flex flex-col items-start">
-                      <span className={`text-sm font-black uppercase italic ${isActive ? c.text : "text-white/60"}`}>
+                      <span className={`text-sm font-black uppercase ${isActive ? c.text : "text-white/60"}`}>
                         {r.name}
                       </span>
                       <span className="text-white/20 text-[9px] font-black uppercase tracking-widest">
-                        {r.code === "TR" ? "Скидка до 65%" : "Скидка до 45%"}
+                        {DISCOUNT_LABELS[r.code]}
                       </span>
                     </div>
-
-                    {/* Галочка активного */}
                     {isActive && (
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        className="ml-auto"
-                      >
+                      <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="ml-auto">
                         <Check size={14} className={c.text} />
                       </motion.div>
                     )}

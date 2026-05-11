@@ -4,9 +4,10 @@ import React from "react";
 import Image from "next/image";
 import { useCartStore } from "@/store/useCart";
 import { Zap } from "lucide-react";
+import type { Game } from "@/store/games";
 
 interface SubscriptionCardProps {
-  id: string; // исправили с number на string
+  id: string;
   title: string;
   price: number;
   image: string;
@@ -17,12 +18,26 @@ interface SubscriptionCardProps {
 export default function SubscriptionCard({ id, title, price, image, color, duration }: SubscriptionCardProps) {
   const addItem = useCartStore((state) => state.addItem);
 
+  const handleAdd = () => {
+    addItem({
+      id,
+      title,
+      price,
+      image,
+      category: "subscription",
+      shortDescription: "",
+      fullDescription: "",
+      screenshots: [],
+      editions: [],
+    } as Game);
+  };
+
   return (
-    <div 
-      onClick={() => addItem({ id, title, price, image } as any)}
-      className="group relative overflow-hidden rounded-[2.5rem] bg-white/5 border border-white/5 p-8 transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
+    <button
+      onClick={handleAdd}
+      className="group relative overflow-hidden rounded-[2.5rem] bg-white/5 border border-white/5 p-8 transition-all hover:scale-[1.02] active:scale-95 cursor-pointer text-left w-full"
     >
-      <div 
+      <div
         className="absolute -right-20 -top-20 w-64 h-64 blur-[100px] opacity-20 transition-opacity group-hover:opacity-40"
         style={{ backgroundColor: color }}
       />
@@ -39,17 +54,17 @@ export default function SubscriptionCard({ id, title, price, image, color, durat
         </div>
 
         <div>
-          <h3 className="text-2xl font-black text-white uppercase italic leading-none">{title}</h3>
+          <h3 className="text-2xl font-black text-white uppercase leading-none">{title}</h3>
           <p className="text-white/40 text-[10px] uppercase tracking-[0.2em] mt-3 font-bold">Мгновенная доставка на почту</p>
         </div>
 
         <div className="flex justify-between items-center mt-4">
-          <span className="text-3xl font-black text-white italic">{price.toLocaleString()} ₽</span>
-          <div className="bg-[#a855f7] text-white px-6 py-3 rounded-2xl font-black uppercase italic text-xs tracking-widest shadow-lg shadow-[#a855f7]/20">
+          <span className="text-3xl font-black text-white">{price.toLocaleString()} ₽</span>
+          <div className="bg-[#a855f7] text-white px-6 py-3 rounded-2xl font-black uppercase text-xs tracking-widest shadow-lg shadow-[#a855f7]/20">
             Купить
           </div>
         </div>
       </div>
-    </div>
+    </button>
   );
 }

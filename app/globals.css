@@ -1,3 +1,4 @@
+/* globals.css */
 @import "tailwindcss";
 
 @layer base {
@@ -12,8 +13,14 @@
     position: relative;
     z-index: 0;
   }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(99, 243, 247, 0.2) transparent;
+  }
+
   body {
-    font-family: var(--font-rajdhani), sans-serif;
+    font-family: var(--font-nunito), sans-serif;
   }
 
   body::before {
@@ -41,12 +48,8 @@
     background-size: 128px 128px;
   }
 
-  ::-webkit-scrollbar {
-    width: 4px;
-  }
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb {
     background: rgba(99, 243, 247, 0.2);
     border-radius: 99px;
@@ -54,27 +57,17 @@
   ::-webkit-scrollbar-thumb:hover {
     background: rgba(99, 243, 247, 0.5);
   }
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(99, 243, 247, 0.2) transparent;
-  }
 }
 
 @layer utilities {
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
 
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 3px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-  }
+  .custom-scrollbar::-webkit-scrollbar { width: 3px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
   .custom-scrollbar::-webkit-scrollbar-thumb {
     background: rgba(99, 243, 247, 0.15);
     border-radius: 99px;
@@ -119,9 +112,7 @@
   .bg-viper-gradient {
     background: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(0, 255, 255, 0.03) 100%);
   }
-}
 
-@layer utilities {
   .nav-button-active {
     background-color: #00FFFF !important;
     box-shadow: 0 0 15px rgba(0, 255, 255, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
@@ -143,16 +134,7 @@ body.modal-open {
   overflow: hidden;
   height: 100vh;
 }
-/* Глобальный стиль кнопок при наведении */
-button:hover,
-a:hover {
-  --tw-bg-opacity: 1;
-}
 
-.btn-hover:hover {
-  background-color: rgba(99, 243, 247, 0.08) !important;
-  border-color: rgba(99, 243, 247, 0.25) !important;
-}
 button:not([disabled]):not(.no-hover):hover,
 a[class*="rounded"]:not(.no-hover):hover {
   background-color: rgba(99, 243, 247, 0.08) !important;

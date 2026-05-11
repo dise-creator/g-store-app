@@ -32,6 +32,29 @@ const MODAL_CONTENT: Record<ModalId, React.ReactNode> = {
   privacy: <PrivacyContent />,
 };
 
+const NAV_LINKS: { label: string; modal: ModalId }[] = [
+  { label: "О магазине", modal: "about" },
+  { label: "Контакты", modal: "contacts" },
+  { label: "Отзывы", modal: "reviews" },
+  { label: "Поддержка", modal: "support" },
+];
+
+const LEGAL_LINKS: { label: string; modal: ModalId }[] = [
+  { label: "Пользовательское соглашение", modal: "agreement" },
+  { label: "Политика конфиденциальности", modal: "privacy" },
+];
+
+const REGIONS = [
+  { flag: "🇹🇷", code: "TR", name: "Турция", discount: "до 65%" },
+  { flag: "🇮🇳", code: "IN", name: "Индия", discount: "до 45%" },
+];
+
+const FEATURES = [
+  { icon: Zap, text: "Моментальная доставка" },
+  { icon: Shield, text: "Официальные карты PSN" },
+  { icon: Award, text: "Скидки до 65%" },
+];
+
 function Modal({ id, onClose }: { id: ModalId; onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-[300] flex items-center justify-center p-4">
@@ -50,9 +73,8 @@ function Modal({ id, onClose }: { id: ModalId; onClose: () => void }) {
         className="relative z-10 w-full max-w-2xl bg-[#0a0f1e] border border-white/10 rounded-[2rem] overflow-hidden shadow-2xl"
         style={{ boxShadow: "0 0 60px rgba(0,60,160,0.2)" }}
       >
-        {/* Шапка */}
         <div className="flex items-center justify-between px-8 py-6 border-b border-white/5">
-          <h2 className="text-white font-black uppercase italic text-xl tracking-tight">
+          <h2 className="text-white font-black uppercase text-xl tracking-tight">
             {MODAL_TITLES[id]}
           </h2>
           <motion.button
@@ -63,8 +85,6 @@ function Modal({ id, onClose }: { id: ModalId; onClose: () => void }) {
             <X size={18} />
           </motion.button>
         </div>
-
-        {/* Контент */}
         <div className="p-8 max-h-[75vh] overflow-y-auto no-scrollbar">
           {MODAL_CONTENT[id]}
         </div>
@@ -86,7 +106,6 @@ export default function Footer() {
 
       <footer className="relative z-20 w-full px-4 md:px-8 pb-8 mt-10">
         <div className="max-w-[1420px] mx-auto bg-white/[0.03] backdrop-blur-xl rounded-[2.5rem] p-8 md:p-12 border border-white/10 shadow-2xl">
-
           <div className="flex flex-col md:flex-row justify-between gap-10">
 
             {/* Лого + описание */}
@@ -103,11 +122,7 @@ export default function Footer() {
                 <span className="text-green-400 text-[10px] font-black uppercase tracking-widest">Работаем 24/7</span>
               </div>
               <div className="flex flex-col gap-2 mt-1">
-                {[
-                  { icon: Zap, text: "Моментальная доставка" },
-                  { icon: Shield, text: "Официальные карты PSN" },
-                  { icon: Award, text: "Скидки до 65%" },
-                ].map((item) => (
+                {FEATURES.map((item) => (
                   <div key={item.text} className="flex items-center gap-2">
                     <item.icon size={11} className="text-[#63f3f7] shrink-0" />
                     <span className="text-white/20 text-[10px] font-black uppercase tracking-wider">{item.text}</span>
@@ -120,16 +135,11 @@ export default function Footer() {
             <div className="flex flex-col gap-4">
               <p className="text-white/20 text-[9px] uppercase font-black tracking-[0.3em]">Навигация</p>
               <nav className="flex flex-col gap-3">
-                {([
-                  { label: "О магазине", modal: "about" },
-                  { label: "Контакты", modal: "contacts" },
-                  { label: "Отзывы", modal: "reviews" },
-                  { label: "Поддержка", modal: "support" },
-                ] as { label: string; modal: ModalId }[]).map((item) => (
+                {NAV_LINKS.map((item) => (
                   <button
                     key={item.label}
                     onClick={() => setActiveModal(item.modal)}
-                    className="text-white/40 hover:text-[#63f3f7] transition-colors text-xs font-black uppercase italic tracking-widest text-left"
+                    className="text-white/40 hover:text-[#63f3f7] transition-colors text-xs font-black uppercase tracking-widest text-left"
                   >
                     {item.label}
                   </button>
@@ -141,15 +151,12 @@ export default function Footer() {
             <div className="flex flex-col gap-4">
               <p className="text-white/20 text-[9px] uppercase font-black tracking-[0.3em]">Регионы</p>
               <div className="flex flex-col gap-3">
-                {[
-                  { flag: "🇹🇷", code: "TR", name: "Турция", discount: "до 65%" },
-                  { flag: "🇮🇳", code: "IN", name: "Индия", discount: "до 45%" },
-                ].map((r) => (
+                {REGIONS.map((r) => (
                   <div key={r.name} className="flex items-center gap-3">
                     <span className="text-white/40 text-[10px] font-black">{r.code}</span>
                     <span className="text-xl">{r.flag}</span>
                     <div>
-                      <p className="text-white/60 text-xs font-black uppercase italic">{r.name}</p>
+                      <p className="text-white/60 text-xs font-black uppercase">{r.name}</p>
                       <p className="text-[#63f3f7] text-[9px] font-black">скидка {r.discount}</p>
                     </div>
                   </div>
@@ -177,12 +184,15 @@ export default function Footer() {
                 </a>
               </div>
               <div className="mt-2 p-3 bg-[#63f3f7]/5 border border-[#63f3f7]/10 rounded-2xl">
-                <p className="text-white/30 text-[9px] uppercase font-black tracking-widest mb-1">Поддержка</p>
-                <a href="https://t.me/clic_support" target="_blank" rel="noopener noreferrer"
-                  className="text-[#63f3f7] text-xs font-black italic hover:underline"
-                >
-                  @clic_support
-                </a>
+             <p className="text-white/30 text-[9px] uppercase font-black tracking-widest mb-1">Поддержка</p>
+
+  href="https://t.me/clic_support"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="text-[#63f3f7] text-xs font-black hover:underline"
+<a>
+  @clic_support
+</a>
               </div>
             </div>
           </div>
@@ -193,10 +203,7 @@ export default function Footer() {
               © 2026 CLIC STORE. ВСЕ ПРАВА ЗАЩИЩЕНЫ.
             </p>
             <div className="flex gap-6">
-              {([
-                { label: "Пользовательское соглашение", modal: "agreement" },
-                { label: "Политика конфиденциальности", modal: "privacy" },
-              ] as { label: string; modal: ModalId }[]).map((item) => (
+              {LEGAL_LINKS.map((item) => (
                 <button
                   key={item.label}
                   onClick={() => setActiveModal(item.modal)}
@@ -211,4 +218,4 @@ export default function Footer() {
       </footer>
     </>
   );
-}
+} 

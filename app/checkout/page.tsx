@@ -42,6 +42,12 @@ const PAYMENT_METHODS = [
   },
 ];
 
+const TRUST_BADGES = [
+  { icon: ShieldCheck, text: "Безопасная оплата" },
+  { icon: Zap, text: "Мгновенная доставка" },
+  { icon: Lock, text: "Данные защищены" },
+];
+
 export default function CheckoutPage() {
   const router = useRouter();
   const { data: session } = useSession();
@@ -167,7 +173,7 @@ export default function CheckoutPage() {
       const allVouchers: { code: string; game_title: string; denomination: number }[] = [];
 
       for (const item of items) {
-        const itemRegion = (item as any).region || "TR";
+        const itemRegion = item.region || "TR";
         const cards = selectCards(item.price);
 
         for (let i = 0; i < item.quantity; i++) {
@@ -208,28 +214,24 @@ export default function CheckoutPage() {
         }
       }
 
-      try {
-        await fetch("/api/notify", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            orderId: order.id,
-            items: preparedItems,
-            total: finalPrice,
-            email,
-            vouchers: allVouchers,
-          }),
-        });
-      } catch (notifyErr) {
-        console.error("Notify error:", notifyErr);
-      }
+      await fetch("/api/notify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          orderId: order.id,
+          items: preparedItems,
+          total: finalPrice,
+          email,
+          vouchers: allVouchers,
+        }),
+      }).catch(() => {});
 
       clearCart();
       router.push(`/order/success?orderId=${order.id}&email=${encodeURIComponent(email)}`);
 
-    } catch (err: any) {
-      console.error(err);
-      alert("Ошибка: " + err.message);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Неизвестная ошибка";
+      alert("Ошибка: " + message);
     } finally {
       setIsSubmitting(false);
     }
@@ -240,8 +242,8 @@ export default function CheckoutPage() {
   if (items.length === 0) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-6">
-        <p className="text-white/30 font-black uppercase italic text-2xl">Корзина пуста</p>
-        <Link href="/" className="px-8 py-4 bg-[#63f3f7] text-black font-black uppercase italic rounded-2xl">
+        <p className="text-white/30 font-black uppercase text-2xl">Корзина пуста</p>
+        <Link href="/" className="px-8 py-4 bg-[#63f3f7] text-black font-black uppercase rounded-2xl">
           В магазин
         </Link>
       </div>
@@ -257,11 +259,11 @@ export default function CheckoutPage() {
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center gap-4 mb-10"
         >
-          <Link href="/cart" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#63f3f7] transition-all">
+          <Link href="/" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#63f3f7] transition-all">
             <ChevronLeft size={20} />
           </Link>
           <div>
-            <h1 className="text-3xl font-black italic uppercase text-white tracking-tighter">
+            <h1 className="text-3xl font-black uppercase text-white tracking-tighter">
               Оформление <span className="text-[#63f3f7]">заказа</span>
             </h1>
             <p className="text-white/30 text-xs mt-0.5">{items.length} товар{items.length > 1 ? "а" : ""} в корзине</p>
@@ -269,9 +271,9 @@ export default function CheckoutPage() {
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-8">
-
           <div className="flex flex-col gap-6">
 
+            {/* Email */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -282,7 +284,7 @@ export default function CheckoutPage() {
                 <div className="w-8 h-8 rounded-xl bg-[#63f3f7]/10 border border-[#63f3f7]/20 flex items-center justify-center">
                   <Mail size={15} className="text-[#63f3f7]" />
                 </div>
-                <p className="text-white font-black uppercase italic text-sm tracking-widest">Email для получения ключей</p>
+                <p className="text-white font-black uppercase text-sm tracking-widest">Email для получения ключей</p>
               </div>
               <input
                 type="email"
@@ -296,6 +298,7 @@ export default function CheckoutPage() {
               </p>
             </motion.div>
 
+            {/* Способ оплаты */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -306,7 +309,7 @@ export default function CheckoutPage() {
                 <div className="w-8 h-8 rounded-xl bg-[#63f3f7]/10 border border-[#63f3f7]/20 flex items-center justify-center">
                   <CreditCard size={15} className="text-[#63f3f7]" />
                 </div>
-                <p className="text-white font-black uppercase italic text-sm tracking-widest">Способ оплаты</p>
+                <p className="text-white font-black uppercase text-sm tracking-widest">Способ оплаты</p>
               </div>
               <div className="flex flex-col gap-3">
                 {PAYMENT_METHODS.map((method) => {
@@ -329,7 +332,7 @@ export default function CheckoutPage() {
                           <Icon size={18} className={isSelected ? "text-[#63f3f7]" : "text-white/40"} />
                         </div>
                         <div>
-                          <p className={`font-black text-sm uppercase italic ${isSelected ? "text-white" : "text-white/50"}`}>
+                          <p className={`font-black text-sm uppercase ${isSelected ? "text-white" : "text-white/50"}`}>
                             {method.label}
                           </p>
                           <p className="text-white/20 text-[10px] font-bold">{method.desc}</p>
@@ -353,17 +356,14 @@ export default function CheckoutPage() {
               </div>
             </motion.div>
 
+            {/* Бейджи */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
               className="grid grid-cols-3 gap-3"
             >
-              {[
-                { icon: ShieldCheck, text: "Безопасная оплата" },
-                { icon: Zap, text: "Мгновенная доставка" },
-                { icon: Lock, text: "Данные защищены" },
-              ].map((item) => (
+              {TRUST_BADGES.map((item) => (
                 <div key={item.text} className="flex flex-col items-center gap-2 p-4 bg-white/[0.02] border border-white/5 rounded-2xl">
                   <item.icon size={18} className="text-[#63f3f7]" />
                   <p className="text-white/30 text-[9px] uppercase font-black tracking-widest text-center">{item.text}</p>
@@ -372,12 +372,14 @@ export default function CheckoutPage() {
             </motion.div>
           </div>
 
+          {/* Правая колонка */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.15 }}
             className="flex flex-col gap-4"
           >
+            {/* Список товаров */}
             <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6 flex flex-col gap-4">
               <p className="text-white/20 text-[10px] uppercase font-black tracking-[0.3em]">Ваш заказ</p>
               {items.map((item) => (
@@ -386,7 +388,7 @@ export default function CheckoutPage() {
                     <Image src={item.image} alt={item.title} fill className="object-cover" unoptimized />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-white/70 text-xs font-black uppercase italic truncate">{item.title}</p>
+                    <p className="text-white/70 text-xs font-black uppercase truncate">{item.title}</p>
                     {item.quantity > 1 && (
                       <p className="text-white/30 text-[10px]">× {item.quantity}</p>
                     )}
@@ -398,12 +400,13 @@ export default function CheckoutPage() {
               ))}
             </div>
 
+            {/* Промокод */}
             <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-8 h-8 rounded-xl bg-[#63f3f7]/10 border border-[#63f3f7]/20 flex items-center justify-center">
                   <Tag size={15} className="text-[#63f3f7]" />
                 </div>
-                <p className="text-white font-black uppercase italic text-sm tracking-widest">Промокод</p>
+                <p className="text-white font-black uppercase text-sm tracking-widest">Промокод</p>
               </div>
 
               {appliedPromo ? (
@@ -444,6 +447,7 @@ export default function CheckoutPage() {
               )}
             </div>
 
+            {/* Итого */}
             <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6 flex flex-col gap-4">
               {loyalty.discount > 0 && (
                 <>
@@ -474,7 +478,7 @@ export default function CheckoutPage() {
               <div className="flex justify-between items-center">
                 <span className="text-white/40 text-xs font-black uppercase tracking-widest">Итого</span>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-white font-black text-3xl italic">{finalPrice.toLocaleString()}</span>
+                  <span className="text-white font-black text-3xl">{finalPrice.toLocaleString()}</span>
                   <span className="text-[#63f3f7] font-black">₽</span>
                 </div>
               </div>
@@ -482,7 +486,7 @@ export default function CheckoutPage() {
               <button
                 onClick={handleCheckout}
                 disabled={isSubmitting}
-                className={`w-full py-5 rounded-2xl font-black uppercase italic text-sm tracking-widest transition-all flex items-center justify-center gap-2 ${
+                className={`w-full py-5 rounded-2xl font-black uppercase text-sm tracking-widest transition-all flex items-center justify-center gap-2 ${
                   isSubmitting
                     ? "bg-[#63f3f7]/50 cursor-wait text-black"
                     : "bg-[#63f3f7] text-black hover:shadow-[0_0_30px_rgba(99,243,247,0.3)] active:scale-95"

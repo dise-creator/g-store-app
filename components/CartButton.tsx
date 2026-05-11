@@ -17,7 +17,6 @@ export default function CartButton({ onClick, totalAmount, totalItems }: CartBut
   const [particles, setParticles] = useState<{ id: number; x: number; y: number }[]>([]);
   const [isHovered, setIsHovered] = useState(false);
   const prevItems = useRef(totalItems);
-  const particleId = useRef(0);
   const hoverTimeout = useRef<NodeJS.Timeout | null>(null);
 
   const { items, removeItem } = useCartStore();
@@ -26,8 +25,8 @@ export default function CartButton({ onClick, totalAmount, totalItems }: CartBut
     if (totalItems > prevItems.current) {
       setPulse(true);
       setTimeout(() => setPulse(false), 700);
-      const newParticles = Array.from({ length: 6 }, () => ({
-        id: particleId.current++,
+      const newParticles = Array.from({ length: 6 }, (_, i) => ({
+        id: Date.now() + i,
         x: Math.random() * 100 - 50,
         y: Math.random() * 60 - 80,
       }));
@@ -37,7 +36,6 @@ export default function CartButton({ onClick, totalAmount, totalItems }: CartBut
     prevItems.current = totalItems;
   }, [totalItems]);
 
-  // Закрытие по ESC
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") setIsHovered(false);
@@ -45,6 +43,12 @@ export default function CartButton({ onClick, totalAmount, totalItems }: CartBut
     if (isHovered) window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, [isHovered]);
+
+  useEffect(() => {
+    return () => {
+      if (hoverTimeout.current) clearTimeout(hoverTimeout.current);
+    };
+  }, []);
 
   const isEmpty = totalItems === 0;
 
@@ -160,7 +164,7 @@ export default function CartButton({ onClick, totalAmount, totalItems }: CartBut
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 6 }}
                       transition={{ duration: 0.18 }}
-                      className="text-[15px] font-black italic text-black tracking-tighter whitespace-nowrap"
+                      className="text-[15px] font-black text-black tracking-tighter whitespace-nowrap"
                     >
                       {totalAmount.toLocaleString()} ₽
                     </motion.span>
@@ -198,14 +202,13 @@ export default function CartButton({ onClick, totalAmount, totalItems }: CartBut
             onMouseLeave={handleMouseLeave}
             className="absolute top-[calc(100%+14px)] right-0 w-[420px] bg-[#0a0a0c] border border-white/10 rounded-[2rem] shadow-[0_30px_80px_rgba(0,0,0,0.7)] overflow-hidden z-[200]"
           >
-            {/* Шапка */}
             <div className="px-6 py-5 border-b border-white/5 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-xl bg-[#00FFFF]/10 border border-[#00FFFF]/20 flex items-center justify-center">
                   <ShoppingBag size={15} className="text-[#00FFFF]" />
                 </div>
                 <div>
-                  <p className="text-white font-black italic uppercase text-sm tracking-widest">Корзина</p>
+                  <p className="text-white font-black uppercase text-sm tracking-widest">Корзина</p>
                   <p className="text-white/30 text-[9px] font-bold uppercase tracking-widest mt-0.5">
                     {totalItems} товар{totalItems === 1 ? "" : totalItems < 5 ? "а" : "ов"}
                   </p>
@@ -219,7 +222,6 @@ export default function CartButton({ onClick, totalAmount, totalItems }: CartBut
               </button>
             </div>
 
-            {/* Список товаров */}
             <div className="max-h-80 overflow-y-auto no-scrollbar py-2">
               <AnimatePresence>
                 {items.map((item, idx) => (
@@ -231,7 +233,6 @@ export default function CartButton({ onClick, totalAmount, totalItems }: CartBut
                     transition={{ delay: idx * 0.04 }}
                     className="flex items-center gap-4 px-6 py-3.5 hover:bg-white/[0.03] transition-all group/item"
                   >
-                    {/* Фото */}
                     <div className="w-14 h-14 rounded-xl overflow-hidden border border-white/5 shrink-0">
                       <Image
                         src={item.image}
@@ -243,9 +244,8 @@ export default function CartButton({ onClick, totalAmount, totalItems }: CartBut
                       />
                     </div>
 
-                    {/* Инфо */}
                     <div className="flex-1 min-w-0">
-                      <p className="text-white/90 text-xs font-black italic uppercase truncate leading-tight">
+                      <p className="text-white/90 text-xs font-black uppercase truncate leading-tight">
                         {item.title}
                       </p>
                       <div className="flex items-center gap-2 mt-1.5">
@@ -260,7 +260,6 @@ export default function CartButton({ onClick, totalAmount, totalItems }: CartBut
                       </div>
                     </div>
 
-                    {/* Удалить */}
                     <button
                       onClick={(e) => { e.stopPropagation(); removeItem(item.cartItemId); }}
                       className="opacity-0 group-hover/item:opacity-100 w-8 h-8 rounded-xl text-white/20 hover:text-red-400 hover:bg-red-500/10 border border-transparent hover:border-red-500/10 flex items-center justify-center transition-all shrink-0"
@@ -272,18 +271,17 @@ export default function CartButton({ onClick, totalAmount, totalItems }: CartBut
               </AnimatePresence>
             </div>
 
-            {/* Футер */}
             <div className="px-6 py-5 bg-white/[0.02] border-t border-white/5">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-white/30 text-[10px] uppercase font-black tracking-widest">Итого к оплате</span>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-white font-black text-2xl italic">{totalAmount.toLocaleString()}</span>
+                  <span className="text-white font-black text-2xl">{totalAmount.toLocaleString()}</span>
                   <span className="text-[#00FFFF] font-black text-sm">₽</span>
                 </div>
               </div>
               <button
                 onClick={() => { setIsHovered(false); onClick(); }}
-                className="w-full py-3.5 bg-[#00FFFF] text-black font-black text-xs uppercase italic tracking-[0.2em] rounded-xl hover:shadow-[0_0_25px_rgba(0,255,255,0.3)] transition-all active:scale-95"
+                className="w-full py-3.5 bg-[#00FFFF] text-black font-black text-xs uppercase tracking-[0.2em] rounded-xl hover:shadow-[0_0_25px_rgba(0,255,255,0.3)] transition-all active:scale-95"
               >
                 Оформить заказ →
               </button>

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight, ShoppingCart, Check } from "lucide-react";
 import { useCartStore } from "@/store/useCart";
@@ -35,8 +36,8 @@ function NewsCard({ item, index }: { item: NewsItem; index: number }) {
 
   const handleAdd = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (!linkedGame) return;
-    addItem({ ...linkedGame, price: displayPrice! });
+    if (!linkedGame || displayPrice === null) return;
+    addItem({ ...linkedGame, price: displayPrice });
     setAdded(true);
     setTimeout(() => setAdded(false), 2500);
   };
@@ -48,30 +49,26 @@ function NewsCard({ item, index }: { item: NewsItem; index: number }) {
       transition={{ delay: index * 0.1, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
       className="group relative flex flex-col bg-white/[0.03] border border-white/5 rounded-[2rem] overflow-hidden hover:border-white/10 hover:bg-white/[0.05] transition-all"
     >
-      {/* Картинка — высокая */}
       <div className="relative h-64 overflow-hidden">
-        <img
+        <Image
           src={item.image}
           alt={item.title}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          fill
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
+          unoptimized
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1e] via-[#0a0f1e]/20 to-transparent" />
-
-        {/* Тег */}
-        <div className={`absolute top-4 left-4 px-3 py-1.5 rounded-xl border text-[10px] font-black uppercase tracking-widest ${TAG_COLORS[item.tag] || "bg-white/10 text-white/50 border-white/10"}`}>
+        <div className={`absolute top-4 left-4 px-3 py-1.5 rounded-xl border text-[10px] font-black uppercase tracking-widest ${TAG_COLORS[item.tag] ?? "bg-white/10 text-white/50 border-white/10"}`}>
           {item.tag}
         </div>
-
-        {/* Дата */}
         <div className="absolute top-4 right-4 px-3 py-1.5 rounded-xl bg-black/50 backdrop-blur-md border border-white/10 text-[10px] text-white/50 font-black">
           {new Date(item.created_at).toLocaleDateString("ru-RU", { day: "numeric", month: "short" })}
         </div>
       </div>
 
-      {/* Контент */}
       <div className="flex flex-col flex-1 p-6 gap-4">
         <div>
-          <h3 className="text-white font-black uppercase italic text-lg leading-tight tracking-tight mb-2">
+          <h3 className="text-white font-black uppercase text-lg leading-tight tracking-tight mb-2">
             {item.title}
           </h3>
           <p className="text-white/40 text-sm leading-relaxed">
@@ -79,19 +76,22 @@ function NewsCard({ item, index }: { item: NewsItem; index: number }) {
           </p>
         </div>
 
-        {/* Привязанная игра */}
-        {linkedGame && (
+        {linkedGame && displayPrice !== null && (
           <div className="mt-auto pt-4 border-t border-white/5 flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <img
-                src={linkedGame.image}
-                alt={linkedGame.title}
-                className="w-12 h-12 rounded-xl object-cover border border-white/10"
-              />
+              <div className="relative w-12 h-12 rounded-xl overflow-hidden border border-white/10 shrink-0">
+                <Image
+                  src={linkedGame.image}
+                  alt={linkedGame.title}
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
+              </div>
               <div>
                 <p className="text-white/40 text-[10px] uppercase font-black tracking-widest">Купить игру</p>
-                <p className="text-white font-black text-sm uppercase italic truncate max-w-[120px]">{linkedGame.title}</p>
-                <p className="text-[#63f3f7] text-base font-black">{displayPrice?.toLocaleString()} ₽</p>
+                <p className="text-white font-black text-sm uppercase truncate max-w-[120px]">{linkedGame.title}</p>
+                <p className="text-[#63f3f7] text-base font-black">{displayPrice.toLocaleString()} ₽</p>
               </div>
             </div>
 
@@ -127,15 +127,13 @@ export default function NewsBlock() {
   if (!loading && !news.length) return null;
 
   return (
-    <section className="w-full  py-2">
+    <section className="w-full py-2">
       <div className="max-w-[1620px] mx-auto">
-
-        {/* Шапка */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
             <div className="w-1 h-8 bg-[#63f3f7] rounded-full shadow-[0_0_15px_#63f3f7]" />
             <h2
-              className="text-2xl md:text-3xl font-michroma text-white uppercase tracking-[0.15em] leading-none italic font-black"
+              className="text-2xl md:text-3xl font-michroma text-white uppercase tracking-[0.15em] leading-none font-black"
               style={{ WebkitTextStroke: "0.5px rgba(255, 255, 255, 0.3)" }}
             >
               Новости
@@ -150,7 +148,6 @@ export default function NewsBlock() {
           </Link>
         </div>
 
-        {/* Карточки */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {loading
             ? Array(3).fill(0).map((_, i) => (

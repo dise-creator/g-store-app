@@ -49,7 +49,6 @@ function SuccessContent() {
   return (
     <main className="min-h-screen pt-32 pb-20 px-6 flex flex-col items-center">
       <div className="max-w-[600px] w-full flex flex-col items-center gap-8">
-
         {/* Иконка успеха */}
         <motion.div
           initial={{ scale: 0 }}
@@ -67,11 +66,12 @@ function SuccessContent() {
           transition={{ delay: 0.2 }}
           className="text-center"
         >
-          <h1 className="text-4xl font-black italic uppercase text-white tracking-tighter mb-2">
+          <h1 className="text-4xl font-black  uppercase text-white tracking-tighter mb-2">
             Заказ <span className="text-[#63f3f7]">оформлен!</span>
           </h1>
           <p className="text-white/40 text-sm">
-            Ключи отправлены на <span className="text-white font-black">{email}</span>
+            Ключи отправлены на{" "}
+            <span className="text-white font-black">{email}</span>
           </p>
         </motion.div>
 
@@ -83,7 +83,9 @@ function SuccessContent() {
             transition={{ delay: 0.3 }}
             className="w-full bg-white/[0.03] border border-white/10 rounded-[2rem] p-6 flex flex-col gap-4"
           >
-            <p className="text-white/20 text-[10px] uppercase font-black tracking-[0.3em]">Ваши ключи активации</p>
+            <p className="text-white/20 text-[10px] uppercase font-black tracking-[0.3em]">
+              Ваши ключи активации
+            </p>
             {vouchers.map((voucher, i) => (
               <motion.div
                 key={voucher.id}
@@ -94,9 +96,13 @@ function SuccessContent() {
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <p className="text-white/30 text-[9px] uppercase font-black tracking-widest">{voucher.game_title}</p>
+                    <p className="text-white/30 text-[9px] uppercase font-black tracking-widest">
+                      {voucher.game_title}
+                    </p>
                   </div>
-                  <p className="text-[#63f3f7] font-black text-sm font-mono tracking-widest mb-2">{voucher.code}</p>
+                  <p className="text-[#63f3f7] font-black text-sm font-mono tracking-widest mb-2">
+                    {voucher.code}
+                  </p>
                   <div className="flex items-center gap-2">
                     <div className="flex items-center gap-1 px-2 py-1 bg-[#63f3f7]/10 border border-[#63f3f7]/20 rounded-lg">
                       <CreditCard size={10} className="text-[#63f3f7]" />
@@ -104,7 +110,9 @@ function SuccessContent() {
                         PSN {voucher.denomination.toLocaleString()} ₽
                       </span>
                     </div>
-                    <span className="text-[10px]">{getRegionFlag(voucher.region)}</span>
+                    <span className="text-[10px]">
+                      {getRegionFlag(voucher.region)}
+                    </span>
                   </div>
                 </div>
                 <motion.button
@@ -116,14 +124,21 @@ function SuccessContent() {
                       : "bg-white/5 border-white/10 text-white/30 hover:text-white"
                   }`}
                 >
-                  {copied === voucher.id ? <Check size={16} /> : <Copy size={16} />}
+                  {copied === voucher.id ? (
+                    <Check size={16} />
+                  ) : (
+                    <Copy size={16} />
+                  )}
                 </motion.button>
               </motion.div>
             ))}
 
             <div className="p-4 bg-[#63f3f7]/5 border border-[#63f3f7]/10 rounded-2xl">
               <p className="text-white/40 text-xs leading-relaxed">
-                <span className="text-[#63f3f7] font-black">Как активировать:</span> Зайди в PS Store → Пополнить баланс → Введи код
+                <span className="text-[#63f3f7] font-black">
+                  Как активировать:
+                </span>{" "}
+                Зайди в PS Store → Пополнить баланс → Введи код
               </p>
             </div>
           </motion.div>
@@ -138,17 +153,16 @@ function SuccessContent() {
         >
           <Link
             href="/profile"
-            className="flex-1 flex items-center justify-center gap-2 py-4 bg-white/5 border border-white/10 text-white/50 hover:text-white rounded-2xl font-black text-xs uppercase italic tracking-widest transition-all"
+            className="flex-1 flex items-center justify-center gap-2 py-4 bg-white/5 border border-white/10 text-white/50 hover:text-white rounded-2xl font-black text-xs uppercase  tracking-widest transition-all"
           >
             <ShoppingBag size={16} />
             Мои заказы
           </Link>
           <Link
             href="/"
-            className="flex-1 flex items-center justify-center gap-2 py-4 bg-[#63f3f7] text-black rounded-2xl font-black text-xs uppercase italic tracking-widest hover:shadow-[0_0_20px_rgba(99,243,247,0.3)] transition-all"
+            className="flex-1 flex items-center justify-center gap-2 py-4 bg-[#63f3f7] text-black rounded-2xl font-black text-xs uppercase  tracking-widest hover:shadow-[0_0_20px_rgba(99,243,247,0.3)] transition-all"
           >
-            <Home size={16} />
-            В магазин
+            <Home size={16} />В магазин
           </Link>
         </motion.div>
       </div>

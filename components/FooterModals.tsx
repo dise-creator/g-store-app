@@ -17,7 +17,7 @@ export const AboutContent = () => (
       ].map((item) => (
         <div key={item.label} className="p-5 bg-white/[0.03] border border-white/5 rounded-2xl flex flex-col gap-3">
           <item.icon size={22} className="text-[#63f3f7]" />
-          <p className="text-white font-black text-sm uppercase italic">{item.label}</p>
+          <p className="text-white font-black text-sm uppercase">{item.label}</p>
           <p className="text-white/30 text-xs leading-relaxed">{item.desc}</p>
         </div>
       ))}
@@ -44,7 +44,7 @@ export const ContactsContent = () => (
       >
         <div>
           <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-1">{item.label}</p>
-          <p className="font-black text-base italic" style={{ color: item.color }}>{item.value}</p>
+          <p className="font-black text-base" style={{ color: item.color }}>{item.value}</p>
         </div>
         <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition-all">
           <MessageCircle size={18} className="text-white/30 group-hover:text-white/60" />
@@ -105,12 +105,12 @@ export const SupportContent = () => (
       { q: "Можно вернуть деньги?", a: "Возврат возможен если ключ не был активирован. Напишите в поддержку в течение 24 часов после покупки." },
     ].map((item, i) => (
       <div key={i} className="p-5 bg-white/[0.03] border border-white/5 rounded-2xl flex flex-col gap-2">
-        <p className="text-white font-black text-sm uppercase italic">{item.q}</p>
+        <p className="text-white font-black text-sm uppercase">{item.q}</p>
         <p className="text-white/50 text-sm leading-relaxed">{item.a}</p>
       </div>
     ))}
     <a href="https://t.me/clicps_bot" target="_blank" rel="noopener noreferrer"
-      className="flex items-center justify-center gap-2 py-4 bg-[#63f3f7] text-black rounded-2xl font-black text-sm uppercase italic tracking-widest hover:shadow-[0_0_20px_rgba(99,243,247,0.3)] transition-all"
+      className="flex items-center justify-center gap-2 py-4 bg-[#63f3f7] text-black rounded-2xl font-black text-sm uppercase tracking-widest hover:shadow-[0_0_20px_rgba(99,243,247,0.3)] transition-all"
     >
       <MessageCircle size={18} />
       Написать в Telegram бот
@@ -128,7 +128,7 @@ export const AgreementContent = () => (
       { title: "5. Ответственность", text: "CLIC STORE не несёт ответственности за изменение цен в PlayStation Store, блокировку аккаунтов по причинам не связанным с покупкой кодов." },
     ].map((item) => (
       <div key={item.title} className="p-5 bg-white/[0.02] border border-white/5 rounded-xl">
-        <p className="text-white font-black text-sm mb-2 uppercase italic">{item.title}</p>
+        <p className="text-white font-black text-sm mb-2 uppercase">{item.title}</p>
         <p className="text-white/40 text-sm leading-relaxed">{item.text}</p>
       </div>
     ))}
@@ -145,7 +145,7 @@ export const PrivacyContent = () => (
       { title: "5. Ваши права", text: "Вы можете запросить удаление ваших данных в любое время, написав в поддержку @clic_support." },
     ].map((item) => (
       <div key={item.title} className="p-5 bg-white/[0.02] border border-white/5 rounded-xl">
-        <p className="text-white font-black text-sm mb-2 uppercase italic">{item.title}</p>
+        <p className="text-white font-black text-sm mb-2 uppercase">{item.title}</p>
         <p className="text-white/40 text-sm leading-relaxed">{item.text}</p>
       </div>
     ))}

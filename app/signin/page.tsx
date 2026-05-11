@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -36,6 +36,8 @@ const TelegramIcon = () => (
   </svg>
 );
 
+type TabId = "social" | "login" | "register";
+
 const BENEFITS = [
   { icon: BarChart3, text: "Аналитика и статистика покупок" },
   { icon: Trophy, text: "Достижения и прокачка аккаунта" },
@@ -50,12 +52,26 @@ const providers = [
   { id: "telegram", label: "Войти через бота", icon: <TelegramIcon />, color: "#29b6f6", bg: "rgba(41,182,246,0.12)" },
 ];
 
+const TABS: { id: TabId; label: string }[] = [
+  { id: "social", label: "Соцсети" },
+  { id: "login", label: "Войти" },
+  { id: "register", label: "Регистрация" },
+];
+
+const dark3D = {
+  color: "#2D3748",
+  textShadow: "0 1px 0 #1a202c, 0 2px 0 #1a202c, 0 3px 0 #1a202c, 0 5px 10px rgba(0,0,0,0.7)"
+};
+
+const viper3D = {
+  color: "#00FFFF",
+  textShadow: "0 1px 0 #00e6e6, 0 2px 0 #00cccc, 0 0 20px rgba(0, 255, 255, 0.8), 0 5px 12px rgba(0,0,0,0.6)"
+};
+
 export default function SignInPage() {
   const router = useRouter();
-  const [tab, setTab] = useState<"social" | "login" | "register">("social");
+  const [tab, setTab] = useState<TabId>("social");
   const [hoveredProvider, setHoveredProvider] = useState<string | null>(null);
-
-  // Email форма
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -94,21 +110,11 @@ export default function SignInPage() {
       } else {
         setError(result?.error || "Ошибка входа");
       }
-    } catch (e) {
+    } catch {
       setError("Ошибка, попробуй снова");
     } finally {
       setLoading(false);
     }
-  };
-
-  const dark3D = {
-    color: "#2D3748",
-    textShadow: "0 1px 0 #1a202c, 0 2px 0 #1a202c, 0 3px 0 #1a202c, 0 5px 10px rgba(0,0,0,0.7)"
-  };
-
-  const viper3D = {
-    color: "#00FFFF",
-    textShadow: "0 1px 0 #00e6e6, 0 2px 0 #00cccc, 0 0 20px rgba(0, 255, 255, 0.8), 0 5px 12px rgba(0,0,0,0.6)"
   };
 
   return (
@@ -129,7 +135,7 @@ export default function SignInPage() {
           className="flex-1 flex flex-col justify-center gap-6 px-4 md:px-8"
         >
           <div>
-            <h1 className="flex items-center font-black italic uppercase tracking-tighter select-none">
+            <h1 className="flex items-center font-black uppercase tracking-tighter select-none">
               <span style={dark3D} className="text-6xl md:text-7xl">C</span>
               <span style={dark3D} className="text-6xl md:text-7xl mr-2">L</span>
               <span style={viper3D} className="text-7xl md:text-8xl">I</span>
@@ -167,14 +173,10 @@ export default function SignInPage() {
         >
           {/* Табы */}
           <div className="flex gap-1 p-1 bg-white/[0.03] border border-white/5 rounded-2xl mb-6">
-            {[
-              { id: "social", label: "Соцсети" },
-              { id: "login", label: "Войти" },
-              { id: "register", label: "Регистрация" },
-            ].map((t) => (
+            {TABS.map((t) => (
               <button
                 key={t.id}
-                onClick={() => { setTab(t.id as any); setError(""); }}
+                onClick={() => { setTab(t.id); setError(""); }}
                 className="flex-1 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all no-hover"
                 style={{
                   background: tab === t.id ? "rgba(99,243,247,0.15)" : "transparent",
@@ -188,8 +190,6 @@ export default function SignInPage() {
           </div>
 
           <AnimatePresence mode="wait">
-
-            {/* Соцсети */}
             {tab === "social" && (
               <motion.div
                 key="social"
@@ -236,7 +236,7 @@ export default function SignInPage() {
                         {provider.icon}
                       </div>
                       <span
-                        className="relative z-10 font-black text-xs uppercase italic tracking-widest transition-colors duration-300"
+                        className="relative z-10 font-black text-xs uppercase tracking-widest transition-colors duration-300"
                         style={{ color: isHovered ? provider.color : "rgba(255,255,255,0.5)" }}
                       >
                         {provider.id === "telegram" ? provider.label : `Войти через ${provider.label}`}
@@ -253,7 +253,6 @@ export default function SignInPage() {
               </motion.div>
             )}
 
-            {/* Вход по email */}
             {(tab === "login" || tab === "register") && (
               <motion.div
                 key={tab}
@@ -312,7 +311,7 @@ export default function SignInPage() {
                   onClick={handleEmailAuth}
                   disabled={loading}
                   whileTap={{ scale: 0.97 }}
-                  className="w-full py-4 bg-[#63f3f7] text-black font-black uppercase italic text-sm rounded-2xl disabled:opacity-50 transition-all hover:shadow-[0_0_20px_rgba(99,243,247,0.3)] no-hover mt-1"
+                  className="w-full py-4 bg-[#63f3f7] text-black font-black uppercase text-sm rounded-2xl disabled:opacity-50 transition-all hover:shadow-[0_0_20px_rgba(99,243,247,0.3)] no-hover mt-1"
                 >
                   {loading ? "Подождите..." : tab === "register" ? "Создать аккаунт" : "Войти"}
                 </motion.button>

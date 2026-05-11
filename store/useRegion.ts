@@ -29,6 +29,14 @@ export const REGIONS: Record<Region, RegionInfo> = {
 };
 
 const MARKUP = 1.10;
+const CACHE_TTL = 24 * 60 * 60 * 1000;
+
+const FALLBACK_RATES = {
+  RUB: 90,
+  TRY: 32,
+  INR: 84,
+  lastUpdated: 0,
+};
 
 export interface ExchangeRates {
   RUB: number;
@@ -39,16 +47,19 @@ export interface ExchangeRates {
 
 interface RegionStore {
   region: Region;
-  rates: ExchangeRates | null; // экспортируем чтобы GameModal мог читать
+  rates: ExchangeRates | null;
   isLoadingRates: boolean;
   setRegion: (region: Region) => void;
   fetchRates: () => Promise<void>;
   getPrice: (basePrice: number) => number;
-  // Вспомогательная функция — цена для конкретного региона
   getPriceForRegion: (basePrice: number, regionCode: Region) => number;
 }
 
-const CACHE_TTL = 24 * 60 * 60 * 1000;
+const calcPrice = (basePrice: number, regionCode: Region, rates: ExchangeRates): number => {
+  const discount = REGIONS[regionCode].psStoreDiscount;
+  const priceInUSD = basePrice / rates.RUB;
+  return Math.round(priceInUSD * discount * rates.RUB * MARKUP);
+};
 
 export const useRegionStore = create<RegionStore>()(
   persist(
@@ -81,43 +92,25 @@ export const useRegionStore = create<RegionStore>()(
                 INR: data.conversion_rates.INR,
                 lastUpdated: Date.now(),
               },
-              isLoadingRates: false,
             });
           }
-        } catch (err) {
-          console.error('Ошибка загрузки курсов:', err);
-          set({
-            rates: {
-              RUB: 90,
-              TRY: 32,
-              INR: 84,
-              lastUpdated: Date.now(),
-            },
-            isLoadingRates: false,
-          });
+        } catch {
+          set({ rates: { ...FALLBACK_RATES, lastUpdated: Date.now() } });
+        } finally {
+          set({ isLoadingRates: false });
         }
       },
 
-      getPrice: (basePrice: number) => {
+      getPrice: (basePrice) => {
         const { region, rates } = get();
         if (!rates) return 0;
-        const regionInfo = REGIONS[region];
-        const priceInUSD = basePrice / rates.RUB;
-        const regionalPriceInUSD = priceInUSD * regionInfo.psStoreDiscount;
-        const priceInRUB = regionalPriceInUSD * rates.RUB;
-        return Math.round(priceInRUB * MARKUP);
+        return calcPrice(basePrice, region, rates);
       },
 
-      // Новая функция — считает цену для любого региона
-      // Используется в GameModal для сравнения цен
-      getPriceForRegion: (basePrice: number, regionCode: Region) => {
+      getPriceForRegion: (basePrice, regionCode) => {
         const { rates } = get();
         if (!rates) return 0;
-        const regionInfo = REGIONS[regionCode];
-        const priceInUSD = basePrice / rates.RUB;
-        const regionalPriceInUSD = priceInUSD * regionInfo.psStoreDiscount;
-        const priceInRUB = regionalPriceInUSD * rates.RUB;
-        return Math.round(priceInRUB * MARKUP);
+        return calcPrice(basePrice, regionCode, rates);
       },
     }),
     {

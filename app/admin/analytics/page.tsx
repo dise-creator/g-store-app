@@ -5,12 +5,9 @@ import { supabase } from "@/lib/supabase";
 import { motion } from "framer-motion";
 import { ChevronLeft, TrendingUp, ShoppingBag, Tag, Zap, ShieldX } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useAdmin } from "@/lib/useAdmin";
-import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid,
-  Tooltip, ResponsiveContainer
-} from "recharts";
+import { useRouter } from "next/navigation";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 interface Order {
   id: string;
@@ -77,8 +74,7 @@ export default function AnalyticsPage() {
       days[key] = { date: key, revenue: 0, orders: 0 };
     }
     orders.forEach((o) => {
-      const d = new Date(o.created_at);
-      const key = d.toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
+      const key = new Date(o.created_at).toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
       if (days[key]) {
         days[key].revenue += o.total_price || 0;
         days[key].orders += 1;
@@ -97,9 +93,7 @@ export default function AnalyticsPage() {
       gameStats[item.title].revenue += item.price * (item.quantity || 1);
     });
   });
-  const topGames = Object.values(gameStats)
-    .sort((a, b) => b.revenue - a.revenue)
-    .slice(0, 5);
+  const topGames = Object.values(gameStats).sort((a, b) => b.revenue - a.revenue).slice(0, 5);
 
   const cards = [
     { label: "Общая выручка", value: `${totalRevenue.toLocaleString()} ₽`, icon: TrendingUp },
@@ -120,8 +114,8 @@ export default function AnalyticsPage() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4">
         <ShieldX size={48} className="text-red-400" />
-        <p className="text-white/30 font-black uppercase italic text-xl">Нет доступа</p>
-        <Link href="/" className="px-6 py-3 bg-[#63f3f7] text-black font-black uppercase italic text-xs rounded-2xl">
+        <p className="text-white/30 font-black uppercase text-xl">Нет доступа</p>
+        <Link href="/" className="px-6 py-3 bg-[#63f3f7] text-black font-black uppercase text-xs rounded-2xl">
           На главную
         </Link>
       </div>
@@ -131,13 +125,12 @@ export default function AnalyticsPage() {
   return (
     <main className="min-h-screen pt-10 pb-20 px-8">
       <div className="max-w-[1100px] mx-auto">
-
         <div className="flex items-center gap-4 mb-10">
           <Link href="/" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#63f3f7] transition-all">
             <ChevronLeft size={20} />
           </Link>
           <div>
-            <h1 className="text-3xl font-black italic uppercase text-white tracking-tighter">
+            <h1 className="text-3xl font-black uppercase text-white tracking-tighter">
               Анали<span className="text-[#63f3f7]">тика</span>
             </h1>
             <p className="text-white/30 text-xs mt-1">Статистика продаж и промокодов</p>
@@ -150,7 +143,6 @@ export default function AnalyticsPage() {
           </div>
         ) : (
           <div className="flex flex-col gap-6">
-
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
               {cards.map((card, i) => (
                 <motion.div
@@ -166,7 +158,7 @@ export default function AnalyticsPage() {
                     </div>
                     <p className="text-white/30 text-[10px] uppercase font-black tracking-widest">{card.label}</p>
                   </div>
-                  <p className="text-white font-black text-2xl italic">{card.value}</p>
+                  <p className="text-white font-black text-2xl">{card.value}</p>
                 </motion.div>
               ))}
             </div>
@@ -193,7 +185,7 @@ export default function AnalyticsPage() {
                   <YAxis tick={{ fill: "rgba(255,255,255,0.2)", fontSize: 10 }} axisLine={false} tickLine={false} />
                   <Tooltip
                     contentStyle={{ background: "#0a0a0c", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "1rem", color: "white" }}
-                    formatter={(val: any) => [`${Number(val).toLocaleString()} ₽`, "Выручка"]}
+               formatter={(val) => [`${Number(val).toLocaleString()} ₽`, "Выручка"]}
                   />
                   <Area type="monotone" dataKey="revenue" stroke="#63f3f7" strokeWidth={2} fill="url(#colorRevenue)" />
                 </AreaChart>
@@ -216,7 +208,7 @@ export default function AnalyticsPage() {
                       <div key={g.title} className="flex items-center gap-3">
                         <span className="text-[#63f3f7] font-black text-sm w-5">{i + 1}</span>
                         <div className="flex-1 min-w-0">
-                          <p className="text-white/70 text-xs font-black uppercase italic truncate">{g.title}</p>
+                          <p className="text-white/70 text-xs font-black uppercase truncate">{g.title}</p>
                           <p className="text-white/20 text-[10px]">{g.count} шт</p>
                         </div>
                         <p className="text-[#63f3f7] font-black text-sm shrink-0">{g.revenue.toLocaleString()} ₽</p>
@@ -238,7 +230,10 @@ export default function AnalyticsPage() {
                 ) : (
                   <div className="flex flex-col gap-3 max-h-[260px] overflow-y-auto pr-1">
                     {promos.map((p) => (
-                      <div key={p.id} className={`flex items-center justify-between gap-2 p-3 rounded-2xl border ${p.is_active ? "border-[#63f3f7]/10 bg-[#63f3f7]/[0.02]" : "border-white/5 opacity-40"}`}>
+                      <div
+                        key={p.id}
+                        className={`flex items-center justify-between gap-2 p-3 rounded-2xl border ${p.is_active ? "border-[#63f3f7]/10 bg-[#63f3f7]/[0.02]" : "border-white/5 opacity-40"}`}
+                      >
                         <div>
                           <p className="font-mono text-xs text-white font-black">{p.code}</p>
                           <p className="text-white/20 text-[10px]">
@@ -273,9 +268,7 @@ export default function AnalyticsPage() {
                         <p className="text-white/50 text-xs truncate">{o.user_email}</p>
                       </div>
                       <div className="flex items-center gap-3 shrink-0">
-                        <p className="text-white/20 text-[10px]">
-                          {new Date(o.created_at).toLocaleDateString("ru-RU")}
-                        </p>
+                        <p className="text-white/20 text-[10px]">{new Date(o.created_at).toLocaleDateString("ru-RU")}</p>
                         <p className="text-[#63f3f7] font-black text-sm">{o.total_price.toLocaleString()} ₽</p>
                       </div>
                     </div>

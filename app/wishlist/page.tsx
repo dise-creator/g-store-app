@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useWishlistStore } from "@/store/useWishlist";
 import GameCard from "@/components/GameCard";
-import { Heart, ChevronLeft, ShoppingBag, Trash2, X } from "lucide-react";
+import { Heart, ChevronLeft, ShoppingBag, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import AnimatedBackground from "@/components/AnimatedBackground";
@@ -14,7 +14,6 @@ export default function WishlistPage() {
   const [mounted, setMounted] = useState(false);
   const [confirmClear, setConfirmClear] = useState(false);
   const items = useWishlistStore((state) => state.items);
-  const toggleItem = useWishlistStore((state) => state.toggleItem);
   const clearAll = useWishlistStore((state) => state.clearAll);
 
   useEffect(() => { setMounted(true); }, []);
@@ -44,8 +43,6 @@ export default function WishlistPage() {
       <AnimatedBackground />
 
       <div className="relative z-10 max-w-[1440px] mx-auto">
-
-        {/* Шапка */}
         <div className="flex items-center justify-between mb-10">
           <div className="flex items-center gap-6">
             <Link
@@ -55,17 +52,16 @@ export default function WishlistPage() {
               <ChevronLeft size={20} className="group-hover:-translate-x-0.5 transition-transform" />
             </Link>
             <div className="flex items-baseline gap-1">
-              <h1 className="text-3xl md:text-4xl font-michroma font-black uppercase italic tracking-tighter text-white">
+              <h1 className="text-3xl md:text-4xl font-michroma font-black uppercase tracking-tighter text-white">
                 ИЗБРАН
               </h1>
-              <h1 className="text-3xl md:text-4xl font-michroma font-black uppercase italic tracking-tighter text-[#63f3f7] drop-shadow-[0_0_20px_rgba(99,243,247,0.4)]">
+              <h1 className="text-3xl md:text-4xl font-michroma font-black uppercase tracking-tighter text-[#63f3f7] drop-shadow-[0_0_20px_rgba(99,243,247,0.4)]">
                 НОЕ
               </h1>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            {/* Кнопка очистить всё */}
             {items.length > 0 && (
               <motion.button
                 onClick={handleClearAll}
@@ -81,7 +77,6 @@ export default function WishlistPage() {
               </motion.button>
             )}
 
-            {/* Счётчик */}
             <div className="flex items-center gap-3 px-5 py-3 bg-white/[0.03] border border-white/5 rounded-2xl">
               <Heart size={16} className="text-[#63f3f7] fill-[#63f3f7]/20" />
               <span className="text-white font-michroma text-xl leading-none">{items.length}</span>
@@ -90,7 +85,6 @@ export default function WishlistPage() {
           </div>
         </div>
 
-        {/* Сетка */}
         <div className="relative z-20">
           <AnimatePresence mode="popLayout">
             {items.length > 0 ? (
@@ -106,18 +100,7 @@ export default function WishlistPage() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
                     transition={{ delay: index * 0.06, ease: [0.25, 0.46, 0.45, 0.94], duration: 0.5 }}
-                    className="relative group/card"
                   >
-                    {/* Кнопка удаления на карточке */}
-                    
-                 {/* <motion.button
-                    onClick={() => toggleItem(game)}
-                     whileTap={{ scale: 0.9 }}
-                         className="absolute top-2 right-2 z-[70] w-7 h-7 bg-black/60 backdrop-blur-md rounded-xl border border-white/10 flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-all hover:bg-red-500/80 hover:border-red-400/30"
-                    >
-                      <X size={12} className="text-white/60 hover:text-white" />
-                  </motion.button> */}
-
                     <GameCard game={game} />
                   </motion.div>
                 ))}
@@ -136,7 +119,7 @@ export default function WishlistPage() {
                   <p className="text-white/20 font-michroma text-xs uppercase tracking-[0.4em]">Список пуст</p>
                   <Link
                     href="/"
-                    className="inline-block px-10 py-4 bg-[#63f3f7] text-black rounded-2xl font-black uppercase italic tracking-widest hover:scale-105 active:scale-95 transition-all shadow-[0_0_40px_rgba(99,243,247,0.2)] text-sm"
+                    className="inline-block px-10 py-4 bg-[#63f3f7] text-black rounded-2xl font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-[0_0_40px_rgba(99,243,247,0.2)] text-sm"
                   >
                     Перейти к покупкам
                   </Link>

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Check, ChevronLeft, ChevronRight } from "lucide-react";
 import { useRegionStore } from "@/store/useRegion";
 import { useCartStore } from "@/store/useCart";
+import type { Game } from "@/store/games";
 
 const PSIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -12,13 +13,31 @@ const PSIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const periods = [
+interface Period {
+  id: string;
+  label: string;
+  fullLabel: string;
+  multiplier: number;
+  badge?: string;
+}
+
+interface Plan {
+  id: string;
+  name: string;
+  basePrice: number;
+  gradient: string;
+  accentColor: string;
+  popular?: boolean;
+  features: string[];
+}
+
+const periods: Period[] = [
   { id: "1", label: "1 мес", fullLabel: "1 месяц", multiplier: 1 },
   { id: "3", label: "3 мес", fullLabel: "3 месяца", multiplier: 2.7, badge: "-10%" },
   { id: "12", label: "12 мес", fullLabel: "12 месяцев", multiplier: 9.6, badge: "-20%" },
 ];
 
-const plans = [
+const plans: Plan[] = [
   {
     id: "essential",
     name: "Essential",
@@ -63,7 +82,7 @@ const plans = [
 
 export default function SubscriptionSection() {
   const [activePeriod, setActivePeriod] = useState("1");
-  const [activePlan, setActivePlan] = useState(1); // для мобилки
+  const [activePlan, setActivePlan] = useState(1);
   const [addedId, setAddedId] = useState<string | null>(null);
   const { getPrice } = useRegionStore();
   const addItem = useCartStore((state) => state.addItem);
@@ -71,7 +90,7 @@ export default function SubscriptionSection() {
 
   const currentPeriod = periods.find(p => p.id === activePeriod)!;
 
-  const handleAdd = (plan: typeof plans[0]) => {
+  const handleAdd = (plan: Plan) => {
     const price = Math.round(getPrice(plan.basePrice) * currentPeriod.multiplier);
     addItem({
       id: `${plan.id}-${activePeriod}`,
@@ -83,7 +102,7 @@ export default function SubscriptionSection() {
       fullDescription: "",
       screenshots: [],
       editions: [],
-    } as any);
+    } as Game);
     setAddedId(plan.id);
     setTimeout(() => setAddedId(null), 2000);
   };
@@ -91,9 +110,7 @@ export default function SubscriptionSection() {
   const scrollToCard = (idx: number) => {
     if (!scrollRef.current) return;
     const card = scrollRef.current.children[idx] as HTMLElement;
-    if (card) {
-      card.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
-    }
+    if (card) card.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
     setActivePlan(idx);
   };
 
@@ -113,19 +130,18 @@ export default function SubscriptionSection() {
       <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
           <p className="text-white/20 text-[10px] uppercase font-black tracking-[0.3em] mb-1">PlayStation Network</p>
-          <h2 className="text-3xl md:text-5xl font-black italic uppercase tracking-tighter">
+          <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter">
             <span className="text-white">ПОДПИСКИ </span>
             <span className="text-[#63f3f7]" style={{ textShadow: "0 0 30px rgba(99,243,247,0.4)" }}>PS PLUS</span>
           </h2>
         </div>
 
-        {/* Переключатель периода */}
         <div className="flex items-center gap-1 p-1 bg-white/[0.03] border border-white/10 rounded-2xl self-start md:self-auto">
           {periods.map((period) => (
             <button
               key={period.id}
               onClick={() => setActivePeriod(period.id)}
-              className="relative px-3 md:px-4 py-2 md:py-2.5 rounded-xl text-[10px] md:text-[11px] font-black uppercase italic tracking-widest transition-all"
+              className="relative px-3 md:px-4 py-2 md:py-2.5 rounded-xl text-[10px] md:text-[11px] font-black uppercase tracking-widest transition-all"
             >
               {activePeriod === period.id && (
                 <motion.div
@@ -147,17 +163,16 @@ export default function SubscriptionSection() {
         </div>
       </div>
 
-      {/* Десктоп — сетка */}
+      {/* Десктоп */}
       <div className="relative hidden md:grid grid-cols-3 gap-5">
-        {plans.map((plan, idx) => {
+        {plans.map((plan) => {
           const price = Math.round(getPrice(plan.basePrice) * currentPeriod.multiplier);
-          const isAdded = addedId === plan.id;
           return (
             <PlanCard
               key={plan.id}
               plan={plan}
               price={price}
-              isAdded={isAdded}
+              isAdded={addedId === plan.id}
               currentPeriod={currentPeriod}
               onAdd={() => handleAdd(plan)}
             />
@@ -165,21 +180,17 @@ export default function SubscriptionSection() {
         })}
       </div>
 
-      {/* Мобилка — горизонтальный скролл */}
+      {/* Мобилка */}
       <div className="md:hidden">
-        <div
-          ref={scrollRef}
-          className="flex gap-4 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-2"
-        >
-          {plans.map((plan, idx) => {
+        <div ref={scrollRef} className="flex gap-4 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-2">
+          {plans.map((plan) => {
             const price = Math.round(getPrice(plan.basePrice) * currentPeriod.multiplier);
-            const isAdded = addedId === plan.id;
             return (
               <div key={plan.id} className="snap-center shrink-0 w-[85vw]">
                 <PlanCard
                   plan={plan}
                   price={price}
-                  isAdded={isAdded}
+                  isAdded={addedId === plan.id}
                   currentPeriod={currentPeriod}
                   onAdd={() => handleAdd(plan)}
                 />
@@ -188,7 +199,6 @@ export default function SubscriptionSection() {
           })}
         </div>
 
-        {/* Навигация на мобилке */}
         <div className="flex items-center justify-center gap-4 mt-5">
           <button
             onClick={() => scrollToCard(Math.max(0, activePlan - 1))}
@@ -196,7 +206,6 @@ export default function SubscriptionSection() {
           >
             <ChevronLeft size={16} />
           </button>
-
           <div className="flex gap-2">
             {plans.map((_, i) => (
               <button
@@ -208,7 +217,6 @@ export default function SubscriptionSection() {
               />
             ))}
           </div>
-
           <button
             onClick={() => scrollToCard(Math.min(plans.length - 1, activePlan + 1))}
             className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#63f3f7] hover:border-[#63f3f7]/30 transition-all active:scale-90"
@@ -221,7 +229,6 @@ export default function SubscriptionSection() {
   );
 }
 
-// Отдельный компонент карточки
 function PlanCard({
   plan,
   price,
@@ -229,10 +236,10 @@ function PlanCard({
   currentPeriod,
   onAdd,
 }: {
-  plan: typeof plans[0];
+  plan: Plan;
   price: number;
   isAdded: boolean;
-  currentPeriod: typeof periods[0];
+  currentPeriod: Period;
   onAdd: () => void;
 }) {
   return (
@@ -257,8 +264,10 @@ function PlanCard({
         <div className="absolute -bottom-6 -left-6 w-24 h-24 rounded-full bg-white/5" />
         <PSIcon className="w-8 h-8 text-black/30 mb-1 relative z-10" />
         <p className="text-black/50 text-xs font-bold relative z-10">PlayStation Plus</p>
-        <p className="text-black font-black text-3xl uppercase tracking-tighter relative z-10"
-          style={{ textShadow: "0 2px 10px rgba(0,0,0,0.3)" }}>
+        <p
+          className="text-black font-black text-3xl uppercase tracking-tighter relative z-10"
+          style={{ textShadow: "0 2px 10px rgba(0,0,0,0.3)" }}
+        >
           {plan.name}
         </p>
       </div>
@@ -273,7 +282,7 @@ function PlanCard({
             transition={{ duration: 0.2 }}
           >
             <div className="flex items-baseline gap-1.5">
-              <span className="text-white font-black text-3xl italic">{price.toLocaleString()}</span>
+              <span className="text-white font-black text-3xl">{price.toLocaleString()}</span>
               <span className="text-[#63f3f7] font-black text-sm">₽</span>
             </div>
             <p className="text-white/30 text-xs font-bold mt-0.5">
@@ -299,7 +308,7 @@ function PlanCard({
         <motion.button
           onClick={onAdd}
           whileTap={{ scale: 0.97 }}
-          className={`w-full py-4 rounded-2xl font-black text-xs uppercase italic tracking-[0.15em] transition-all flex items-center justify-center gap-2 ${
+          className={`w-full py-4 rounded-2xl font-black text-xs uppercase tracking-[0.15em] transition-all flex items-center justify-center gap-2 ${
             isAdded
               ? "bg-[#63f3f7] text-black shadow-[0_0_20px_rgba(99,243,247,0.3)]"
               : plan.popular

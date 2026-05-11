@@ -3,15 +3,20 @@ import { persist } from 'zustand/middleware';
 import type { Game } from './games';
 import type { Region } from './useRegion';
 
-interface CartItem extends Game {
+export interface CartItem extends Game {
   quantity: number;
   cartItemId: string;
-  region: Region; // ← добавили регион
+  region: Region;
+}
+
+interface AddItemPayload extends Game {
+  selectedEdition?: string;
+  region?: Region;
 }
 
 interface CartStore {
   items: CartItem[];
-  addItem: (game: Game & { selectedEdition?: string; region?: Region }) => void;
+  addItem: (game: AddItemPayload) => void;
   removeItem: (cartItemId: string) => void;
   updateQuantity: (cartItemId: string, quantity: number) => void;
   clearCart: () => void;
@@ -23,7 +28,7 @@ export const useCartStore = create<CartStore>()(
       items: [],
 
       addItem: (game) => set((state) => {
-        const editionName = (game as any).selectedEdition || "Standard";
+        const editionName = game.selectedEdition || "Standard";
         const cartItemId = `${game.id}-${editionName}`;
         const existingItem = state.items.find(item => item.cartItemId === cartItemId);
 
@@ -45,7 +50,7 @@ export const useCartStore = create<CartStore>()(
               cartItemId,
               quantity: 1,
               price: Number(game.price) || 0,
-              region: game.region || "TR", // ← сохраняем регион
+              region: game.region ?? "TR",
             }
           ]
         };
@@ -56,23 +61,20 @@ export const useCartStore = create<CartStore>()(
       })),
 
       updateQuantity: (cartItemId, quantity) => set((state) => ({
-        items: state.items.map(item =>
-          item.cartItemId === cartItemId
-            ? { ...item, quantity: Math.max(0, quantity) }
-            : item
-        ).filter(item => item.quantity > 0)
+        items: state.items
+          .map(item =>
+            item.cartItemId === cartItemId
+              ? { ...item, quantity: Math.max(0, quantity) }
+              : item
+          )
+          .filter(item => item.quantity > 0)
       })),
 
       clearCart: () => set({ items: [] }),
     }),
-    {
-      name: 'clic-cart-storage',
-    }
+    { name: 'clic-cart-storage' }
   )
 );
 
-export const getTotalPrice = (items: CartItem[]) => {
-  return items.reduce((total, item) => {
-    return total + (Number(item.price) * item.quantity);
-  }, 0);
-};
+export const getTotalPrice = (items: CartItem[]): number =>
+  items.reduce((total, item) => total + Number(item.price) * item.quantity, 0);

@@ -4,15 +4,17 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useGamesStore } from "@/store/games";
 import { useRegionStore } from "@/store/useRegion";
+import { useGameModal } from "@/store/useGameModal";
 import { Tag } from "lucide-react";
+import Image from "next/image";
 
 const BG = "#0d1528";
 
 const FONT_CLASSES = [
-  "font-[family-name:var(--font-arapey)]",
   "font-[family-name:var(--font-bangers)] tracking-wider",
-  "font-[family-name:var(--font-im-fell)]",
   "font-michroma",
+  "font-[family-name:var(--font-barlow)]",
+  "font-[family-name:var(--font-nunito)]",
 ];
 
 const COLORS = [
@@ -28,8 +30,9 @@ const COLORS = [
 export default function HeroBanner() {
   const [index, setIndex] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
-  const { allGames, setSelectedGame } = useGamesStore();
+  const { allGames } = useGamesStore();
   const { getPrice } = useRegionStore();
+  const { openModal } = useGameModal();
 
   const bannerGames = allGames.slice(0, 8);
 
@@ -42,25 +45,29 @@ export default function HeroBanner() {
   }, [bannerGames.length]);
 
   if (!isMounted || bannerGames.length === 0) return (
-    <div className="w-full h-[380px] md:h-[580px] mt-4 md:mt-8 rounded-[2rem] md:rounded-[2.5rem]" style={{ backgroundColor: BG }} />
+    <div
+      className="w-full h-[380px] md:h-[580px] mt-4 md:mt-8 rounded-[2rem] md:rounded-[2.5rem]"
+      style={{ backgroundColor: BG }}
+    />
   );
 
   const current = bannerGames[index];
   const color = COLORS[index % COLORS.length];
   const fontClass = FONT_CLASSES[index % FONT_CLASSES.length];
   const displayPrice = getPrice(current.price);
-  const discount = current.discount_percent || 0;
+  const discount = current.discount_percent ?? 0;
   const discountedPrice = discount > 0
     ? Math.round(displayPrice * (1 - discount / 100))
     : displayPrice;
 
   const words = current.title.split(" ");
-  const firstPart = words.slice(0, Math.ceil(words.length / 2)).join(" ");
-  const secondPart = words.slice(Math.ceil(words.length / 2)).join(" ");
+  const mid = Math.ceil(words.length / 2);
+  const firstPart = words.slice(0, mid).join(" ");
+  const secondPart = words.slice(mid).join(" ");
 
   const handleAction = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setSelectedGame(current);
+    openModal(current);
   };
 
   return (
@@ -83,34 +90,31 @@ export default function HeroBanner() {
         >
           <div className="absolute inset-0" style={{ backgroundColor: BG }} />
 
-          {/* Картинка */}
           <div className="relative h-full w-full flex justify-center items-center">
-            <img
+            <Image
               src={current.image}
               alt={current.title}
-              className="h-full w-auto max-w-none object-contain transition-transform duration-[10000ms] scale-100 group-hover:scale-[1.03]"
+              fill
+              className="object-contain transition-transform duration-[10000ms] scale-100 group-hover:scale-[1.03]"
               style={{
-                maskImage: 'linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 8%, black 85%, transparent 100%)',
-                WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 8%, black 85%, transparent 100%)',
-                maskComposite: 'intersect',
-                WebkitMaskComposite: 'source-in'
+                maskImage: "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 8%, black 85%, transparent 100%)",
+                WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 8%, black 85%, transparent 100%)",
+                maskComposite: "intersect",
+                WebkitMaskComposite: "source-in",
               }}
+              unoptimized
             />
           </div>
 
-          {/* Левый градиент — на мобилке полный, на десктопе половина */}
           <div
             className="absolute inset-y-0 left-0 z-10 w-full md:w-[55%]"
             style={{ background: `linear-gradient(to right, ${BG} 0%, ${BG}ee 30%, ${BG}99 60%, transparent 100%)` }}
           />
-
-          {/* Нижний градиент */}
           <div
             className="absolute bottom-0 left-0 right-0 z-10 h-32 md:h-40"
             style={{ background: `linear-gradient(to top, ${BG} 0%, transparent 100%)` }}
           />
 
-          {/* Контент */}
           <div className="absolute inset-0 z-20 flex flex-col justify-end md:justify-center px-6 md:px-24 pb-12 md:pb-0">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -118,7 +122,6 @@ export default function HeroBanner() {
               transition={{ delay: 0.2, duration: 0.6 }}
               className="flex flex-col gap-3 md:gap-6 max-w-xl"
             >
-              {/* Бейдж скидки */}
               {discount > 0 && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -127,7 +130,7 @@ export default function HeroBanner() {
                   className="flex items-center gap-2 w-fit"
                 >
                   <div
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-black text-xs uppercase italic"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-black text-xs uppercase"
                     style={{
                       backgroundColor: color + "25",
                       border: `1px solid ${color}50`,
@@ -140,13 +143,11 @@ export default function HeroBanner() {
                 </motion.div>
               )}
 
-              {/* Заголовок */}
-              <h1 className={`${fontClass} text-4xl sm:text-5xl md:text-8xl font-black uppercase italic text-white leading-[0.85] drop-shadow-2xl`}>
+              <h1 className={`${fontClass} text-4xl sm:text-5xl md:text-8xl font-black uppercase text-white leading-[0.85] drop-shadow-2xl`}>
                 {firstPart} <br />
                 <span style={{ color }} className="opacity-95">{secondPart}</span>
               </h1>
 
-              {/* Цена + кнопка */}
               <div className="flex items-center gap-3 md:gap-6">
                 <div className="flex flex-col">
                   {discount > 0 && (
@@ -154,14 +155,14 @@ export default function HeroBanner() {
                       {displayPrice.toLocaleString()} ₽
                     </span>
                   )}
-                  <span className="font-black text-2xl md:text-4xl italic" style={{ color }}>
+                  <span className="font-black text-2xl md:text-4xl" style={{ color }}>
                     {discountedPrice.toLocaleString()} ₽
                   </span>
                 </div>
 
                 <button
                   onClick={handleAction}
-                  className="relative px-6 md:px-10 py-3 md:py-4 text-black font-extrabold uppercase italic rounded-xl md:rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-xl z-30 text-xs md:text-base"
+                  className="relative px-6 md:px-10 py-3 md:py-4 text-black font-extrabold uppercase rounded-xl md:rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-xl z-30 text-xs md:text-base"
                   style={{ backgroundColor: color }}
                 >
                   Забрать сейчас
@@ -172,15 +173,11 @@ export default function HeroBanner() {
         </motion.div>
       </AnimatePresence>
 
-      {/* Точки навигации */}
       <div className="absolute bottom-4 md:bottom-10 left-6 md:left-24 z-30 flex gap-2 flex-wrap">
         {bannerGames.map((_, i) => (
           <button
             key={i}
-            onClick={(e) => {
-              e.stopPropagation();
-              setIndex(i);
-            }}
+            onClick={(e) => { e.stopPropagation(); setIndex(i); }}
             className={`h-1 md:h-1.5 rounded-full transition-all duration-500 ${
               i === index ? "w-8 md:w-12" : "w-2 md:w-2.5 bg-white/10 hover:bg-white/30"
             }`}

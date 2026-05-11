@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Home, Gamepad2, Heart, User, ShoppingCart } from "lucide-react";
@@ -21,13 +21,19 @@ export default function MobileNav() {
   const [cartPulse, setCartPulse] = useState(false);
   const lastScrollY = useRef(0);
   const showTimer = useRef<NodeJS.Timeout | null>(null);
+  const prevTotal = useRef(0);
 
   const items = useCartStore((state) => state.items);
   const wishlistItems = useWishlistStore((state) => state.items);
 
-  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const prevTotal = useRef(totalItems);
+  const totalItems = useMemo(
+    () => items.reduce((sum, item) => sum + item.quantity, 0),
+    [items]
+  );
+  const totalPrice = useMemo(
+    () => items.reduce((sum, item) => sum + item.price * item.quantity, 0),
+    [items]
+  );
 
   useEffect(() => {
     if (totalItems > prevTotal.current) {
@@ -48,7 +54,7 @@ export default function MobileNav() {
       } else if (currentY > lastScrollY.current + 10) {
         window.dispatchEvent(new CustomEvent("headerHide"));
         if (showTimer.current) clearTimeout(showTimer.current);
-        showTimer.current = setTimeout(() => setVisible(true), 150);
+        showTimer.current = setTimeout(() => setVisible(true), 50);
       } else if (currentY < lastScrollY.current - 10) {
         if (showTimer.current) clearTimeout(showTimer.current);
         setVisible(false);
@@ -64,14 +70,6 @@ export default function MobileNav() {
       if (showTimer.current) clearTimeout(showTimer.current);
     };
   }, []);
-
-  const getActive = (id: string) => {
-    if (id === "home") return pathname === "/";
-    if (id === "catalog") return pathname === "/catalog";
-    if (id === "wishlist") return pathname === "/wishlist";
-    if (id === "profile") return pathname === "/profile";
-    return false;
-  };
 
   return (
     <AnimatePresence>
@@ -93,7 +91,7 @@ export default function MobileNav() {
           >
             {NAV_ITEMS.map((item) => {
               const Icon = item.icon;
-              const isActive = getActive(item.id);
+              const isActive = item.id === "home" ? pathname === "/" : pathname === item.href;
               const isWishlist = item.id === "wishlist";
 
               return (

@@ -52,7 +52,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
     }
     return () => {
       window.removeEventListener("keydown", handleEsc);
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = "";
     };
   }, [isOpen, onClose]);
 
@@ -97,11 +97,9 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           >
             {/* Шапка */}
             <div className="p-8 flex items-center justify-between border-b border-white/10 bg-white/[0.02]">
-          <div className="flex items-center gap-3">
-  <h2 className="text-4xl font-black uppercase italic tracking-tighter text-white">
-    Корзина
-  </h2>
-</div>
+              <h2 className="text-4xl font-black uppercase tracking-tighter text-white">
+                Корзина
+              </h2>
               <button
                 onClick={onClose}
                 className="w-12 h-12 flex items-center justify-center bg-white/5 hover:bg-[#63f3f7] hover:text-black rounded-full transition-all text-white/50 border border-white/10"
@@ -133,7 +131,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         </h3>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-1.5">
-                            <p className="text-[#63f3f7] font-black italic text-base leading-none">
+                            <p className="text-[#63f3f7] font-black text-base leading-none">
                               {(Number(item.price) || 0).toLocaleString()} ₽
                             </p>
                             <span className="text-xs opacity-50">{currentRegion.flag}</span>
@@ -170,7 +168,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               ) : (
                 <div className="h-full flex flex-col items-center justify-center opacity-10">
                   <ShoppingBag size={48} strokeWidth={1} className="mb-2 text-white" />
-                  <p className="text-[10px] font-black uppercase italic tracking-[0.3em] text-white">Пусто</p>
+                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white">Пусто</p>
                 </div>
               )}
             </div>
@@ -178,7 +176,6 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             {/* Футер */}
             {items.length > 0 && (
               <div className="p-8 bg-black/80 backdrop-blur-xl border-t border-white/10 space-y-5">
-
                 {loyalty.discount > 0 && (
                   <div className="flex flex-col gap-2 p-4 bg-[#63f3f7]/5 border border-[#63f3f7]/20 rounded-2xl">
                     <div className="flex justify-between items-center">
@@ -193,8 +190,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 )}
 
                 <div className="flex justify-between items-end">
-                  <span className="text-[10px] font-black uppercase italic text-white/30 tracking-widest">Итого:</span>
-                  <span className="text-4xl font-black italic text-[#63f3f7] tracking-tighter leading-none">
+                  <span className="text-[10px] font-black uppercase text-white/30 tracking-widest">Итого:</span>
+                  <span className="text-4xl font-black text-[#63f3f7] tracking-tighter leading-none">
                     {finalAmount.toLocaleString()} ₽
                   </span>
                 </div>
@@ -202,7 +199,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 <div className="flex flex-col gap-4">
                   <button
                     onClick={handleCheckout}
-                    className="w-full py-6 rounded-2xl font-black uppercase italic tracking-[0.2em] transition-all flex items-center justify-center gap-3 bg-[#63f3f7] text-black hover:scale-[1.02] active:scale-95 shadow-[0_0_30px_rgba(99,243,247,0.1)]"
+                    className="w-full py-6 rounded-2xl font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 bg-[#63f3f7] text-black hover:scale-[1.02] active:scale-95 shadow-[0_0_30px_rgba(99,243,247,0.1)]"
                   >
                     <CreditCard size={18} />
                     <span className="text-sm">Перейти к оплате</span>

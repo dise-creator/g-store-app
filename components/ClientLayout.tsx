@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Header from "./Header";
 import SearchModal from "./SearchModal";
 import CartDrawer from "./CartDrawer";
@@ -13,9 +13,9 @@ import { useRouter, usePathname } from "next/navigation";
 import { useRegionStore } from "@/store/useRegion";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTelegramAuth } from "../hooks/useTelegramAuth";
+import { useState } from "react";
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
-  const [mounted, setMounted] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
@@ -25,7 +25,6 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const fetchRates = useRegionStore((state) => state.fetchRates);
 
   useEffect(() => {
-    setMounted(true);
     fetchRates();
   }, [fetchRates]);
 
@@ -38,9 +37,8 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   return (
     <SessionProvider>
       <TelegramAuthProvider />
-      <div className="relative flex flex-col min-h-screen bg-[#0a0a0c] text-white isolate overflow-x-hidden">
+      <div className="relative flex flex-col min-h-screen text-white isolate overflow-x-hidden">
 
-        {/* HEADER */}
         <div className="sticky top-0 z-[100] w-full">
           <Header
             onSearchClick={() => setIsSearchOpen(true)}
@@ -49,7 +47,6 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
           />
         </div>
 
-        {/* DRAWERS / MODALS */}
         <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
         <SearchModal
           isOpen={isSearchOpen}
@@ -57,10 +54,8 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
           games={allGames}
         />
 
-        {/* Индикатор загрузки курсов */}
-        {mounted && <RatesLoader />}
+        <RatesLoader />
 
-        {/* MAIN с анимацией */}
         <main className="relative z-10 flex-grow w-full pb-24 md:pb-0">
           <AnimatePresence mode="wait">
             <motion.div
@@ -75,18 +70,9 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
           </AnimatePresence>
         </main>
 
-        {/* FOOTER */}
         <Footer />
-
-        {/* MOBILE NAV */}
         <MobileNav />
-
-        {/* GAME MODAL */}
-        <div className="fixed inset-0 z-[999] pointer-events-none">
-          <div className="pointer-events-auto">
-            <GameModal />
-          </div>
-        </div>
+        <GameModal />
       </div>
     </SessionProvider>
   );
@@ -99,7 +85,6 @@ function TelegramAuthProvider() {
 
 function RatesLoader() {
   const { isLoadingRates } = useRegionStore();
-
   if (!isLoadingRates) return null;
 
   return (

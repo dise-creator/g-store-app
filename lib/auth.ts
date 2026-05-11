@@ -11,6 +11,13 @@ const supabaseAdmin = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 );
 
+const formatUser = (user: { id: string; name: string; email: string; image?: string }) => ({
+  id: user.id,
+  name: user.name,
+  email: user.email,
+  image: user.image ?? null,
+});
+
 export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
@@ -26,7 +33,6 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.VK_CLIENT_SECRET!,
     }),
 
-    // Telegram
     CredentialsProvider({
       id: "credentials",
       name: "Telegram",
@@ -44,17 +50,10 @@ export const authOptions: NextAuthOptions = {
           .single();
 
         if (!user) return null;
-
-        return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          image: user.image,
-        };
+        return formatUser(user);
       },
     }),
 
-    // Email + пароль
     CredentialsProvider({
       id: "email-password",
       name: "Email",
@@ -73,12 +72,10 @@ export const authOptions: NextAuthOptions = {
           .eq("email", credentials.email)
           .single();
 
-        // Регистрация
         if (credentials.isRegister === "true") {
           if (user) throw new Error("Пользователь уже существует");
 
           const hashedPassword = await bcrypt.hash(credentials.password, 10);
-
           const { data: newUser } = await supabaseAdmin
             .from("users")
             .insert({
@@ -91,27 +88,15 @@ export const authOptions: NextAuthOptions = {
             .single();
 
           if (!newUser) return null;
-
-          return {
-            id: newUser.id,
-            name: newUser.name,
-            email: newUser.email,
-            image: newUser.image,
-          };
+          return formatUser(newUser);
         }
 
-        // Вход
-        if (!user || !user.password) throw new Error("Пользователь не найден");
+        if (!user?.password) throw new Error("Пользователь не найден");
 
         const isValid = await bcrypt.compare(credentials.password, user.password);
         if (!isValid) throw new Error("Неверный пароль");
 
-        return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          image: user.image,
-        };
+        return formatUser(user);
       },
     }),
   ],
@@ -147,9 +132,8 @@ export const authOptions: NextAuthOptions = {
     },
 
     async session({ session, token }) {
-      if (session.user) {
-        // @ts-ignore
-        session.user.id = token.sub;
+      if (session.user && token.sub) {
+        (session.user as { id?: string }).id = token.sub;
       }
       return session;
     },

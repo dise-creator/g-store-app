@@ -80,25 +80,17 @@ export default function KeysPage() {
       return;
     }
 
-    const rows = keys.map((code) => ({
-      code,
-      is_used: false,
-      user_email: null,
-      denomination,
-      region,
-    }));
-
+    const rows = keys.map((code) => ({ code, is_used: false, user_email: null, denomination, region }));
     const { error: insertError } = await supabase.from("vouchers").insert(rows);
 
     if (insertError) {
       setError("Ошибка: " + insertError.message);
     } else {
-      const regionLabel = REGIONS.find(r => r.code === region);
+      const regionLabel = REGIONS.find((r) => r.code === region);
       setSuccess(`✅ Загружено ${keys.length} ключей · ${denomination.toLocaleString()} ₽ · ${regionLabel?.flag} ${regionLabel?.label}`);
       setKeysText("");
       await loadVouchers();
     }
-
     setLoading(false);
   };
 
@@ -107,7 +99,7 @@ export default function KeysPage() {
     setVouchers((prev) => prev.filter((v) => v.id !== id));
   };
 
-  const filteredVouchers = vouchers.filter(v => {
+  const filteredVouchers = vouchers.filter((v) => {
     if (filterDenomination && v.denomination !== filterDenomination) return false;
     if (filterRegion && v.region !== filterRegion) return false;
     return true;
@@ -116,17 +108,17 @@ export default function KeysPage() {
   const freeCount = filteredVouchers.filter((v) => !v.is_used).length;
   const usedCount = filteredVouchers.filter((v) => v.is_used).length;
 
-  const denominationStats = DENOMINATIONS.map(d => ({
+  const denominationStats = DENOMINATIONS.map((d) => ({
     value: d,
     TR: {
-      free: vouchers.filter(v => v.denomination === d && v.region === "TR" && !v.is_used).length,
-      used: vouchers.filter(v => v.denomination === d && v.region === "TR" && v.is_used).length,
+      free: vouchers.filter((v) => v.denomination === d && v.region === "TR" && !v.is_used).length,
+      used: vouchers.filter((v) => v.denomination === d && v.region === "TR" && v.is_used).length,
     },
     IN: {
-      free: vouchers.filter(v => v.denomination === d && v.region === "IN" && !v.is_used).length,
-      used: vouchers.filter(v => v.denomination === d && v.region === "IN" && v.is_used).length,
+      free: vouchers.filter((v) => v.denomination === d && v.region === "IN" && !v.is_used).length,
+      used: vouchers.filter((v) => v.denomination === d && v.region === "IN" && v.is_used).length,
     },
-  })).filter(d => d.TR.free + d.TR.used + d.IN.free + d.IN.used > 0);
+  })).filter((d) => d.TR.free + d.TR.used + d.IN.free + d.IN.used > 0);
 
   if (adminLoading) {
     return (
@@ -140,8 +132,10 @@ export default function KeysPage() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4">
         <ShieldX size={48} className="text-red-400" />
-        <p className="text-white/30 font-black uppercase italic text-xl">Нет доступа</p>
-        <Link href="/" className="px-6 py-3 bg-[#63f3f7] text-black font-black uppercase italic text-xs rounded-2xl">На главную</Link>
+        <p className="text-white/30 font-black uppercase text-xl">Нет доступа</p>
+        <Link href="/" className="px-6 py-3 bg-[#63f3f7] text-black font-black uppercase text-xs rounded-2xl">
+          На главную
+        </Link>
       </div>
     );
   }
@@ -149,13 +143,12 @@ export default function KeysPage() {
   return (
     <main className="min-h-screen pt-10 pb-20 px-8">
       <div className="max-w-[900px] mx-auto">
-
         <div className="flex items-center gap-4 mb-10">
           <Link href="/" className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-[#63f3f7] transition-all">
             <ChevronLeft size={20} />
           </Link>
           <div>
-            <h1 className="text-3xl font-black italic uppercase text-white tracking-tighter">
+            <h1 className="text-3xl font-black uppercase text-white tracking-tighter">
               Загрузка <span className="text-[#63f3f7]">ключей</span>
             </h1>
             <p className="text-white/30 text-xs mt-1">Загружай .txt файл — каждый ключ на новой строке</p>
@@ -164,18 +157,17 @@ export default function KeysPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div className="flex flex-col gap-4">
-
-            {/* Выбор региона */}
             <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6">
               <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-3">Регион карты</p>
               <div className="flex gap-2">
                 {REGIONS.map((r) => (
-                  <button key={r.code} onClick={() => setRegion(r.code)}
+                  <button
+                    key={r.code}
+                    onClick={() => setRegion(r.code)}
                     className={`flex-1 py-3 rounded-2xl font-black text-sm transition-all flex items-center justify-center gap-2 ${
-                      region === r.code
-                        ? "bg-[#63f3f7] text-black"
-                        : "bg-white/5 border border-white/10 text-white/40 hover:text-white"
-                    }`}>
+                      region === r.code ? "bg-[#63f3f7] text-black" : "bg-white/5 border border-white/10 text-white/40 hover:text-white"
+                    }`}
+                  >
                     <span className="text-lg">{r.flag}</span>
                     {r.label}
                   </button>
@@ -183,17 +175,17 @@ export default function KeysPage() {
               </div>
             </div>
 
-            {/* Выбор номинала */}
             <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6">
               <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-3">Номинал карты PSN</p>
               <div className="grid grid-cols-3 gap-2">
                 {DENOMINATIONS.map((d) => (
-                  <button key={d} onClick={() => setDenomination(d)}
+                  <button
+                    key={d}
+                    onClick={() => setDenomination(d)}
                     className={`py-3 rounded-2xl font-black text-sm transition-all flex items-center justify-center gap-1.5 ${
-                      denomination === d
-                        ? "bg-[#63f3f7] text-black"
-                        : "bg-white/5 border border-white/10 text-white/40 hover:text-white"
-                    }`}>
+                      denomination === d ? "bg-[#63f3f7] text-black" : "bg-white/5 border border-white/10 text-white/40 hover:text-white"
+                    }`}
+                  >
                     <CreditCard size={12} />
                     {d.toLocaleString()} ₽
                   </button>
@@ -201,7 +193,6 @@ export default function KeysPage() {
               </div>
             </div>
 
-            {/* Загрузка ключей */}
             <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6">
               <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-3">Файл с ключами (.txt)</p>
               <label className="flex flex-col items-center justify-center gap-3 p-6 border-2 border-dashed border-white/10 rounded-2xl cursor-pointer hover:border-[#63f3f7]/30 transition-all group">
@@ -210,13 +201,16 @@ export default function KeysPage() {
                 <input type="file" accept=".txt" onChange={handleFileUpload} className="hidden" />
               </label>
               <p className="text-white/20 text-[10px] uppercase font-black tracking-widest my-3 text-center">или вставь вручную</p>
-              <textarea value={keysText} onChange={(e) => setKeysText(e.target.value)}
+              <textarea
+                value={keysText}
+                onChange={(e) => setKeysText(e.target.value)}
                 placeholder={"XXXXX-XXXXX-XXXXX\nXXXXX-XXXXX-XXXXX"}
                 rows={5}
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white/70 font-mono text-xs focus:outline-none focus:border-[#63f3f7]/40 transition-all placeholder-white/10 resize-none" />
+                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white/70 font-mono text-xs focus:outline-none focus:border-[#63f3f7]/40 transition-all placeholder-white/10 resize-none"
+              />
               {keysText && (
                 <p className="text-[#63f3f7] text-[10px] font-black mt-2">
-                  {keysText.split("\n").filter(Boolean).length} ключей · {denomination.toLocaleString()} ₽ · {REGIONS.find(r => r.code === region)?.flag} {REGIONS.find(r => r.code === region)?.label}
+                  {keysText.split("\n").filter(Boolean).length} ключей · {denomination.toLocaleString()} ₽ · {REGIONS.find((r) => r.code === region)?.flag} {REGIONS.find((r) => r.code === region)?.label}
                 </p>
               )}
             </div>
@@ -236,48 +230,49 @@ export default function KeysPage() {
               )}
             </AnimatePresence>
 
-            <button onClick={handleUpload} disabled={loading}
-              className="w-full py-5 bg-[#63f3f7] text-black font-black uppercase italic text-sm rounded-2xl hover:shadow-[0_0_30px_rgba(99,243,247,0.3)] transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2">
-              {loading
-                ? <><Loader2 size={18} className="animate-spin" /> Загружаем...</>
-                : <><Upload size={18} /> {REGIONS.find(r => r.code === region)?.flag} {denomination.toLocaleString()} ₽ — Загрузить</>}
+            <button
+              onClick={handleUpload}
+              disabled={loading}
+              className="w-full py-5 bg-[#63f3f7] text-black font-black uppercase text-sm rounded-2xl hover:shadow-[0_0_30px_rgba(99,243,247,0.3)] transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2"
+            >
+              {loading ? (
+                <><Loader2 size={18} className="animate-spin" /> Загружаем...</>
+              ) : (
+                <><Upload size={18} /> {REGIONS.find((r) => r.code === region)?.flag} {denomination.toLocaleString()} ₽ — Загрузить</>
+              )}
             </button>
           </div>
 
-          {/* Правая часть */}
           <div className="flex flex-col gap-4">
-
-            {/* Фильтры */}
             <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6">
               <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-3">Фильтр по региону</p>
               <div className="flex gap-2">
                 {REGIONS.map((r) => (
-                  <button key={r.code}
+                  <button
+                    key={r.code}
                     onClick={() => setFilterRegion(filterRegion === r.code ? null : r.code)}
                     className={`flex-1 py-2 rounded-2xl font-black text-xs transition-all flex items-center justify-center gap-1.5 ${
-                      filterRegion === r.code
-                        ? "bg-[#63f3f7] text-black"
-                        : "bg-white/5 border border-white/10 text-white/40 hover:text-white"
-                    }`}>
+                      filterRegion === r.code ? "bg-[#63f3f7] text-black" : "bg-white/5 border border-white/10 text-white/40 hover:text-white"
+                    }`}
+                  >
                     {r.flag} {r.label}
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Статистика по номиналам */}
             {denominationStats.length > 0 && (
               <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6">
                 <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-3">По номиналам</p>
                 <div className="flex flex-col gap-2">
                   {denominationStats.map((d) => (
-                    <button key={d.value}
+                    <button
+                      key={d.value}
                       onClick={() => setFilterDenomination(filterDenomination === d.value ? null : d.value)}
                       className={`flex items-center justify-between p-3 rounded-2xl border transition-all ${
-                        filterDenomination === d.value
-                          ? "border-[#63f3f7]/30 bg-[#63f3f7]/5"
-                          : "border-white/5 hover:border-white/10"
-                      }`}>
+                        filterDenomination === d.value ? "border-[#63f3f7]/30 bg-[#63f3f7]/5" : "border-white/5 hover:border-white/10"
+                      }`}
+                    >
                       <div className="flex items-center gap-2">
                         <CreditCard size={14} className="text-[#63f3f7]" />
                         <span className="text-white font-black text-sm">{d.value.toLocaleString()} ₽</span>
@@ -298,7 +293,6 @@ export default function KeysPage() {
               </div>
             )}
 
-            {/* Список ключей */}
             <div className="bg-white/[0.03] border border-white/10 rounded-[2rem] p-6 flex-1">
               <div className="flex items-center justify-between mb-4">
                 <p className="text-white/30 text-[10px] uppercase font-black tracking-widest">Все ключи</p>
@@ -308,20 +302,27 @@ export default function KeysPage() {
                 </div>
               </div>
 
-              {loadingVouchers && <div className="flex justify-center py-10"><Loader2 size={20} className="animate-spin text-[#63f3f7]" /></div>}
+              {loadingVouchers && (
+                <div className="flex justify-center py-10">
+                  <Loader2 size={20} className="animate-spin text-[#63f3f7]" />
+                </div>
+              )}
               {!loadingVouchers && vouchers.length === 0 && (
                 <p className="text-white/20 text-xs font-black uppercase text-center py-10">Ключей нет — загрузи первые!</p>
               )}
 
               <div className="flex flex-col gap-2 max-h-[400px] overflow-y-auto pr-1">
                 {filteredVouchers.map((v) => (
-                  <div key={v.id} className={`flex items-center justify-between gap-2 p-3 rounded-xl border ${v.is_used ? "border-white/5 bg-white/[0.01] opacity-40" : "border-[#63f3f7]/10 bg-[#63f3f7]/[0.02]"}`}>
+                  <div
+                    key={v.id}
+                    className={`flex items-center justify-between gap-2 p-3 rounded-xl border ${v.is_used ? "border-white/5 bg-white/[0.01] opacity-40" : "border-[#63f3f7]/10 bg-[#63f3f7]/[0.02]"}`}
+                  >
                     <div className="flex items-center gap-2 min-w-0">
                       <Key size={12} className={v.is_used ? "text-white/20" : "text-[#63f3f7]"} />
                       <p className="font-mono text-xs text-white/70 truncate">{v.code}</p>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
-                      <span className="text-[9px]">{REGIONS.find(r => r.code === v.region)?.flag}</span>
+                      <span className="text-[9px]">{REGIONS.find((r) => r.code === v.region)?.flag}</span>
                       {v.denomination > 0 && (
                         <span className="text-[9px] bg-[#63f3f7]/10 border border-[#63f3f7]/20 text-[#63f3f7] px-1.5 py-0.5 rounded-lg font-black">
                           {v.denomination.toLocaleString()} ₽
