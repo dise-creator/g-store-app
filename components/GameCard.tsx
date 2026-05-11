@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { Heart } from "lucide-react"; 
 import { Game, getActiveDiscount, getDiscountedPrice } from "@/store/games";
@@ -17,6 +17,7 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
   const { toggleItem, isInWishlist } = useWishlistStore();
   const openModal = useGameModal((state) => state.openModal);
   const { region, getPrice } = useRegionStore();
+  const [imgError, setImgError] = useState(false);
   
   const isFavorite = isInWishlist ? isInWishlist(game.id) : false;
 
@@ -73,15 +74,23 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
         aria-label={`Открыть ${game.title}`}
       />
 
-      {/* Изображение — убран group-hover:border-[#63f3f7]/30 */}
+      {/* Изображение */}
       <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[2rem] border border-white/5 transition-all bg-[#161618]">
-        <Image 
-          src={game.image} 
-          alt={game.title} 
-          fill 
-          className="object-cover object-top transition-transform duration-700 group-hover:scale-110"
-          unoptimized 
-        />
+        {!imgError ? (
+          <Image 
+            src={game.image} 
+            alt={game.title} 
+            fill
+            sizes="(max-width: 640px) 65vw, (max-width: 768px) 30vw, (max-width: 1024px) 22vw, 16vw"
+            className="object-cover object-top transition-transform duration-700 group-hover:scale-110"
+            loading="lazy"
+            onError={() => setImgError(true)}
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center bg-[#161618]">
+            <span className="text-white/20 text-xs font-black uppercase">Нет фото</span>
+          </div>
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
         {hasDiscount && (
