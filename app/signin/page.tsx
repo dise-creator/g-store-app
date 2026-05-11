@@ -51,16 +51,6 @@ export default function SignInPage() {
   const [emailLoading, setEmailLoading] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [hoveredProvider, setHoveredProvider] = useState<string | null>(null);
-  const [isTelegramApp, setIsTelegramApp] = useState(false);
-
-  useEffect(() => {
-    const tg = (window as any).Telegram?.WebApp;
-    if (tg?.initData) {
-      setIsTelegramApp(true);
-      // Автоматически авторизуем если открыто в Mini App
-      window.location.href = "/";
-    }
-  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -69,35 +59,6 @@ export default function SignInPage() {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [router, showEmailModal]);
-
-  useEffect(() => {
-    if (isTelegramApp) return; // не грузим виджет в Mini App
-
-    (window as any).onTelegramAuth = async (user: any) => {
-      const res = await fetch("/api/auth/telegram", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(user),
-      });
-      if (res.ok) {
-        setTelegramUser(user);
-        setShowEmailModal(true);
-      }
-    };
-
-    const script = document.createElement("script");
-    script.src = "https://telegram.org/js/telegram-widget.js?22";
-    script.setAttribute("data-telegram-login", "clicps_bot");
-    script.setAttribute("data-size", "large");
-    script.setAttribute("data-auth-url", "https://clicps.ru/api/auth/telegram-redirect");
-    script.setAttribute("data-request-access", "write");
-    script.async = true;
-    document.getElementById("telegram-widget-hidden")?.appendChild(script);
-
-    return () => {
-      delete (window as any).onTelegramAuth;
-    };
-  }, [isTelegramApp]);
 
   const handleEmailSubmit = async () => {
     if (!email.includes("@")) {
@@ -150,17 +111,12 @@ export default function SignInPage() {
     textShadow: "0 1px 0 #00e6e6, 0 2px 0 #00cccc, 0 0 20px rgba(0, 255, 255, 0.8), 0 5px 12px rgba(0,0,0,0.6)"
   };
 
-  const allProviders = [
+  const providers = [
     { id: "yandex", label: "Яндекс", icon: <YandexIcon />, color: "#FC3F1D", bg: "rgba(252,63,29,0.12)" },
     { id: "google", label: "Google", icon: <GoogleIcon />, color: "#34a853", bg: "rgba(52,168,83,0.12)" },
     { id: "vk", label: "VK ID", icon: <VKIcon />, color: "#0077ff", bg: "rgba(0,119,255,0.12)" },
-    { id: "telegram", label: "Telegram", icon: <TelegramIcon />, color: "#29b6f6", bg: "rgba(41,182,246,0.12)" },
+    { id: "telegram", label: "Войти через бота", icon: <TelegramIcon />, color: "#29b6f6", bg: "rgba(41,182,246,0.12)" },
   ];
-
-  // Скрываем Telegram кнопку в Mini App
-  const providers = isTelegramApp
-    ? allProviders.filter(p => p.id !== "telegram")
-    : allProviders;
 
   return (
     <main className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[#050505] py-10">
@@ -169,8 +125,6 @@ export default function SignInPage() {
       <Link href="/" className="absolute top-6 right-6 p-3 bg-white/5 hover:bg-white/10 rounded-full border border-white/10 transition-all z-50 group">
         <X size={20} className="text-white/40 group-hover:text-[#00ffff] transition-colors" />
       </Link>
-
-      <div id="telegram-widget-hidden" className="hidden" />
 
       <div className="relative z-10 w-full max-w-[900px] mx-4 flex flex-col md:flex-row gap-6">
 
@@ -230,8 +184,7 @@ export default function SignInPage() {
                   key={provider.id}
                   onClick={() => {
                     if (provider.id === "telegram") {
-                      const iframe = document.querySelector("#telegram-widget-hidden iframe") as HTMLElement;
-                      if (iframe) iframe.click();
+                      window.open("https://t.me/clicps_bot", "_blank");
                     } else {
                       signIn(provider.id, { callbackUrl: "/" });
                     }
@@ -267,14 +220,21 @@ export default function SignInPage() {
                     className="relative z-10 font-black text-xs uppercase italic tracking-widest transition-colors duration-300"
                     style={{ color: isHovered ? provider.color : "rgba(255,255,255,0.5)" }}
                   >
-                    Войти через {provider.label}
+                    {provider.id === "telegram" ? provider.label : `Войти через ${provider.label}`}
                   </span>
                 </motion.button>
               );
             })}
           </div>
 
-          <p className="mt-8 text-center text-[8px] text-white/10 uppercase font-bold tracking-[0.2em]">
+          {/* Подсказка для Telegram */}
+          <div className="mt-4 p-3 bg-[#29b6f6]/5 border border-[#29b6f6]/15 rounded-2xl">
+            <p className="text-[#29b6f6]/60 text-[9px] text-center font-bold leading-relaxed">
+              При входе через Telegram откроется наш бот — авторизация произойдёт автоматически
+            </p>
+          </div>
+
+          <p className="mt-6 text-center text-[8px] text-white/10 uppercase font-bold tracking-[0.2em]">
             Нажмите <span className="text-white/20 border border-white/10 px-2 py-0.5 rounded mx-1">ESC</span> для отмены
           </p>
         </motion.div>
