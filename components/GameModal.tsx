@@ -170,7 +170,7 @@ export default function GameModal() {
       />
 
       <div
-        className="relative z-[210] w-full max-w-[1300px] bg-[#0a0f1e] md:border md:border-[#1a2a4a] md:rounded-[2.5rem] overflow-hidden flex flex-col md:flex-row shadow-2xl"
+        className="relative z-[210] w-full max-w-[1300px] bg-[#1d3a9e] md:border md:border-[#1a2a4a] md:rounded-[2.5rem] overflow-hidden flex flex-col md:flex-row shadow-2xl"
         style={{
           boxShadow: "0 0 80px rgba(0, 60, 160, 0.2)",
           height: "100dvh",
@@ -198,7 +198,7 @@ export default function GameModal() {
             />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-[#060b16]/80 via-transparent to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#0a0f1e]/30" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#1d3a9e]/30" />
 
           {screenshots.length > 1 && (
             <>
@@ -235,7 +235,7 @@ export default function GameModal() {
         </div>
 
         {/* ПРАВАЯ ЧАСТЬ */}
-        <div className="flex flex-col flex-1 overflow-y-auto no-scrollbar bg-[#0a0f1e]">
+        <div className="flex flex-col flex-1 overflow-y-auto no-scrollbar bg-[#1d3a9e]">
           <div className="flex flex-col flex-1 p-4 md:p-10 gap-3 md:gap-5 pb-0">
             {/* Бейджи */}
             <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
@@ -437,7 +437,7 @@ export default function GameModal() {
           </div>
 
           {/* Итого */}
-          <div className="sticky bottom-0 bg-[#0a0f1e] border-t border-white/5 p-4 md:p-10 md:pt-5">
+          <div className="sticky bottom-0 bg-[#1d3a9e] border-t border-white/5 p-4 md:p-10 md:pt-5">
             <div className="flex items-center justify-between mb-3">
               <div>
                 <span className="text-[9px] text-white/20 uppercase font-bold tracking-widest block">

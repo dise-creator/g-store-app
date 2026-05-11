@@ -142,7 +142,7 @@ export default function RegionSwitcher() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.95 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="absolute top-[calc(100%+8px)] left-0 z-[200] min-w-[160px] bg-[#0a0f1e] border border-white/10 rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.8)]"
+              className="absolute top-[calc(100%+8px)] left-0 z-[200] min-w-[160px] bg-[#1d3a9e] border border-white/10 rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.8)]"
             >
               {Object.values(REGIONS).map((r, i) => {
                 const isActive = region === r.code;

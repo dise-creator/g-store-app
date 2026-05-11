@@ -27,18 +27,24 @@ export const metadata: Metadata = {
   description: "Магазин цифровых карт пополнения PS5",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="ru" suppressHydrationWarning>
       <head>
         <script src="https://telegram.org/js/telegram-web-app.js" />
       </head>
-      <body className={`
+      <body
+        className={`
         ${nunito.variable}
         ${barlowCondensed.variable}
         ${bangers.variable}
-        antialiased text-white bg-[#00071a]
-      `}>
+        antialiased text-white bg-[#1d3a9e]
+      `}
+      >
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

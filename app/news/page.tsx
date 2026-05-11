@@ -61,8 +61,8 @@ function NewsPageCard({ item, index }: { item: NewsItem; index: number }) {
           className="object-cover transition-transform duration-700 group-hover:scale-105"
           unoptimized
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#0a0f1e]/60 hidden md:block" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1e]/80 to-transparent md:hidden" />
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#1d3a9e]/60 hidden md:block" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1d3a9e]/80 to-transparent md:hidden" />
         <div
           className={`absolute top-4 left-4 px-3 py-1.5 rounded-xl border text-[10px] font-black uppercase tracking-widest ${TAG_COLORS[item.tag] ?? "bg-white/10 text-white/50 border-white/10"}`}
         >

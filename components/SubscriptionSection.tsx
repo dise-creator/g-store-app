@@ -289,7 +289,7 @@ function PlanCard({
           ? "border-[#f5a623]/40 shadow-[0_0_40px_rgba(245,166,35,0.15)]"
           : "border-white/10 hover:border-white/20"
       }`}
-      style={{ background: "#0a0f1e" }}
+      style={{ background: "#1d3a9e" }}
     >
       {plan.popular && (
         <div className="absolute top-4 right-4 z-10 px-3 py-1 bg-[#f5a623] rounded-xl">
