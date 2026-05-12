@@ -49,7 +49,7 @@ export default function WishlistPage() {
           <div className="flex items-center gap-6">
             <Link
               href="/"
-              className="group flex items-center justify-center w-10 h-10 rounded-full border border-[#f5a623]/40 text-white/30 hover:text-[#f5a623] hover:border-[#f5a623]/40 hover:bg-[#f5a623]/5 transition-all"
+              className="group flex items-center justify-center w-10 h-10 rounded-full border border-[#ff6b00]/40 text-white/30 hover:text-[#ff6b00] hover:border-[#ff6b00]/40 hover:bg-[#ff6b00]/5 transition-all"
             >
               <ChevronLeft
                 size={20}
@@ -60,7 +60,7 @@ export default function WishlistPage() {
               <h1 className="text-3xl md:text-4xl font-michroma font-black uppercase tracking-tighter text-white">
                 ИЗБРАН
               </h1>
-              <h1 className="text-3xl md:text-4xl font-michroma font-black uppercase tracking-tighter text-[#f5a623] drop-shadow-[0_0_20px_rgba(99,243,247,0.4)]">
+              <h1 className="text-3xl md:text-4xl font-michroma font-black uppercase tracking-tighter text-[#ff6b00] drop-shadow-[0_0_20px_rgba(99,243,247,0.4)]">
                 НОЕ
               </h1>
             </div>
@@ -74,7 +74,7 @@ export default function WishlistPage() {
                 className={`flex items-center gap-2 px-4 py-3 rounded-2xl border text-xs font-black uppercase tracking-wider transition-all ${
                   confirmClear
                     ? "bg-red-500/20 border-red-500/40 text-red-400"
-                    : "bg-[#0a1860]/60 border-[#f5a623]/30 text-white/30 hover:bg-red-500/10 hover:border-red-500/20 hover:text-red-400"
+                    : "bg-[#0a1860]/60 border-[#ff6b00]/30 text-white/30 hover:bg-red-500/10 hover:border-red-500/20 hover:text-red-400"
                 }`}
               >
                 <Trash2 size={14} />
@@ -82,8 +82,8 @@ export default function WishlistPage() {
               </motion.button>
             )}
 
-            <div className="flex items-center gap-3 px-5 py-3 bg-[#0a1860]/60 border border-[#f5a623]/30 rounded-2xl">
-              <Heart size={16} className="text-[#f5a623] fill-[#00d68f]/20" />
+            <div className="flex items-center gap-3 px-5 py-3 bg-[#0a1860]/60 border border-[#ff6b00]/30 rounded-2xl">
+              <Heart size={16} className="text-[#ff6b00] fill-[#ff6b00]/20" />
               <span className="text-white font-michroma text-xl leading-none">
                 {items.length}
               </span>
@@ -126,7 +126,7 @@ export default function WishlistPage() {
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="h-[50vh] flex flex-col items-center justify-center text-center space-y-8 border border-[#f5a623]/30 rounded-[3rem] bg-white/[0.01]"
+                className="h-[50vh] flex flex-col items-center justify-center text-center space-y-8 border border-[#ff6b00]/30 rounded-[3rem] bg-white/[0.01]"
               >
                 <div className="relative">
                   <Heart size={80} className="text-white/[0.03]" />
@@ -141,7 +141,7 @@ export default function WishlistPage() {
                   </p>
                   <Link
                     href="/"
-                    className="inline-block px-10 py-4 bg-[#f5a623] text-black rounded-2xl font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-[0_0_40px_rgba(99,243,247,0.2)] text-sm"
+                    className="inline-block px-10 py-4 bg-[#ff6b00] text-black rounded-2xl font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-[0_0_40px_rgba(99,243,247,0.2)] text-sm"
                   >
                     Перейти к покупкам
                   </Link>

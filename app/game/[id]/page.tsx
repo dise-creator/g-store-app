@@ -21,7 +21,7 @@ export default function GamePage({ params }: GamePageProps) {
       <div className="max-w-[1200px] mx-auto">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-white/30 hover:text-[#f5a623] mb-12 transition-colors group"
+          className="inline-flex items-center gap-2 text-white/30 hover:text-[#ff6b00] mb-12 transition-colors group"
         >
           <ChevronLeft
             size={20}
@@ -34,7 +34,7 @@ export default function GamePage({ params }: GamePageProps) {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
           {/* Левая колонка: Изображение */}
-          <div className="relative aspect-[3/4] w-full rounded-[2.5rem] overflow-hidden border border-[#f5a623]/40 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+          <div className="relative aspect-[3/4] w-full rounded-[2.5rem] overflow-hidden border border-[#ff6b00]/40 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
             <Image
               src={game.image}
               alt={game.title}
@@ -51,7 +51,7 @@ export default function GamePage({ params }: GamePageProps) {
               <h1 className="text-4xl md:text-6xl font-michroma font-black text-white uppercase  leading-tight">
                 {game.title}
               </h1>
-              <div className="h-1 w-24 bg-[#f5a623]" />
+              <div className="h-1 w-24 bg-[#ff6b00]" />
             </div>
 
             <p className="text-white/60 text-lg font-light leading-relaxed">
@@ -62,10 +62,10 @@ export default function GamePage({ params }: GamePageProps) {
               <span className="text-5xl font-michroma text-white">
                 {game.price.toLocaleString()}
               </span>
-              <span className="text-2xl font-michroma text-[#f5a623]">₽</span>
+              <span className="text-2xl font-michroma text-[#ff6b00]">₽</span>
             </div>
 
-            <button className="group relative w-full h-20 bg-[#f5a623] text-black rounded-2xl font-black uppercase  tracking-widest overflow-hidden transition-all hover:scale-[1.02] active:scale-95">
+            <button className="group relative w-full h-20 bg-[#ff6b00] text-black rounded-2xl font-black uppercase  tracking-widest overflow-hidden transition-all hover:scale-[1.02] active:scale-95">
               <div className="relative z-10 flex items-center justify-center gap-3">
                 <ShoppingCart size={24} />
                 <span>Купить сейчас</span>
@@ -73,7 +73,7 @@ export default function GamePage({ params }: GamePageProps) {
               <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity" />
             </button>
 
-            <div className="p-6 rounded-2xl bg-white/5 border border-[#f5a623]/40 text-white/40 text-xs uppercase tracking-widest font-michroma">
+            <div className="p-6 rounded-2xl bg-white/5 border border-[#ff6b00]/40 text-white/40 text-xs uppercase tracking-widest font-michroma">
               Мгновенная доставка на email • Лицензионный ключ
             </div>
           </div>

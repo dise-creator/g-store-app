@@ -58,7 +58,7 @@ export default function AnimatedBackground() {
           scale: [1, 1.05, 1],
         }}
         transition={{ duration: 32, repeat: Infinity, ease: "linear" }}
-        className="absolute top-[30%] left-[30%] w-[40%] h-[40%] bg-[#f5a623]/[0.05] blur-[120px] rounded-full"
+        className="absolute top-[30%] left-[30%] w-[40%] h-[40%] bg-[#ff6b00]/[0.05] blur-[120px] rounded-full"
       />
       <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#80808010_1px,transparent_1px),linear-gradient(to_bottom,#80808010_1px,transparent_1px)] bg-[size:80px_80px]" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,#080f1e_100%)] opacity-40" />

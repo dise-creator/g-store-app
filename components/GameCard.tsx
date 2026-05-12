@@ -52,13 +52,13 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
       <button
         onClick={handleHeartClick}
         type="button"
-        className="absolute top-3 right-3 z-[60] w-9 h-9 flex items-center justify-center bg-black/40 backdrop-blur-md rounded-xl border border-[#f5a623]/40 text-white/40 hover:text-[#f5a623] transition-all active:scale-90"
+        className="absolute top-3 right-3 z-[60] w-9 h-9 flex items-center justify-center bg-black/40 backdrop-blur-md rounded-xl border border-[#ff6b00]/40 text-white/40 hover:text-[#ff6b00] transition-all active:scale-90"
       >
         <Heart
           size={16}
           className={
             isFavorite
-              ? "fill-[#00d68f] text-[#f5a623] drop-shadow-[0_0_5px_#00d68f]"
+              ? "fill-[#ff6b00] text-[#ff6b00] drop-shadow-[0_0_5px_#ff6b00]"
               : ""
           }
         />
@@ -73,7 +73,7 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
       )}
 
       <div
-        className={`absolute z-[60] flex items-center gap-1 px-2 py-1 bg-black/60 backdrop-blur-md rounded-lg border border-[#f5a623]/40 ${
+        className={`absolute z-[60] flex items-center gap-1 px-2 py-1 bg-black/60 backdrop-blur-md rounded-lg border border-[#ff6b00]/40 ${
           hasDiscount ? "top-12 left-3" : "top-3 left-3"
         }`}
       >
@@ -90,7 +90,7 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
         aria-label={`Открыть ${game.title}`}
       />
 
-      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[2rem] border border-[#f5a623]/30 transition-all bg-[#161618]">
+      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[2rem] border border-[#ff6b00]/30 transition-all bg-[#161618]">
         {!imgError ? (
           <Image
             src={game.image}
@@ -135,7 +135,7 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
               {displayPrice.toLocaleString()}
             </span>
             <span
-              className={`font-michroma text-[10px] mt-1 ${hasDiscount ? "text-red-400" : "text-[#f5a623]"}`}
+              className={`font-michroma text-[10px] mt-1 ${hasDiscount ? "text-red-400" : "text-[#ff6b00]"}`}
             >
               ₽
             </span>

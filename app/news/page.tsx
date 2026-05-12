@@ -23,7 +23,7 @@ interface NewsItem {
 const TAG_COLORS: Record<string, string> = {
   Обновление: "bg-blue-500/20 text-blue-400 border-blue-500/30",
   Скидки: "bg-red-500/20 text-red-400 border-red-500/30",
-  Анонс: "bg-[#f5a623]/10 text-[#f5a623] border-[#f5a623]/40",
+  Анонс: "bg-[#ff6b00]/10 text-[#ff6b00] border-[#ff6b00]/40",
 };
 
 function NewsPageCard({ item, index }: { item: NewsItem; index: number }) {
@@ -51,7 +51,7 @@ function NewsPageCard({ item, index }: { item: NewsItem; index: number }) {
         duration: 0.5,
         ease: [0.25, 0.46, 0.45, 0.94],
       }}
-      className="group flex flex-col md:flex-row bg-[#0a1860]/60 border border-[#f5a623]/30 rounded-[2.5rem] overflow-hidden hover:border-[#f5a623]/40 hover:bg-white/[0.05] transition-all"
+      className="group flex flex-col md:flex-row bg-[#0a1860]/60 border border-[#ff6b00]/30 rounded-[2.5rem] overflow-hidden hover:border-[#ff6b00]/40 hover:bg-white/[0.05] transition-all"
     >
       <div className="relative w-full md:w-96 h-56 md:h-auto shrink-0 overflow-hidden">
         <Image
@@ -64,7 +64,7 @@ function NewsPageCard({ item, index }: { item: NewsItem; index: number }) {
         <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#0d1f6e]/60 hidden md:block" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0d1f6e]/80 to-transparent md:hidden" />
         <div
-          className={`absolute top-4 left-4 px-3 py-1.5 rounded-xl border text-[10px] font-black uppercase tracking-widest ${TAG_COLORS[item.tag] ?? "bg-white/10 text-white/50 border-[#f5a623]/40"}`}
+          className={`absolute top-4 left-4 px-3 py-1.5 rounded-xl border text-[10px] font-black uppercase tracking-widest ${TAG_COLORS[item.tag] ?? "bg-white/10 text-white/50 border-[#ff6b00]/40"}`}
         >
           {item.tag}
         </div>
@@ -88,9 +88,9 @@ function NewsPageCard({ item, index }: { item: NewsItem; index: number }) {
         </div>
 
         {linkedGame && displayPrice !== null && (
-          <div className="flex items-center justify-between gap-4 pt-6 border-t border-[#f5a623]/30">
+          <div className="flex items-center justify-between gap-4 pt-6 border-t border-[#ff6b00]/30">
             <div className="flex items-center gap-4">
-              <div className="relative w-14 h-14 rounded-2xl overflow-hidden border border-[#f5a623]/40 shrink-0">
+              <div className="relative w-14 h-14 rounded-2xl overflow-hidden border border-[#ff6b00]/40 shrink-0">
                 <Image
                   src={linkedGame.image}
                   alt={linkedGame.title}
@@ -106,7 +106,7 @@ function NewsPageCard({ item, index }: { item: NewsItem; index: number }) {
                 <p className="text-white font-black text-base uppercase">
                   {linkedGame.title}
                 </p>
-                <p className="text-[#f5a623] text-xl font-black">
+                <p className="text-[#ff6b00] text-xl font-black">
                   {displayPrice.toLocaleString()} ₽
                 </p>
               </div>
@@ -116,8 +116,8 @@ function NewsPageCard({ item, index }: { item: NewsItem; index: number }) {
               onClick={handleAdd}
               className={`shrink-0 flex items-center gap-2.5 px-6 py-4 rounded-2xl text-sm font-black uppercase tracking-wider transition-all ${
                 added
-                  ? "bg-[#f5a623] text-black shadow-[0_0_25px_rgba(99,243,247,0.3)]"
-                  : "bg-white/5 border border-[#f5a623]/40 text-white/50 hover:bg-[#f5a623]/10 hover:border-[#f5a623]/30 hover:text-[#f5a623]"
+                  ? "bg-[#ff6b00] text-black shadow-[0_0_25px_rgba(99,243,247,0.3)]"
+                  : "bg-white/5 border border-[#ff6b00]/40 text-white/50 hover:bg-[#ff6b00]/10 hover:border-[#ff6b00]/30 hover:text-[#ff6b00]"
               }`}
             >
               {added ? <Check size={16} /> : <ShoppingCart size={16} />}
@@ -151,7 +151,7 @@ export default function NewsPage() {
         <div className="flex items-center gap-6 mb-12">
           <Link
             href="/"
-            className="group flex items-center justify-center w-10 h-10 rounded-full border border-[#f5a623]/40 text-white/30 hover:text-[#f5a623] hover:border-[#f5a623]/40 hover:bg-[#f5a623]/5 transition-all shrink-0"
+            className="group flex items-center justify-center w-10 h-10 rounded-full border border-[#ff6b00]/40 text-white/30 hover:text-[#ff6b00] hover:border-[#ff6b00]/40 hover:bg-[#ff6b00]/5 transition-all shrink-0"
           >
             <ChevronLeft
               size={20}
@@ -162,7 +162,7 @@ export default function NewsPage() {
             <h1 className="text-3xl md:text-4xl font-michroma font-black uppercase tracking-tighter text-white">
               ИГ
             </h1>
-            <h1 className="text-3xl md:text-4xl font-michroma font-black uppercase tracking-tighter text-[#f5a623] drop-shadow-[0_0_20px_rgba(99,243,247,0.4)]">
+            <h1 className="text-3xl md:text-4xl font-michroma font-black uppercase tracking-tighter text-[#ff6b00] drop-shadow-[0_0_20px_rgba(99,243,247,0.4)]">
               РОВЫЕ НОВОСТИ
             </h1>
           </div>

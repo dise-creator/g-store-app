@@ -180,7 +180,7 @@ export default function GameModal() {
         {/* Закрытие */}
         <button
           onClick={closeModal}
-          className="absolute top-4 right-4 z-[250] w-9 h-9 flex items-center justify-center bg-white/10 hover:bg-red-500/20 border border-[#f5a623]/40 rounded-full text-white/50 hover:text-red-400 transition-all"
+          className="absolute top-4 right-4 z-[250] w-9 h-9 flex items-center justify-center bg-white/10 hover:bg-red-500/20 border border-[#ff6b00]/40 rounded-full text-white/50 hover:text-red-400 transition-all"
         >
           <X size={18} />
         </button>
@@ -204,13 +204,13 @@ export default function GameModal() {
             <>
               <button
                 onClick={prevSlide}
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/50 backdrop-blur-xl border border-[#f5a623]/40 rounded-full text-white flex items-center justify-center transition-all hover:bg-[#f5a623] hover:text-black"
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/50 backdrop-blur-xl border border-[#ff6b00]/40 rounded-full text-white flex items-center justify-center transition-all hover:bg-[#ff6b00] hover:text-black"
               >
                 <ChevronLeft size={18} />
               </button>
               <button
                 onClick={nextSlide}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/50 backdrop-blur-xl border border-[#f5a623]/40 rounded-full text-white flex items-center justify-center transition-all hover:bg-[#f5a623] hover:text-black"
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/50 backdrop-blur-xl border border-[#ff6b00]/40 rounded-full text-white flex items-center justify-center transition-all hover:bg-[#ff6b00] hover:text-black"
               >
                 <ChevronRight size={18} />
               </button>
@@ -219,7 +219,7 @@ export default function GameModal() {
                   <button
                     key={idx}
                     onClick={() => setCurrentSlide(idx)}
-                    className={`h-1 rounded-full transition-all duration-300 ${idx === currentSlide ? "w-8 bg-[#f5a623]" : "w-2 bg-white/20"}`}
+                    className={`h-1 rounded-full transition-all duration-300 ${idx === currentSlide ? "w-8 bg-[#ff6b00]" : "w-2 bg-white/20"}`}
                   />
                 ))}
               </div>
@@ -245,21 +245,21 @@ export default function GameModal() {
                   PS5
                 </span>
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white/5 rounded-xl border border-[#f5a623]/30 shrink-0">
-                <ShieldCheck size={11} className="text-[#f5a623]" />
+              <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white/5 rounded-xl border border-[#ff6b00]/30 shrink-0">
+                <ShieldCheck size={11} className="text-[#ff6b00]" />
                 <span className="text-[9px] text-white/50 uppercase font-bold tracking-widest">
                   Карта пополнения
                 </span>
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white/5 rounded-xl border border-[#f5a623]/30 shrink-0">
-                <Zap size={11} className="text-[#f5a623]" />
+              <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white/5 rounded-xl border border-[#ff6b00]/30 shrink-0">
+                <Zap size={11} className="text-[#ff6b00]" />
                 <span className="text-[9px] text-white/50 uppercase font-bold tracking-widest">
                   Моментально
                 </span>
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#f5a623]/10 border border-[#f5a623]/40 rounded-xl shrink-0">
+              <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#ff6b00]/10 border border-[#ff6b00]/40 rounded-xl shrink-0">
                 <span className="text-sm">{currentRegion.flag}</span>
-                <span className="text-[9px] text-[#f5a623] uppercase font-black tracking-widest">
+                <span className="text-[9px] text-[#ff6b00] uppercase font-black tracking-widest">
                   {currentRegion.name}
                 </span>
               </div>
@@ -302,8 +302,8 @@ export default function GameModal() {
                       onClick={() => setSelectedEditionIndex(index)}
                       className={`flex flex-col p-3 md:p-4 rounded-2xl border transition-all text-left ${
                         isSelected
-                          ? "bg-blue-900/20 border-[#f5a623] shadow-[0_0_25px_rgba(99,243,247,0.08)]"
-                          : "border-[#f5a623]/30 hover:border-white/15 bg-[#0a1860]/40"
+                          ? "bg-blue-900/20 border-[#ff6b00] shadow-[0_0_25px_rgba(99,243,247,0.08)]"
+                          : "border-[#ff6b00]/30 hover:border-white/15 bg-[#0a1860]/40"
                       }`}
                     >
                       <div className="flex justify-between items-center w-full gap-2">
@@ -317,7 +317,7 @@ export default function GameModal() {
                             {edition.price.toLocaleString()} ₽
                           </span>
                           <span
-                            className={`font-black text-base ${isSelected ? "text-[#f5a623]" : "text-white/20"}`}
+                            className={`font-black text-base ${isSelected ? "text-[#ff6b00]" : "text-white/20"}`}
                           >
                             {editionDisplayPrice.toLocaleString()} ₽
                           </span>
@@ -329,7 +329,7 @@ export default function GameModal() {
                           {edition.cards.map((card: Card, cIdx: number) => (
                             <div
                               key={cIdx}
-                              className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-[9px] font-black ${isSelected ? "bg-[#f5a623]/10 border-[#f5a623]/40 text-[#f5a623]" : "bg-[#0a1860]/60 border-[#f5a623]/30 text-white/20"}`}
+                              className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-[9px] font-black ${isSelected ? "bg-[#ff6b00]/10 border-[#ff6b00]/40 text-[#ff6b00]" : "bg-[#0a1860]/60 border-[#ff6b00]/30 text-white/20"}`}
                             >
                               <CreditCard size={9} />
                               {card.quantity > 1 && (
@@ -388,7 +388,7 @@ export default function GameModal() {
                           ? "bg-blue-900/20 border-blue-700/40"
                           : idx === 0
                             ? "bg-green-500/10 border-green-500/20"
-                            : "bg-[#0a1860]/40 border-[#f5a623]/30"
+                            : "bg-[#0a1860]/40 border-[#ff6b00]/30"
                       }`}
                     >
                       <div className="flex items-center gap-1.5">
@@ -411,7 +411,7 @@ export default function GameModal() {
             )}
 
             {/* Инструкция — только десктоп */}
-            <div className="hidden md:flex items-center gap-4 p-4 bg-[#0a1860]/40 border border-[#f5a623]/30 rounded-2xl overflow-x-auto no-scrollbar">
+            <div className="hidden md:flex items-center gap-4 p-4 bg-[#0a1860]/40 border border-[#ff6b00]/30 rounded-2xl overflow-x-auto no-scrollbar">
               {[
                 { step: "1", text: "Купи карту PSN" },
                 { step: "2", text: "Получи код" },
@@ -419,8 +419,8 @@ export default function GameModal() {
               ].map((item, i) => (
                 <React.Fragment key={item.step}>
                   <div className="flex items-center gap-2 shrink-0">
-                    <div className="w-6 h-6 rounded-full bg-[#f5a623]/10 border border-[#f5a623]/40 flex items-center justify-center shrink-0">
-                      <span className="text-[#f5a623] text-[8px] font-black">
+                    <div className="w-6 h-6 rounded-full bg-[#ff6b00]/10 border border-[#ff6b00]/40 flex items-center justify-center shrink-0">
+                      <span className="text-[#ff6b00] text-[8px] font-black">
                         {item.step}
                       </span>
                     </div>
@@ -437,13 +437,13 @@ export default function GameModal() {
           </div>
 
           {/* Итого */}
-          <div className="sticky bottom-0 bg-[#0d1f6e] border-t border-[#f5a623]/30 p-4 md:p-10 md:pt-5">
+          <div className="sticky bottom-0 bg-[#0d1f6e] border-t border-[#ff6b00]/30 p-4 md:p-10 md:pt-5">
             <div className="flex items-center justify-between mb-3">
               <div>
                 <span className="text-[9px] text-white/20 uppercase font-bold tracking-widest block">
                   Итого к оплате
                 </span>
-                <span className="text-[#f5a623] text-[10px] font-black mt-0.5 block">
+                <span className="text-[#ff6b00] text-[10px] font-black mt-0.5 block">
                   Экономия {savings.toLocaleString()} ₽ {currentRegion.flag}
                 </span>
               </div>
@@ -455,7 +455,7 @@ export default function GameModal() {
                   <span className="font-black text-3xl md:text-5xl text-white">
                     {displayPrice.toLocaleString()}
                   </span>
-                  <span className="text-[#f5a623] font-black text-base md:text-xl">
+                  <span className="text-[#ff6b00] font-black text-base md:text-xl">
                     ₽
                   </span>
                 </div>
@@ -483,10 +483,10 @@ export default function GameModal() {
                 whileTap={{ scale: 0.97 }}
                 className={`group relative w-full h-14 md:h-16 rounded-2xl flex items-center justify-center gap-3 transition-all overflow-hidden text-sm ${
                   isAdded
-                    ? "bg-[#f5a623] shadow-[0_0_30px_rgba(99,243,247,0.4)]"
+                    ? "bg-[#ff6b00] shadow-[0_0_30px_rgba(99,243,247,0.4)]"
                     : showCardAnimation
-                      ? "bg-[#f5a623]/50 cursor-wait"
-                      : "bg-[#f5a623] hover:shadow-[0_0_30px_rgba(99,243,247,0.3)]"
+                      ? "bg-[#ff6b00]/50 cursor-wait"
+                      : "bg-[#ff6b00] hover:shadow-[0_0_30px_rgba(99,243,247,0.3)]"
                 }`}
               >
                 <div

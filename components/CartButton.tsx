@@ -85,8 +85,8 @@ export default function CartButton({
         <div
           className={`absolute inset-0 rounded-2xl transition-all duration-500 ${
             isEmpty
-              ? "bg-white/[0.05] border border-[#f5a623]/40"
-              : "bg-[#00FFFF] border border-[#00FFFF]/50"
+              ? "bg-white/[0.05] border border-[#ff6b00]/40"
+              : "bg-[#ff6b00] border border-[#ff6b00]/50"
           }`}
         />
 
@@ -97,7 +97,7 @@ export default function CartButton({
               animate={{ opacity: 1, scale: 1.3 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.4 }}
-              className="absolute inset-0 rounded-2xl bg-[#00FFFF]/40 blur-xl"
+              className="absolute inset-0 rounded-2xl bg-[#ff6b00]/40 blur-xl"
             />
           )}
         </AnimatePresence>
@@ -129,7 +129,7 @@ export default function CartButton({
               animate={{ opacity: 0, scale: 0, x: p.x, y: p.y }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
-              className="absolute left-1/2 top-1/2 w-1.5 h-1.5 rounded-full bg-[#00FFFF] pointer-events-none"
+              className="absolute left-1/2 top-1/2 w-1.5 h-1.5 rounded-full bg-[#ff6b00] pointer-events-none"
               style={{ zIndex: 20 }}
             />
           ))}
@@ -159,7 +159,7 @@ export default function CartButton({
                   animate={{ scale: 1, rotate: 0, y: 0 }}
                   exit={{ scale: 0, rotate: 180 }}
                   transition={{ type: "spring", stiffness: 500, damping: 20 }}
-                  className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] bg-black text-[#00FFFF] text-[8px] font-black flex items-center justify-center rounded-full border border-[#00FFFF]/60 px-1"
+                  className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] bg-black text-[#ff6b00] text-[8px] font-black flex items-center justify-center rounded-full border border-[#ff6b00]/60 px-1"
                 >
                   {totalItems}
                 </motion.div>
@@ -206,7 +206,7 @@ export default function CartButton({
             >
               <Zap
                 size={14}
-                className="text-[#00FFFF] fill-[#00FFFF] drop-shadow-[0_0_6px_#00FFFF]"
+                className="text-[#ff6b00] fill-[#ff6b00] drop-shadow-[0_0_6px_#ff6b00]"
               />
             </motion.div>
           )}
@@ -223,12 +223,12 @@ export default function CartButton({
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            className="absolute top-[calc(100%+14px)] right-0 w-[420px] bg-[#0a0a0c] border border-[#f5a623]/40 rounded-[2rem] shadow-[0_30px_80px_rgba(0,0,0,0.7)] overflow-hidden z-[200]"
+            className="absolute top-[calc(100%+14px)] right-0 w-[420px] bg-[#0a0a0c] border border-[#ff6b00]/40 rounded-[2rem] shadow-[0_30px_80px_rgba(0,0,0,0.7)] overflow-hidden z-[200]"
           >
-            <div className="px-6 py-5 border-b border-[#f5a623]/30 flex items-center justify-between">
+            <div className="px-6 py-5 border-b border-[#ff6b00]/30 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-xl bg-[#00FFFF]/10 border border-[#00FFFF]/20 flex items-center justify-center">
-                  <ShoppingBag size={15} className="text-[#00FFFF]" />
+                <div className="w-8 h-8 rounded-xl bg-[#ff6b00]/10 border border-[#ff6b00]/20 flex items-center justify-center">
+                  <ShoppingBag size={15} className="text-[#ff6b00]" />
                 </div>
                 <div>
                   <p className="text-white font-black uppercase text-sm tracking-widest">
@@ -242,7 +242,7 @@ export default function CartButton({
               </div>
               <button
                 onClick={() => setIsHovered(false)}
-                className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 border border-[#f5a623]/40 flex items-center justify-center text-white/30 hover:text-white transition-all"
+                className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 border border-[#ff6b00]/40 flex items-center justify-center text-white/30 hover:text-white transition-all"
               >
                 <X size={14} />
               </button>
@@ -259,7 +259,7 @@ export default function CartButton({
                     transition={{ delay: idx * 0.04 }}
                     className="flex items-center gap-4 px-6 py-3.5 hover:bg-[#0a1860]/60 transition-all group/item"
                   >
-                    <div className="w-14 h-14 rounded-xl overflow-hidden border border-[#f5a623]/30 shrink-0">
+                    <div className="w-14 h-14 rounded-xl overflow-hidden border border-[#ff6b00]/30 shrink-0">
                       <Image
                         src={item.image}
                         alt={item.title}
@@ -275,7 +275,7 @@ export default function CartButton({
                         {item.title}
                       </p>
                       <div className="flex items-center gap-2 mt-1.5">
-                        <p className="text-[#00FFFF] text-sm font-black">
+                        <p className="text-[#ff6b00] text-sm font-black">
                           {(item.price * item.quantity).toLocaleString()} ₽
                         </p>
                         {item.quantity > 1 && (
@@ -300,7 +300,7 @@ export default function CartButton({
               </AnimatePresence>
             </div>
 
-            <div className="px-6 py-5 bg-[#0a1860]/40 border-t border-[#f5a623]/30">
+            <div className="px-6 py-5 bg-[#0a1860]/40 border-t border-[#ff6b00]/30">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-white/30 text-[10px] uppercase font-black tracking-widest">
                   Итого к оплате
@@ -309,7 +309,7 @@ export default function CartButton({
                   <span className="text-white font-black text-2xl">
                     {totalAmount.toLocaleString()}
                   </span>
-                  <span className="text-[#00FFFF] font-black text-sm">₽</span>
+                  <span className="text-[#ff6b00] font-black text-sm">₽</span>
                 </div>
               </div>
               <button
@@ -317,7 +317,7 @@ export default function CartButton({
                   setIsHovered(false);
                   onClick();
                 }}
-                className="w-full py-3.5 bg-[#00FFFF] text-black font-black text-xs uppercase tracking-[0.2em] rounded-xl hover:shadow-[0_0_25px_rgba(0,255,255,0.3)] transition-all active:scale-95"
+                className="w-full py-3.5 bg-[#ff6b00] text-black font-black text-xs uppercase tracking-[0.2em] rounded-xl hover:shadow-[0_0_25px_rgba(255,107,0,0.3)] transition-all active:scale-95"
               >
                 Оформить заказ →
               </button>

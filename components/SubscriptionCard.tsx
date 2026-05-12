@@ -42,7 +42,7 @@ export default function SubscriptionCard({
   return (
     <button
       onClick={handleAdd}
-      className="group relative overflow-hidden rounded-[2.5rem] bg-white/5 border border-[#f5a623]/30 p-8 transition-all hover:scale-[1.02] active:scale-95 cursor-pointer text-left w-full"
+      className="group relative overflow-hidden rounded-[2.5rem] bg-white/5 border border-[#ff6b00]/30 p-8 transition-all hover:scale-[1.02] active:scale-95 cursor-pointer text-left w-full"
     >
       <div
         className="absolute -right-20 -top-20 w-64 h-64 blur-[100px] opacity-20 transition-opacity group-hover:opacity-40"
@@ -54,7 +54,7 @@ export default function SubscriptionCard({
           <div className="w-20 h-20 relative rounded-2xl overflow-hidden shadow-2xl bg-black/20">
             <Image src={image} alt={title} fill className="object-cover" />
           </div>
-          <div className="bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full flex items-center gap-2 border border-[#f5a623]/40">
+          <div className="bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full flex items-center gap-2 border border-[#ff6b00]/40">
             <Zap size={14} className="text-yellow-400 fill-yellow-400" />
             <span className="text-[10px] font-black uppercase tracking-widest text-white">
               {duration}

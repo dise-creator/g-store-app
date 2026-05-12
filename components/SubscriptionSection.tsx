@@ -67,8 +67,8 @@ const plans: Plan[] = [
     id: "extra",
     name: "Extra",
     basePrice: 1415,
-    gradient: "from-[#f5a623] via-[#f0c040] to-[#e8920a]",
-    accentColor: "#f5a623",
+    gradient: "from-[#ff6b00] via-[#f0c040] to-[#e8920a]",
+    accentColor: "#ff6b00",
     popular: true,
     features: [
       "Всё что есть в Essential",
@@ -82,7 +82,7 @@ const plans: Plan[] = [
     name: "Deluxe",
     basePrice: 1655,
     gradient: "from-[#2a1f0a] via-[#4a3510] to-[#2a1f0a]",
-    accentColor: "#f5a623",
+    accentColor: "#ff6b00",
     features: [
       "Всё из Essential и Extra",
       "Каталог классических хитов Sony",
@@ -138,13 +138,13 @@ export default function SubscriptionSection() {
       className="w-full relative rounded-[2rem] md:rounded-[3rem] overflow-hidden py-8 md:py-10 px-4 md:px-8"
       style={{
         background: "#08113d",
-        border: "1px solid rgba(:245, 166, 35, 0.35)",
+        border: "1px solid rgba(:255, 107, 0, 0.35)",
         boxShadow:
-          "inset 0 0 80px rgba(0,20,80,0.3), 0 0 40px rgba(:245, 166, 35, 0.05)",
+          "inset 0 0 80px rgba(0,20,80,0.3), 0 0 40px rgba(:255, 107, 0, 0.05)",
       }}
     >
       <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/5 blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#f5a623]/[0.03] blur-[100px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#ff6b00]/[0.03] blur-[100px] rounded-full pointer-events-none" />
 
       <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <div>
@@ -154,7 +154,7 @@ export default function SubscriptionSection() {
           <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter">
             <span className="text-white">ПОДПИСКИ </span>
             <span
-              className="text-[#f5a623]"
+              className="text-[#ff6b00]"
               style={{ textShadow: "0 0 30px rgba(0,214,143,0.4)" }}
             >
               PS PLUS
@@ -162,7 +162,7 @@ export default function SubscriptionSection() {
           </h2>
         </div>
 
-        <div className="flex items-center gap-1 p-1 bg-[#060e30] border border-[#f5a623]/40 rounded-2xl self-start md:self-auto">
+        <div className="flex items-center gap-1 p-1 bg-[#060e30] border border-[#ff6b00]/40 rounded-2xl self-start md:self-auto">
           {periods.map((period) => (
             <button
               key={period.id}
@@ -172,7 +172,7 @@ export default function SubscriptionSection() {
               {activePeriod === period.id && (
                 <motion.div
                   layoutId="period-bg"
-                  className="absolute inset-0 bg-[#f5a623] rounded-xl"
+                  className="absolute inset-0 bg-[#ff6b00] rounded-xl"
                   transition={{ type: "spring", damping: 25, stiffness: 300 }}
                 />
               )}
@@ -235,7 +235,7 @@ export default function SubscriptionSection() {
         <div className="flex items-center justify-center gap-4 mt-5">
           <button
             onClick={() => scrollToCard(Math.max(0, activePlan - 1))}
-            className="w-9 h-9 rounded-xl bg-[#060e30] border border-[#f5a623]/40 flex items-center justify-center text-white/40 hover:text-[#f5a623] transition-all active:scale-90"
+            className="w-9 h-9 rounded-xl bg-[#060e30] border border-[#ff6b00]/40 flex items-center justify-center text-white/40 hover:text-[#ff6b00] transition-all active:scale-90"
           >
             <ChevronLeft size={16} />
           </button>
@@ -244,7 +244,7 @@ export default function SubscriptionSection() {
               <button
                 key={i}
                 onClick={() => scrollToCard(i)}
-                className={`h-1.5 rounded-full transition-all duration-300 ${i === activePlan ? "w-8 bg-[#f5a623]" : "w-2 bg-white/20"}`}
+                className={`h-1.5 rounded-full transition-all duration-300 ${i === activePlan ? "w-8 bg-[#ff6b00]" : "w-2 bg-white/20"}`}
               />
             ))}
           </div>
@@ -252,7 +252,7 @@ export default function SubscriptionSection() {
             onClick={() =>
               scrollToCard(Math.min(plans.length - 1, activePlan + 1))
             }
-            className="w-9 h-9 rounded-xl bg-[#060e30] border border-[#f5a623]/40 flex items-center justify-center text-white/40 hover:text-[#f5a623] transition-all active:scale-90"
+            className="w-9 h-9 rounded-xl bg-[#060e30] border border-[#ff6b00]/40 flex items-center justify-center text-white/40 hover:text-[#ff6b00] transition-all active:scale-90"
           >
             <ChevronRight size={16} />
           </button>
@@ -281,13 +281,13 @@ function PlanCard({
       animate={{ opacity: 1, y: 0 }}
       className={`relative flex flex-col rounded-[2rem] border overflow-hidden transition-all duration-300 hover:scale-[1.02] ${
         plan.popular
-          ? "border-[#f5a623]/40 shadow-[0_0_40px_rgba(245,166,35,0.15)]"
-          : "border-[#f5a623]/30 hover:border-[#f5a623]/50"
+          ? "border-[#ff6b00]/40 shadow-[0_0_40px_rgba(245,166,35,0.15)]"
+          : "border-[#ff6b00]/30 hover:border-[#ff6b00]/50"
       }`}
       style={{ background: "#0a1650" }}
     >
       {plan.popular && (
-        <div className="absolute top-4 right-4 z-10 px-3 py-1 bg-[#f5a623] rounded-xl">
+        <div className="absolute top-4 right-4 z-10 px-3 py-1 bg-[#ff6b00] rounded-xl">
           <span className="text-black text-[8px] font-black uppercase tracking-widest">
             Популярное
           </span>
@@ -324,7 +324,7 @@ function PlanCard({
               <span className="text-white font-black text-3xl">
                 {price.toLocaleString()}
               </span>
-              <span className="text-[#f5a623] font-black text-sm">₽</span>
+              <span className="text-[#ff6b00] font-black text-sm">₽</span>
             </div>
             <p className="text-white/30 text-xs font-bold mt-0.5">
               PS Plus {plan.name} · {currentPeriod.fullLabel}
@@ -359,10 +359,10 @@ function PlanCard({
           whileTap={{ scale: 0.97 }}
           className={`w-full py-4 rounded-2xl font-black text-xs uppercase tracking-[0.15em] transition-all flex items-center justify-center gap-2 ${
             isAdded
-              ? "bg-[#f5a623] text-black shadow-[0_0_20px_rgba(0,214,143,0.3)]"
+              ? "bg-[#ff6b00] text-black shadow-[0_0_20px_rgba(0,214,143,0.3)]"
               : plan.popular
-                ? "bg-[#f5a623] text-black hover:shadow-[0_0_30px_rgba(245,166,35,0.3)]"
-                : "bg-[#060e30] border border-[#f5a623]/40 text-white hover:bg-[#0a1650] hover:border-[#f5a623]/60 hover:text-[#f5a623]"
+                ? "bg-[#ff6b00] text-black hover:shadow-[0_0_30px_rgba(245,166,35,0.3)]"
+                : "bg-[#060e30] border border-[#ff6b00]/40 text-white hover:bg-[#0a1650] hover:border-[#ff6b00]/60 hover:text-[#ff6b00]"
           }`}
         >
           {isAdded ? (

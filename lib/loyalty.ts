@@ -50,7 +50,7 @@ export function getLoyaltyInfo(totalSpent: number): LoyaltyInfo {
 
 export const levelColors: Record<LoyaltyLevel, string> = {
   Новичок: "#ffffff",
-  Игрок: "#00d68f",
+  Игрок: "#ff6b00",
   Про: "#a855f7",
   Легенда: "#f59e0b",
 };

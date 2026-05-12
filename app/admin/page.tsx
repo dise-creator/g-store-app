@@ -12,7 +12,7 @@ const SECTIONS = [
     icon: Key,
     title: "Ключи",
     desc: "Загрузка и управление ваучерами PSN",
-    color: "#00d68f",
+    color: "#ff6b00",
   },
   {
     href: "/admin/import",
@@ -50,7 +50,7 @@ export default function AdminPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-[#f5a623] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#ff6b00] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -64,7 +64,7 @@ export default function AdminPage() {
         </p>
         <Link
           href="/"
-          className="px-6 py-3 bg-[#f5a623] text-black font-black uppercase text-xs rounded-2xl"
+          className="px-6 py-3 bg-[#ff6b00] text-black font-black uppercase text-xs rounded-2xl"
         >
           На главную
         </Link>
@@ -81,7 +81,7 @@ export default function AdminPage() {
           className="mb-10 mt-16"
         >
           <h1 className="text-4xl font-black uppercase tracking-tighter text-white">
-            АДМИН <span className="text-[#f5a623]">ПАНЕЛЬ</span>
+            АДМИН <span className="text-[#ff6b00]">ПАНЕЛЬ</span>
           </h1>
           <p className="text-white/30 text-sm mt-1">
             Выбери раздел для управления
@@ -100,7 +100,7 @@ export default function AdminPage() {
               >
                 <Link
                   href={section.href}
-                  className="group flex items-center gap-4 p-5 bg-[#0a1860]/60 hover:bg-white/[0.06] border border-[#f5a623]/40 hover:border-white/20 rounded-[2rem] transition-all"
+                  className="group flex items-center gap-4 p-5 bg-[#0a1860]/60 hover:bg-white/[0.06] border border-[#ff6b00]/40 hover:border-white/20 rounded-[2rem] transition-all"
                 >
                   <div
                     className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-all"
@@ -136,7 +136,7 @@ export default function AdminPage() {
         >
           <Link
             href="/"
-            className="flex items-center justify-center gap-2 py-4 bg-[#0a1860]/40 border border-[#f5a623]/30 text-white/30 hover:text-white rounded-[2rem] font-black text-xs uppercase transition-all"
+            className="flex items-center justify-center gap-2 py-4 bg-[#0a1860]/40 border border-[#ff6b00]/30 text-white/30 hover:text-white rounded-[2rem] font-black text-xs uppercase transition-all"
           >
             ← На главную
           </Link>

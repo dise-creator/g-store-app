@@ -125,13 +125,13 @@ export default function Home() {
                   className={`relative px-4 py-2.5 rounded-2xl text-xs font-black uppercase tracking-widest whitespace-nowrap transition-all shrink-0 ${
                     activeCategory === cat.key
                       ? "text-black"
-                      : "text-white/40 hover:text-white bg-[#0a1860]/60 border border-[#f5a623]/40 hover:border-white/20"
+                      : "text-white/40 hover:text-white bg-[#0a1860]/60 border border-[#ff6b00]/40 hover:border-white/20"
                   }`}
                 >
                   {activeCategory === cat.key && (
                     <motion.div
                       layoutId="category-bg"
-                      className="absolute inset-0 bg-[#f5a623] rounded-2xl"
+                      className="absolute inset-0 bg-[#ff6b00] rounded-2xl"
                       transition={{
                         type: "spring",
                         damping: 25,
@@ -149,8 +149,8 @@ export default function Home() {
               whileTap={{ scale: 0.95 }}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black uppercase tracking-widest shrink-0 transition-all border ${
                 showFilters || activeSort !== "newest"
-                  ? "bg-[#f5a623]/10 border-[#f5a623]/30 text-[#f5a623]"
-                  : "bg-[#0a1860]/60 border-[#f5a623]/40 text-white/40 hover:text-white"
+                  ? "bg-[#ff6b00]/10 border-[#ff6b00]/30 text-[#ff6b00]"
+                  : "bg-[#0a1860]/60 border-[#ff6b00]/40 text-white/40 hover:text-white"
               }`}
             >
               <SlidersHorizontal size={14} />
@@ -167,7 +167,7 @@ export default function Home() {
                 transition={{ duration: 0.3 }}
                 className="overflow-hidden"
               >
-                <div className="flex items-center gap-2 p-4 bg-[#0a1860]/60 border border-[#f5a623]/40 rounded-2xl flex-wrap">
+                <div className="flex items-center gap-2 p-4 bg-[#0a1860]/60 border border-[#ff6b00]/40 rounded-2xl flex-wrap">
                   <span className="text-white/20 text-[10px] uppercase font-black tracking-widest mr-2">
                     Сортировать:
                   </span>
@@ -177,8 +177,8 @@ export default function Home() {
                       onClick={() => setActiveSort(opt.key)}
                       className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border ${
                         activeSort === opt.key
-                          ? "bg-[#f5a623] text-black border-transparent"
-                          : "bg-[#0a1860]/60 border-[#f5a623]/40 text-white/40 hover:text-white"
+                          ? "bg-[#ff6b00] text-black border-transparent"
+                          : "bg-[#0a1860]/60 border-[#ff6b00]/40 text-white/40 hover:text-white"
                       }`}
                     >
                       {opt.label}
@@ -236,7 +236,7 @@ export default function Home() {
                   </p>
                   <button
                     onClick={resetFilters}
-                    className="px-6 py-3 bg-[#f5a623] text-black font-black uppercase text-xs rounded-2xl"
+                    className="px-6 py-3 bg-[#ff6b00] text-black font-black uppercase text-xs rounded-2xl"
                   >
                     Сбросить фильтры
                   </button>

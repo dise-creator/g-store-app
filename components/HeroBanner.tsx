@@ -21,8 +21,8 @@ const COLORS = [
   "#a8c0d8",
   "#ef4444",
   "#4ade80",
-  "#00d68f",
-  "#f5a623",
+  "#ff6b00",
+  "#ff6b00",
   "#a855f7",
   "#f472b6",
 ];
@@ -78,7 +78,7 @@ export default function HeroBanner() {
       style={{
         backgroundColor: BG,
         boxShadow: `0 30px 80px -20px ${color}30`,
-        border: "1px solid rgba(:245, 166, 35, 0.35)",
+        border: "1px solid rgba(:255, 107, 0, 0.35)",
       }}
     >
       <AnimatePresence mode="wait">

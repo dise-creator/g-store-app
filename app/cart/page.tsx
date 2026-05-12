@@ -76,7 +76,7 @@ export default function CartPage() {
         {items.map((item, index) => (
           <div
             key={`${item.cartItemId}-${index}`}
-            className="bg-white/5 border border-[#f5a623]/40 rounded-3xl p-5 flex items-center gap-6 backdrop-blur-sm"
+            className="bg-white/5 border border-[#ff6b00]/40 rounded-3xl p-5 flex items-center gap-6 backdrop-blur-sm"
           >
             <div className="relative w-24 h-28 rounded-2xl overflow-hidden flex-shrink-0 bg-white/10">
               <Image
@@ -92,12 +92,12 @@ export default function CartPage() {
               <h3 className="font-black text-xl uppercase  leading-tight mb-1">
                 {item.title}
               </h3>
-              <p className="text-[#f5a623] font-black text-lg">
+              <p className="text-[#ff6b00] font-black text-lg">
                 {(item.price || 0).toLocaleString()} ₽
               </p>
             </div>
 
-            <div className="flex items-center gap-4 bg-black/40 rounded-2xl px-4 py-2 border border-[#f5a623]/40">
+            <div className="flex items-center gap-4 bg-black/40 rounded-2xl px-4 py-2 border border-[#ff6b00]/40">
               <button
                 onClick={() =>
                   updateQuantity(
@@ -105,7 +105,7 @@ export default function CartPage() {
                     Math.max(1, item.quantity - 1),
                   )
                 }
-                className="hover:text-[#f5a623] opacity-50 hover:opacity-100 p-1 transition-all"
+                className="hover:text-[#ff6b00] opacity-50 hover:opacity-100 p-1 transition-all"
               >
                 <Minus size={20} />
               </button>
@@ -116,7 +116,7 @@ export default function CartPage() {
                 onClick={() =>
                   updateQuantity(item.cartItemId, item.quantity + 1)
                 }
-                className="hover:text-[#f5a623] opacity-50 hover:opacity-100 p-1 transition-all"
+                className="hover:text-[#ff6b00] opacity-50 hover:opacity-100 p-1 transition-all"
               >
                 <Plus size={20} />
               </button>
@@ -132,10 +132,10 @@ export default function CartPage() {
         ))}
       </div>
 
-      <div className="bg-white/5 border border-[#f5a623]/40 rounded-[32px] p-8 backdrop-blur-md">
+      <div className="bg-white/5 border border-[#ff6b00]/40 rounded-[32px] p-8 backdrop-blur-md">
         {/* Скидка лояльности */}
         {loyalty.discount > 0 && (
-          <div className="flex flex-col gap-2 mb-6 p-4 bg-[#f5a623]/5 border border-[#f5a623]/40 rounded-2xl">
+          <div className="flex flex-col gap-2 mb-6 p-4 bg-[#ff6b00]/5 border border-[#ff6b00]/40 rounded-2xl">
             <div className="flex justify-between items-center">
               <span className="text-white/40 uppercase font-black text-xs">
                 Цена без скидки
@@ -145,10 +145,10 @@ export default function CartPage() {
               </span>
             </div>
             <div className="flex justify-between items-center">
-              <span className="text-[#f5a623] uppercase font-black text-xs">
+              <span className="text-[#ff6b00] uppercase font-black text-xs">
                 Скидка {loyalty.discount}% ({loyalty.level})
               </span>
-              <span className="text-[#f5a623] font-black">
+              <span className="text-[#ff6b00] font-black">
                 −{discountAmount.toLocaleString()} ₽
               </span>
             </div>
@@ -160,16 +160,16 @@ export default function CartPage() {
             Итого к оплате
           </span>
           <div className="flex items-baseline gap-1">
-            <span className="text-5xl font-black text-[#f5a623] ">
+            <span className="text-5xl font-black text-[#ff6b00] ">
               {finalPrice.toLocaleString()}
             </span>
-            <span className="text-[#f5a623] font-black text-xl">₽</span>
+            <span className="text-[#ff6b00] font-black text-xl">₽</span>
           </div>
         </div>
 
         <button
           onClick={handleCheckout}
-          className="w-full py-6 rounded-2xl font-black uppercase  text-black transition-all flex items-center justify-center gap-3 text-lg bg-[#f5a623] hover:shadow-[0_0_30px_rgba(99,243,247,0.3)] active:scale-95"
+          className="w-full py-6 rounded-2xl font-black uppercase  text-black transition-all flex items-center justify-center gap-3 text-lg bg-[#ff6b00] hover:shadow-[0_0_30px_rgba(99,243,247,0.3)] active:scale-95"
         >
           <CreditCard size={24} />
           Перейти к оплате

@@ -34,7 +34,7 @@ export default function CatalogPage() {
   return (
     <div className="min-h-screen px-4 md:px-8 py-8 max-w-[1620px] mx-auto">
       <div className="flex items-center gap-4 mb-8">
-        <div className="w-1 h-8 bg-[#f5a623] rounded-full shadow-[0_0_15px_#00d68f]" />
+        <div className="w-1 h-8 bg-[#ff6b00] rounded-full shadow-[0_0_15px_#ff6b00]" />
         <h1 className="text-2xl md:text-4xl font-michroma text-white uppercase tracking-[0.15em] font-black">
           Каталог
         </h1>
@@ -50,7 +50,7 @@ export default function CatalogPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Найти игру..."
-          className="w-full pl-10 pr-4 py-3 bg-[#0a1860]/60 border border-[#f5a623]/40 focus:border-[#f5a623]/40 rounded-2xl text-white text-sm outline-none transition-all placeholder-white/20 font-bold"
+          className="w-full pl-10 pr-4 py-3 bg-[#0a1860]/60 border border-[#ff6b00]/40 focus:border-[#ff6b00]/40 rounded-2xl text-white text-sm outline-none transition-all placeholder-white/20 font-bold"
         />
       </div>
 
@@ -67,7 +67,7 @@ export default function CatalogPage() {
                   : "rgba(255,255,255,0.03)",
               border: `1px solid ${activeCategory === cat ? "rgba(99,243,247,0.4)" : "rgba(255,255,255,0.08)"}`,
               color:
-                activeCategory === cat ? "#00d68f" : "rgba(255,255,255,0.4)",
+                activeCategory === cat ? "#ff6b00" : "rgba(255,255,255,0.4)",
             }}
           >
             {cat}

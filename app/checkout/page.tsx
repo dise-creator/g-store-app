@@ -278,7 +278,7 @@ export default function CheckoutPage() {
         </p>
         <Link
           href="/"
-          className="px-8 py-4 bg-[#f5a623] text-black font-black uppercase rounded-2xl"
+          className="px-8 py-4 bg-[#ff6b00] text-black font-black uppercase rounded-2xl"
         >
           В магазин
         </Link>
@@ -296,13 +296,13 @@ export default function CheckoutPage() {
         >
           <Link
             href="/"
-            className="w-10 h-10 rounded-xl bg-white/5 border border-[#f5a623]/40 flex items-center justify-center text-white/40 hover:text-[#f5a623] transition-all"
+            className="w-10 h-10 rounded-xl bg-white/5 border border-[#ff6b00]/40 flex items-center justify-center text-white/40 hover:text-[#ff6b00] transition-all"
           >
             <ChevronLeft size={20} />
           </Link>
           <div>
             <h1 className="text-3xl font-black uppercase text-white tracking-tighter">
-              Оформление <span className="text-[#f5a623]">заказа</span>
+              Оформление <span className="text-[#ff6b00]">заказа</span>
             </h1>
             <p className="text-white/30 text-xs mt-0.5">
               {items.length} товар{items.length > 1 ? "а" : ""} в корзине
@@ -317,11 +317,11 @@ export default function CheckoutPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-[#0a1860]/60 border border-[#f5a623]/40 rounded-[2rem] p-7"
+              className="bg-[#0a1860]/60 border border-[#ff6b00]/40 rounded-[2rem] p-7"
             >
               <div className="flex items-center gap-3 mb-5">
-                <div className="w-8 h-8 rounded-xl bg-[#f5a623]/10 border border-[#f5a623]/40 flex items-center justify-center">
-                  <Mail size={15} className="text-[#f5a623]" />
+                <div className="w-8 h-8 rounded-xl bg-[#ff6b00]/10 border border-[#ff6b00]/40 flex items-center justify-center">
+                  <Mail size={15} className="text-[#ff6b00]" />
                 </div>
                 <p className="text-white font-black uppercase text-sm tracking-widest">
                   Email для получения ключей
@@ -332,7 +332,7 @@ export default function CheckoutPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="your@email.com"
-                className="w-full px-5 py-4 bg-white/5 border border-[#f5a623]/40 focus:border-[#f5a623]/40 rounded-2xl text-white font-bold text-sm outline-none transition-all placeholder-white/20"
+                className="w-full px-5 py-4 bg-white/5 border border-[#ff6b00]/40 focus:border-[#ff6b00]/40 rounded-2xl text-white font-bold text-sm outline-none transition-all placeholder-white/20"
               />
               <p className="text-white/20 text-[10px] uppercase font-black tracking-widest mt-3">
                 Ключи активации придут на этот адрес сразу после оплаты
@@ -344,11 +344,11 @@ export default function CheckoutPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-[#0a1860]/60 border border-[#f5a623]/40 rounded-[2rem] p-7"
+              className="bg-[#0a1860]/60 border border-[#ff6b00]/40 rounded-[2rem] p-7"
             >
               <div className="flex items-center gap-3 mb-5">
-                <div className="w-8 h-8 rounded-xl bg-[#f5a623]/10 border border-[#f5a623]/40 flex items-center justify-center">
-                  <CreditCard size={15} className="text-[#f5a623]" />
+                <div className="w-8 h-8 rounded-xl bg-[#ff6b00]/10 border border-[#ff6b00]/40 flex items-center justify-center">
+                  <CreditCard size={15} className="text-[#ff6b00]" />
                 </div>
                 <p className="text-white font-black uppercase text-sm tracking-widest">
                   Способ оплаты
@@ -366,20 +366,20 @@ export default function CheckoutPage() {
                       }
                       className={`flex items-center justify-between p-4 rounded-2xl border transition-all text-left ${
                         !method.available
-                          ? "opacity-40 cursor-not-allowed border-[#f5a623]/30 bg-white/[0.01]"
+                          ? "opacity-40 cursor-not-allowed border-[#ff6b00]/30 bg-white/[0.01]"
                           : isSelected
-                            ? "border-[#f5a623]/40 bg-[#f5a623]/5 shadow-[0_0_20px_rgba(99,243,247,0.05)]"
-                            : "border-[#f5a623]/40 hover:border-white/20 bg-[#0a1860]/40"
+                            ? "border-[#ff6b00]/40 bg-[#ff6b00]/5 shadow-[0_0_20px_rgba(99,243,247,0.05)]"
+                            : "border-[#ff6b00]/40 hover:border-white/20 bg-[#0a1860]/40"
                       }`}
                     >
                       <div className="flex items-center gap-4">
                         <div
-                          className={`w-10 h-10 rounded-xl flex items-center justify-center ${isSelected ? "bg-[#f5a623]/20" : "bg-white/5"}`}
+                          className={`w-10 h-10 rounded-xl flex items-center justify-center ${isSelected ? "bg-[#ff6b00]/20" : "bg-white/5"}`}
                         >
                           <Icon
                             size={18}
                             className={
-                              isSelected ? "text-[#f5a623]" : "text-white/40"
+                              isSelected ? "text-[#ff6b00]" : "text-white/40"
                             }
                           />
                         </div>
@@ -396,12 +396,12 @@ export default function CheckoutPage() {
                       </div>
                       <div className="flex items-center gap-2">
                         {method.soon && (
-                          <span className="text-[8px] bg-[#f5a623]/10 border border-[#f5a623]/40 text-[#f5a623] px-2 py-1 rounded-lg font-black uppercase">
+                          <span className="text-[8px] bg-[#ff6b00]/10 border border-[#ff6b00]/40 text-[#ff6b00] px-2 py-1 rounded-lg font-black uppercase">
                             Скоро
                           </span>
                         )}
                         {isSelected && method.available && (
-                          <div className="w-5 h-5 rounded-full bg-[#f5a623] flex items-center justify-center">
+                          <div className="w-5 h-5 rounded-full bg-[#ff6b00] flex items-center justify-center">
                             <Check size={12} className="text-black" />
                           </div>
                         )}
@@ -422,9 +422,9 @@ export default function CheckoutPage() {
               {TRUST_BADGES.map((item) => (
                 <div
                   key={item.text}
-                  className="flex flex-col items-center gap-2 p-4 bg-[#0a1860]/40 border border-[#f5a623]/30 rounded-2xl"
+                  className="flex flex-col items-center gap-2 p-4 bg-[#0a1860]/40 border border-[#ff6b00]/30 rounded-2xl"
                 >
-                  <item.icon size={18} className="text-[#f5a623]" />
+                  <item.icon size={18} className="text-[#ff6b00]" />
                   <p className="text-white/30 text-[9px] uppercase font-black tracking-widest text-center">
                     {item.text}
                   </p>
@@ -441,13 +441,13 @@ export default function CheckoutPage() {
             className="flex flex-col gap-4"
           >
             {/* Список товаров */}
-            <div className="bg-[#0a1860]/60 border border-[#f5a623]/40 rounded-[2rem] p-6 flex flex-col gap-4">
+            <div className="bg-[#0a1860]/60 border border-[#ff6b00]/40 rounded-[2rem] p-6 flex flex-col gap-4">
               <p className="text-white/20 text-[10px] uppercase font-black tracking-[0.3em]">
                 Ваш заказ
               </p>
               {items.map((item) => (
                 <div key={item.cartItemId} className="flex items-center gap-3">
-                  <div className="w-12 h-14 relative rounded-xl overflow-hidden shrink-0 border border-[#f5a623]/30">
+                  <div className="w-12 h-14 relative rounded-xl overflow-hidden shrink-0 border border-[#ff6b00]/30">
                     <Image
                       src={item.image}
                       alt={item.title}
@@ -466,7 +466,7 @@ export default function CheckoutPage() {
                       </p>
                     )}
                   </div>
-                  <p className="text-[#f5a623] text-sm font-black shrink-0">
+                  <p className="text-[#ff6b00] text-sm font-black shrink-0">
                     {(item.price * item.quantity).toLocaleString()} ₽
                   </p>
                 </div>
@@ -474,10 +474,10 @@ export default function CheckoutPage() {
             </div>
 
             {/* Промокод */}
-            <div className="bg-[#0a1860]/60 border border-[#f5a623]/40 rounded-[2rem] p-6">
+            <div className="bg-[#0a1860]/60 border border-[#ff6b00]/40 rounded-[2rem] p-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-xl bg-[#f5a623]/10 border border-[#f5a623]/40 flex items-center justify-center">
-                  <Tag size={15} className="text-[#f5a623]" />
+                <div className="w-8 h-8 rounded-xl bg-[#ff6b00]/10 border border-[#ff6b00]/40 flex items-center justify-center">
+                  <Tag size={15} className="text-[#ff6b00]" />
                 </div>
                 <p className="text-white font-black uppercase text-sm tracking-widest">
                   Промокод
@@ -485,12 +485,12 @@ export default function CheckoutPage() {
               </div>
 
               {appliedPromo ? (
-                <div className="flex items-center justify-between p-3 bg-[#f5a623]/10 border border-[#f5a623]/40 rounded-2xl">
+                <div className="flex items-center justify-between p-3 bg-[#ff6b00]/10 border border-[#ff6b00]/40 rounded-2xl">
                   <div>
-                    <p className="text-[#f5a623] font-black text-sm">
+                    <p className="text-[#ff6b00] font-black text-sm">
                       {promoInput.toUpperCase()}
                     </p>
-                    <p className="text-[#f5a623]/60 text-[10px] font-black">
+                    <p className="text-[#ff6b00]/60 text-[10px] font-black">
                       −
                       {appliedPromo.type === "percent"
                         ? `${appliedPromo.value}%`
@@ -515,12 +515,12 @@ export default function CheckoutPage() {
                     }
                     onKeyDown={(e) => e.key === "Enter" && handleApplyPromo()}
                     placeholder="CLIC-XXXX-XXXX"
-                    className="flex-1 px-4 py-3 bg-white/5 border border-[#f5a623]/40 rounded-2xl text-white font-mono text-sm focus:outline-none focus:border-[#f5a623]/40 transition-all placeholder-white/20"
+                    className="flex-1 px-4 py-3 bg-white/5 border border-[#ff6b00]/40 rounded-2xl text-white font-mono text-sm focus:outline-none focus:border-[#ff6b00]/40 transition-all placeholder-white/20"
                   />
                   <button
                     onClick={handleApplyPromo}
                     disabled={promoLoading || !promoInput}
-                    className="px-4 py-3 bg-[#f5a623]/10 border border-[#f5a623]/40 text-[#f5a623] rounded-2xl font-black text-xs uppercase hover:bg-[#f5a623]/20 transition-all disabled:opacity-40 flex items-center gap-1"
+                    className="px-4 py-3 bg-[#ff6b00]/10 border border-[#ff6b00]/40 text-[#ff6b00] rounded-2xl font-black text-xs uppercase hover:bg-[#ff6b00]/20 transition-all disabled:opacity-40 flex items-center gap-1"
                   >
                     {promoLoading ? (
                       <Loader2 size={14} className="animate-spin" />
@@ -540,7 +540,7 @@ export default function CheckoutPage() {
             </div>
 
             {/* Итого */}
-            <div className="bg-[#0a1860]/60 border border-[#f5a623]/40 rounded-[2rem] p-6 flex flex-col gap-4">
+            <div className="bg-[#0a1860]/60 border border-[#ff6b00]/40 rounded-[2rem] p-6 flex flex-col gap-4">
               {loyalty.discount > 0 && (
                 <>
                   <div className="flex justify-between items-center">
@@ -552,10 +552,10 @@ export default function CheckoutPage() {
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-[#f5a623] text-xs font-black uppercase">
+                    <span className="text-[#ff6b00] text-xs font-black uppercase">
                       Скидка {loyalty.discount}%
                     </span>
-                    <span className="text-[#f5a623] text-sm font-black">
+                    <span className="text-[#ff6b00] text-sm font-black">
                       −{loyaltyDiscount.toLocaleString()} ₽
                     </span>
                   </div>
@@ -566,10 +566,10 @@ export default function CheckoutPage() {
               {appliedPromo && (
                 <>
                   <div className="flex justify-between items-center">
-                    <span className="text-[#f5a623] text-xs font-black uppercase flex items-center gap-1">
+                    <span className="text-[#ff6b00] text-xs font-black uppercase flex items-center gap-1">
                       <Tag size={10} /> Промокод
                     </span>
-                    <span className="text-[#f5a623] text-sm font-black">
+                    <span className="text-[#ff6b00] text-sm font-black">
                       −{promoDiscount.toLocaleString()} ₽
                     </span>
                   </div>
@@ -585,7 +585,7 @@ export default function CheckoutPage() {
                   <span className="text-white font-black text-3xl">
                     {finalPrice.toLocaleString()}
                   </span>
-                  <span className="text-[#f5a623] font-black">₽</span>
+                  <span className="text-[#ff6b00] font-black">₽</span>
                 </div>
               </div>
 
@@ -594,8 +594,8 @@ export default function CheckoutPage() {
                 disabled={isSubmitting}
                 className={`w-full py-5 rounded-2xl font-black uppercase text-sm tracking-widest transition-all flex items-center justify-center gap-2 ${
                   isSubmitting
-                    ? "bg-[#f5a623]/50 cursor-wait text-black"
-                    : "bg-[#f5a623] text-black hover:shadow-[0_0_30px_rgba(99,243,247,0.3)] active:scale-95"
+                    ? "bg-[#ff6b00]/50 cursor-wait text-black"
+                    : "bg-[#ff6b00] text-black hover:shadow-[0_0_30px_rgba(99,243,247,0.3)] active:scale-95"
                 }`}
               >
                 <CreditCard size={18} />
