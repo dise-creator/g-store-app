@@ -152,7 +152,7 @@ export default function AnalyticsPage() {
   if (adminLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-[#00d68f] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#f5a623] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -166,7 +166,7 @@ export default function AnalyticsPage() {
         </p>
         <Link
           href="/"
-          className="px-6 py-3 bg-[#00d68f] text-black font-black uppercase text-xs rounded-2xl"
+          className="px-6 py-3 bg-[#f5a623] text-black font-black uppercase text-xs rounded-2xl"
         >
           На главную
         </Link>
@@ -180,13 +180,13 @@ export default function AnalyticsPage() {
         <div className="flex items-center gap-4 mb-10">
           <Link
             href="/"
-            className="w-10 h-10 rounded-xl bg-white/5 border border-[#00d68f]/40 flex items-center justify-center text-white/40 hover:text-[#00d68f] transition-all"
+            className="w-10 h-10 rounded-xl bg-white/5 border border-[#f5a623]/40 flex items-center justify-center text-white/40 hover:text-[#f5a623] transition-all"
           >
             <ChevronLeft size={20} />
           </Link>
           <div>
             <h1 className="text-3xl font-black uppercase text-white tracking-tighter">
-              Анали<span className="text-[#00d68f]">тика</span>
+              Анали<span className="text-[#f5a623]">тика</span>
             </h1>
             <p className="text-white/30 text-xs mt-1">
               Статистика продаж и промокодов
@@ -196,7 +196,7 @@ export default function AnalyticsPage() {
 
         {loading ? (
           <div className="flex justify-center py-20">
-            <div className="w-8 h-8 border-2 border-[#00d68f] border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-[#f5a623] border-t-transparent rounded-full animate-spin" />
           </div>
         ) : (
           <div className="flex flex-col gap-6">
@@ -207,11 +207,11 @@ export default function AnalyticsPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.07 }}
-                  className="bg-[#0a1860]/60 border border-[#00d68f]/40 rounded-[2rem] p-6"
+                  className="bg-[#0a1860]/60 border border-[#f5a623]/40 rounded-[2rem] p-6"
                 >
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-8 h-8 rounded-xl bg-[#00d68f]/10 border border-[#00d68f]/40 flex items-center justify-center">
-                      <card.icon size={15} className="text-[#00d68f]" />
+                    <div className="w-8 h-8 rounded-xl bg-[#f5a623]/10 border border-[#f5a623]/40 flex items-center justify-center">
+                      <card.icon size={15} className="text-[#f5a623]" />
                     </div>
                     <p className="text-white/30 text-[10px] uppercase font-black tracking-widest">
                       {card.label}
@@ -226,7 +226,7 @@ export default function AnalyticsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="bg-[#0a1860]/60 border border-[#00d68f]/40 rounded-[2rem] p-6"
+              className="bg-[#0a1860]/60 border border-[#f5a623]/40 rounded-[2rem] p-6"
             >
               <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-6">
                 Выручка за последние 14 дней
@@ -288,7 +288,7 @@ export default function AnalyticsPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="bg-[#0a1860]/60 border border-[#00d68f]/40 rounded-[2rem] p-6"
+                className="bg-[#0a1860]/60 border border-[#f5a623]/40 rounded-[2rem] p-6"
               >
                 <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-4">
                   Топ игр по выручке
@@ -301,7 +301,7 @@ export default function AnalyticsPage() {
                   <div className="flex flex-col gap-3">
                     {topGames.map((g, i) => (
                       <div key={g.title} className="flex items-center gap-3">
-                        <span className="text-[#00d68f] font-black text-sm w-5">
+                        <span className="text-[#f5a623] font-black text-sm w-5">
                           {i + 1}
                         </span>
                         <div className="flex-1 min-w-0">
@@ -312,7 +312,7 @@ export default function AnalyticsPage() {
                             {g.count} шт
                           </p>
                         </div>
-                        <p className="text-[#00d68f] font-black text-sm shrink-0">
+                        <p className="text-[#f5a623] font-black text-sm shrink-0">
                           {g.revenue.toLocaleString()} ₽
                         </p>
                       </div>
@@ -325,7 +325,7 @@ export default function AnalyticsPage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="bg-[#0a1860]/60 border border-[#00d68f]/40 rounded-[2rem] p-6"
+                className="bg-[#0a1860]/60 border border-[#f5a623]/40 rounded-[2rem] p-6"
               >
                 <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-4">
                   Статистика промокодов
@@ -339,7 +339,7 @@ export default function AnalyticsPage() {
                     {promos.map((p) => (
                       <div
                         key={p.id}
-                        className={`flex items-center justify-between gap-2 p-3 rounded-2xl border ${p.is_active ? "border-[#00d68f]/10 bg-[#00d68f]/[0.02]" : "border-[#00d68f]/30 opacity-40"}`}
+                        className={`flex items-center justify-between gap-2 p-3 rounded-2xl border ${p.is_active ? "border-[#f5a623]/10 bg-[#f5a623]/[0.02]" : "border-[#f5a623]/30 opacity-40"}`}
                       >
                         <div>
                           <p className="font-mono text-xs text-white font-black">
@@ -353,7 +353,7 @@ export default function AnalyticsPage() {
                           </p>
                         </div>
                         <span
-                          className={`text-[9px] px-2 py-1 rounded-lg font-black uppercase border ${p.is_active ? "bg-[#00d68f]/10 border-[#00d68f]/40 text-[#00d68f]" : "bg-white/5 border-[#00d68f]/40 text-white/30"}`}
+                          className={`text-[9px] px-2 py-1 rounded-lg font-black uppercase border ${p.is_active ? "bg-[#f5a623]/10 border-[#f5a623]/40 text-[#f5a623]" : "bg-white/5 border-[#f5a623]/40 text-white/30"}`}
                         >
                           {p.is_active ? "Активен" : "Выкл"}
                         </span>
@@ -368,7 +368,7 @@ export default function AnalyticsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="bg-[#0a1860]/60 border border-[#00d68f]/40 rounded-[2rem] p-6"
+              className="bg-[#0a1860]/60 border border-[#f5a623]/40 rounded-[2rem] p-6"
             >
               <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-4">
                 Последние заказы
@@ -382,7 +382,7 @@ export default function AnalyticsPage() {
                   {orders.slice(0, 10).map((o) => (
                     <div
                       key={o.id}
-                      className="flex items-center justify-between gap-4 p-3 bg-[#0a1860]/40 border border-[#00d68f]/30 rounded-2xl"
+                      className="flex items-center justify-between gap-4 p-3 bg-[#0a1860]/40 border border-[#f5a623]/30 rounded-2xl"
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <p className="font-mono text-[10px] text-white/30 shrink-0">
@@ -396,7 +396,7 @@ export default function AnalyticsPage() {
                         <p className="text-white/20 text-[10px]">
                           {new Date(o.created_at).toLocaleDateString("ru-RU")}
                         </p>
-                        <p className="text-[#00d68f] font-black text-sm">
+                        <p className="text-[#f5a623] font-black text-sm">
                           {o.total_price.toLocaleString()} ₽
                         </p>
                       </div>

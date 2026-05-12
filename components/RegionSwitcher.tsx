@@ -57,7 +57,7 @@ export default function RegionSwitcher() {
   return (
     <div ref={ref} className="relative">
       {/* Десктоп */}
-      <div className="hidden md:flex items-center gap-1.5 p-1 bg-[#0a1860]/60 border border-[#00d68f]/30 rounded-2xl">
+      <div className="hidden md:flex items-center gap-1.5 p-1 bg-[#0a1860]/60 border border-[#f5a623]/30 rounded-2xl">
         {Object.values(REGIONS).map((r) => {
           const isActive = region === r.code;
           const c = regionColors[r.code];
@@ -142,7 +142,7 @@ export default function RegionSwitcher() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.95 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="absolute top-[calc(100%+8px)] left-0 z-[200] min-w-[160px] bg-[#0d1f6e] border border-[#00d68f]/40 rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.8)]"
+              className="absolute top-[calc(100%+8px)] left-0 z-[200] min-w-[160px] bg-[#0d1f6e] border border-[#f5a623]/40 rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.8)]"
             >
               {Object.values(REGIONS).map((r, i) => {
                 const isActive = region === r.code;

@@ -95,17 +95,17 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             animate={{ x: 0 }}
             exit={{ x: "-110%" }}
             transition={{ type: "spring", damping: 28, stiffness: 220 }}
-            className="relative h-full w-full max-w-[420px] flex flex-col bg-[#0a0a0c] border border-[#00d68f]/40 shadow-2xl overflow-hidden rounded-[2.5rem] md:rounded-[3rem]"
+            className="relative h-full w-full max-w-[420px] flex flex-col bg-[#0a0a0c] border border-[#f5a623]/40 shadow-2xl overflow-hidden rounded-[2.5rem] md:rounded-[3rem]"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Шапка */}
-            <div className="p-8 flex items-center justify-between border-b border-[#00d68f]/40 bg-[#0a1860]/40">
+            <div className="p-8 flex items-center justify-between border-b border-[#f5a623]/40 bg-[#0a1860]/40">
               <h2 className="text-4xl font-black uppercase tracking-tighter text-white">
                 Корзина
               </h2>
               <button
                 onClick={onClose}
-                className="w-12 h-12 flex items-center justify-center bg-white/5 hover:bg-[#00d68f] hover:text-black rounded-full transition-all text-white/50 border border-[#00d68f]/40"
+                className="w-12 h-12 flex items-center justify-center bg-white/5 hover:bg-[#f5a623] hover:text-black rounded-full transition-all text-white/50 border border-[#f5a623]/40"
               >
                 <X size={24} strokeWidth={3} />
               </button>
@@ -122,9 +122,9 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
-                      className="group flex items-center gap-4 bg-[#0a1860]/60 p-4 rounded-[1.8rem] border border-[#00d68f]/40 hover:border-[#00d68f]/30 transition-all"
+                      className="group flex items-center gap-4 bg-[#0a1860]/60 p-4 rounded-[1.8rem] border border-[#f5a623]/40 hover:border-[#f5a623]/30 transition-all"
                     >
-                      <div className="relative w-16 h-20 shrink-0 rounded-2xl overflow-hidden border border-[#00d68f]/40">
+                      <div className="relative w-16 h-20 shrink-0 rounded-2xl overflow-hidden border border-[#f5a623]/40">
                         <Image
                           src={item.image}
                           alt={item.title}
@@ -140,14 +140,14 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         </h3>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-1.5">
-                            <p className="text-[#00d68f] font-black text-base leading-none">
+                            <p className="text-[#f5a623] font-black text-base leading-none">
                               {(Number(item.price) || 0).toLocaleString()} ₽
                             </p>
                             <span className="text-xs opacity-50">
                               {currentRegion.flag}
                             </span>
                           </div>
-                          <div className="flex items-center gap-2.5 bg-black/40 px-2.5 py-1.5 rounded-xl border border-[#00d68f]/30">
+                          <div className="flex items-center gap-2.5 bg-black/40 px-2.5 py-1.5 rounded-xl border border-[#f5a623]/30">
                             <button
                               onClick={() =>
                                 updateQuantity(
@@ -155,7 +155,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                                   item.quantity - 1,
                                 )
                               }
-                              className="text-white/30 hover:text-[#00d68f] transition-colors p-0.5"
+                              className="text-white/30 hover:text-[#f5a623] transition-colors p-0.5"
                             >
                               <Minus size={12} strokeWidth={2.5} />
                             </button>
@@ -169,7 +169,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                                   item.quantity + 1,
                                 )
                               }
-                              className="text-white/30 hover:text-[#00d68f] transition-colors p-0.5"
+                              className="text-white/30 hover:text-[#f5a623] transition-colors p-0.5"
                             >
                               <Plus size={12} strokeWidth={2.5} />
                             </button>
@@ -202,9 +202,9 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
 
             {/* Футер */}
             {items.length > 0 && (
-              <div className="p-8 bg-black/80 backdrop-blur-xl border-t border-[#00d68f]/40 space-y-5">
+              <div className="p-8 bg-black/80 backdrop-blur-xl border-t border-[#f5a623]/40 space-y-5">
                 {loyalty.discount > 0 && (
-                  <div className="flex flex-col gap-2 p-4 bg-[#00d68f]/5 border border-[#00d68f]/40 rounded-2xl">
+                  <div className="flex flex-col gap-2 p-4 bg-[#f5a623]/5 border border-[#f5a623]/40 rounded-2xl">
                     <div className="flex justify-between items-center">
                       <span className="text-white/30 text-[9px] uppercase font-black tracking-widest">
                         Без скидки
@@ -214,10 +214,10 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       </span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-[#00d68f] text-[9px] uppercase font-black tracking-widest">
+                      <span className="text-[#f5a623] text-[9px] uppercase font-black tracking-widest">
                         Скидка {loyalty.discount}% · {loyalty.level}
                       </span>
-                      <span className="text-[#00d68f] font-black text-sm">
+                      <span className="text-[#f5a623] font-black text-sm">
                         −{discountAmount.toLocaleString()} ₽
                       </span>
                     </div>
@@ -228,7 +228,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   <span className="text-[10px] font-black uppercase text-white/30 tracking-widest">
                     Итого:
                   </span>
-                  <span className="text-4xl font-black text-[#00d68f] tracking-tighter leading-none">
+                  <span className="text-4xl font-black text-[#f5a623] tracking-tighter leading-none">
                     {finalAmount.toLocaleString()} ₽
                   </span>
                 </div>
@@ -236,7 +236,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 <div className="flex flex-col gap-4">
                   <button
                     onClick={handleCheckout}
-                    className="w-full py-6 rounded-2xl font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 bg-[#00d68f] text-black hover:scale-[1.02] active:scale-95 shadow-[0_0_30px_rgba(99,243,247,0.1)]"
+                    className="w-full py-6 rounded-2xl font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 bg-[#f5a623] text-black hover:scale-[1.02] active:scale-95 shadow-[0_0_30px_rgba(99,243,247,0.1)]"
                   >
                     <CreditCard size={18} />
                     <span className="text-sm">Перейти к оплате</span>

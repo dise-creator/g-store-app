@@ -15,13 +15,14 @@ export default function AnimatedBackground() {
 
   if (isMobile) {
     return (
-  <div
-  className="fixed inset-0 overflow-hidden pointer-events-none"
-  style={{ 
-    zIndex: -1,
-    background: "linear-gradient(160deg, #0d1f6e 0%, #0a1860 50%, #08113d 100%)" 
-  }}
->
+      <div
+        className="fixed inset-0 overflow-hidden pointer-events-none"
+        style={{
+          zIndex: -1,
+          background:
+            "linear-gradient(160deg, #0d1f6e 0%, #0a1860 50%, #08113d 100%)",
+        }}
+      >
         <div className="absolute top-[-20%] left-[-10%] w-[80%] h-[80%] bg-blue-700/20 blur-[100px] rounded-full opacity-50" />
         <div className="absolute bottom-[-20%] right-[-10%] w-[80%] h-[80%] bg-blue-900/15 blur-[100px] rounded-full opacity-40" />
         <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#80808010_1px,transparent_1px),linear-gradient(to_bottom,#80808010_1px,transparent_1px)] bg-[size:80px_80px]" />
@@ -57,7 +58,7 @@ export default function AnimatedBackground() {
           scale: [1, 1.05, 1],
         }}
         transition={{ duration: 32, repeat: Infinity, ease: "linear" }}
-        className="absolute top-[30%] left-[30%] w-[40%] h-[40%] bg-[#00d68f]/[0.05] blur-[120px] rounded-full"
+        className="absolute top-[30%] left-[30%] w-[40%] h-[40%] bg-[#f5a623]/[0.05] blur-[120px] rounded-full"
       />
       <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#80808010_1px,transparent_1px),linear-gradient(to_bottom,#80808010_1px,transparent_1px)] bg-[size:80px_80px]" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,#080f1e_100%)] opacity-40" />

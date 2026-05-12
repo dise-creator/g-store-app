@@ -209,7 +209,7 @@ export default function SignInPage() {
 
       <Link
         href="/"
-        className="absolute top-6 right-6 p-3 bg-white/5 hover:bg-white/10 rounded-full border border-[#00d68f]/40 transition-all z-50 group"
+        className="absolute top-6 right-6 p-3 bg-white/5 hover:bg-white/10 rounded-full border border-[#f5a623]/40 transition-all z-50 group"
       >
         <X
           size={20}
@@ -252,10 +252,10 @@ export default function SignInPage() {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 + i * 0.08 }}
-                className="flex items-center gap-3 p-3 bg-[#0a1860]/60 border border-[#00d68f]/30 rounded-2xl"
+                className="flex items-center gap-3 p-3 bg-[#0a1860]/60 border border-[#f5a623]/30 rounded-2xl"
               >
-                <div className="w-8 h-8 rounded-xl bg-[#00d68f]/10 border border-[#00d68f]/40 flex items-center justify-center shrink-0">
-                  <benefit.icon size={14} className="text-[#00d68f]" />
+                <div className="w-8 h-8 rounded-xl bg-[#f5a623]/10 border border-[#f5a623]/40 flex items-center justify-center shrink-0">
+                  <benefit.icon size={14} className="text-[#f5a623]" />
                 </div>
                 <span className="text-white/60 text-xs font-bold">
                   {benefit.text}
@@ -270,10 +270,10 @@ export default function SignInPage() {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.15 }}
-          className="w-full md:w-[360px] px-8 py-8 bg-black/60 backdrop-blur-3xl border border-[#00d68f]/40 rounded-[3rem] shadow-[0_0_100px_rgba(0,255,255,0.08)]"
+          className="w-full md:w-[360px] px-8 py-8 bg-black/60 backdrop-blur-3xl border border-[#f5a623]/40 rounded-[3rem] shadow-[0_0_100px_rgba(0,255,255,0.08)]"
         >
           {/* Табы */}
-          <div className="flex gap-1 p-1 bg-[#0a1860]/60 border border-[#00d68f]/30 rounded-2xl mb-6">
+          <div className="flex gap-1 p-1 bg-[#0a1860]/60 border border-[#f5a623]/30 rounded-2xl mb-6">
             {TABS.map((t) => (
               <button
                 key={t.id}
@@ -399,7 +399,7 @@ export default function SignInPage() {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Твоё имя"
-                      className="w-full pl-10 pr-4 py-4 bg-white/[0.04] border border-[#00d68f]/40 focus:border-[#00d68f]/40 rounded-2xl text-white font-bold text-sm outline-none transition-all placeholder-white/20"
+                      className="w-full pl-10 pr-4 py-4 bg-white/[0.04] border border-[#f5a623]/40 focus:border-[#f5a623]/40 rounded-2xl text-white font-bold text-sm outline-none transition-all placeholder-white/20"
                     />
                   </div>
                 )}
@@ -414,7 +414,7 @@ export default function SignInPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Email"
-                    className="w-full pl-10 pr-4 py-4 bg-white/[0.04] border border-[#00d68f]/40 focus:border-[#00d68f]/40 rounded-2xl text-white font-bold text-sm outline-none transition-all placeholder-white/20"
+                    className="w-full pl-10 pr-4 py-4 bg-white/[0.04] border border-[#f5a623]/40 focus:border-[#f5a623]/40 rounded-2xl text-white font-bold text-sm outline-none transition-all placeholder-white/20"
                   />
                 </div>
 
@@ -429,7 +429,7 @@ export default function SignInPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleEmailAuth()}
                     placeholder="Пароль"
-                    className="w-full pl-10 pr-10 py-4 bg-white/[0.04] border border-[#00d68f]/40 focus:border-[#00d68f]/40 rounded-2xl text-white font-bold text-sm outline-none transition-all placeholder-white/20"
+                    className="w-full pl-10 pr-10 py-4 bg-white/[0.04] border border-[#f5a623]/40 focus:border-[#f5a623]/40 rounded-2xl text-white font-bold text-sm outline-none transition-all placeholder-white/20"
                   />
                   <button
                     onClick={() => setShowPassword(!showPassword)}
@@ -449,7 +449,7 @@ export default function SignInPage() {
                   onClick={handleEmailAuth}
                   disabled={loading}
                   whileTap={{ scale: 0.97 }}
-                  className="w-full py-4 bg-[#00d68f] text-black font-black uppercase text-sm rounded-2xl disabled:opacity-50 transition-all hover:shadow-[0_0_20px_rgba(99,243,247,0.3)] no-hover mt-1"
+                  className="w-full py-4 bg-[#f5a623] text-black font-black uppercase text-sm rounded-2xl disabled:opacity-50 transition-all hover:shadow-[0_0_20px_rgba(99,243,247,0.3)] no-hover mt-1"
                 >
                   {loading
                     ? "Подождите..."
@@ -464,7 +464,7 @@ export default function SignInPage() {
                       Нет аккаунта?{" "}
                       <button
                         onClick={() => setTab("register")}
-                        className="text-[#00d68f]/60 hover:text-[#00d68f] transition-colors no-hover"
+                        className="text-[#f5a623]/60 hover:text-[#f5a623] transition-colors no-hover"
                       >
                         Зарегистрироваться
                       </button>
@@ -474,7 +474,7 @@ export default function SignInPage() {
                       Уже есть аккаунт?{" "}
                       <button
                         onClick={() => setTab("login")}
-                        className="text-[#00d68f]/60 hover:text-[#00d68f] transition-colors no-hover"
+                        className="text-[#f5a623]/60 hover:text-[#f5a623] transition-colors no-hover"
                       >
                         Войти
                       </button>
@@ -487,7 +487,7 @@ export default function SignInPage() {
 
           <p className="mt-6 text-center text-[8px] text-white/10 uppercase font-bold tracking-[0.2em]">
             Нажмите{" "}
-            <span className="text-white/20 border border-[#00d68f]/40 px-2 py-0.5 rounded mx-1">
+            <span className="text-white/20 border border-[#f5a623]/40 px-2 py-0.5 rounded mx-1">
               ESC
             </span>{" "}
             для отмены

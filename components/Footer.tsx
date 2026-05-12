@@ -76,17 +76,17 @@ function Modal({ id, onClose }: { id: ModalId; onClose: () => void }) {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 20, scale: 0.95 }}
         transition={{ type: "spring", damping: 25, stiffness: 300 }}
-        className="relative z-10 w-full max-w-2xl bg-[#0d1f6e] border border-[#00d68f]/40 rounded-[2rem] overflow-hidden shadow-2xl"
+        className="relative z-10 w-full max-w-2xl bg-[#0d1f6e] border border-[#f5a623]/40 rounded-[2rem] overflow-hidden shadow-2xl"
         style={{ boxShadow: "0 0 60px rgba(0,60,160,0.2)" }}
       >
-        <div className="flex items-center justify-between px-8 py-6 border-b border-[#00d68f]/30">
+        <div className="flex items-center justify-between px-8 py-6 border-b border-[#f5a623]/30">
           <h2 className="text-white font-black uppercase text-xl tracking-tight">
             {MODAL_TITLES[id]}
           </h2>
           <motion.button
             onClick={onClose}
             whileTap={{ scale: 0.9 }}
-            className="w-10 h-10 rounded-xl bg-white/5 hover:bg-red-500/10 border border-[#00d68f]/40 hover:border-red-500/20 flex items-center justify-center text-white/30 hover:text-red-400 transition-all"
+            className="w-10 h-10 rounded-xl bg-white/5 hover:bg-red-500/10 border border-[#f5a623]/40 hover:border-red-500/20 flex items-center justify-center text-white/30 hover:text-red-400 transition-all"
           >
             <X size={18} />
           </motion.button>
@@ -111,7 +111,7 @@ export default function Footer() {
       </AnimatePresence>
 
       <footer className="relative z-20 w-full px-4 md:px-8 pb-8 mt-10">
-        <div className="max-w-[1420px] mx-auto bg-[#0a1860]/60 backdrop-blur-xl rounded-[2.5rem] p-8 md:p-12 border border-[#00d68f]/40 shadow-2xl">
+        <div className="max-w-[1420px] mx-auto bg-[#0a1860]/60 backdrop-blur-xl rounded-[2.5rem] p-8 md:p-12 border border-[#f5a623]/40 shadow-2xl">
           <div className="flex flex-col md:flex-row justify-between gap-10">
             {/* Лого + описание */}
             <div className="flex flex-col gap-4 max-w-[280px]">
@@ -145,7 +145,7 @@ export default function Footer() {
               <div className="flex flex-col gap-2 mt-1">
                 {FEATURES.map((item) => (
                   <div key={item.text} className="flex items-center gap-2">
-                    <item.icon size={11} className="text-[#00d68f] shrink-0" />
+                    <item.icon size={11} className="text-[#f5a623] shrink-0" />
                     <span className="text-white/20 text-[10px] font-black uppercase tracking-wider">
                       {item.text}
                     </span>
@@ -164,7 +164,7 @@ export default function Footer() {
                   <button
                     key={item.label}
                     onClick={() => setActiveModal(item.modal)}
-                    className="text-white/40 hover:text-[#00d68f] transition-colors text-xs font-black uppercase tracking-widest text-left"
+                    className="text-white/40 hover:text-[#f5a623] transition-colors text-xs font-black uppercase tracking-widest text-left"
                   >
                     {item.label}
                   </button>
@@ -188,7 +188,7 @@ export default function Footer() {
                       <p className="text-white/60 text-xs font-black uppercase">
                         {r.name}
                       </p>
-                      <p className="text-[#00d68f] text-[9px] font-black">
+                      <p className="text-[#f5a623] text-[9px] font-black">
                         скидка {r.discount}
                       </p>
                     </div>
@@ -217,19 +217,19 @@ export default function Footer() {
                   href="https://t.me/clicps_bot"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-14 h-14 bg-white/5 hover:bg-[#229ed9] border border-[#00d68f]/40 text-white rounded-2xl flex items-center justify-center transition-all hover:scale-110 hover:shadow-[0_0_20px_rgba(34,158,217,0.3)]"
+                  className="w-14 h-14 bg-white/5 hover:bg-[#229ed9] border border-[#f5a623]/40 text-white rounded-2xl flex items-center justify-center transition-all hover:scale-110 hover:shadow-[0_0_20px_rgba(34,158,217,0.3)]"
                 >
                   <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current">
                     <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
                   </svg>
                 </a>
               </div>
-              <div className="mt-2 p-3 bg-[#00d68f]/5 border border-[#00d68f]/10 rounded-2xl">
+              <div className="mt-2 p-3 bg-[#f5a623]/5 border border-[#f5a623]/10 rounded-2xl">
                 <p className="text-white/30 text-[9px] uppercase font-black tracking-widest mb-1">
                   Поддержка
                 </p>
                 href="https://t.me/clic_support" target="_blank" rel="noopener
-                noreferrer" className="text-[#00d68f] text-xs font-black
+                noreferrer" className="text-[#f5a623] text-xs font-black
                 hover:underline"
                 <a>@clic_support</a>
               </div>
@@ -237,7 +237,7 @@ export default function Footer() {
           </div>
 
           {/* Нижняя строка */}
-          <div className="mt-10 pt-6 border-t border-[#00d68f]/30 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="mt-10 pt-6 border-t border-[#f5a623]/30 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-white/20 text-[9px] uppercase tracking-[0.3em] font-black">
               © 2026 CLIC STORE. ВСЕ ПРАВА ЗАЩИЩЕНЫ.
             </p>
@@ -246,7 +246,7 @@ export default function Footer() {
                 <button
                   key={item.label}
                   onClick={() => setActiveModal(item.modal)}
-                  className="text-white/20 hover:text-[#00d68f] transition-colors text-[9px] uppercase tracking-[0.2em] font-black"
+                  className="text-white/20 hover:text-[#f5a623] transition-colors text-[9px] uppercase tracking-[0.2em] font-black"
                 >
                   {item.label}
                 </button>

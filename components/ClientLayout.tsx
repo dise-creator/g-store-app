@@ -91,8 +91,8 @@ function RatesLoader() {
   if (!isLoadingRates) return null;
 
   return (
-    <div className="fixed bottom-24 left-6 z-[500] flex items-center gap-2 px-4 py-2.5 bg-[#0a0a0b] border border-[#00d68f]/40 rounded-2xl shadow-2xl backdrop-blur-xl md:bottom-6">
-      <div className="w-3 h-3 border border-[#00d68f] border-t-transparent rounded-full animate-spin" />
+    <div className="fixed bottom-24 left-6 z-[500] flex items-center gap-2 px-4 py-2.5 bg-[#0a0a0b] border border-[#f5a623]/40 rounded-2xl shadow-2xl backdrop-blur-xl md:bottom-6">
+      <div className="w-3 h-3 border border-[#f5a623] border-t-transparent rounded-full animate-spin" />
       <span className="text-[9px] text-white/40 uppercase font-black tracking-widest">
         Обновляем курсы...
       </span>

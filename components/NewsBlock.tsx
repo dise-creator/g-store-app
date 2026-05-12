@@ -22,7 +22,7 @@ interface NewsItem {
 const TAG_COLORS: Record<string, string> = {
   Обновление: "bg-blue-500/20 text-blue-400 border-blue-500/30",
   Скидки: "bg-red-500/20 text-red-400 border-red-500/30",
-  Анонс: "bg-[#00d68f]/10 text-[#00d68f] border-[#00d68f]/40",
+  Анонс: "bg-[#f5a623]/10 text-[#f5a623] border-[#f5a623]/40",
 };
 
 function NewsCard({ item, index }: { item: NewsItem; index: number }) {
@@ -51,7 +51,7 @@ function NewsCard({ item, index }: { item: NewsItem; index: number }) {
         duration: 0.5,
         ease: [0.25, 0.46, 0.45, 0.94],
       }}
-      className="group relative flex flex-col bg-[#0a1860]/60 border border-[#00d68f]/30 rounded-[2rem] overflow-hidden hover:border-[#00d68f]/40 hover:bg-white/[0.05] transition-all"
+      className="group relative flex flex-col bg-[#0a1860]/60 border border-[#f5a623]/30 rounded-[2rem] overflow-hidden hover:border-[#f5a623]/40 hover:bg-white/[0.05] transition-all"
     >
       <div className="relative h-64 overflow-hidden">
         <Image
@@ -63,11 +63,11 @@ function NewsCard({ item, index }: { item: NewsItem; index: number }) {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a1860] via-[#0a1860]/20 to-transparent" />
         <div
-          className={`absolute top-4 left-4 px-3 py-1.5 rounded-xl border text-[10px] font-black uppercase tracking-widest ${TAG_COLORS[item.tag] ?? "bg-white/10 text-white/50 border-[#00d68f]/40"}`}
+          className={`absolute top-4 left-4 px-3 py-1.5 rounded-xl border text-[10px] font-black uppercase tracking-widest ${TAG_COLORS[item.tag] ?? "bg-white/10 text-white/50 border-[#f5a623]/40"}`}
         >
           {item.tag}
         </div>
-        <div className="absolute top-4 right-4 px-3 py-1.5 rounded-xl bg-black/50 backdrop-blur-md border border-[#00d68f]/40 text-[10px] text-white/50 font-black">
+        <div className="absolute top-4 right-4 px-3 py-1.5 rounded-xl bg-black/50 backdrop-blur-md border border-[#f5a623]/40 text-[10px] text-white/50 font-black">
           {new Date(item.created_at).toLocaleDateString("ru-RU", {
             day: "numeric",
             month: "short",
@@ -86,9 +86,9 @@ function NewsCard({ item, index }: { item: NewsItem; index: number }) {
         </div>
 
         {linkedGame && displayPrice !== null && (
-          <div className="mt-auto pt-4 border-t border-[#00d68f]/15 flex items-center justify-between gap-3">
+          <div className="mt-auto pt-4 border-t border-[#f5a623]/15 flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="relative w-12 h-12 rounded-xl overflow-hidden border border-[#00d68f]/40 shrink-0">
+              <div className="relative w-12 h-12 rounded-xl overflow-hidden border border-[#f5a623]/40 shrink-0">
                 <Image
                   src={linkedGame.image}
                   alt={linkedGame.title}
@@ -104,7 +104,7 @@ function NewsCard({ item, index }: { item: NewsItem; index: number }) {
                 <p className="text-white font-black text-sm uppercase truncate max-w-[120px]">
                   {linkedGame.title}
                 </p>
-                <p className="text-[#00d68f] text-base font-black">
+                <p className="text-[#f5a623] text-base font-black">
                   {displayPrice.toLocaleString()} ₽
                 </p>
               </div>
@@ -114,8 +114,8 @@ function NewsCard({ item, index }: { item: NewsItem; index: number }) {
               onClick={handleAdd}
               className={`shrink-0 flex items-center gap-2 px-5 py-3 rounded-2xl text-xs font-black uppercase tracking-wider transition-all ${
                 added
-                  ? "bg-[#00d68f] text-black shadow-[0_0_20px_rgba(99,243,247,0.3)]"
-                  : "bg-white/5 border border-[#00d68f]/40 text-white/50 hover:bg-[#00d68f]/10 hover:border-[#00d68f]/30 hover:text-[#00d68f]"
+                  ? "bg-[#f5a623] text-black shadow-[0_0_20px_rgba(99,243,247,0.3)]"
+                  : "bg-white/5 border border-[#f5a623]/40 text-white/50 hover:bg-[#f5a623]/10 hover:border-[#f5a623]/30 hover:text-[#f5a623]"
               }`}
             >
               {added ? <Check size={14} /> : <ShoppingCart size={14} />}
@@ -149,7 +149,7 @@ export default function NewsBlock() {
       <div className="max-w-[1620px] mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
-            <div className="w-1 h-8 bg-[#00d68f] rounded-full shadow-[0_0_15px_#00d68f]" />
+            <div className="w-1 h-8 bg-[#f5a623] rounded-full shadow-[0_0_15px_#00d68f]" />
             <h2
               className="text-2xl md:text-3xl font-michroma text-white uppercase tracking-[0.15em] leading-none font-black"
               style={{ WebkitTextStroke: "0.5px rgba(255, 255, 255, 0.3)" }}
@@ -159,7 +159,7 @@ export default function NewsBlock() {
           </div>
           <Link
             href="/news"
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0a1860]/60 border border-[#00d68f]/40 text-white/40 hover:text-[#00d68f] hover:border-[#00d68f]/30 transition-all text-[10px] font-black uppercase tracking-widest"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0a1860]/60 border border-[#f5a623]/40 text-white/40 hover:text-[#f5a623] hover:border-[#f5a623]/30 transition-all text-[10px] font-black uppercase tracking-widest"
           >
             Все новости
             <ArrowRight size={14} />

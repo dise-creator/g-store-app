@@ -85,7 +85,7 @@ export default function CartButton({
         <div
           className={`absolute inset-0 rounded-2xl transition-all duration-500 ${
             isEmpty
-              ? "bg-white/[0.05] border border-[#00d68f]/40"
+              ? "bg-white/[0.05] border border-[#f5a623]/40"
               : "bg-[#00FFFF] border border-[#00FFFF]/50"
           }`}
         />
@@ -223,9 +223,9 @@ export default function CartButton({
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            className="absolute top-[calc(100%+14px)] right-0 w-[420px] bg-[#0a0a0c] border border-[#00d68f]/40 rounded-[2rem] shadow-[0_30px_80px_rgba(0,0,0,0.7)] overflow-hidden z-[200]"
+            className="absolute top-[calc(100%+14px)] right-0 w-[420px] bg-[#0a0a0c] border border-[#f5a623]/40 rounded-[2rem] shadow-[0_30px_80px_rgba(0,0,0,0.7)] overflow-hidden z-[200]"
           >
-            <div className="px-6 py-5 border-b border-[#00d68f]/30 flex items-center justify-between">
+            <div className="px-6 py-5 border-b border-[#f5a623]/30 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-xl bg-[#00FFFF]/10 border border-[#00FFFF]/20 flex items-center justify-center">
                   <ShoppingBag size={15} className="text-[#00FFFF]" />
@@ -242,7 +242,7 @@ export default function CartButton({
               </div>
               <button
                 onClick={() => setIsHovered(false)}
-                className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 border border-[#00d68f]/40 flex items-center justify-center text-white/30 hover:text-white transition-all"
+                className="w-8 h-8 rounded-xl bg-white/5 hover:bg-white/10 border border-[#f5a623]/40 flex items-center justify-center text-white/30 hover:text-white transition-all"
               >
                 <X size={14} />
               </button>
@@ -259,7 +259,7 @@ export default function CartButton({
                     transition={{ delay: idx * 0.04 }}
                     className="flex items-center gap-4 px-6 py-3.5 hover:bg-[#0a1860]/60 transition-all group/item"
                   >
-                    <div className="w-14 h-14 rounded-xl overflow-hidden border border-[#00d68f]/30 shrink-0">
+                    <div className="w-14 h-14 rounded-xl overflow-hidden border border-[#f5a623]/30 shrink-0">
                       <Image
                         src={item.image}
                         alt={item.title}
@@ -300,7 +300,7 @@ export default function CartButton({
               </AnimatePresence>
             </div>
 
-            <div className="px-6 py-5 bg-[#0a1860]/40 border-t border-[#00d68f]/30">
+            <div className="px-6 py-5 bg-[#0a1860]/40 border-t border-[#f5a623]/30">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-white/30 text-[10px] uppercase font-black tracking-widest">
                   Итого к оплате

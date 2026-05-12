@@ -108,8 +108,8 @@ export default function MobileNav() {
                       layoutId="nav-indicator"
                       className="absolute inset-0 rounded-2xl"
                       style={{
-                        background: "rgba(0, 214, 143, 0.1)",
-                        border: "1px solid rgba(0, 214, 143, 0.25)",
+                        background: "rgba(:245, 166, 35, 0.1)",
+                        border: "1px solid rgba(:245, 166, 35, 0.25)",
                       }}
                       transition={{
                         type: "spring",
@@ -128,7 +128,7 @@ export default function MobileNav() {
                       }}
                     />
                     {isWishlist && wishlistItems.length > 0 && (
-                      <div className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#00d68f] rounded-full flex items-center justify-center">
+                      <div className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#f5a623] rounded-full flex items-center justify-center">
                         <span className="text-black text-[8px] font-black">
                           {wishlistItems.length}
                         </span>
@@ -161,7 +161,7 @@ export default function MobileNav() {
                   initial={{ scale: 1, opacity: 0.5 }}
                   animate={{ scale: 2, opacity: 0 }}
                   transition={{ duration: 0.6 }}
-                  className="absolute inset-0 rounded-2xl bg-[#00d68f]"
+                  className="absolute inset-0 rounded-2xl bg-[#f5a623]"
                 />
               )}
 
@@ -177,7 +177,7 @@ export default function MobileNav() {
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#00d68f] rounded-full flex items-center justify-center"
+                    className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#f5a623] rounded-full flex items-center justify-center"
                   >
                     <span className="text-black text-[8px] font-black">
                       {totalItems}
@@ -187,7 +187,7 @@ export default function MobileNav() {
               </div>
 
               {totalItems > 0 ? (
-                <span className="text-[9px] font-black text-[#00d68f] mt-0.5">
+                <span className="text-[9px] font-black text-[#f5a623] mt-0.5">
                   {totalPrice.toLocaleString()} ₽
                 </span>
               ) : (

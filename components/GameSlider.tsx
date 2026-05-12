@@ -40,18 +40,19 @@ export default function GameSlider({
   return (
     <div
       className="w-full py-8 transform-gpu relative rounded-[2.5rem] overflow-hidden"
-    style={{
-  background: "#08113d",
-  border: "1px solid rgba(0, 214, 143, 0.35)",
-  boxShadow: "inset 0 0 60px rgba(0,20,80,0.3), 0 0 40px rgba(0, 214, 143, 0.05)",
-}}
+      style={{
+        background: "#08113d",
+        border: "1px solid rgba(:245, 166, 35, 0.35)",
+        boxShadow:
+          "inset 0 0 60px rgba(0,20,80,0.3), 0 0 40px rgba(:245, 166, 35, 0.05)",
+      }}
     >
       <div className="absolute top-0 right-1/4 w-80 h-40 bg-[#1d3393]/10 blur-[80px] rounded-full pointer-events-none" />
 
       {/* Шапка */}
       <div className="relative flex items-center justify-between mb-6 px-8">
         <div className="flex items-center gap-4">
-          <div className="w-1 h-8 bg-[#00d68f] rounded-full shadow-[0_0_15px_#00d68f]" />
+          <div className="w-1 h-8 bg-[#f5a623] rounded-full shadow-[0_0_15px_#00d68f]" />
           <h2
             className="text-2xl md:text-3xl font-michroma text-white uppercase tracking-[0.15em] leading-none font-black"
             style={{ WebkitTextStroke: "0.5px rgba(255,255,255,0.3)" }}
@@ -63,13 +64,13 @@ export default function GameSlider({
         <div className="flex gap-2">
           <button
             onClick={scrollPrev}
-            className="w-10 h-10 rounded-xl bg-[#0a1860]/60 border border-[#00d68f]/40 flex items-center justify-center text-white/40 hover:text-[#00d68f] hover:border-[#00d68f]/50 hover:bg-[#00d68f]/5 transition-all active:scale-90"
+            className="w-10 h-10 rounded-xl bg-[#0a1860]/60 border border-[#f5a623]/40 flex items-center justify-center text-white/40 hover:text-[#f5a623] hover:border-[#f5a623]/50 hover:bg-[#f5a623]/5 transition-all active:scale-90"
           >
             <ChevronLeft size={20} />
           </button>
           <button
             onClick={scrollNext}
-            className="w-10 h-10 rounded-xl bg-[#0a1860]/60 border border-[#00d68f]/40 flex items-center justify-center text-white/40 hover:text-[#00d68f] hover:border-[#00d68f]/50 hover:bg-[#00d68f]/5 transition-all active:scale-90"
+            className="w-10 h-10 rounded-xl bg-[#0a1860]/60 border border-[#f5a623]/40 flex items-center justify-center text-white/40 hover:text-[#f5a623] hover:border-[#f5a623]/50 hover:bg-[#f5a623]/5 transition-all active:scale-90"
           >
             <ChevronRight size={20} />
           </button>

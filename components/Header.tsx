@@ -131,19 +131,19 @@ export default function Header({
             className="relative group/logo cursor-pointer shrink-0 h-10 md:h-14 flex items-center active:scale-95 transition-transform duration-150"
           >
             <div className="relative flex items-center h-full tracking-widest transition-all duration-500 skew-x-[-12deg] group-hover/logo:skew-x-[-8deg]">
-              <div className="absolute -inset-3 rounded-2xl bg-[#00d68f]/5 blur-xl opacity-0 group-hover/logo:opacity-100 transition-opacity duration-500 pointer-events-none" />
+              <div className="absolute -inset-3 rounded-2xl bg-[#f5a623]/5 blur-xl opacity-0 group-hover/logo:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
               <h1 className="select-none flex items-center transition-all duration-500 h-full relative z-10">
                 <div className="flex items-center mt-[-2px]">
                   <span
-                    className="relative flex items-center justify-center font-michroma text-white text-xl md:text-4xl font-black transition-all duration-500 group-hover/logo:text-[#00d68f]"
+                    className="relative flex items-center justify-center font-michroma text-white text-xl md:text-4xl font-black transition-all duration-500 group-hover/logo:text-[#f5a623]"
                     style={{ WebkitTextStroke: "1px white" }}
                   >
                     C
-                    <PlayIcon className="absolute text-[#00d68f] w-2.5 h-2.5 md:w-5 md:h-5 opacity-0 group-hover/logo:opacity-100 transition-all duration-300 transform scale-50 group-hover/logo:scale-100 translate-x-[1px] translate-y-[1px] drop-shadow-[0_0_10px_#00d68f]" />
+                    <PlayIcon className="absolute text-[#f5a623] w-2.5 h-2.5 md:w-5 md:h-5 opacity-0 group-hover/logo:opacity-100 transition-all duration-300 transform scale-50 group-hover/logo:scale-100 translate-x-[1px] translate-y-[1px] drop-shadow-[0_0_10px_#00d68f]" />
                   </span>
                   <span
-                    className="font-michroma text-white text-xl md:text-4xl font-black ml-[1px] transition-all duration-500 group-hover/logo:text-[#00d68f]"
+                    className="font-michroma text-white text-xl md:text-4xl font-black ml-[1px] transition-all duration-500 group-hover/logo:text-[#f5a623]"
                     style={{ WebkitTextStroke: "1px white" }}
                   >
                     L
@@ -173,7 +173,7 @@ export default function Header({
               </h1>
 
               <motion.div
-                className="absolute -bottom-1 left-0 h-[3px] bg-[#00d68f] rounded-full shadow-[0_0_15px_#00d68f]"
+                className="absolute -bottom-1 left-0 h-[3px] bg-[#f5a623] rounded-full shadow-[0_0_15px_#00d68f]"
                 initial={{ width: "0%" }}
                 whileHover={{ width: "100%" }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
@@ -206,7 +206,7 @@ export default function Header({
                   animate={{ rotate: [0, 20, -10, 0], scale: [1, 1.3, 1] }}
                   transition={{ duration: 0.4 }}
                 >
-                  <Search size={18} className="text-[#00d68f] shrink-0" />
+                  <Search size={18} className="text-[#f5a623] shrink-0" />
                 </motion.div>
                 <motion.span
                   initial={{ opacity: 0, x: -10 }}
@@ -219,7 +219,7 @@ export default function Header({
                 <motion.div
                   animate={{ opacity: [1, 0, 1] }}
                   transition={{ duration: 0.8, repeat: Infinity }}
-                  className="w-0.5 h-4 bg-[#00d68f] rounded-full ml-1"
+                  className="w-0.5 h-4 bg-[#f5a623] rounded-full ml-1"
                 />
                 {[...Array(3)].map((_, i) => (
                   <motion.div
@@ -231,7 +231,7 @@ export default function Header({
                       delay: i * 0.08,
                       ease: "easeOut",
                     }}
-                    className="absolute w-1 h-1 rounded-full bg-[#00d68f]"
+                    className="absolute w-1 h-1 rounded-full bg-[#f5a623]"
                     style={{ top: "50%", left: 20 }}
                   />
                 ))}
@@ -266,27 +266,27 @@ export default function Header({
             onClick={handleSearchClick}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.85, rotate: 15 }}
-            className="p-2 md:p-3 bg-[#0a1860]/60 hover:bg-white/[0.08] rounded-xl md:rounded-2xl border border-[#00d68f]/30 transition-colors group relative overflow-hidden"
+            className="p-2 md:p-3 bg-[#0a1860]/60 hover:bg-white/[0.08] rounded-xl md:rounded-2xl border border-[#f5a623]/30 transition-colors group relative overflow-hidden"
           >
             <motion.div
-              className="absolute inset-0 rounded-2xl bg-[#00d68f]/10"
+              className="absolute inset-0 rounded-2xl bg-[#f5a623]/10"
               initial={{ scale: 0, opacity: 0 }}
               whileHover={{ scale: 1.5, opacity: 1 }}
               transition={{ duration: 0.3 }}
             />
             <Search
               size={18}
-              className="text-white/40 group-hover:text-[#00d68f] transition-colors relative z-10"
+              className="text-white/40 group-hover:text-[#f5a623] transition-colors relative z-10"
             />
           </motion.button>
 
           <motion.button
             onClick={onWishlistClick}
             whileTap={{ scale: 0.8 }}
-            className="relative p-2 md:p-3 bg-[#0a1860]/60 hover:bg-white/[0.08] rounded-xl md:rounded-2xl border border-[#00d68f]/30 transition-all group overflow-visible hidden md:flex"
+            className="relative p-2 md:p-3 bg-[#0a1860]/60 hover:bg-white/[0.08] rounded-xl md:rounded-2xl border border-[#f5a623]/30 transition-all group overflow-visible hidden md:flex"
           >
             <motion.div
-              className="absolute inset-0 rounded-2xl bg-[#00d68f]/10"
+              className="absolute inset-0 rounded-2xl bg-[#f5a623]/10"
               initial={{ scale: 0, opacity: 0 }}
               whileHover={{ scale: 1.5, opacity: 1 }}
               transition={{ duration: 0.3 }}
@@ -298,7 +298,7 @@ export default function Header({
                   animate={{ opacity: 1, scale: 1.4 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.4 }}
-                  className="absolute inset-0 rounded-2xl bg-[#00d68f]/30 blur-xl pointer-events-none"
+                  className="absolute inset-0 rounded-2xl bg-[#f5a623]/30 blur-xl pointer-events-none"
                 />
               )}
             </AnimatePresence>
@@ -317,8 +317,8 @@ export default function Header({
                 size={18}
                 className={`transition-all relative z-10 ${
                   mounted && wishlistCount > 0
-                    ? "text-[#00d68f] fill-[#00d68f]/30 drop-shadow-[0_0_8px_rgba(99,243,247,0.8)]"
-                    : "text-white/40 group-hover:text-[#00d68f]"
+                    ? "text-[#f5a623] fill-[#00d68f]/30 drop-shadow-[0_0_8px_rgba(99,243,247,0.8)]"
+                    : "text-white/40 group-hover:text-[#f5a623]"
                 }`}
               />
             </motion.div>
@@ -336,7 +336,7 @@ export default function Header({
                         y: Math.sin((i / 6) * Math.PI * 2) * 28,
                       }}
                       transition={{ duration: 0.6, ease: "easeOut" }}
-                      className="absolute left-1/2 top-1/2 w-1.5 h-1.5 rounded-full bg-[#00d68f] pointer-events-none -translate-x-1/2 -translate-y-1/2"
+                      className="absolute left-1/2 top-1/2 w-1.5 h-1.5 rounded-full bg-[#f5a623] pointer-events-none -translate-x-1/2 -translate-y-1/2"
                       style={{ zIndex: 20 }}
                     />
                   ))}
@@ -351,7 +351,7 @@ export default function Header({
                   animate={{ scale: 1, rotate: 0 }}
                   exit={{ scale: 0, rotate: 180 }}
                   transition={{ type: "spring", stiffness: 500, damping: 20 }}
-                  className="absolute -top-1 -right-1 w-4 h-4 bg-[#00d68f] text-black text-[9px] font-black rounded-full flex items-center justify-center"
+                  className="absolute -top-1 -right-1 w-4 h-4 bg-[#f5a623] text-black text-[9px] font-black rounded-full flex items-center justify-center"
                 >
                   {wishlistCount}
                 </motion.span>

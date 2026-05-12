@@ -36,9 +36,9 @@ export const AboutContent = () => (
       ].map((item) => (
         <div
           key={item.label}
-          className="p-5 bg-[#0a1860]/60 border border-[#00d68f]/30 rounded-2xl flex flex-col gap-3"
+          className="p-5 bg-[#0a1860]/60 border border-[#f5a623]/30 rounded-2xl flex flex-col gap-3"
         >
-          <item.icon size={22} className="text-[#00d68f]" />
+          <item.icon size={22} className="text-[#f5a623]" />
           <p className="text-white font-black text-sm uppercase">
             {item.label}
           </p>
@@ -46,11 +46,11 @@ export const AboutContent = () => (
         </div>
       ))}
     </div>
-    <div className="p-5 bg-[#00d68f]/5 border border-[#00d68f]/10 rounded-2xl">
+    <div className="p-5 bg-[#f5a623]/5 border border-[#f5a623]/10 rounded-2xl">
       <p className="text-white/50 text-sm leading-relaxed">
         Мы предлагаем карты пополнения PSN по ценам турецкого 🇹🇷 и индийского 🇮🇳
         регионов — это позволяет экономить до{" "}
-        <span className="text-[#00d68f] font-black">65%</span> на покупке игр и
+        <span className="text-[#f5a623] font-black">65%</span> на покупке игр и
         подписок PS Plus.
       </p>
     </div>
@@ -93,7 +93,7 @@ export const ContactsContent = () => (
         href={item.href}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center justify-between p-5 bg-[#0a1860]/60 hover:bg-white/[0.06] border border-[#00d68f]/30 hover:border-[#00d68f]/40 rounded-2xl transition-all group"
+        className="flex items-center justify-between p-5 bg-[#0a1860]/60 hover:bg-white/[0.06] border border-[#f5a623]/30 hover:border-[#f5a623]/40 rounded-2xl transition-all group"
       >
         <div>
           <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-1">
@@ -111,13 +111,13 @@ export const ContactsContent = () => (
         </div>
       </a>
     ))}
-    <div className="p-5 bg-[#0a1860]/40 border border-[#00d68f]/30 rounded-2xl">
+    <div className="p-5 bg-[#0a1860]/40 border border-[#f5a623]/30 rounded-2xl">
       <p className="text-white/20 text-[10px] uppercase font-black tracking-widest mb-1">
         Время ответа
       </p>
       <p className="text-white/50 text-sm">
         Обычно отвечаем в течение{" "}
-        <span className="text-[#00d68f] font-black">15 минут</span>
+        <span className="text-[#f5a623] font-black">15 минут</span>
       </p>
     </div>
   </div>
@@ -125,7 +125,7 @@ export const ContactsContent = () => (
 
 export const ReviewsContent = () => (
   <div className="flex flex-col gap-5">
-    <div className="flex items-center gap-5 p-5 bg-[#00d68f]/5 border border-[#00d68f]/10 rounded-2xl">
+    <div className="flex items-center gap-5 p-5 bg-[#f5a623]/5 border border-[#f5a623]/10 rounded-2xl">
       <div className="text-5xl font-black text-white">4.9</div>
       <div>
         <div className="flex gap-1 mb-2">
@@ -164,12 +164,12 @@ export const ReviewsContent = () => (
     ].map((review) => (
       <div
         key={review.name}
-        className="p-5 bg-[#0a1860]/60 border border-[#00d68f]/30 rounded-2xl flex flex-col gap-4"
+        className="p-5 bg-[#0a1860]/60 border border-[#f5a623]/30 rounded-2xl flex flex-col gap-4"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-[#00d68f]/10 border border-[#00d68f]/40 flex items-center justify-center">
-              <span className="text-[#00d68f] text-sm font-black">
+            <div className="w-10 h-10 rounded-full bg-[#f5a623]/10 border border-[#f5a623]/40 flex items-center justify-center">
+              <span className="text-[#f5a623] text-sm font-black">
                 {review.name[0]}
               </span>
             </div>
@@ -219,7 +219,7 @@ export const SupportContent = () => (
     ].map((item, i) => (
       <div
         key={i}
-        className="p-5 bg-[#0a1860]/60 border border-[#00d68f]/30 rounded-2xl flex flex-col gap-2"
+        className="p-5 bg-[#0a1860]/60 border border-[#f5a623]/30 rounded-2xl flex flex-col gap-2"
       >
         <p className="text-white font-black text-sm uppercase">{item.q}</p>
         <p className="text-white/50 text-sm leading-relaxed">{item.a}</p>
@@ -229,7 +229,7 @@ export const SupportContent = () => (
       href="https://t.me/clicps_bot"
       target="_blank"
       rel="noopener noreferrer"
-      className="flex items-center justify-center gap-2 py-4 bg-[#00d68f] text-black rounded-2xl font-black text-sm uppercase tracking-widest hover:shadow-[0_0_20px_rgba(99,243,247,0.3)] transition-all"
+      className="flex items-center justify-center gap-2 py-4 bg-[#f5a623] text-black rounded-2xl font-black text-sm uppercase tracking-widest hover:shadow-[0_0_20px_rgba(99,243,247,0.3)] transition-all"
     >
       <MessageCircle size={18} />
       Написать в Telegram бот
@@ -263,7 +263,7 @@ export const AgreementContent = () => (
     ].map((item) => (
       <div
         key={item.title}
-        className="p-5 bg-[#0a1860]/40 border border-[#00d68f]/30 rounded-xl"
+        className="p-5 bg-[#0a1860]/40 border border-[#f5a623]/30 rounded-xl"
       >
         <p className="text-white font-black text-sm mb-2 uppercase">
           {item.title}
@@ -300,7 +300,7 @@ export const PrivacyContent = () => (
     ].map((item) => (
       <div
         key={item.title}
-        className="p-5 bg-[#0a1860]/40 border border-[#00d68f]/30 rounded-xl"
+        className="p-5 bg-[#0a1860]/40 border border-[#f5a623]/30 rounded-xl"
       >
         <p className="text-white font-black text-sm mb-2 uppercase">
           {item.title}

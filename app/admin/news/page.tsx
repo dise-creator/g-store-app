@@ -99,7 +99,7 @@ export default function AdminNewsPage() {
   if (adminLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-[#00d68f] border-t-transparent rounded-full animate-spin" />
+        <div className="w-8 h-8 border-2 border-[#f5a623] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -113,7 +113,7 @@ export default function AdminNewsPage() {
         </p>
         <Link
           href="/"
-          className="px-6 py-3 bg-[#00d68f] text-black font-black uppercase  text-xs rounded-2xl"
+          className="px-6 py-3 bg-[#f5a623] text-black font-black uppercase  text-xs rounded-2xl"
         >
           На главную
         </Link>
@@ -127,13 +127,13 @@ export default function AdminNewsPage() {
         <div className="flex items-center gap-4 mb-10">
           <Link
             href="/"
-            className="w-10 h-10 rounded-xl bg-white/5 border border-[#00d68f]/40 flex items-center justify-center text-white/40 hover:text-[#00d68f] transition-all"
+            className="w-10 h-10 rounded-xl bg-white/5 border border-[#f5a623]/40 flex items-center justify-center text-white/40 hover:text-[#f5a623] transition-all"
           >
             <ChevronLeft size={20} />
           </Link>
           <div>
             <h1 className="text-3xl font-black  uppercase text-white tracking-tighter">
-              Управление <span className="text-[#00d68f]">новостями</span>
+              Управление <span className="text-[#f5a623]">новостями</span>
             </h1>
             <p className="text-white/30 text-xs mt-1">
               Добавляй и редактируй новости магазина
@@ -142,7 +142,7 @@ export default function AdminNewsPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-[#0a1860]/60 border border-[#00d68f]/40 rounded-[2rem] p-6 flex flex-col gap-4">
+          <div className="bg-[#0a1860]/60 border border-[#f5a623]/40 rounded-[2rem] p-6 flex flex-col gap-4">
             <p className="text-white/30 text-[10px] uppercase font-black tracking-widest">
               {editId ? "Редактировать новость" : "Новая новость"}
             </p>
@@ -157,7 +157,7 @@ export default function AdminNewsPage() {
                   setForm((p) => ({ ...p, title: e.target.value }))
                 }
                 placeholder="Заголовок новости..."
-                className="w-full px-4 py-3 bg-white/5 border border-[#00d68f]/40 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#00d68f]/40 transition-all placeholder-white/20"
+                className="w-full px-4 py-3 bg-white/5 border border-[#f5a623]/40 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#f5a623]/40 transition-all placeholder-white/20"
               />
             </div>
 
@@ -172,7 +172,7 @@ export default function AdminNewsPage() {
                 }
                 placeholder="Текст новости..."
                 rows={4}
-                className="w-full px-4 py-3 bg-white/5 border border-[#00d68f]/40 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#00d68f]/40 transition-all placeholder-white/20 resize-none"
+                className="w-full px-4 py-3 bg-white/5 border border-[#f5a623]/40 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#f5a623]/40 transition-all placeholder-white/20 resize-none"
               />
             </div>
 
@@ -186,7 +186,7 @@ export default function AdminNewsPage() {
                   setForm((p) => ({ ...p, image: e.target.value }))
                 }
                 placeholder="https://... или /hero/1.jpg"
-                className="w-full px-4 py-3 bg-white/5 border border-[#00d68f]/40 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#00d68f]/40 transition-all placeholder-white/20"
+                className="w-full px-4 py-3 bg-white/5 border border-[#f5a623]/40 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#f5a623]/40 transition-all placeholder-white/20"
               />
             </div>
 
@@ -200,7 +200,7 @@ export default function AdminNewsPage() {
                   setForm((p) => ({ ...p, game_id: e.target.value }))
                 }
                 placeholder="gow-1, tlou-1..."
-                className="w-full px-4 py-3 bg-white/5 border border-[#00d68f]/40 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#00d68f]/40 transition-all placeholder-white/20"
+                className="w-full px-4 py-3 bg-white/5 border border-[#f5a623]/40 rounded-2xl text-white font-bold text-sm focus:outline-none focus:border-[#f5a623]/40 transition-all placeholder-white/20"
               />
             </div>
 
@@ -213,7 +213,7 @@ export default function AdminNewsPage() {
                   <button
                     key={tag}
                     onClick={() => setForm((p) => ({ ...p, tag }))}
-                    className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase  border transition-all ${form.tag === tag ? "bg-[#00d68f] text-black border-transparent" : "bg-white/5 border-[#00d68f]/40 text-white/40 hover:text-white"}`}
+                    className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase  border transition-all ${form.tag === tag ? "bg-[#f5a623] text-black border-transparent" : "bg-white/5 border-[#f5a623]/40 text-white/40 hover:text-white"}`}
                   >
                     {tag}
                   </button>
@@ -222,7 +222,7 @@ export default function AdminNewsPage() {
             </div>
 
             {form.image && (
-              <div className="relative h-32 rounded-2xl overflow-hidden border border-[#00d68f]/40">
+              <div className="relative h-32 rounded-2xl overflow-hidden border border-[#f5a623]/40">
                 <img
                   src={form.image}
                   alt="preview"
@@ -235,7 +235,7 @@ export default function AdminNewsPage() {
               {editId && (
                 <button
                   onClick={handleCancel}
-                  className="flex-1 py-3 bg-white/5 border border-[#00d68f]/40 text-white/40 font-black uppercase  text-xs rounded-2xl hover:text-white transition-all"
+                  className="flex-1 py-3 bg-white/5 border border-[#f5a623]/40 text-white/40 font-black uppercase  text-xs rounded-2xl hover:text-white transition-all"
                 >
                   Отмена
                 </button>
@@ -243,7 +243,7 @@ export default function AdminNewsPage() {
               <button
                 onClick={handleSave}
                 disabled={saving || !form.title || !form.description}
-                className="flex-1 py-3 bg-[#00d68f] text-black font-black uppercase  text-xs rounded-2xl hover:shadow-[0_0_20px_rgba(99,243,247,0.3)] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                className="flex-1 py-3 bg-[#f5a623] text-black font-black uppercase  text-xs rounded-2xl hover:shadow-[0_0_20px_rgba(99,243,247,0.3)] transition-all disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {saving ? (
                   <Loader2 size={14} className="animate-spin" />
@@ -260,14 +260,14 @@ export default function AdminNewsPage() {
             </div>
           </div>
 
-          <div className="bg-[#0a1860]/60 border border-[#00d68f]/40 rounded-[2rem] p-6">
+          <div className="bg-[#0a1860]/60 border border-[#f5a623]/40 rounded-[2rem] p-6">
             <p className="text-white/30 text-[10px] uppercase font-black tracking-widest mb-4">
               Все новости ({news.length})
             </p>
 
             {loading ? (
               <div className="flex justify-center py-10">
-                <Loader2 size={20} className="animate-spin text-[#00d68f]" />
+                <Loader2 size={20} className="animate-spin text-[#f5a623]" />
               </div>
             ) : news.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-10 gap-2">
@@ -285,13 +285,13 @@ export default function AdminNewsPage() {
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0 }}
-                      className={`p-4 rounded-2xl border transition-all cursor-pointer hover:border-[#00d68f]/40 ${editId === item.id ? "border-[#00d68f]/30 bg-[#00d68f]/5" : "border-[#00d68f]/30 bg-[#0a1860]/40"}`}
+                      className={`p-4 rounded-2xl border transition-all cursor-pointer hover:border-[#f5a623]/40 ${editId === item.id ? "border-[#f5a623]/30 bg-[#f5a623]/5" : "border-[#f5a623]/30 bg-[#0a1860]/40"}`}
                       onClick={() => handleEdit(item)}
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="text-[9px] bg-[#00d68f]/10 border border-[#00d68f]/40 text-[#00d68f] px-2 py-0.5 rounded-lg font-black uppercase">
+                            <span className="text-[9px] bg-[#f5a623]/10 border border-[#f5a623]/40 text-[#f5a623] px-2 py-0.5 rounded-lg font-black uppercase">
                               {item.tag}
                             </span>
                             <span className="text-white/20 text-[9px] font-black">
