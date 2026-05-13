@@ -26,10 +26,10 @@ const regionColors: Record<
   },
 };
 
-const DISCOUNT_LABELS: Record<Region, string> = {
-  TR: "Скидка до 65%",
-  IN: "Скидка до 45%",
-};
+// const DISCOUNT_LABELS: Record<Region, string> = {
+//   TR: "Скидка до 65%",
+//   IN: "Скидка до 45%",
+// };
 
 const flagUrls: Record<Region, string> = {
   TR: "https://flagcdn.com/w40/tr.png",
