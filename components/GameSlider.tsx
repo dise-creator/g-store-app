@@ -115,7 +115,7 @@ export default function GameSlider({
                       damping: 20,
                       delay: (index % 8) * 0.07,
                     }}
-                    whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                    
                   >
                     <GameCard
                       game={game}

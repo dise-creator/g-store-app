@@ -48,11 +48,12 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
   };
 
   return (
-    <div className="group relative flex flex-col gap-3 transition-all">
+    <div className="group relative flex flex-col gap-3">
+      {/* Кнопка сердца */}
       <button
         onClick={handleHeartClick}
         type="button"
-        className="absolute top-3 right-3 z-[60] w-9 h-9 flex items-center justify-center bg-black/40 backdrop-blur-md rounded-xl border border-[#ff6b00]/40 text-white/40 hover:text-[#ff6b00] transition-all active:scale-90"
+        className="absolute top-3 right-3 z-[70] w-9 h-9 flex items-center justify-center bg-black/40 backdrop-blur-md rounded-xl border border-white/10 text-white/40 hover:text-[#ff6b00] transition-colors active:scale-90"
       >
         <Heart
           size={16}
@@ -64,16 +65,18 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
         />
       </button>
 
+      {/* Скидка */}
       {hasDiscount && (
-        <div className="absolute top-3 left-3 z-[60] flex items-center gap-1 px-2.5 py-1.5 bg-red-500 rounded-xl shadow-[0_0_15px_rgba(239,68,68,0.5)]">
+        <div className="absolute top-3 left-3 z-[70] flex items-center gap-1 px-2.5 py-1.5 bg-red-500 rounded-xl shadow-[0_0_15px_rgba(239,68,68,0.5)]">
           <span className="text-white font-black text-xs uppercase tracking-wider">
             -{discount}%
           </span>
         </div>
       )}
 
+      {/* Регион */}
       <div
-        className={`absolute z-[60] flex items-center gap-1 px-2 py-1 bg-black/60 backdrop-blur-md rounded-lg border border-[#ff6b00]/40 ${
+        className={`absolute z-[70] flex items-center gap-1 px-2 py-1 bg-black/60 backdrop-blur-md rounded-lg border border-white/10 ${
           hasDiscount ? "top-12 left-3" : "top-3 left-3"
         }`}
       >
@@ -83,21 +86,23 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
         </span>
       </div>
 
+      {/* Кнопка открытия модалки */}
       <button
         onClick={handleCardClick}
         type="button"
-        className="absolute inset-0 z-50 w-full h-full cursor-pointer appearance-none bg-transparent border-none p-0"
+        className="absolute inset-0 z-[40] w-full h-full cursor-pointer appearance-none bg-transparent border-none p-0 outline-none focus:outline-none"
         aria-label={`Открыть ${game.title}`}
       />
 
-      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[2rem] border border-[#ff6b00]/30 transition-all bg-[#161618]">
+      {/* Картинка */}
+      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[2rem] border border-white/10 bg-[#161618]">
         {!imgError ? (
           <Image
             src={game.image}
             alt={game.title}
             fill
             sizes="(max-width: 640px) 65vw, (max-width: 768px) 30vw, (max-width: 1024px) 22vw, 16vw"
-            className="object-cover object-top transition-transform duration-700 group-hover:scale-110"
+            className="object-cover object-top"
             loading="lazy"
             onError={() => setImgError(true)}
           />
@@ -108,43 +113,24 @@ export default function GameCard({ game, onSelect }: GameCardProps) {
             </span>
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
-        {hasDiscount && game.discount_until && (
-          <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-red-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-            <p className="text-[9px] text-red-300 font-black uppercase tracking-widest text-center">
-              🔥 Скидка до{" "}
-              {new Date(game.discount_until).toLocaleDateString("ru-RU", {
-                day: "numeric",
-                month: "long",
-              })}
-            </p>
-          </div>
-        )}
       </div>
 
-      <div className="flex flex-col gap-1 px-2 pointer-events-none">
-        <h3 className="font-michroma text-[9px] md:text-[10px] uppercase tracking-[0.15em] text-white/30 group-hover:text-white/80 truncate">
+      {/* Инфо */}
+      <div className="flex flex-col gap-1 px-2">
+        <h3 className="font-michroma text-[9px] md:text-[10px] uppercase tracking-[0.15em] text-white/40 truncate">
           {game.title}
         </h3>
         <div className="flex items-center gap-2 flex-wrap">
           <div className="flex items-center gap-1.5">
-            <span
-              className={`font-michroma text-lg leading-none ${hasDiscount ? "text-red-400" : "text-white"}`}
-            >
+            <span className={`font-michroma text-lg leading-none ${hasDiscount ? "text-red-400" : "text-white"}`}>
               {displayPrice.toLocaleString()}
             </span>
-            <span
-              className={`font-michroma text-[10px] mt-1 ${hasDiscount ? "text-red-400" : "text-[#ff6b00]"}`}
-            >
+            <span className={`font-michroma text-[10px] mt-1 ${hasDiscount ? "text-red-400" : "text-[#ff6b00]"}`}>
               ₽
             </span>
           </div>
           <span className="font-michroma text-xs text-white/20 line-through leading-none mt-1">
-            {hasDiscount
-              ? originalDisplayPrice.toLocaleString()
-              : game.price.toLocaleString()}{" "}
-            ₽
+            {hasDiscount ? originalDisplayPrice.toLocaleString() : game.price.toLocaleString()} ₽
           </span>
         </div>
       </div>

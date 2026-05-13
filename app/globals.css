@@ -73,6 +73,13 @@
   ::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 107, 0, 0.5);
   }
+
+  button:focus {
+    outline: none;
+  }
+  button:focus-visible {
+    outline: none;
+  }
 }
 
 @layer utilities {
@@ -168,11 +175,4 @@
 body.modal-open {
   overflow: hidden;
   height: 100vh;
-}
-
-button:not([disabled]):not(.no-hover):hover,
-a[class*="rounded"]:not(.no-hover):hover {
-  background-color: rgba(255, 107, 0, 0.08) !important;
-  border-color: rgba(255, 107, 0, 0.2) !important;
-  transition: all 0.2s ease;
 }
