@@ -26,11 +26,6 @@ const regionColors: Record<
   },
 };
 
-// const DISCOUNT_LABELS: Record<Region, string> = {
-//   TR: "Скидка до 65%",
-//   IN: "Скидка до 45%",
-// };
-
 const flagUrls: Record<Region, string> = {
   TR: "https://flagcdn.com/w40/tr.png",
   IN: "https://flagcdn.com/w40/in.png",
@@ -50,8 +45,12 @@ export default function RegionSwitcher() {
         setIsOpen(false);
       }
     };
+
     document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+    };
   }, []);
 
   return (
@@ -61,6 +60,7 @@ export default function RegionSwitcher() {
         {Object.values(REGIONS).map((r) => {
           const isActive = region === r.code;
           const c = regionColors[r.code];
+
           return (
             <motion.button
               key={r.code}
@@ -86,6 +86,7 @@ export default function RegionSwitcher() {
                   unoptimized
                 />
               </div>
+
               <span
                 className={`text-sm font-black uppercase tracking-wide transition-colors ${
                   isActive ? c.text : "text-white/25"
@@ -93,11 +94,16 @@ export default function RegionSwitcher() {
               >
                 {r.name}
               </span>
+
               {isActive && (
                 <motion.div
                   layoutId="region-indicator"
                   className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#ff5555]"
-                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 400,
+                    damping: 30,
+                  }}
                 />
               )}
             </motion.button>
@@ -105,7 +111,7 @@ export default function RegionSwitcher() {
         })}
       </div>
 
-      {/* Мобилка */}
+      {/* Мобильная версия */}
       <div className="flex md:hidden">
         <motion.button
           onClick={() => setIsOpen(!isOpen)}
@@ -124,9 +130,11 @@ export default function RegionSwitcher() {
               unoptimized
             />
           </div>
+
           <span className={`text-xs font-black uppercase ${colors.text}`}>
             {currentRegion.name}
           </span>
+
           <motion.div
             animate={{ rotate: isOpen ? 180 : 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
@@ -141,12 +149,17 @@ export default function RegionSwitcher() {
               initial={{ opacity: 0, y: -8, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.95 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              transition={{
+                type: "spring",
+                damping: 25,
+                stiffness: 300,
+              }}
               className="absolute top-[calc(100%+8px)] left-0 z-[200] min-w-[160px] bg-[#0d1f6e] border border-[#ff6b00]/40 rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.8)]"
             >
               {Object.values(REGIONS).map((r, i) => {
                 const isActive = region === r.code;
                 const c = regionColors[r.code];
+
                 return (
                   <motion.button
                     key={r.code}
@@ -157,14 +170,16 @@ export default function RegionSwitcher() {
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.06 }}
-                    className={`w-full flex items-center gap-3 px-4 py-3.5 transition-all ${
+                    className={`w-full flex items-center gap-3 px-4 py-3 transition-all ${
                       isActive
                         ? `${c.bg} border-l-2 ${c.border}`
                         : "hover:bg-white/5 border-l-2 border-transparent"
                     }`}
                   >
                     <div
-                      className={`w-8 h-8 rounded-xl overflow-hidden shrink-0 ${isActive ? c.iconBg : "bg-white/10"}`}
+                      className={`w-8 h-8 rounded-xl overflow-hidden shrink-0 ${
+                        isActive ? c.iconBg : "bg-white/10"
+                      }`}
                     >
                       <Image
                         src={flagUrls[r.code]}
@@ -175,16 +190,15 @@ export default function RegionSwitcher() {
                         unoptimized
                       />
                     </div>
-                    <div className="flex flex-col items-start">
-                      <span
-                        className={`text-sm font-black uppercase ${isActive ? c.text : "text-white/60"}`}
-                      >
-                        {r.name}
-                      </span>
-                      <span className="text-white/20 text-[9px] font-black uppercase tracking-widest">
-                        {DISCOUNT_LABELS[r.code]}
-                      </span>
-                    </div>
+
+                    <span
+                      className={`text-sm font-black uppercase ${
+                        isActive ? c.text : "text-white/60"
+                      }`}
+                    >
+                      {r.name}
+                    </span>
+
                     {isActive && (
                       <motion.div
                         initial={{ scale: 0 }}
