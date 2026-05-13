@@ -10,17 +10,6 @@ import { useCartStore } from "@/store/useCart";
 import { useWishlistStore } from "@/store/useWishlist";
 import Link from "next/link";
 
-const PlayIcon = ({ className }: { className?: string }) => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    className={className}
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path d="M8 5v14l11-7z" />
-  </svg>
-);
-
 interface HeaderProps {
   onSearchClick: () => void;
   onCartClick: () => void;
@@ -134,13 +123,13 @@ export default function Header({
               <div className="absolute -inset-3 rounded-2xl bg-[#ff6b00]/5 blur-xl opacity-0 group-hover/logo:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
               <h1 className="select-none flex items-center transition-all duration-500 h-full relative z-10">
+                {/* CL */}
                 <div className="flex items-center mt-[-2px]">
                   <span
                     className="relative flex items-center justify-center font-michroma text-white text-xl md:text-4xl font-black transition-all duration-500 group-hover/logo:text-[#ff6b00]"
                     style={{ WebkitTextStroke: "1px white" }}
                   >
                     C
-                    <PlayIcon className="absolute text-[#ff6b00] w-2.5 h-2.5 md:w-5 md:h-5 opacity-0 group-hover/logo:opacity-100 transition-all duration-300 transform scale-50 group-hover/logo:scale-100 translate-x-[1px] translate-y-[1px] drop-shadow-[0_0_10px_#ff6b00]" />
                   </span>
                   <span
                     className="font-michroma text-white text-xl md:text-4xl font-black ml-[1px] transition-all duration-500 group-hover/logo:text-[#ff6b00]"
@@ -149,9 +138,11 @@ export default function Header({
                     L
                   </span>
                 </div>
+
+                {/* IC */}
                 <span className="relative flex items-center ml-1 h-full overflow-hidden">
                   <span
-                    className="font-unbounded text-white text-3xl md:text-6xl font-black transition-all duration-500"
+                    className="font-unbounded text-white text-3xl md:text-6xl font-black transition-all duration-500 group-hover/logo:text-[#ff6b00]"
                     style={{
                       WebkitTextStroke: "2px white",
                       textShadow: "4px 4px 0px rgba(0,0,0,1)",
