@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
@@ -23,6 +23,7 @@ const TAG_COLORS: Record<string, { bg: string; text: string; border: string; glo
   Обновление: { bg: "bg-blue-500", text: "text-white", border: "border-blue-400", glow: "shadow-[0_0_12px_rgba(59,130,246,0.6)]" },
   Скидки: { bg: "bg-red-500", text: "text-white", border: "border-red-400", glow: "shadow-[0_0_12px_rgba(239,68,68,0.6)]" },
   Анонс: { bg: "bg-[#ff6b00]", text: "text-black", border: "border-[#ff6b00]", glow: "shadow-[0_0_12px_rgba(255,107,0,0.6)]" },
+  Новость: { bg: "bg-purple-500", text: "text-white", border: "border-purple-400", glow: "shadow-[0_0_12px_rgba(168,85,247,0.6)]" },
 };
 
 function getTimeAgo(dateStr: string): string {
@@ -57,6 +58,45 @@ function AddButton({ linkedGame, displayPrice }: { linkedGame: any; displayPrice
   );
 }
 
+function MobileNewsCard({ item, index }: { item: NewsItem; index: number }) {
+  const { allGames: games } = useGamesStore();
+  const { getPrice } = useRegionStore();
+  const tag = TAG_COLORS[item.tag];
+  const linkedGame = games.find((g) => g.id === item.game_id);
+  const displayPrice = linkedGame ? getPrice(linkedGame.price) : null;
+
+  return (
+    <div
+      className="relative flex-shrink-0 rounded-[1.5rem] overflow-hidden bg-[#0a1650] border border-[#ff6b00]/30"
+      style={{ width: "80vw", maxWidth: "320px", scrollSnapAlign: "start" }}
+    >
+      <div className="relative w-full" style={{ height: "200px" }}>
+        <Image src={item.image} alt={item.title} fill className="object-cover" unoptimized />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a1650] via-[#0a1650]/20 to-transparent" />
+        {tag && (
+          <div className={`absolute top-3 left-3 px-2.5 py-1 rounded-lg border text-[9px] font-black uppercase tracking-widest ${tag.bg} ${tag.text} ${tag.border} ${tag.glow}`}>
+            {item.tag}
+          </div>
+        )}
+        <div className="absolute top-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-md border border-white/10 text-[9px] text-white/50 font-black">
+          <Clock size={9} />
+          {getTimeAgo(item.created_at)}
+        </div>
+      </div>
+      <div className="p-4 flex flex-col gap-2">
+        <h3 className="text-white font-black uppercase text-sm leading-tight tracking-tight">{item.title}</h3>
+        <p className="text-white/40 text-xs leading-relaxed line-clamp-2">{item.description}</p>
+        {linkedGame && displayPrice !== null && (
+          <div className="flex items-center justify-between gap-2 mt-1 pt-3 border-t border-[#ff6b00]/15">
+            <p className="text-[#ff6b00] font-black text-sm">{displayPrice.toLocaleString()} ₽</p>
+            <AddButton linkedGame={linkedGame} displayPrice={displayPrice} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function BigNewsCard({ item }: { item: NewsItem }) {
   const { allGames: games } = useGamesStore();
   const { getPrice } = useRegionStore();
@@ -85,7 +125,6 @@ function BigNewsCard({ item }: { item: NewsItem }) {
           {getTimeAgo(item.created_at)}
         </div>
       </div>
-
       <div className="flex flex-col p-6 gap-4" style={{ flexShrink: 0 }}>
         <div>
           <h3 className="text-white font-black uppercase text-xl lg:text-2xl leading-tight tracking-tight mb-3">{item.title}</h3>
@@ -135,7 +174,6 @@ function SmallNewsCard({ item, index }: { item: NewsItem; index: number }) {
           </div>
         )}
       </div>
-
       <div className="flex flex-col flex-1 p-4 gap-2 min-w-0 justify-center">
         <div className="flex items-center gap-1 text-white/30 text-[9px] font-black">
           <Clock size={9} />
@@ -157,6 +195,8 @@ function SmallNewsCard({ item, index }: { item: NewsItem; index: number }) {
 export default function NewsBlock() {
   const [news, setNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetch("/api/news")
@@ -164,6 +204,17 @@ export default function NewsBlock() {
       .then((data) => { setNews(data.slice(0, 4)); setLoading(false); })
       .catch(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      const index = Math.round(el.scrollLeft / el.offsetWidth * (80 / 100));
+      setActiveIndex(Math.min(index, news.length - 1));
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, [news.length]);
 
   if (!loading && !news.length) return null;
 
@@ -190,8 +241,44 @@ export default function NewsBlock() {
           </Link>
         </div>
 
+        {/* Мобилка — свайп карусель */}
         {loading ? (
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
+          <div className="flex md:hidden gap-4 overflow-x-auto pb-4" style={{ scrollSnapType: "x mandatory" }}>
+            {[0,1,2].map(i => (
+              <div key={i} className="flex-shrink-0 rounded-[1.5rem] bg-[#0a1860]/40 animate-pulse" style={{ width: "80vw", maxWidth: "320px", height: "280px", scrollSnapAlign: "start" }} />
+            ))}
+          </div>
+        ) : (
+          <div className="md:hidden">
+            <div
+              ref={scrollRef}
+              className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4"
+              style={{ scrollSnapType: "x mandatory", scrollBehavior: "smooth", WebkitOverflowScrolling: "touch" as any, msOverflowStyle: "none", scrollbarWidth: "none" }}
+            >
+              {news.map((item, i) => (
+                <MobileNewsCard key={item.id} item={item} index={i} />
+              ))}
+            </div>
+            {/* Точки-индикаторы */}
+            <div className="flex justify-center gap-2 mt-4">
+              {news.map((_, i) => (
+                <div
+                  key={i}
+                  className="rounded-full transition-all duration-300"
+                  style={{
+                    width: i === activeIndex ? "24px" : "8px",
+                    height: "8px",
+                    backgroundColor: i === activeIndex ? "#ff6b00" : "rgba(255,255,255,0.2)",
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Десктоп — текущий layout */}
+        {loading ? (
+          <div className="hidden md:grid" style={{ gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
             <div className="h-[500px] rounded-[2rem] bg-[#0a1860]/40 animate-pulse" />
             <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
               <div className="rounded-[1.5rem] bg-[#0a1860]/40 animate-pulse" style={{ flex: 1 }} />
@@ -200,7 +287,7 @@ export default function NewsBlock() {
             </div>
           </div>
         ) : (
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px", alignItems: "stretch" }}>
+          <div className="hidden md:grid" style={{ gridTemplateColumns: "1fr 1fr", gap: "24px", alignItems: "stretch" }}>
             {first && <BigNewsCard item={first} />}
             <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
               {[second, ...rest].filter(Boolean).map((item, i) => (
