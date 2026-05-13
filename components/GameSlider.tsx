@@ -3,7 +3,6 @@
 import React, { useCallback, useMemo } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { motion } from "framer-motion";
 import GameCard from "./GameCard";
 import type { Game } from "@/store/games";
 import GameCardSkeleton from "./GameCardSkeleton";
@@ -21,101 +20,159 @@ export default function GameSlider({
   isLoading = false,
   onSelectGame,
 }: GameSliderProps) {
-  const displayGames = useMemo(
-    () => (games.length > 0 && games.length < 8 ? [...games, ...games] : games),
-    [games],
-  );
+  // НЕ дублируем массив на мобиле
+  const displayGames = useMemo(() => {
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
+      return games;
+    }
 
+    return games.length > 0 && games.length < 8 ? [...games, ...games] : games;
+  }, [games]);
+
+  // ОПТИМИЗИРОВАННЫЙ EMBLA
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: "start",
     containScroll: "trimSnaps",
-    dragFree: true,
+
+    // КРИТИЧНО ДЛЯ FPS
+    dragFree: false,
+
+    // Safari лагает с loop/free drag
     loop: false,
-    duration: 40,
+
+    duration: 28,
   });
 
-  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
-  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+  const scrollPrev = useCallback(() => {
+    emblaApi?.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    emblaApi?.scrollNext();
+  }, [emblaApi]);
 
   return (
     <div
-      className="w-full py-8 transform-gpu relative rounded-[2.5rem] overflow-hidden"
+      className="
+        w-full 
+        py-6 md:py-8
+        relative 
+        rounded-[2rem] md:rounded-[2.5rem]
+        overflow-hidden
+        transform-gpu
+      "
       style={{
         background: "#08113d",
-        border: "1px solid rgba(:255, 107, 0, 0.35)",
-        boxShadow:
-          "inset 0 0 60px rgba(0,20,80,0.3), 0 0 40px rgba(:255, 107, 0, 0.05)",
+        border: "1px solid rgba(255, 107, 0, 0.20)",
+
+        // УПРОЩЕННАЯ ТЕНЬ
+        boxShadow: "inset 0 0 30px rgba(0,20,80,0.18)",
       }}
     >
-      <div className="absolute top-0 right-1/4 w-80 h-40 bg-[#1d3393]/10 blur-[80px] rounded-full pointer-events-none" />
+      {/* УБРАЛИ blur на мобиле */}
+      <div className="hidden md:block absolute top-0 right-1/4 w-80 h-40 bg-[#1d3393]/10 blur-[80px] rounded-full pointer-events-none" />
 
-      {/* Шапка */}
-      <div className="relative flex items-center justify-between mb-6 px-8">
-        <div className="flex items-center gap-4">
-          <div className="w-1 h-8 bg-[#ff6b00] rounded-full shadow-[0_0_15px_#ff6b00]" />
+      {/* HEADER */}
+      <div className="relative flex items-center justify-between mb-5 px-4 md:px-8">
+        <div className="flex items-center gap-3">
+          {/* УПРОЩЕННЫЙ GLOW */}
+          <div className="w-1 h-7 bg-[#ff6b00] rounded-full md:shadow-[0_0_15px_#ff6b00]" />
+
           <h2
-            className="text-2xl md:text-3xl font-michroma text-white uppercase tracking-[0.15em] leading-none font-black"
-            style={{ WebkitTextStroke: "0.5px rgba(255,255,255,0.3)" }}
+            className="
+              text-lg
+              sm:text-xl
+              md:text-3xl
+              font-michroma
+              text-white
+              uppercase
+              tracking-[0.08em]
+              md:tracking-[0.15em]
+              leading-none
+              font-black
+            "
           >
             {title}
           </h2>
         </div>
 
+        {/* КНОПКИ */}
         <div className="flex gap-2">
           <button
             onClick={scrollPrev}
-            className="w-10 h-10 rounded-xl bg-[#0a1860]/60 border border-[#ff6b00]/40 flex items-center justify-center text-white/40 hover:text-[#ff6b00] hover:border-[#ff6b00]/50 hover:bg-[#ff6b00]/5 transition-all active:scale-90"
+            className="
+              w-9 h-9 md:w-10 md:h-10
+              rounded-xl
+              bg-[#0a1860]/60
+              border border-[#ff6b00]/30
+              flex items-center justify-center
+              text-white/50
+              active:scale-90
+              transition-transform
+            "
           >
-            <ChevronLeft size={20} />
+            <ChevronLeft size={18} />
           </button>
+
           <button
             onClick={scrollNext}
-            className="w-10 h-10 rounded-xl bg-[#0a1860]/60 border border-[#ff6b00]/40 flex items-center justify-center text-white/40 hover:text-[#ff6b00] hover:border-[#ff6b00]/50 hover:bg-[#ff6b00]/5 transition-all active:scale-90"
+            className="
+              w-9 h-9 md:w-10 md:h-10
+              rounded-xl
+              bg-[#0a1860]/60
+              border border-[#ff6b00]/30
+              flex items-center justify-center
+              text-white/50
+              active:scale-90
+              transition-transform
+            "
           >
-            <ChevronRight size={20} />
+            <ChevronRight size={18} />
           </button>
         </div>
       </div>
 
-      {/* Слайдер */}
+      {/* SLIDER */}
       <div className="relative">
         <div
-          className="overflow-hidden px-8 cursor-grab active:cursor-grabbing [mask-image:linear-gradient(to_right,transparent,white_5%,white_95%,transparent)]"
           ref={emblaRef}
+          className="
+            overflow-hidden
+            px-4 md:px-8
+            cursor-grab
+            active:cursor-grabbing
+          "
         >
-          <div className="flex gap-4">
+          <div className="flex gap-3 md:gap-4">
             {isLoading
-              ? Array(8)
+              ? Array(6)
                   .fill(0)
                   .map((_, i) => (
-                    <motion.div
+                    <div
                       key={`skeleton-${i}`}
-                      className="flex-[0_0_65%] sm:flex-[0_0_30%] md:flex-[0_0_22%] lg:flex-[0_0_16.6%]"
-                      initial={{ opacity: 0, scale: 0.7 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 260,
-                        damping: 22,
-                        delay: i * 0.06,
-                      }}
+                      className="
+                        flex-[0_0_48%]
+                        sm:flex-[0_0_30%]
+                        md:flex-[0_0_22%]
+                        lg:flex-[0_0_16.6%]
+                      "
                     >
                       <GameCardSkeleton />
-                    </motion.div>
+                    </div>
                   ))
               : displayGames.map((game, index) => (
-                  <motion.div
+                  <div
                     key={`${game.id}-${index}`}
-                    className="flex-[0_0_65%] sm:flex-[0_0_30%] md:flex-[0_0_22%] lg:flex-[0_0_16.6%] min-w-0 select-none"
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 200,
-                      damping: 20,
-                      delay: (index % 8) * 0.07,
-                    }}
-                    whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                    className="
+                      flex-[0_0_48%]
+                      sm:flex-[0_0_30%]
+                      md:flex-[0_0_22%]
+                      lg:flex-[0_0_16.6%]
+                      min-w-0
+                      select-none
+                      transform-gpu
+                      will-change-transform
+                    "
                   >
                     <GameCard
                       game={game}
@@ -123,7 +180,7 @@ export default function GameSlider({
                         onSelectGame ? () => onSelectGame(game) : undefined
                       }
                     />
-                  </motion.div>
+                  </div>
                 ))}
           </div>
         </div>
