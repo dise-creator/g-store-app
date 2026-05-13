@@ -69,9 +69,10 @@ function BigNewsCard({ item }: { item: NewsItem }) {
       initial={{ opacity: 0, x: -30 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className="group relative flex flex-col bg-[#0a1650] border border-[#ff6b00]/30 rounded-[2rem] overflow-hidden hover:border-[#ff6b00]/50 transition-all h-full"
+      className="group relative flex flex-col bg-[#0a1650] border border-[#ff6b00]/30 rounded-[2rem] overflow-hidden hover:border-[#ff6b00]/50 transition-all"
+      style={{ height: "100%" }}
     >
-      <div className="relative flex-1 min-h-[300px] overflow-hidden">
+      <div style={{ position: "relative", flex: 1, minHeight: "300px", overflow: "hidden" }}>
         <Image src={item.image} alt={item.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" unoptimized />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a1650] via-[#0a1650]/40 to-transparent" />
         {tag && (
@@ -85,7 +86,7 @@ function BigNewsCard({ item }: { item: NewsItem }) {
         </div>
       </div>
 
-      <div className="flex flex-col p-6 gap-4 shrink-0">
+      <div className="flex flex-col p-6 gap-4" style={{ flexShrink: 0 }}>
         <div>
           <h3 className="text-white font-black uppercase text-xl lg:text-2xl leading-tight tracking-tight mb-3">{item.title}</h3>
           <p className="text-white/40 text-sm leading-relaxed">{item.description}</p>
@@ -122,9 +123,10 @@ function SmallNewsCard({ item, index }: { item: NewsItem; index: number }) {
       initial={{ opacity: 0, x: 30 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.15, duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className="group relative flex flex-row bg-[#0a1650] border border-[#ff6b00]/30 rounded-[1.5rem] overflow-hidden hover:border-[#ff6b00]/50 transition-all flex-1"
+      className="group relative flex flex-row bg-[#0a1650] border border-[#ff6b00]/30 rounded-[1.5rem] overflow-hidden hover:border-[#ff6b00]/50 transition-all"
+      style={{ flex: 1 }}
     >
-      <div className="relative w-32 lg:w-44 shrink-0 overflow-hidden">
+      <div style={{ position: "relative", width: "160px", flexShrink: 0, overflow: "hidden" }}>
         <Image src={item.image} alt={item.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" unoptimized />
         <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#0a1650]/60" />
         {tag && (
@@ -189,18 +191,18 @@ export default function NewsBlock() {
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
             <div className="h-[500px] rounded-[2rem] bg-[#0a1860]/40 animate-pulse" />
-            <div className="flex flex-col gap-4">
-              <div className="h-[155px] rounded-[1.5rem] bg-[#0a1860]/40 animate-pulse flex-1" />
-              <div className="h-[155px] rounded-[1.5rem] bg-[#0a1860]/40 animate-pulse flex-1" />
-              <div className="h-[155px] rounded-[1.5rem] bg-[#0a1860]/40 animate-pulse flex-1" />
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+              <div className="rounded-[1.5rem] bg-[#0a1860]/40 animate-pulse" style={{ flex: 1 }} />
+              <div className="rounded-[1.5rem] bg-[#0a1860]/40 animate-pulse" style={{ flex: 1 }} />
+              <div className="rounded-[1.5rem] bg-[#0a1860]/40 animate-pulse" style={{ flex: 1 }} />
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px", alignItems: "stretch" }}>
             {first && <BigNewsCard item={first} />}
-            <div className="flex flex-col gap-4 h-full">
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
               {[second, ...rest].filter(Boolean).map((item, i) => (
                 <SmallNewsCard key={item.id} item={item} index={i} />
               ))}
