@@ -8,7 +8,13 @@ import { useRegionStore, REGIONS, type Region } from "@/store/useRegion";
 
 const regionColors: Record<
   Region,
-  { bg: string; border: string; text: string; glow: string; iconBg: string }
+  {
+    bg: string;
+    border: string;
+    text: string;
+    glow: string;
+    iconBg: string;
+  }
 > = {
   TR: {
     bg: "bg-[#2e0a0a]",
@@ -17,6 +23,7 @@ const regionColors: Record<
     glow: "shadow-[0_0_20px_rgba(255,60,60,0.3)]",
     iconBg: "bg-[#cc2222]",
   },
+
   IN: {
     bg: "bg-[#1a1200]",
     border: "border-[#cc8800]",
@@ -33,12 +40,25 @@ const flagUrls: Record<Region, string> = {
 
 export default function RegionSwitcher() {
   const { region, setRegion } = useRegionStore();
+
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
   const ref = useRef<HTMLDivElement>(null);
 
-  const currentRegion = REGIONS[region];
-  const colors = regionColors[region];
+  // Fix hydration mismatch на iPhone/Safari
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
+  // Безопасный регион
+  const safeRegion: Region =
+    region && regionColors[region] ? region : "TR";
+
+  const currentRegion = REGIONS[safeRegion];
+  const colors = regionColors[safeRegion];
+
+  // Закрытие dropdown при клике вне блока
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) {
@@ -53,12 +73,15 @@ export default function RegionSwitcher() {
     };
   }, []);
 
+  // Не рендерим до mount
+  if (!mounted) return null;
+
   return (
     <div ref={ref} className="relative">
-      {/* Десктоп */}
+      {/* DESKTOP */}
       <div className="hidden md:flex items-center gap-1.5 p-1 bg-[#0a1860]/60 border border-[#ff6b00]/30 rounded-2xl">
         {Object.values(REGIONS).map((r) => {
-          const isActive = region === r.code;
+          const isActive = safeRegion === r.code;
           const c = regionColors[r.code];
 
           return (
@@ -111,7 +134,7 @@ export default function RegionSwitcher() {
         })}
       </div>
 
-      {/* Мобильная версия */}
+      {/* MOBILE */}
       <div className="flex md:hidden">
         <motion.button
           onClick={() => setIsOpen(!isOpen)}
@@ -119,10 +142,10 @@ export default function RegionSwitcher() {
           className={`flex items-center gap-2 px-2.5 py-1.5 rounded-xl border transition-all duration-300 ${colors.bg} ${colors.border} ${colors.glow}`}
         >
           <div
-            className={`w-6 h-6 rounded-lg overflow-hidden shrink-0 ${colors.iconBg}`}
+            className={`w-6 h-6 rounded-lg overflow-hidden shrink-0 flex items-center justify-center ${colors.iconBg}`}
           >
             <Image
-              src={flagUrls[region]}
+              src={flagUrls[safeRegion]}
               alt={currentRegion.name}
               width={24}
               height={24}
@@ -137,7 +160,10 @@ export default function RegionSwitcher() {
 
           <motion.div
             animate={{ rotate: isOpen ? 180 : 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+            transition={{
+              duration: 0.3,
+              ease: "easeInOut",
+            }}
           >
             <ChevronDown size={14} className={colors.text} />
           </motion.div>
@@ -146,9 +172,21 @@ export default function RegionSwitcher() {
         <AnimatePresence>
           {isOpen && (
             <motion.div
-              initial={{ opacity: 0, y: -8, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -8, scale: 0.95 }}
+              initial={{
+                opacity: 0,
+                y: -8,
+                scale: 0.95,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+                scale: 1,
+              }}
+              exit={{
+                opacity: 0,
+                y: -8,
+                scale: 0.95,
+              }}
               transition={{
                 type: "spring",
                 damping: 25,
@@ -157,7 +195,7 @@ export default function RegionSwitcher() {
               className="absolute top-[calc(100%+8px)] left-0 z-[200] min-w-[160px] bg-[#0d1f6e] border border-[#ff6b00]/40 rounded-2xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.8)]"
             >
               {Object.values(REGIONS).map((r, i) => {
-                const isActive = region === r.code;
+                const isActive = safeRegion === r.code;
                 const c = regionColors[r.code];
 
                 return (
@@ -167,9 +205,17 @@ export default function RegionSwitcher() {
                       setRegion(r.code);
                       setIsOpen(false);
                     }}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.06 }}
+                    initial={{
+                      opacity: 0,
+                      x: -10,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      x: 0,
+                    }}
+                    transition={{
+                      delay: i * 0.06,
+                    }}
                     className={`w-full flex items-center gap-3 px-4 py-3 transition-all ${
                       isActive
                         ? `${c.bg} border-l-2 ${c.border}`
@@ -177,7 +223,7 @@ export default function RegionSwitcher() {
                     }`}
                   >
                     <div
-                      className={`w-8 h-8 rounded-xl overflow-hidden shrink-0 ${
+                      className={`w-8 h-8 rounded-xl overflow-hidden shrink-0 flex items-center justify-center ${
                         isActive ? c.iconBg : "bg-white/10"
                       }`}
                     >
