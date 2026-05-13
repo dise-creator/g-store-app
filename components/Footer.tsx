@@ -228,10 +228,10 @@ export default function Footer() {
                 <p className="text-white/30 text-[9px] uppercase font-black tracking-widest mb-1">
                   Поддержка
                 </p>
-                href="https://t.me/clic_support" target="_blank" rel="noopener
+                {/* href="https://t.me/@clicps_bot" target="_blank" rel="noopener
                 noreferrer" className="text-[#ff6b00] text-xs font-black
-                hover:underline"
-                <a>@clic_support</a>
+                hover:underline" */}
+                <a>@clicps_bot</a>
               </div>
             </div>
           </div>
