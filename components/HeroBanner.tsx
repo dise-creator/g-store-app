@@ -1,3 +1,4 @@
+// HeroBanner.tsx
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -91,9 +92,9 @@ export default function HeroBanner() {
         transition: "background-color 1s ease",
       }}
     >
-      {/* Цветное свечение фона */}
+      {/* Цветное свечение */}
       <div
-        className="absolute inset-0 opacity-30 transition-all duration-1000"
+        className="absolute inset-0 opacity-30 transition-all duration-1000 pointer-events-none"
         style={{
           background: `radial-gradient(ellipse at 70% 50%, ${color}40 0%, transparent 70%)`,
         }}
@@ -127,7 +128,7 @@ export default function HeroBanner() {
             />
           </div>
 
-          {/* Левый градиент в цвет фона */}
+          {/* Левый градиент */}
           <div
             className="absolute inset-y-0 left-0 z-10 w-full md:w-[60%]"
             style={{
@@ -136,17 +137,17 @@ export default function HeroBanner() {
             }}
           />
 
-          {/* Нижний градиент плавно переходит в фон страницы */}
+          {/* Нижний градиент — плавно в цвет страницы */}
           <div
-            className="absolute bottom-0 left-0 right-0 z-10 h-48 md:h-64"
+            className="absolute bottom-0 left-0 right-0 z-10 h-64 md:h-96 pointer-events-none"
             style={{
-              background: `linear-gradient(to bottom, transparent 0%, ${bg} 60%, ${PAGE_BG} 100%)`,
+              background: `linear-gradient(to bottom, transparent 0%, ${bg} 50%, ${PAGE_BG} 100%)`,
               transition: "background 1s ease",
             }}
           />
 
           {/* Контент */}
-          <div className="absolute inset-0 z-20 flex flex-col justify-end md:justify-center px-6 md:px-24 pb-16 md:pb-0">
+          <div className="absolute inset-0 z-20 flex flex-col justify-end md:justify-center px-6 md:px-24 pb-20 md:pb-0">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}

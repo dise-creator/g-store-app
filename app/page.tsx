@@ -1,3 +1,4 @@
+// page.tsx
 "use client";
 
 import React, { useMemo, useState, useEffect } from "react";
@@ -106,12 +107,13 @@ export default function Home() {
         <AnimatedBackground />
       </div>
 
-      {/* Баннер на всю ширину — вне контейнера */}
-      <div className="relative z-10 w-full pt-20 md:pt-38">
-  <HeroBanner />
-</div>
-      {/* Остальной контент */}
-      <div className="relative z-10 max-w-[1440px] mx-auto px-4 md:px-10 flex flex-col gap-16 md:gap-24 mt-16 md:mt-24">
+      {/* Баннер на всю ширину */}
+      <div className="relative z-10 w-full pt-20 md:pt-24">
+        <HeroBanner />
+      </div>
+
+      {/* Контент без отступа сверху — баннер уже имеет градиент вниз */}
+      <div className="relative z-10 max-w-[1440px] mx-auto px-4 md:px-10 flex flex-col gap-16 md:gap-24">
         <NewsBlock />
 
         {/* Фильтры */}
