@@ -8,7 +8,7 @@ import { useGameModal } from "@/store/useGameModal";
 import { Tag } from "lucide-react";
 import Image from "next/image";
 
-const BG = "#08113d";
+const PAGE_BG = "#0d1f6e";
 
 const FONT_CLASSES = [
   "font-[family-name:var(--font-bangers)] tracking-wider",
@@ -25,6 +25,16 @@ const COLORS = [
   "#ff6b00",
   "#a855f7",
   "#f472b6",
+];
+
+const BG_COLORS = [
+  "#0a1520",
+  "#1a0505",
+  "#041a04",
+  "#1a0a00",
+  "#1a0a00",
+  "#100518",
+  "#1a0510",
 ];
 
 export default function HeroBanner() {
@@ -47,13 +57,14 @@ export default function HeroBanner() {
   if (!isMounted || bannerGames.length === 0)
     return (
       <div
-        className="w-full h-[500px] md:h-[700px]"
-        style={{ backgroundColor: BG }}
+        className="w-full h-[500px] md:h-[800px]"
+        style={{ backgroundColor: PAGE_BG }}
       />
     );
 
   const current = bannerGames[index];
   const color = COLORS[index % COLORS.length];
+  const bg = BG_COLORS[index % BG_COLORS.length];
   const fontClass = FONT_CLASSES[index % FONT_CLASSES.length];
   const displayPrice = getPrice(current.price);
   const discount = current.discount_percent ?? 0;
@@ -76,10 +87,18 @@ export default function HeroBanner() {
     <section
       className="relative w-full h-[500px] md:h-[800px] overflow-hidden group"
       style={{
-        backgroundColor: BG,
-        boxShadow: `0 30px 80px -20px ${color}30`,
+        backgroundColor: bg,
+        transition: "background-color 1s ease",
       }}
     >
+      {/* Цветное свечение фона */}
+      <div
+        className="absolute inset-0 opacity-30 transition-all duration-1000"
+        style={{
+          background: `radial-gradient(ellipse at 70% 50%, ${color}40 0%, transparent 70%)`,
+        }}
+      />
+
       <AnimatePresence mode="wait">
         <motion.div
           key={current.id}
@@ -90,8 +109,6 @@ export default function HeroBanner() {
           className="absolute inset-0 cursor-pointer flex items-center justify-center"
           onClick={handleAction}
         >
-          <div className="absolute inset-0" style={{ backgroundColor: BG }} />
-
           <div className="relative h-full w-full flex justify-center items-center">
             <Image
               src={current.image}
@@ -110,20 +127,26 @@ export default function HeroBanner() {
             />
           </div>
 
+          {/* Левый градиент в цвет фона */}
           <div
-            className="absolute inset-y-0 left-0 z-10 w-full md:w-[55%]"
+            className="absolute inset-y-0 left-0 z-10 w-full md:w-[60%]"
             style={{
-              background: `linear-gradient(to right, ${BG} 0%, ${BG}ee 30%, ${BG}99 60%, transparent 100%)`,
-            }}
-          />
-          <div
-            className="absolute bottom-0 left-0 right-0 z-10 h-32 md:h-40"
-            style={{
-              background: `linear-gradient(to top, ${BG} 0%, transparent 100%)`,
+              background: `linear-gradient(to right, ${bg} 0%, ${bg}dd 35%, ${bg}88 60%, transparent 100%)`,
+              transition: "background 1s ease",
             }}
           />
 
-          <div className="absolute inset-0 z-20 flex flex-col justify-end md:justify-center px-6 md:px-24 pb-12 md:pb-0">
+          {/* Нижний градиент плавно переходит в фон страницы */}
+          <div
+            className="absolute bottom-0 left-0 right-0 z-10 h-48 md:h-64"
+            style={{
+              background: `linear-gradient(to bottom, transparent 0%, ${bg} 60%, ${PAGE_BG} 100%)`,
+              transition: "background 1s ease",
+            }}
+          />
+
+          {/* Контент */}
+          <div className="absolute inset-0 z-20 flex flex-col justify-end md:justify-center px-6 md:px-24 pb-16 md:pb-0">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -188,7 +211,8 @@ export default function HeroBanner() {
         </motion.div>
       </AnimatePresence>
 
-      <div className="absolute bottom-4 md:bottom-10 left-6 md:left-24 z-30 flex gap-2 flex-wrap">
+      {/* Точки */}
+      <div className="absolute bottom-4 md:bottom-8 left-6 md:left-24 z-30 flex gap-2 flex-wrap">
         {bannerGames.map((_, i) => (
           <button
             key={i}
