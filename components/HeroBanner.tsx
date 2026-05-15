@@ -147,7 +147,7 @@ export default function HeroBanner() {
           />
 
           {/* Контент */}
-          <div className="absolute inset-0 z-20 flex flex-col justify-end md:justify-center px-6 md:px-24 pb-20 md:pb-0">
+          <div className="absolute inset-0 z-20 flex flex-col justify-end md:justify-center px-6 md:px-24 pb-20 md:pb-0 pt-20 md:pt-0">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}

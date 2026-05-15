@@ -1,4 +1,3 @@
-// page.tsx
 "use client";
 
 import React, { useMemo, useState, useEffect } from "react";
@@ -51,7 +50,6 @@ export default function Home() {
           .from("games")
           .select("*")
           .order("created_at", { ascending: false });
-
         const loaded = !error && data?.length ? (data as Game[]) : ALL_GAMES;
         setGames(loaded);
         setAllGames(loaded);
@@ -77,7 +75,6 @@ export default function Home() {
       activeCategory === "ALL"
         ? [...games]
         : games.filter((g) => g.category?.toUpperCase() === activeCategory);
-
     switch (activeSort) {
       case "price_asc":
         result.sort((a, b) => a.price - b.price);
@@ -95,7 +92,6 @@ export default function Home() {
   }, [games, activeCategory, activeSort]);
 
   const isFiltered = activeCategory !== "ALL" || activeSort !== "newest";
-
   const resetFilters = () => {
     setActiveCategory("ALL");
     setActiveSort("newest");
@@ -107,16 +103,15 @@ export default function Home() {
         <AnimatedBackground />
       </div>
 
-      {/* Баннер на всю ширину */}
-      <div className="relative z-10 w-full pt-20 md:pt-24">
+      {/* Баннер на всю ширину — без отступа сверху, хедер поверх */}
+      <div className="relative z-10 w-full">
         <HeroBanner />
       </div>
 
-      {/* Контент без отступа сверху — баннер уже имеет градиент вниз */}
+      {/* Контент */}
       <div className="relative z-10 max-w-[1440px] mx-auto px-4 md:px-10 flex flex-col gap-16 md:gap-24">
         <NewsBlock />
 
-        {/* Фильтры */}
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2 overflow-x-auto no-scrollbar flex-1">
@@ -146,7 +141,6 @@ export default function Home() {
                 </motion.button>
               ))}
             </div>
-
             <motion.button
               onClick={() => setShowFilters(!showFilters)}
               whileTap={{ scale: 0.95 }}
@@ -178,11 +172,7 @@ export default function Home() {
                     <button
                       key={opt.key}
                       onClick={() => setActiveSort(opt.key)}
-                      className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border ${
-                        activeSort === opt.key
-                          ? "bg-[#ff6b00] text-black border-transparent"
-                          : "bg-[#0a1860]/60 border-[#ff6b00]/40 text-white/40 hover:text-white"
-                      }`}
+                      className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border ${activeSort === opt.key ? "bg-[#ff6b00] text-black border-transparent" : "bg-[#0a1860]/60 border-[#ff6b00]/40 text-white/40 hover:text-white"}`}
                     >
                       {opt.label}
                     </button>
@@ -208,7 +198,6 @@ export default function Home() {
           </AnimatePresence>
         </div>
 
-        {/* Контент */}
         <div className="flex flex-col gap-12 md:gap-20">
           {loading ? (
             SECTIONS.map((s) => (
