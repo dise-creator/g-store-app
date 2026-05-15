@@ -42,7 +42,7 @@ export default function Header({
     setMounted(true);
 
     const handleScroll = () => {
-      window.requestAnimationFrame(() => setScrolled(window.scrollY > 20));
+      window.requestAnimationFrame(() => setScrolled(window.scrollY > 80));
     };
     const handleHide = () => {
       if (window.innerWidth < 768) setHeaderVisible(false);
@@ -102,10 +102,10 @@ export default function Header({
           opacity: headerVisible ? 1 : 0,
         }}
         transition={{ type: "spring", damping: 25, stiffness: 300 }}
-        className={`fixed top-2 md:top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-[1440px] z-[100] px-4 md:px-8 rounded-[1.5rem] md:rounded-[2.5rem] transition-all duration-700 flex justify-between items-center transform-gpu ${
+        className={`fixed z-[100] flex justify-between items-center transform-gpu transition-all duration-500 ${
           scrolled
-            ? "py-2 md:py-3 bg-black/[0.15] backdrop-blur-[40px] border border-white/[0.1] shadow-2xl"
-            : "py-3 md:py-6 bg-transparent backdrop-blur-[10px] border border-white/[0.05]"
+            ? "top-2 md:top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-[1440px] px-4 md:px-8 py-2 md:py-3 rounded-[1.5rem] md:rounded-[2.5rem] bg-black/[0.15] backdrop-blur-[40px] border border-white/[0.1] shadow-2xl"
+            : "top-0 left-0 right-0 w-full px-6 md:px-16 py-5 md:py-7 bg-transparent"
         }`}
       >
         {/* Логотип */}
@@ -123,7 +123,6 @@ export default function Header({
               <div className="absolute -inset-3 rounded-2xl bg-[#ff6b00]/5 blur-xl opacity-0 group-hover/logo:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
               <h1 className="select-none flex items-center transition-all duration-500 h-full relative z-10">
-                {/* CL */}
                 <div className="flex items-center mt-[-2px]">
                   <span
                     className="relative flex items-center justify-center font-michroma text-white text-xl md:text-4xl font-black transition-all duration-500 group-hover/logo:text-[#ff6b00]"
@@ -139,7 +138,6 @@ export default function Header({
                   </span>
                 </div>
 
-                {/* IC */}
                 <span className="relative flex items-center ml-1 h-full overflow-hidden">
                   <span
                     className="font-unbounded text-white text-3xl md:text-6xl font-black transition-all duration-500 group-hover/logo:text-[#ff6b00]"
@@ -173,7 +171,7 @@ export default function Header({
           </motion.div>
         </Link>
 
-        {/* Центр — только десктоп */}
+        {/* Центр */}
         <div className="absolute left-1/2 -translate-x-1/2 hidden md:block">
           <AnimatePresence mode="wait">
             {searchActivated ? (
@@ -296,10 +294,7 @@ export default function Header({
             <motion.div
               animate={
                 wishlistPulse
-                  ? {
-                      scale: [1, 1.6, 0.85, 1.3, 1],
-                      rotate: [0, -15, 10, -5, 0],
-                    }
+                  ? { scale: [1, 1.6, 0.85, 1.3, 1], rotate: [0, -15, 10, -5, 0] }
                   : {}
               }
               transition={{ duration: 0.5, ease: "easeInOut" }}
