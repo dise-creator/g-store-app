@@ -175,4 +175,13 @@
 body.modal-open {
   overflow: hidden;
   height: 100vh;
+  @keyframes blob1 {
+  0%, 100% { transform: translate(-10%, 0%); }
+  50% { transform: translate(5%, 10%); }
+}
+
+@keyframes blob2 {
+  0%, 100% { transform: translate(10%, 0%); }
+  50% { transform: translate(-5%, -10%); }
+}
 }

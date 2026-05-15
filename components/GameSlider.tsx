@@ -70,7 +70,7 @@ export default function GameSlider({
       }}
     >
       {/* УБРАЛИ blur на мобиле */}
-      <div className="hidden md:block absolute top-0 right-1/4 w-80 h-40 bg-[#1d3393]/10 blur-[80px] rounded-full pointer-events-none" />
+      {/* <div className="hidden md:block absolute top-0 right-1/4 w-80 h-40 bg-[#1d3393]/10 blur-[80px] rounded-full pointer-events-none" /> */}
 
       {/* HEADER */}
       <div className="relative flex items-center justify-between mb-5 px-4 md:px-8">
@@ -171,7 +171,7 @@ export default function GameSlider({
                       min-w-0
                       select-none
                       transform-gpu
-                      will-change-transform
+                      
                     "
                   >
                     <GameCard
