@@ -47,7 +47,7 @@ export default function HeroBanner() {
   if (!isMounted || bannerGames.length === 0)
     return (
       <div
-        className="w-full h-[380px] md:h-[580px] mt-4 md:mt-8 rounded-[2rem] md:rounded-[2.5rem]"
+        className="w-full h-[500px] md:h-[700px]"
         style={{ backgroundColor: BG }}
       />
     );
@@ -74,11 +74,10 @@ export default function HeroBanner() {
 
   return (
     <section
-      className="relative w-full h-[380px] md:h-[580px] mt-4 md:mt-8 rounded-[2rem] md:rounded-[3.5rem] overflow-hidden group"
+      className="relative w-full h-[500px] md:h-[800px] overflow-hidden group"
       style={{
         backgroundColor: BG,
         boxShadow: `0 30px 80px -20px ${color}30`,
-        border: "1px solid rgba(:255, 107, 0, 0.35)",
       }}
     >
       <AnimatePresence mode="wait">
@@ -98,7 +97,7 @@ export default function HeroBanner() {
               src={current.image}
               alt={current.title}
               fill
-              className="object-contain transition-transform duration-[10000ms] scale-100 group-hover:scale-[1.03]"
+              className="object-cover transition-transform duration-[10000ms] scale-100 group-hover:scale-[1.03]"
               style={{
                 maskImage:
                   "linear-gradient(to right, transparent 0%, black 20%, black 80%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 8%, black 85%, transparent 100%)",

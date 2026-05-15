@@ -101,16 +101,17 @@ export default function Home() {
   };
 
   return (
-    <main className="relative min-h-screen pt-28 md:pt-32 pb-24 overflow-x-hidden">
+    <main className="relative min-h-screen pb-24 overflow-x-hidden">
       <div className="fixed inset-0 z-0">
         <AnimatedBackground />
       </div>
 
-      <div className="relative z-10 max-w-[1440px] mx-auto px-4 md:px-10 flex flex-col gap-16 md:gap-24">
-        <section className="w-full">
-          <HeroBanner />
-        </section>
-
+      {/* Баннер на всю ширину — вне контейнера */}
+      <div className="relative z-10 w-full pt-20 md:pt-38">
+  <HeroBanner />
+</div>
+      {/* Остальной контент */}
+      <div className="relative z-10 max-w-[1440px] mx-auto px-4 md:px-10 flex flex-col gap-16 md:gap-24 mt-16 md:mt-24">
         <NewsBlock />
 
         {/* Фильтры */}
