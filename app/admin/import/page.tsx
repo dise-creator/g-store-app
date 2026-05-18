@@ -84,10 +84,7 @@ export default function ImportPage() {
 
   const handleAdd = async (game: RawgGame) => {
     const gamePrice = parseInt(price[game.id] || "0", 10);
-    if (!gamePrice) {
-      alert("Введи цену!");
-      return;
-    }
+    if (!gamePrice) { alert("Введи цену!"); return; }
 
     setAddingId(game.id);
     setError(null);
@@ -96,20 +93,27 @@ export default function ImportPage() {
       const details = await fetchDetails(game.id);
       const genre = details.genres?.[0]?.name || "Action";
       const category = CATEGORY_MAP[genre] || "RPG";
-      const screenshots =
-        details.short_screenshots?.map((s: { image: string }) => s.image) || [];
+      const screenshots = details.short_screenshots?.map((s: { image: string }) => s.image) || [];
+
+      // Скачиваем картинку к себе в Supabase Storage
+      let imageUrl = game.background_image;
+      try {
+        const imgRes = await fetch(`/api/upload-image?url=${encodeURIComponent(game.background_image)}`);
+        const imgData = await imgRes.json();
+        if (imgData.url) imageUrl = imgData.url;
+      } catch {
+        // если не удалось — оставляем внешнюю ссылку rawg
+      }
 
       const { error: insertError } = await supabase.from("games").insert({
         title: game.name.toUpperCase(),
         price: gamePrice,
         category,
-        image: game.background_image,
+        image: imageUrl,
         description: details.description_raw?.slice(0, 200) || "",
         full_description: details.description_raw || "",
         screenshots: screenshots.slice(0, 5),
-        editions: [
-          { name: "Standard", price: gamePrice, features: ["Базовая игра"] },
-        ],
+        editions: [{ name: "Standard", price: gamePrice, features: ["Базовая игра"] }],
         discount_percent: 0,
       });
 
@@ -137,13 +141,8 @@ export default function ImportPage() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4">
         <ShieldX size={48} className="text-red-400" />
-        <p className="text-white/30 font-black uppercase text-xl">
-          Нет доступа
-        </p>
-        <Link
-          href="/"
-          className="px-6 py-3 bg-[#ff6b00] text-black font-black uppercase text-xs rounded-2xl"
-        >
+        <p className="text-white/30 font-black uppercase text-xl">Нет доступа</p>
+        <Link href="/" className="px-6 py-3 bg-[#ff6b00] text-black font-black uppercase text-xs rounded-2xl">
           На главную
         </Link>
       </div>
@@ -172,10 +171,7 @@ export default function ImportPage() {
 
         <div className="flex gap-3 mb-8">
           <div className="flex-1 relative">
-            <Search
-              size={18}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30"
-            />
+            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" />
             <input
               type="text"
               value={query}
@@ -190,11 +186,7 @@ export default function ImportPage() {
             disabled={loading}
             className="px-8 py-4 bg-[#ff6b00] text-black font-black text-sm uppercase rounded-2xl hover:shadow-[0_0_20px_rgba(99,243,247,0.3)] transition-all active:scale-95 disabled:opacity-50 flex items-center gap-2"
           >
-            {loading ? (
-              <Loader2 size={18} className="animate-spin" />
-            ) : (
-              <Search size={18} />
-            )}
+            {loading ? <Loader2 size={18} className="animate-spin" /> : <Search size={18} />}
             Найти
           </button>
         </div>
@@ -251,12 +243,7 @@ export default function ImportPage() {
                     <input
                       type="number"
                       value={price[game.id] || ""}
-                      onChange={(e) =>
-                        setPrice((prev) => ({
-                          ...prev,
-                          [game.id]: e.target.value,
-                        }))
-                      }
+                      onChange={(e) => setPrice((prev) => ({ ...prev, [game.id]: e.target.value }))}
                       placeholder="Цена ₽"
                       className="w-full px-3 py-2 bg-[#0a1860]/60 border border-[#ff6b00]/40 rounded-xl text-white text-xs font-bold focus:outline-none focus:border-[#ff6b00]/40 transition-all placeholder-white/20"
                     />
@@ -273,18 +260,11 @@ export default function ImportPage() {
                       }`}
                     >
                       {isAdded ? (
-                        <>
-                          <Check size={12} /> Добавлено
-                        </>
+                        <><Check size={12} /> Добавлено</>
                       ) : isAdding ? (
-                        <>
-                          <Loader2 size={12} className="animate-spin" />{" "}
-                          Добавляем...
-                        </>
+                        <><Loader2 size={12} className="animate-spin" /> Добавляем...</>
                       ) : (
-                        <>
-                          <Plus size={12} /> Добавить
-                        </>
+                        <><Plus size={12} /> Добавить</>
                       )}
                     </button>
                   </motion.div>
@@ -296,9 +276,7 @@ export default function ImportPage() {
 
         {!loading && results.length === 0 && query && (
           <div className="flex flex-col items-center justify-center h-40 gap-3">
-            <p className="text-white/20 text-sm font-black uppercase">
-              Ничего не найдено
-            </p>
+            <p className="text-white/20 text-sm font-black uppercase">Ничего не найдено</p>
           </div>
         )}
       </div>
