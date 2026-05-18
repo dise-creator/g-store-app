@@ -104,8 +104,10 @@ export default function Home() {
       </div>
 
       {/* Баннер на всю ширину — без отступа сверху, хедер поверх */}
-      <div className="relative z-10 w-full">
-        <HeroBanner />
+      <div className="relative z-10 max-w-[1440px] mx-auto px-4 md:px-10 flex flex-col gap-16 md:gap-24">
+    <section className="w-full">
+      <HeroBanner />
+    </section>
       </div>
 
       {/* Контент */}
