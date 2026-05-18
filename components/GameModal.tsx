@@ -18,7 +18,6 @@ import {
   TrendingDown,
 } from "lucide-react";
 
-// --- Типы ---
 interface Card {
   value: number;
   quantity: number;
@@ -31,7 +30,6 @@ interface Edition {
   cards?: Card[];
 }
 
-// --- Вспомогательные компоненты ---
 const PSIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
     <path d="M8.985 2.596v17.548l3.915 1.261V6.688c0-.69.304-1.151.794-.998.636.2.76.893.76 1.582v5.815c2.77 1.397 4.851-.29 4.851-3.652 0-3.5-1.201-5.135-4.851-6.457 0 0-3.143-1.012-5.469-1.382zm-4.732 14.5c-2.361-.766-2.75-2.355-1.674-3.27.981-.858 2.639-1.491 2.639-1.491l.01 2.86s-1.016.35-1.534.668c-.519.319-.525.757.108.98.894.315 1.813.162 1.813.162v2.005s-.407.08-.928.08c-.961 0-2.153-.26-2.974-.77l.54-.224zm11.49 1.639l-4.223-1.362v-2.15l4.223 1.487v2.025z" />
@@ -54,8 +52,7 @@ const PSNCard = ({ value, animate }: { value: number; animate: boolean }) => (
     transition={{ duration: 0.8, ease: "easeOut" }}
     className="relative w-36 h-24 rounded-2xl overflow-hidden shadow-2xl"
     style={{
-      background:
-        "linear-gradient(135deg, #003087 0%, #0070d1 50%, #00439c 100%)",
+      background: "linear-gradient(135deg, #003087 0%, #0070d1 50%, #00439c 100%)",
     }}
   >
     <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent" />
@@ -63,17 +60,12 @@ const PSNCard = ({ value, animate }: { value: number; animate: boolean }) => (
       <PSIcon className="w-6 h-6 text-white/80" />
     </div>
     <div className="absolute bottom-2 left-3">
-      <p className="text-white/50 text-[7px] uppercase font-black tracking-widest">
-        PlayStation Network
-      </p>
-      <p className="text-white font-black text-base">
-        {value.toLocaleString()} ₽
-      </p>
+      <p className="text-white/50 text-[7px] uppercase font-black tracking-widest">PlayStation Network</p>
+      <p className="text-white font-black text-base">{value.toLocaleString()} ₽</p>
     </div>
   </motion.div>
 );
 
-// --- Главный компонент ---
 export default function GameModal() {
   const { isOpen, selectedGame, closeModal } = useGameModal();
   const addItem = useCartStore((state) => state.addItem);
@@ -94,36 +86,24 @@ export default function GameModal() {
     } else {
       document.body.style.overflow = "";
     }
-    return () => {
-      document.body.style.overflow = "";
-    };
+    return () => { document.body.style.overflow = ""; };
   }, [isOpen, selectedGame]);
 
   useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") closeModal();
-    };
+    const handleEsc = (e: KeyboardEvent) => { if (e.key === "Escape") closeModal(); };
     if (isOpen) window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, [isOpen, closeModal]);
 
   if (!isOpen || !selectedGame) return null;
 
-  const screenshots =
-    selectedGame.screenshots?.length > 0
-      ? selectedGame.screenshots
-      : [selectedGame.image || ""];
+  const screenshots = selectedGame.screenshots?.length > 0
+    ? selectedGame.screenshots
+    : [selectedGame.image || ""];
 
-  const editions: Edition[] =
-    selectedGame.editions?.length > 0
-      ? selectedGame.editions
-      : [
-          {
-            name: "Standard Edition",
-            price: selectedGame.price || 0,
-            features: ["Базовая игра"],
-          },
-        ];
+  const editions: Edition[] = selectedGame.editions?.length > 0
+    ? selectedGame.editions
+    : [{ name: "Standard Edition", price: selectedGame.price || 0, features: ["Базовая игра"] }];
 
   const currentEdition = editions[selectedEditionIndex] ?? editions[0];
   const currentRegion = REGIONS[region];
@@ -132,30 +112,19 @@ export default function GameModal() {
   const savings = originalPrice - displayPrice;
 
   const allRegionPrices = Object.values(REGIONS)
-    .map((r) => ({
-      region: r,
-      price: getPriceForRegion(originalPrice, r.code),
-    }))
+    .map((r) => ({ region: r, price: getPriceForRegion(originalPrice, r.code) }))
     .sort((a, b) => a.price - b.price);
 
   const cheapestRegion = allRegionPrices[0];
   const isCurrentCheapest = cheapestRegion.region.code === region;
 
-  const nextSlide = () =>
-    setCurrentSlide((prev) => (prev + 1) % screenshots.length);
-  const prevSlide = () =>
-    setCurrentSlide(
-      (prev) => (prev - 1 + screenshots.length) % screenshots.length,
-    );
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % screenshots.length);
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + screenshots.length) % screenshots.length);
 
   const handleAddToCart = () => {
     setShowCardAnimation(true);
     setTimeout(() => {
-      addItem({
-        ...selectedGame,
-        price: displayPrice,
-        title: `${selectedGame.title} (${currentEdition.name})`,
-      });
+      addItem({ ...selectedGame, price: displayPrice, title: `${selectedGame.title} (${currentEdition.name})` });
       setIsAdded(true);
       setShowCardAnimation(false);
     }, 800);
@@ -164,20 +133,12 @@ export default function GameModal() {
 
   return (
     <div className="fixed inset-0 z-[200] flex items-end md:items-center justify-center md:p-4 animate-in fade-in duration-300">
-      <div
-        className="absolute inset-0 bg-black/90 backdrop-blur-2xl"
-        onClick={closeModal}
-      />
+      <div className="absolute inset-0 bg-black/90 backdrop-blur-2xl" onClick={closeModal} />
 
       <div
         className="relative z-[210] w-full max-w-[1300px] bg-[#0d1f6e] md:border md:border-[#1a2a4a] md:rounded-[2.5rem] overflow-hidden flex flex-col md:flex-row shadow-2xl"
-        style={{
-          boxShadow: "0 0 80px rgba(0, 60, 160, 0.2)",
-          height: "100dvh",
-          maxHeight: "100dvh",
-        }}
+        style={{ boxShadow: "0 0 80px rgba(0, 60, 160, 0.2)", height: "100dvh", maxHeight: "100dvh" }}
       >
-        {/* Закрытие */}
         <button
           onClick={closeModal}
           className="absolute top-4 right-4 z-[250] w-9 h-9 flex items-center justify-center bg-white/10 hover:bg-red-500/20 border border-[#ff6b00]/40 rounded-full text-white/50 hover:text-red-400 transition-all"
@@ -202,31 +163,20 @@ export default function GameModal() {
 
           {screenshots.length > 1 && (
             <>
-              <button
-                onClick={prevSlide}
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/50 backdrop-blur-xl border border-[#ff6b00]/40 rounded-full text-white flex items-center justify-center transition-all hover:bg-[#ff6b00] hover:text-black"
-              >
+              <button onClick={prevSlide} className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/50 backdrop-blur-xl border border-[#ff6b00]/40 rounded-full text-white flex items-center justify-center transition-all hover:bg-[#ff6b00] hover:text-black">
                 <ChevronLeft size={18} />
               </button>
-              <button
-                onClick={nextSlide}
-                className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/50 backdrop-blur-xl border border-[#ff6b00]/40 rounded-full text-white flex items-center justify-center transition-all hover:bg-[#ff6b00] hover:text-black"
-              >
+              <button onClick={nextSlide} className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/50 backdrop-blur-xl border border-[#ff6b00]/40 rounded-full text-white flex items-center justify-center transition-all hover:bg-[#ff6b00] hover:text-black">
                 <ChevronRight size={18} />
               </button>
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
                 {screenshots.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrentSlide(idx)}
-                    className={`h-1 rounded-full transition-all duration-300 ${idx === currentSlide ? "w-8 bg-[#ff6b00]" : "w-2 bg-white/20"}`}
-                  />
+                  <button key={idx} onClick={() => setCurrentSlide(idx)} className={`h-1 rounded-full transition-all duration-300 ${idx === currentSlide ? "w-8 bg-[#ff6b00]" : "w-2 bg-white/20"}`} />
                 ))}
               </div>
             </>
           )}
 
-          {/* Заголовок на мобилке */}
           <div className="absolute bottom-4 left-4 md:hidden">
             <h2 className="font-black uppercase text-xl text-white tracking-tighter leading-none drop-shadow-2xl">
               {selectedGame.title}
@@ -237,31 +187,24 @@ export default function GameModal() {
         {/* ПРАВАЯ ЧАСТЬ */}
         <div className="flex flex-col flex-1 overflow-y-auto no-scrollbar bg-[#0d1f6e]">
           <div className="flex flex-col flex-1 p-4 md:p-10 gap-3 md:gap-5 pb-0">
+
             {/* Бейджи */}
             <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
               <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#003087]/20 border border-[#003087]/40 rounded-xl shrink-0">
                 <PSIcon className="w-3.5 h-3.5 text-[#0070d1]" />
-                <span className="text-[9px] text-[#0070d1] uppercase font-black tracking-widest">
-                  PS5
-                </span>
+                <span className="text-[9px] text-[#0070d1] uppercase font-black tracking-widest">PS5</span>
               </div>
               <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white/5 rounded-xl border border-[#ff6b00]/30 shrink-0">
                 <ShieldCheck size={11} className="text-[#ff6b00]" />
-                <span className="text-[9px] text-white/50 uppercase font-bold tracking-widest">
-                  Карта пополнения
-                </span>
+                <span className="text-[9px] text-white/50 uppercase font-bold tracking-widest">Карта пополнения</span>
               </div>
               <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white/5 rounded-xl border border-[#ff6b00]/30 shrink-0">
                 <Zap size={11} className="text-[#ff6b00]" />
-                <span className="text-[9px] text-white/50 uppercase font-bold tracking-widest">
-                  Моментально
-                </span>
+                <span className="text-[9px] text-white/50 uppercase font-bold tracking-widest">Моментально</span>
               </div>
               <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-[#ff6b00]/10 border border-[#ff6b00]/40 rounded-xl shrink-0">
                 <span className="text-sm">{currentRegion.flag}</span>
-                <span className="text-[9px] text-[#ff6b00] uppercase font-black tracking-widest">
-                  {currentRegion.name}
-                </span>
+                <span className="text-[9px] text-[#ff6b00] uppercase font-black tracking-widest">{currentRegion.name}</span>
               </div>
             </div>
 
@@ -271,27 +214,25 @@ export default function GameModal() {
                 {selectedGame.title}
               </h2>
               <p className="text-white/40 text-sm leading-relaxed line-clamp-2">
-                {selectedGame.shortDescription}
+                {selectedGame.description}
               </p>
             </div>
 
             {/* Описание мобилка */}
             <div className="md:hidden flex flex-col gap-2">
               <p className="text-white/50 text-sm leading-relaxed">
-                {selectedGame.shortDescription}
+                {selectedGame.description}
               </p>
-              {selectedGame.fullDescription && (
+              {selectedGame.full_description && (
                 <p className="text-white/25 text-xs leading-relaxed line-clamp-4">
-                  {selectedGame.fullDescription}
+                  {selectedGame.full_description}
                 </p>
               )}
             </div>
 
             {/* Выбор издания */}
             <div>
-              <p className="text-[10px] text-white/20 uppercase font-black tracking-[0.3em] mb-2">
-                Выберите вариант
-              </p>
+              <p className="text-[10px] text-white/20 uppercase font-black tracking-[0.3em] mb-2">Выберите вариант</p>
               <div className="flex flex-col gap-2">
                 {editions.map((edition, index) => {
                   const editionDisplayPrice = getPrice(edition.price);
@@ -307,18 +248,12 @@ export default function GameModal() {
                       }`}
                     >
                       <div className="flex justify-between items-center w-full gap-2">
-                        <span
-                          className={`text-sm font-black uppercase truncate ${isSelected ? "text-white" : "text-white/30"}`}
-                        >
+                        <span className={`text-sm font-black uppercase truncate ${isSelected ? "text-white" : "text-white/30"}`}>
                           {edition.name}
                         </span>
                         <div className="flex items-center gap-2 shrink-0">
-                          <span className="text-white/20 text-xs line-through font-black">
-                            {edition.price.toLocaleString()} ₽
-                          </span>
-                          <span
-                            className={`font-black text-base ${isSelected ? "text-[#ff6b00]" : "text-white/20"}`}
-                          >
+                          <span className="text-white/20 text-xs line-through font-black">{edition.price.toLocaleString()} ₽</span>
+                          <span className={`font-black text-base ${isSelected ? "text-[#ff6b00]" : "text-white/20"}`}>
                             {editionDisplayPrice.toLocaleString()} ₽
                           </span>
                         </div>
@@ -327,14 +262,9 @@ export default function GameModal() {
                       {edition.cards && edition.cards.length > 0 && (
                         <div className="flex flex-wrap gap-1.5 mt-2">
                           {edition.cards.map((card: Card, cIdx: number) => (
-                            <div
-                              key={cIdx}
-                              className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-[9px] font-black ${isSelected ? "bg-[#ff6b00]/10 border-[#ff6b00]/40 text-[#ff6b00]" : "bg-[#0a1860]/60 border-[#ff6b00]/30 text-white/20"}`}
-                            >
+                            <div key={cIdx} className={`flex items-center gap-1 px-2 py-1 rounded-lg border text-[9px] font-black ${isSelected ? "bg-[#ff6b00]/10 border-[#ff6b00]/40 text-[#ff6b00]" : "bg-[#0a1860]/60 border-[#ff6b00]/30 text-white/20"}`}>
                               <CreditCard size={9} />
-                              {card.quantity > 1 && (
-                                <span>{card.quantity}×</span>
-                              )}
+                              {card.quantity > 1 && <span>{card.quantity}×</span>}
                               <span>PSN {card.value.toLocaleString()} ₽</span>
                             </div>
                           ))}
@@ -344,12 +274,7 @@ export default function GameModal() {
                       {(!edition.cards || edition.cards.length === 0) && (
                         <div className="flex flex-wrap gap-x-3 mt-1">
                           {edition.features?.map((feature, fIdx) => (
-                            <span
-                              key={fIdx}
-                              className="text-[9px] text-white/20 uppercase"
-                            >
-                              • {feature}
-                            </span>
+                            <span key={fIdx} className="text-[9px] text-white/20 uppercase">• {feature}</span>
                           ))}
                         </div>
                       )}
@@ -359,24 +284,13 @@ export default function GameModal() {
               </div>
             </div>
 
-            {/* Сравнение цен по регионам */}
+            {/* Сравнение цен */}
             {rates && (
-              <div
-                className={`p-3 rounded-2xl border ${isCurrentCheapest ? "bg-green-500/5 border-green-500/20" : "bg-[#f59e0b]/5 border-[#f59e0b]/20"}`}
-              >
+              <div className={`p-3 rounded-2xl border ${isCurrentCheapest ? "bg-green-500/5 border-green-500/20" : "bg-[#f59e0b]/5 border-[#f59e0b]/20"}`}>
                 <div className="flex items-center gap-2 mb-2">
-                  <TrendingDown
-                    size={12}
-                    className={
-                      isCurrentCheapest ? "text-green-400" : "text-[#f59e0b]"
-                    }
-                  />
-                  <span
-                    className={`text-[9px] font-black uppercase tracking-widest ${isCurrentCheapest ? "text-green-400" : "text-[#f59e0b]"}`}
-                  >
-                    {isCurrentCheapest
-                      ? "🏆 Лучшая цена в вашем регионе!"
-                      : `💡 Дешевле в ${cheapestRegion.region.name} — ${cheapestRegion.price.toLocaleString()} ₽`}
+                  <TrendingDown size={12} className={isCurrentCheapest ? "text-green-400" : "text-[#f59e0b]"} />
+                  <span className={`text-[9px] font-black uppercase tracking-widest ${isCurrentCheapest ? "text-green-400" : "text-[#f59e0b]"}`}>
+                    {isCurrentCheapest ? "🏆 Лучшая цена в вашем регионе!" : `💡 Дешевле в ${cheapestRegion.region.name} — ${cheapestRegion.price.toLocaleString()} ₽`}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -384,24 +298,16 @@ export default function GameModal() {
                     <div
                       key={r.code}
                       className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border flex-1 justify-between ${
-                        r.code === region
-                          ? "bg-blue-900/20 border-blue-700/40"
-                          : idx === 0
-                            ? "bg-green-500/10 border-green-500/20"
-                            : "bg-[#0a1860]/40 border-[#ff6b00]/30"
+                        r.code === region ? "bg-blue-900/20 border-blue-700/40" : idx === 0 ? "bg-green-500/10 border-green-500/20" : "bg-[#0a1860]/40 border-[#ff6b00]/30"
                       }`}
                     >
                       <div className="flex items-center gap-1.5">
                         <span className="text-base">{r.flag}</span>
-                        <span
-                          className={`text-[9px] font-black uppercase hidden sm:block ${r.code === region ? "text-white/60" : idx === 0 ? "text-green-400" : "text-white/20"}`}
-                        >
+                        <span className={`text-[9px] font-black uppercase hidden sm:block ${r.code === region ? "text-white/60" : idx === 0 ? "text-green-400" : "text-white/20"}`}>
                           {r.name}
                         </span>
                       </div>
-                      <span
-                        className={`text-xs font-black ${r.code === region ? "text-white" : idx === 0 ? "text-green-400" : "text-white/30"}`}
-                      >
+                      <span className={`text-xs font-black ${r.code === region ? "text-white" : idx === 0 ? "text-green-400" : "text-white/30"}`}>
                         {price.toLocaleString()} ₽
                       </span>
                     </div>
@@ -410,7 +316,7 @@ export default function GameModal() {
               </div>
             )}
 
-            {/* Инструкция — только десктоп */}
+            {/* Инструкция */}
             <div className="hidden md:flex items-center gap-4 p-4 bg-[#0a1860]/40 border border-[#ff6b00]/30 rounded-2xl overflow-x-auto no-scrollbar">
               {[
                 { step: "1", text: "Купи карту PSN" },
@@ -420,17 +326,11 @@ export default function GameModal() {
                 <React.Fragment key={item.step}>
                   <div className="flex items-center gap-2 shrink-0">
                     <div className="w-6 h-6 rounded-full bg-[#ff6b00]/10 border border-[#ff6b00]/40 flex items-center justify-center shrink-0">
-                      <span className="text-[#ff6b00] text-[8px] font-black">
-                        {item.step}
-                      </span>
+                      <span className="text-[#ff6b00] text-[8px] font-black">{item.step}</span>
                     </div>
-                    <span className="text-white/40 text-xs font-bold whitespace-nowrap">
-                      {item.text}
-                    </span>
+                    <span className="text-white/40 text-xs font-bold whitespace-nowrap">{item.text}</span>
                   </div>
-                  {i < 2 && (
-                    <div className="flex-1 h-px bg-white/10 min-w-[12px]" />
-                  )}
+                  {i < 2 && <div className="flex-1 h-px bg-white/10 min-w-[12px]" />}
                 </React.Fragment>
               ))}
             </div>
@@ -440,24 +340,14 @@ export default function GameModal() {
           <div className="sticky bottom-0 bg-[#0d1f6e] border-t border-[#ff6b00]/30 p-4 md:p-10 md:pt-5">
             <div className="flex items-center justify-between mb-3">
               <div>
-                <span className="text-[9px] text-white/20 uppercase font-bold tracking-widest block">
-                  Итого к оплате
-                </span>
-                <span className="text-[#ff6b00] text-[10px] font-black mt-0.5 block">
-                  Экономия {savings.toLocaleString()} ₽ {currentRegion.flag}
-                </span>
+                <span className="text-[9px] text-white/20 uppercase font-bold tracking-widest block">Итого к оплате</span>
+                <span className="text-[#ff6b00] text-[10px] font-black mt-0.5 block">Экономия {savings.toLocaleString()} ₽ {currentRegion.flag}</span>
               </div>
               <div className="flex items-center gap-2 md:gap-4">
-                <span className="text-white/20 text-base md:text-xl line-through font-black">
-                  {originalPrice.toLocaleString()} ₽
-                </span>
+                <span className="text-white/20 text-base md:text-xl line-through font-black">{originalPrice.toLocaleString()} ₽</span>
                 <div className="flex items-baseline gap-1">
-                  <span className="font-black text-3xl md:text-5xl text-white">
-                    {displayPrice.toLocaleString()}
-                  </span>
-                  <span className="text-[#ff6b00] font-black text-base md:text-xl">
-                    ₽
-                  </span>
+                  <span className="font-black text-3xl md:text-5xl text-white">{displayPrice.toLocaleString()}</span>
+                  <span className="text-[#ff6b00] font-black text-base md:text-xl">₽</span>
                 </div>
               </div>
             </div>
@@ -467,11 +357,7 @@ export default function GameModal() {
                 {showCardAnimation && currentEdition.cards && (
                   <div className="absolute inset-0 flex items-center justify-center gap-3 z-10 pointer-events-none">
                     {currentEdition.cards.map((card: Card, idx: number) => (
-                      <PSNCard
-                        key={idx}
-                        value={card.value}
-                        animate={showCardAnimation}
-                      />
+                      <PSNCard key={idx} value={card.value} animate={showCardAnimation} />
                     ))}
                   </div>
                 )}
@@ -482,36 +368,20 @@ export default function GameModal() {
                 disabled={showCardAnimation}
                 whileTap={{ scale: 0.97 }}
                 className={`group relative w-full h-14 md:h-16 rounded-2xl flex items-center justify-center gap-3 transition-all overflow-hidden text-sm ${
-                  isAdded
-                    ? "bg-[#ff6b00] shadow-[0_0_30px_rgba(99,243,247,0.4)]"
-                    : showCardAnimation
-                      ? "bg-[#ff6b00]/50 cursor-wait"
-                      : "bg-[#ff6b00] hover:shadow-[0_0_30px_rgba(99,243,247,0.3)]"
+                  isAdded ? "bg-[#ff6b00] shadow-[0_0_30px_rgba(99,243,247,0.4)]" : showCardAnimation ? "bg-[#ff6b00]/50 cursor-wait" : "bg-[#ff6b00] hover:shadow-[0_0_30px_rgba(99,243,247,0.3)]"
                 }`}
               >
-                <div
-                  className={`flex items-center gap-3 transition-all duration-300 ${isAdded || showCardAnimation ? "translate-y-10 opacity-0" : "translate-y-0 opacity-100"}`}
-                >
+                <div className={`flex items-center gap-3 transition-all duration-300 ${isAdded || showCardAnimation ? "translate-y-10 opacity-0" : "translate-y-0 opacity-100"}`}>
                   <ShoppingCart size={18} className="text-black" />
-                  <span className="text-black font-black uppercase tracking-[0.15em] text-sm">
-                    Добавить в корзину
-                  </span>
+                  <span className="text-black font-black uppercase tracking-[0.15em] text-sm">Добавить в корзину</span>
                 </div>
-                <div
-                  className={`absolute inset-0 flex items-center justify-center gap-3 transition-all duration-300 ${showCardAnimation ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"}`}
-                >
+                <div className={`absolute inset-0 flex items-center justify-center gap-3 transition-all duration-300 ${showCardAnimation ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"}`}>
                   <CreditCard size={18} className="text-black animate-bounce" />
-                  <span className="text-black font-black uppercase tracking-[0.15em] text-sm">
-                    Добавляем...
-                  </span>
+                  <span className="text-black font-black uppercase tracking-[0.15em] text-sm">Добавляем...</span>
                 </div>
-                <div
-                  className={`absolute inset-0 flex items-center justify-center gap-3 transition-all duration-300 ${isAdded ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"}`}
-                >
+                <div className={`absolute inset-0 flex items-center justify-center gap-3 transition-all duration-300 ${isAdded ? "translate-y-0 opacity-100" : "-translate-y-10 opacity-0"}`}>
                   <Check size={18} className="text-black" />
-                  <span className="text-black font-black uppercase tracking-[0.15em] text-sm">
-                    Товар добавлен!
-                  </span>
+                  <span className="text-black font-black uppercase tracking-[0.15em] text-sm">Товар добавлен!</span>
                 </div>
               </motion.button>
             </div>
