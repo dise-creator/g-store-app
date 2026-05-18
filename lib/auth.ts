@@ -42,13 +42,11 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.telegramId) return null;
-
         const { data: user } = await supabaseAdmin
           .from("users")
           .select("*")
           .eq("email", credentials.email)
           .single();
-
         if (!user) return null;
         return formatUser(user);
       },
@@ -74,7 +72,6 @@ export const authOptions: NextAuthOptions = {
 
         if (credentials.isRegister === "true") {
           if (user) throw new Error("Пользователь уже существует");
-
           const hashedPassword = await bcrypt.hash(credentials.password, 10);
           const { data: newUser } = await supabaseAdmin
             .from("users")
@@ -86,16 +83,13 @@ export const authOptions: NextAuthOptions = {
             })
             .select()
             .single();
-
           if (!newUser) return null;
           return formatUser(newUser);
         }
 
         if (!user?.password) throw new Error("Пользователь не найден");
-
         const isValid = await bcrypt.compare(credentials.password, user.password);
         if (!isValid) throw new Error("Неверный пароль");
-
         return formatUser(user);
       },
     }),
@@ -103,8 +97,8 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async signIn({ user, account }) {
-      if (!user.email) return true;
       if (account?.provider === "credentials" || account?.provider === "email-password") return true;
+      if (!user.email) return true;
 
       const { data: existingUser } = await supabaseAdmin
         .from("users")
@@ -125,17 +119,32 @@ export const authOptions: NextAuthOptions = {
       return true;
     },
 
+    async jwt({ token, user, account }) {
+      // При первом входе сохраняем email в токен
+      if (user) {
+        token.email = user.email;
+      }
+      if (account) {
+        token.provider = account.provider;
+      }
+      return token;
+    },
+
+    async session({ session, token }) {
+      if (session.user) {
+        (session.user as { id?: string }).id = token.sub;
+        // Всегда берём email из токена
+        if (token.email) {
+          session.user.email = token.email as string;
+        }
+      }
+      return session;
+    },
+
     async redirect({ url, baseUrl }) {
       if (url.startsWith(baseUrl)) return url;
       if (url.startsWith("/")) return `${baseUrl}${url}`;
       return baseUrl;
-    },
-
-    async session({ session, token }) {
-      if (session.user && token.sub) {
-        (session.user as { id?: string }).id = token.sub;
-      }
-      return session;
     },
   },
 
