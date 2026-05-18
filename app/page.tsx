@@ -98,20 +98,16 @@ export default function Home() {
   };
 
   return (
-    <main className="relative min-h-screen pb-24 overflow-x-hidden">
+    <main className="relative min-h-screen pt-24 md:pt-28 pb-24 overflow-x-hidden">
       <div className="fixed inset-0 z-0">
         <AnimatedBackground />
       </div>
 
-      {/* Баннер на всю ширину — без отступа сверху, хедер поверх */}
       <div className="relative z-10 max-w-[1440px] mx-auto px-4 md:px-10 flex flex-col gap-16 md:gap-24">
-    <section className="w-full">
-      <HeroBanner />
-    </section>
-      </div>
+        <section className="w-full">
+          <HeroBanner />
+        </section>
 
-      {/* Контент */}
-      <div className="relative z-10 max-w-[1440px] mx-auto px-4 md:px-10 flex flex-col gap-16 md:gap-24">
         <NewsBlock />
 
         <div className="flex flex-col gap-4">
@@ -174,7 +170,11 @@ export default function Home() {
                     <button
                       key={opt.key}
                       onClick={() => setActiveSort(opt.key)}
-                      className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border ${activeSort === opt.key ? "bg-[#ff6b00] text-black border-transparent" : "bg-[#0a1860]/60 border-[#ff6b00]/40 text-white/40 hover:text-white"}`}
+                      className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border ${
+                        activeSort === opt.key
+                          ? "bg-[#ff6b00] text-black border-transparent"
+                          : "bg-[#0a1860]/60 border-[#ff6b00]/40 text-white/40 hover:text-white"
+                      }`}
                     >
                       {opt.label}
                     </button>
