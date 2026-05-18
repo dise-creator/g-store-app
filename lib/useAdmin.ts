@@ -9,11 +9,5 @@ export function useAdmin() {
   const { data: session, status } = useSession();
   const email = session?.user?.email?.toLowerCase() ?? "";
   const isAdmin = email.length > 0 && ADMIN_EMAILS.includes(email);
-  
-  console.log("ADMIN CHECK:", { email, ADMIN_EMAILS, status, isAdmin });
-  
-  return { 
-    isAdmin, 
-    loading: status === "loading" || status === "unauthenticated" && email === ""
-  };
+  return { isAdmin, loading: status === "loading" };
 }
